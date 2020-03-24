@@ -1331,12 +1331,16 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <div id="pair-wise-p-values" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_d65.model1[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_d65.model1, <span class="dt">y=</span>VislistB_d65.model1, <span class="dt">fill=</span>leaf.vs.flower)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_tile</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_d65.model1, VislistB_d65.model1, <span class="dt">label =</span> <span class="kw">round</span>(leaf.vs.flower, <span class="dv">2</span>)))<span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour</span>
-<span class="st">  </span><span class="kw">theme_classic</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
-        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>())</code></pre></div>
+        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 </div>
 <div id="original-model-output" class="section level6">
@@ -1425,12 +1429,16 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <div id="pair-wise-p-values-1" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model1[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model1, <span class="dt">y=</span>VislistB_twilight.model1, <span class="dt">fill=</span>leaf.vs.flower)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_tile</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_twilight.model1, VislistB_twilight.model1, <span class="dt">label =</span> <span class="kw">round</span>(leaf.vs.flower, <span class="dv">2</span>)))<span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
-        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>())</code></pre></div>
+        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-1" class="section level6">
@@ -1522,12 +1530,16 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <div id="pair-wise-p-values-2" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_d65.model1[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_d65.model1, <span class="dt">y=</span>VislistB_d65.model1, <span class="dt">fill=</span>leaf.vs.beetle)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_tile</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_d65.model1, VislistB_d65.model1, <span class="dt">label =</span> <span class="kw">round</span>(leaf.vs.beetle, <span class="dv">2</span>))) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
-        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>())</code></pre></div>
+        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-2" class="section level6">
@@ -1616,12 +1628,16 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <div id="pair-wise-p-values-3" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model1[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model1, <span class="dt">y=</span>VislistB_twilight.model1, <span class="dt">fill=</span>leaf.vs.beetle)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_tile</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_twilight.model1, VislistB_twilight.model1, <span class="dt">label =</span> <span class="kw">round</span>(leaf.vs.beetle, <span class="dv">2</span>))) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
-        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>())</code></pre></div>
+        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-3" class="section level6">
@@ -1713,12 +1729,16 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <div id="pair-wise-p-values-4" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model1[,<span class="dv">3</span><span class="op">:</span><span class="dv">5</span>,], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model1, <span class="dt">y=</span>VislistB_twilight.model1, <span class="dt">fill=</span>flower.vs.beetle)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_tile</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_twilight.model1, VislistB_twilight.model1, <span class="dt">label =</span> <span class="kw">round</span>(flower.vs.beetle, <span class="dv">2</span>)))<span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour </span>
-<span class="st">  </span><span class="kw">theme_minimal</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
-        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>())</code></pre></div>
+        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-4" class="section level6">
@@ -1808,12 +1828,16 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <div id="pair-wise-p-values-5" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model1[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model1, <span class="dt">y=</span>VislistB_twilight.model1, <span class="dt">fill=</span>leaf.vs.flower)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_tile</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_twilight.model1, VislistB_twilight.model1, <span class="dt">label =</span> <span class="kw">round</span>(leaf.vs.flower, <span class="dv">2</span>)))<span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
-        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>())</code></pre></div>
+        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-5" class="section level6">
@@ -1911,12 +1935,16 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <div id="pair-wise-p-values-6" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_d65.model2[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_d65.model2, <span class="dt">y=</span>VislistB_d65.model2, <span class="dt">fill=</span>leaf.vs.flower)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_tile</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_d65.model2, VislistB_d65.model2, <span class="dt">label =</span> <span class="kw">round</span>(leaf.vs.flower, <span class="dv">2</span>)))<span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
-        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>())</code></pre></div>
+        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-6" class="section level6">
@@ -2002,12 +2030,16 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <div id="pair-wise-p-values-7" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model2[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model2, <span class="dt">y=</span>VislistB_twilight.model2, <span class="dt">fill=</span>leaf.vs.flower)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_tile</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_twilight.model2, VislistB_twilight.model2, <span class="dt">label =</span> <span class="kw">round</span>(leaf.vs.flower, <span class="dv">2</span>)))<span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
-        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>())</code></pre></div>
+        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-7" class="section level6">
@@ -2144,12 +2176,16 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <div id="pair-wise-p-values-8" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_d65.model2[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_d65.model2, <span class="dt">y=</span>VislistB_d65.model2, <span class="dt">fill=</span>leaf.vs.beetle)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_tile</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_d65.model2, VislistB_d65.model2, <span class="dt">label =</span> <span class="kw">round</span>(leaf.vs.beetle, <span class="dv">2</span>))) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
-        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>())</code></pre></div>
+        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-8" class="section level6">
@@ -2235,12 +2271,16 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <div id="pair-wise-p-values-9" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model2[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model2, <span class="dt">y=</span>VislistB_twilight.model2, <span class="dt">fill=</span>leaf.vs.beetle)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_tile</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_twilight.model2, VislistB_twilight.model2, <span class="dt">label =</span> <span class="kw">round</span>(leaf.vs.beetle, <span class="dv">2</span>))) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
-        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>())</code></pre></div>
+        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-9" class="section level6">
@@ -2377,12 +2417,16 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <div id="pair-wise-p-values-10" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model2[,<span class="dv">3</span><span class="op">:</span><span class="dv">5</span>,], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model2, <span class="dt">y=</span>VislistB_twilight.model2, <span class="dt">fill=</span>flower.vs.beetle)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_tile</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_twilight.model2, VislistB_twilight.model2, <span class="dt">label =</span> <span class="kw">round</span>(flower.vs.beetle, <span class="dv">2</span>)))<span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour </span>
-<span class="st">  </span><span class="kw">theme_minimal</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
-        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>())</code></pre></div>
+        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-10" class="section level6">
@@ -2517,12 +2561,16 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <div id="pair-wise-p-values-11" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model2[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model2, <span class="dt">y=</span>VislistB_twilight.model2, <span class="dt">fill=</span>leaf.vs.flower)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_tile</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_twilight.model2, VislistB_twilight.model2, <span class="dt">label =</span> <span class="kw">round</span>(leaf.vs.flower, <span class="dv">2</span>)))<span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
-        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>())</code></pre></div>
+        <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
+                     <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-11" class="section level6">
@@ -3094,6 +3142,7 @@ figure_twilight.model1</code></pre></div>
 Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance.
 </p>
 </div>
+<p></br> </br></p>
 </div>
 </div>
 <div id="visual-model-2-2" class="section level2 tabset tabset-fade tabset-pills">

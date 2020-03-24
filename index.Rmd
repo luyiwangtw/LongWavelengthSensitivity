@@ -889,12 +889,16 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 ######Pair-wise p-values 
 ```{r}
 ggplot(data = heat1_d65.model1[,c(1,4:5)], aes(x=VislistA_d65.model1, y=VislistB_d65.model1, fill=leaf.vs.flower)) + 
-  geom_tile()+
+  geom_tile(colour="white", size = 4)+
   geom_text(aes(VislistA_d65.model1, VislistB_d65.model1, label = round(leaf.vs.flower, 2)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_classic()+
+  theme_bw()+
   theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank())
+        axis.title.y=element_blank(),
+        panel.grid = element_blank(), 
+                     panel.border = element_blank(), 
+                     axis.ticks = element_blank() )+
+   labs(fill = "p vaalue")
 ```
 
 ######Original model output
@@ -915,12 +919,16 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 ######Pair-wise p-values
 ```{r}
 ggplot(data = heat1_twilight.model1[,c(1,4:5)], aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=leaf.vs.flower)) + 
-  geom_tile()+
+  geom_tile(colour="white", size = 4)+
   geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = round(leaf.vs.flower, 2)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_minimal()+
+  theme_bw()+
   theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank())
+        axis.title.y=element_blank(),
+        panel.grid = element_blank(), 
+                     panel.border = element_blank(), 
+                     axis.ticks = element_blank() )+
+   labs(fill = "p vaalue")
 ```
 
 ######Original model output
@@ -942,12 +950,16 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 ######Pair-wise p-values 
 ```{r}
 ggplot(data = heat1_d65.model1[,c(2,4:5)], aes(x=VislistA_d65.model1, y=VislistB_d65.model1, fill=leaf.vs.beetle)) + 
-  geom_tile()+
+  geom_tile(colour="white", size = 4)+
   geom_text(aes(VislistA_d65.model1, VislistB_d65.model1, label = round(leaf.vs.beetle, 2))) +
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_minimal()+
+  theme_bw()+
   theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank())
+        axis.title.y=element_blank(),
+        panel.grid = element_blank(), 
+                     panel.border = element_blank(), 
+                     axis.ticks = element_blank() )+
+   labs(fill = "p vaalue")
 ```
 
 ######Original model output
@@ -968,12 +980,16 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 ######Pair-wise p-values
 ```{r}
 ggplot(data = heat1_twilight.model1[,c(2,4:5)], aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=leaf.vs.beetle)) + 
-  geom_tile()+
+  geom_tile(colour="white", size = 4)+
   geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = round(leaf.vs.beetle, 2))) +
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_minimal()+
+  theme_bw()+
   theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank())
+        axis.title.y=element_blank(),
+        panel.grid = element_blank(), 
+                     panel.border = element_blank(), 
+                     axis.ticks = element_blank() )+
+   labs(fill = "p vaalue")
 ```
 
 ######Original model output
@@ -995,12 +1011,16 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 ######Pair-wise p-values 
 ```{r}
 ggplot(data = heat1_twilight.model1[,3:5,], aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=flower.vs.beetle)) + 
-  geom_tile()+
+  geom_tile(colour="white", size = 4)+
   geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = round(flower.vs.beetle, 2)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour 
-  theme_minimal()+
+  theme_bw()+
   theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank())
+        axis.title.y=element_blank(),
+        panel.grid = element_blank(), 
+                     panel.border = element_blank(), 
+                     axis.ticks = element_blank() )+
+   labs(fill = "p vaalue")
 ```
 
 ######Original model output
@@ -1021,12 +1041,16 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 ######Pair-wise p-values
 ```{r}
 ggplot(data = heat1_twilight.model1[,c(1,4:5)], aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=leaf.vs.flower)) + 
-  geom_tile()+
+  geom_tile(colour="white", size = 4)+
   geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = round(leaf.vs.flower, 2)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_minimal()+
+  theme_bw()+
   theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank())
+        axis.title.y=element_blank(),
+        panel.grid = element_blank(), 
+                     panel.border = element_blank(), 
+                     axis.ticks = element_blank() )+
+   labs(fill = "p vaalue")
 ```
 
 ######Original model output
@@ -1058,12 +1082,16 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 ######Pair-wise p-values 
 ```{r}
 ggplot(data = heat1_d65.model2[,c(1,4:5)], aes(x=VislistA_d65.model2, y=VislistB_d65.model2, fill=leaf.vs.flower)) + 
-  geom_tile()+
+  geom_tile(colour="white", size = 4)+
   geom_text(aes(VislistA_d65.model2, VislistB_d65.model2, label = round(leaf.vs.flower, 2)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_minimal()+
+  theme_bw()+
   theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank())
+        axis.title.y=element_blank(),
+        panel.grid = element_blank(), 
+                     panel.border = element_blank(), 
+                     axis.ticks = element_blank() )+
+   labs(fill = "p vaalue")
 ```
 
 ######Original model output
@@ -1084,12 +1112,16 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 ######Pair-wise p-values
 ```{r}
 ggplot(data = heat1_twilight.model2[,c(1,4:5)], aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=leaf.vs.flower)) + 
-  geom_tile()+
+  geom_tile(colour="white", size = 4)+
   geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = round(leaf.vs.flower, 2)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_minimal()+
+  theme_bw()+
   theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank())
+        axis.title.y=element_blank(),
+        panel.grid = element_blank(), 
+                     panel.border = element_blank(), 
+                     axis.ticks = element_blank() )+
+   labs(fill = "p vaalue")
 ```
 
 ######Original model output
@@ -1111,12 +1143,16 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 ######Pair-wise p-values 
 ```{r}
 ggplot(data = heat1_d65.model2[,c(2,4:5)], aes(x=VislistA_d65.model2, y=VislistB_d65.model2, fill=leaf.vs.beetle)) + 
-  geom_tile()+
+  geom_tile(colour="white", size = 4)+
   geom_text(aes(VislistA_d65.model2, VislistB_d65.model2, label = round(leaf.vs.beetle, 2))) +
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_minimal()+
+  theme_bw()+
   theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank())
+        axis.title.y=element_blank(),
+        panel.grid = element_blank(), 
+                     panel.border = element_blank(), 
+                     axis.ticks = element_blank() )+
+   labs(fill = "p vaalue")
 ```
 
 ######Original model output
@@ -1137,12 +1173,16 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 ######Pair-wise p-values
 ```{r}
 ggplot(data = heat1_twilight.model2[,c(2,4:5)], aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=leaf.vs.beetle)) + 
-  geom_tile()+
+  geom_tile(colour="white", size = 4)+
   geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = round(leaf.vs.beetle, 2))) +
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_minimal()+
+  theme_bw()+
   theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank())
+        axis.title.y=element_blank(),
+        panel.grid = element_blank(), 
+                     panel.border = element_blank(), 
+                     axis.ticks = element_blank() )+
+   labs(fill = "p vaalue")
 ```
 
 ######Original model output
@@ -1164,12 +1204,16 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 ######Pair-wise p-values 
 ```{r}
 ggplot(data = heat1_twilight.model2[,3:5,], aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=flower.vs.beetle)) + 
-  geom_tile()+
+  geom_tile(colour="white", size = 4)+
   geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = round(flower.vs.beetle, 2)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour 
-  theme_minimal()+
+  theme_bw()+
   theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank())
+        axis.title.y=element_blank(),
+        panel.grid = element_blank(), 
+                     panel.border = element_blank(), 
+                     axis.ticks = element_blank() )+
+   labs(fill = "p vaalue")
 ```
 
 ######Original model output
@@ -1190,12 +1234,16 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 ######Pair-wise p-values
 ```{r}
 ggplot(data = heat1_twilight.model2[,c(1,4:5)], aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=leaf.vs.flower)) + 
-  geom_tile()+
+  geom_tile(colour="white", size = 4)+
   geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = round(leaf.vs.flower, 2)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_minimal()+
+  theme_bw()+
   theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank())
+        axis.title.y=element_blank(),
+        panel.grid = element_blank(), 
+                     panel.border = element_blank(), 
+                     axis.ticks = element_blank() )+
+   labs(fill = "p vaalue")
 ```
 
 ######Original model output
@@ -1663,6 +1711,8 @@ figure_twilight.model1 <- ggarrange(lf_twilight.model1,lb_twilight.model1,bf_twi
 figure_twilight.model1
 ```
 
+</br>
+</br>
 
 ##Visual model 2 {.tabset .tabset-fade .tabset-pills}
 ###Daylight
