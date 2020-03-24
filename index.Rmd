@@ -118,12 +118,12 @@ dataset.plot.indivisually$category2<-factor(dataset.plot.indivisually$category, 
 ggplot(dataset.plot.indivisually,aes(x=wavelength,y=reflectance, colour=category2, group=species))+
   geom_point(size=.05)+
   geom_line(size=.05)+
+  theme(legend.position = "none")+
   scale_color_manual( values = c( "forestgreen", "palevioletred1","cornflowerblue"))+
   facet_grid(category2 ~ .)+
   xlab("Wavelength (nm)")+ylab("Reflectance (%)")+
-  scale_fill_discrete(name="sample type")+
-  theme(legend.position = "none")+
-  theme_classic()
+  theme_classic()+
+  guides(colour=FALSE) # remove the legend
 ```
 
 
