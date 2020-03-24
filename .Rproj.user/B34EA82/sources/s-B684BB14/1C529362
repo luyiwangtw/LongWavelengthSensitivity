@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1585017539365.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "257|18|1121|0|\n",
+    "hash" : "0",
+    "id" : "1C529362",
+    "lastKnownWriteTime" : 1585018744,
+    "last_content_update" : 1585018744038,
+    "path" : "~/Documents/GitHub/Far-redSensitivity/index.Rmd",
+    "project_path" : "index.Rmd",
+    "properties" : {
+        "cursorPosition" : "8,57",
+        "scrollLine" : "0",
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
