@@ -3,7 +3,7 @@ navbar:
   title: " "
   left:
     - text: "Visual sensitivity in the far-red enhances contrast against vegetation"
-      href: "index.html"
+      href: index.html
 output:
   html_document:
     toc: true # table of content true
