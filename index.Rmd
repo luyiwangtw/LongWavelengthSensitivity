@@ -95,7 +95,7 @@ dataset<- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measureme
 
 * We averaged of 3 measurements to generate a representative spectrum for each colour
 * The spectral data were smoothed with the span = 0.1, and those < 0 were lifted to 0
-```{r, fig.cap="Reflectance spectra of samples used in the visual models"}
+```{r, fig.cap="Reflectance spectra of the targets"}
 #assign categoryies to each spectrum
 category.list <- c("flower","leaf","beetle")
 category <- rep(category.list , c(47*501,46*501,37*501))
