@@ -4,3 +4,4 @@ navbar:
   left:
     - text: "Home"
       href: index.html
+theme: flatly
