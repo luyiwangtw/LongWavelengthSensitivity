@@ -1,9 +1,12 @@
 name: "Visual modelling"
 navbar:
-  title: " "
+  title: "Visual sensitivity in the far-red enhances contrast against vegetation"
   left:
     - text: "Visual sensitivity in the far-red enhances contrast against vegetation"
       href: index.html
+subtitle: Supplementary Information
+author: "<br>Lu-Yi Wang^1^, Devi Stuart-Fox^1^, Geoff Walker^1^, Nicholas Roberts^2^ and Amanda Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne, Australia <br></br> ^2^School of Biological Sciences, University of Bristol, UK <br></br>"
+Date: "March 24th 2020"
 output:
   html_document:
     toc: true # table of content true
