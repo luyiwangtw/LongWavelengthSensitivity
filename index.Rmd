@@ -10,7 +10,7 @@ output:
   
 #Aims
   
-* We investigated the potential bene`fit of long wavelength sensitivity by modelling the visual contrast in representative insect vision.
+* We investigated the potential benefit of long wavelength sensitivity by modelling the visual contrast in representative insect vision.
 
 * Specifically, we varied the presence of a long wavelength sensitive photoreceptor and its wavelength of maximum sensitivity.
 
