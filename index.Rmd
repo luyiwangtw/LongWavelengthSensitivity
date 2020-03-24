@@ -1058,6 +1058,10 @@ ggplot(data = heat1_twilight.model1[,c(1,4:5)], aes(x=VislistA_twilight.model1, 
 sum.leaf.vs.flower_twilight.model1
 ```
 
+
+</br>
+</br>
+
 ### Result of visual model 2: comparing visual systems with different peak of LWS photoreceptor {.tabset .tabset-fade .tabset-pills}
 
 </br>
@@ -1711,8 +1715,6 @@ figure_twilight.model1 <- ggarrange(lf_twilight.model1,lb_twilight.model1,bf_twi
 figure_twilight.model1
 ```
 
-</br>
-</br>
 
 ##Visual model 2 {.tabset .tabset-fade .tabset-pills}
 ###Daylight
