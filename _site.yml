@@ -1,20 +1,6 @@
-name: "Visual modelling"
+name: "my-website"
 navbar:
-  title: "Visual sensitivity in the far-red enhances contrast against vegetation"
+  title: "My Website"
   left:
-    - text: "Visual sensitivity in the far-red enhances contrast against vegetation"
+    - text: "Home"
       href: index.html
-subtitle: Supplementary Information
-author: "<br>Lu-Yi Wang^1^, Devi Stuart-Fox^1^, Geoff Walker^1^, Nicholas Roberts^2^ and Amanda Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne, Australia <br></br> ^2^School of Biological Sciences, University of Bristol, UK <br></br>"
-Date: "March 24th 2020"
-output:
-  html_document:
-    toc: true # table of content true
-    toc_float: # have a table of content at the left side
-      collapsed: true #default true, only show up tp level 2 unless click to expand
-      smooth_scroll: true #animated the page to the clicked item
-    depth: 6  # upto three depths of headings (specified by #, ## and ###)
-    number_sections: false  ## if you want number sections at each table header
-    theme: flatly # theme for fonts and colours
-    highlight: tango # different theme for the appearance of the code
-    code_folding: hide #  buttons to show/hide the code
