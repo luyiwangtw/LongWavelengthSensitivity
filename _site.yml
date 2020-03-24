@@ -1,6 +1,9 @@
 name: "Visual modelling"
 navbar:
-  title: "Visual sensitivity in the far-red enhances contrast against vegetation"
+  title: " "
+  left:
+    - text: "Visual sensitivity in the far-red enhances contrast against vegetation"
+      href: "index.html"
 output:
   html_document:
     toc: true # table of content true
