@@ -4,14 +4,5 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-output:
-  html_document:
-    toc: true # table of content true
-    toc_float: # have a table of content at the left side
-      collapsed: true #default true, only show up tp level 2 unless click to expand
-      smooth_scroll: true #animated the page to the clicked item
-    depth: 6  # upto three depths of headings (specified by #, ## and ###)
-    number_sections: false  ## if you want number sections at each table header
-    theme: flatly # theme for fonts and colours
-    highlight: tango # different theme for the appearance of the code
-    code_folding: hide #  buttons to show/hide the code
+
+   
