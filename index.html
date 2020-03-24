@@ -447,6 +447,7 @@ div.tocify {
 <li><p>To make our study ecological relevant to far-red sensitivity, we focused on jewel beetles.</p></li>
 <li><p>Additionally, we tested the effect of red-shifted light environment on contrast by running the same models under twilight illumination.</p></li>
 </ul>
+<p></br> </br></p>
 </div>
 <div id="load-r-libraries" class="section level1">
 <h1>Load R libraries</h1>
@@ -461,9 +462,11 @@ div.tocify {
 <span class="kw">library</span>(boot) <span class="co">#for mean() function</span>
 <span class="kw">library</span>(pander) <span class="co">#for creating tidy tables</span>
 <span class="kw">library</span>(ggpubr) <span class="co">#for ggarrange() function</span></code></pre></div>
+<p></br> </br></p>
 </div>
 <div id="data-description" class="section level1">
 <h1>Data description</h1>
+<p></br></p>
 <div id="import-and-process-the-data" class="section level2">
 <h2>Import and process the data</h2>
 <ul>
@@ -488,6 +491,7 @@ aveleaf &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span cla
 raw.dataset&lt;-<span class="kw">read.csv</span>(<span class="st">&quot;data/pooled_spec_2019.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.rspec</span>()
 dataset&lt;-<span class="st"> </span><span class="kw">aggspec</span>(raw.dataset, <span class="dt">by =</span> <span class="dv">3</span>, <span class="dt">FUN =</span> mean) <span class="op">%&gt;%</span><span class="st">  </span><span class="co">#average three measurements to a representative one</span>
 <span class="st">  </span><span class="kw">procspec</span>(<span class="dt">opt =</span> <span class="st">&quot;smooth&quot;</span>, <span class="dt">span =</span> <span class="fl">0.1</span>, <span class="dt">fixneg =</span> <span class="st">&quot;zero&quot;</span>) <span class="co">#smooth the spectra and lift &lt;0 to 0</span></code></pre></div>
+<p></br></p>
 </div>
 <div id="spectra-of-the-targets" class="section level2">
 <h2>Spectra of the targets</h2>
@@ -542,7 +546,13 @@ dataset.plot.indivisually<span class="op">$</span>category2&lt;-<span class="kw"
 <span class="st">  </span><span class="kw">scale_fill_discrete</span>(<span class="dt">name=</span><span class="st">&quot;sample type&quot;</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_classic</span>()</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div class="figure">
+<img src="index_files/figure-html/unnamed-chunk-2-1.png" alt="Reflectance spectra of samples used in the visual models" width="672" />
+<p class="caption">
+Reflectance spectra of samples used in the visual models
+</p>
+</div>
+<p></br> </br></p>
 </div>
 <div id="visual-sensitivities-and-visual-systems" class="section level2">
 <h2>Visual sensitivities and visual systems</h2>
@@ -592,13 +602,19 @@ peak.order &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Wavelength (nm)&quot;</span>)<span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Relative spectral sensitivity&quot;</span>)<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_classic</span>()</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="figure">
+<img src="index_files/figure-html/unnamed-chunk-3-1.png" alt="Sensitivity curves of the photoreceptors with different peak wavelengths." width="672" />
+<p class="caption">
+Sensitivity curves of the photoreceptors with different peak wavelengths.
+</p>
+</div>
+<p></br> </br></p>
 </div>
 <div id="illuminations" class="section level2">
 <h2>Illuminations</h2>
 <ul>
 <li>Two light environments: daylight and twilight (to represent red-shifted illumination).</li>
-<li>daylight: <strong>D65</strong> from Commission internationale de l’eclairage CIE</li>
+<li>daylight: <strong>D65</strong> (standard daylight) from Commission internationale de l’eclairage CIE</li>
 <li>twilight: measured at the Pinnacles Lookout in Alpine National Park, VIC, Australia at 18:15 on September 14th 2019.</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">illum &lt;-<span class="st"> </span><span class="kw">merge</span>(irradiance.d65, irradiance.twilight) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(light, illuminace, <span class="op">-</span>wl) 
@@ -606,13 +622,20 @@ peak.order &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="
 <span class="kw">ggplot</span>(illum, <span class="kw">aes</span>(<span class="dt">x=</span>wl, <span class="dt">y=</span>illuminace, <span class="dt">color=</span>light))<span class="op">+</span>
 <span class="kw">geom_line</span>()<span class="op">+</span>
 <span class="kw">xlab</span>(<span class="st">&quot;Wavelength (nm)&quot;</span>)<span class="op">+</span>
-<span class="kw">ylab</span>(<span class="st">&quot;Irradiance&quot;</span>)<span class="op">+</span>
+<span class="kw">ylab</span>(<span class="st">&quot;Relative irradiance&quot;</span>)<span class="op">+</span>
 <span class="kw">theme_classic</span>()</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div class="figure">
+<img src="index_files/figure-html/unnamed-chunk-4-1.png" alt="Relative irradiance of the standard daylight and twilight" width="672" />
+<p class="caption">
+Relative irradiance of the standard daylight and twilight
+</p>
+</div>
+<p></br> </br></p>
 </div>
 </div>
 <div id="run-the-visual-models" class="section level1">
 <h1>Run the visual models</h1>
+<p></br> </br></p>
 <div id="first-quantum-catch-calculation" class="section level2">
 <h2>First: Quantum catch calculation</h2>
 <ul>
@@ -647,6 +670,7 @@ buprest620_twilight=<span class="kw">vismodel</span>(dataset[<span class="dv">1<
 buprest640_twilight=<span class="kw">vismodel</span>(dataset[<span class="dv">1</span><span class="op">:</span><span class="dv">501</span>,], <span class="dt">visual =</span> specsensbuprest.model2[, <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">8</span>)], <span class="dt">bkg=</span>aveleaf<span class="op">$</span>aveleaf, <span class="dt">illum =</span> irradiance.twilight[<span class="dv">1</span><span class="op">:</span><span class="dv">501</span>,<span class="dv">2</span>], <span class="dt">qcatch =</span> <span class="st">&#39;fi&#39;</span>, <span class="dt">relative=</span><span class="ot">FALSE</span>, <span class="dt">vonkries=</span><span class="ot">TRUE</span>)
 buprest660_twilight=<span class="kw">vismodel</span>(dataset[<span class="dv">1</span><span class="op">:</span><span class="dv">501</span>,], <span class="dt">visual =</span> specsensbuprest.model2[, <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">9</span>)], <span class="dt">bkg=</span>aveleaf<span class="op">$</span>aveleaf, <span class="dt">illum =</span> irradiance.twilight[<span class="dv">1</span><span class="op">:</span><span class="dv">501</span>,<span class="dv">2</span>], <span class="dt">qcatch =</span> <span class="st">&#39;fi&#39;</span>, <span class="dt">relative=</span><span class="ot">FALSE</span>, <span class="dt">vonkries=</span><span class="ot">TRUE</span>)
 buprest680_twilight=<span class="kw">vismodel</span>(dataset[<span class="dv">1</span><span class="op">:</span><span class="dv">501</span>,], <span class="dt">visual =</span> specsensbuprest.model2[, <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">10</span>)], <span class="dt">bkg=</span>aveleaf<span class="op">$</span>aveleaf, <span class="dt">illum =</span> irradiance.twilight[<span class="dv">1</span><span class="op">:</span><span class="dv">501</span>,<span class="dv">2</span>], <span class="dt">qcatch =</span> <span class="st">&#39;fi&#39;</span>, <span class="dt">relative=</span><span class="ot">FALSE</span>, <span class="dt">vonkries=</span><span class="ot">TRUE</span>)</code></pre></div>
+<p></br> </br></p>
 </div>
 <div id="second-contrast-calculation" class="section level2">
 <h2>Second: Contrast calculation</h2>
@@ -682,12 +706,13 @@ Cbuprest620_twilight =<span class="st"> </span><span class="kw">coldist</span>(b
 Cbuprest640_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest640_twilight, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)
 Cbuprest660_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest660_twilight, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)
 Cbuprest680_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest680_twilight, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</code></pre></div>
+<p></br> </br></p>
 </div>
 </div>
 <div id="compare-contrasts" class="section level1">
 <h1>Compare contrasts</h1>
 <ul>
-<li>Using GLMM to test if contasts were different among visual systems</li>
+<li>To compare contrasts between visual systems, We performed Wald chisquare tests on generalised linear mixed models (GLMM) followed by posthoc tests.</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#creat different comparison groups for furthur GLMM analysis</span>
 <span class="co">#Organize data before GLMM</span>
@@ -1019,6 +1044,12 @@ compare.flower.vs.beetle_twilight.model2 &lt;-<span class="st"> </span>com.bupco
 <span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;peak_wl.flower.vs.beetle&quot;</span>, <span class="dt">value =</span> <span class="st">&quot;dS&quot;</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">8</span>)</code></pre></div>
 <div id="check-assumptions" class="section level2 tabset tabset-fade tabset-pills">
 <h2>Check assumptions</h2>
+<ul>
+<li>Before running GLMM, we first check if the data follows the assumption of normality and homogeneity of variance</li>
+</ul>
+<p></br></p>
+<p>Click the tabs to choose the assumptions ( <strong>Normality</strong> / <strong>Homogeneity</strong> ) of the visual models ( <strong>Visual model 1</strong> / <strong>Visual model 2</strong> ) under different light conditions ( <strong>Daylight</strong> / <strong>Twilight</strong>)</p>
+<p></br></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#checking assumptions</span>
 ##D65 - visual model 1
 res.leaf.vs.flower_d65.model1&lt;-<span class="kw">lm</span>(compare.leaf.vs.flower.model1<span class="op">$</span>dS <span class="op">~</span><span class="st"> </span>compare.leaf.vs.flower.model1<span class="op">$</span>peak_wl.leaf.vs.flower)
@@ -1142,12 +1173,14 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
         <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>,
         <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis 580&quot;</span>, <span class="st">&quot;Vis 600&quot;</span>, <span class="st">&quot;Vis 620&quot;</span>, <span class="st">&quot;Vis 640&quot;</span>, <span class="st">&quot;Vis 660&quot;</span>, <span class="st">&quot;Vis 680&quot;</span>))</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p></br> </br></p>
 </div>
 </div>
 </div>
 </div>
 <div id="glmm-results" class="section level2">
 <h2>GLMM results</h2>
+<p></br></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#GLMM - D65 - visual model 1</span>
 ##Leaf vs Flower
 m.leaf.vs.flower_d65.model1 &lt;-<span class="st"> </span><span class="kw">lmer</span>(dS<span class="op">~</span>peak_wl.leaf.vs.flower <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>patch2) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>patch1), <span class="dt">data =</span> compare.leaf.vs.flower.model1,<span class="dt">REML=</span>F)
@@ -1260,7 +1293,9 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>orignial.list)</code></pre></div>
 <div id="result-of-visual-model-1-comparing-visual-systems-with-different-photoreceptor-combination" class="section level3 tabset tabset-fade tabset-pills">
 <h3>Result of visual model 1: comparing visual systems with different photoreceptor combination</h3>
+<p></br></p>
 <p>Click the tabs to see the results in each comparison groups ( <strong>Leaf vs. Flower</strong> / <strong>Leaf vs. Beetle</strong> / <strong>Beetle vs. Flower</strong>) and under different light conditions ( <strong>Daylight</strong> / <strong>Twilight</strong>)</p>
+<p></br></p>
 <div id="leaf-vs-flower" class="section level4 tabset tabset-fade tabset-pills">
 <h4><strong>Leaf vs Flower</strong></h4>
 <div id="daylight" class="section level5 tabset tabset-fade tabset-pills">
@@ -1291,14 +1326,15 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 </tr>
 </tbody>
 </table>
-<p>Click the tabs to see the <strong>p-value summary plot</strong> or the <strong>original model output</strong></p>
+<p></br> </br></p>
+<p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_d65.model1[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_d65.model1, <span class="dt">y=</span>VislistB_d65.model1, <span class="dt">fill=</span>leaf.vs.flower)) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_tile</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_d65.model1, VislistB_d65.model1, <span class="dt">label =</span> <span class="kw">round</span>(leaf.vs.flower, <span class="dv">2</span>)))<span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour</span>
-<span class="st">  </span><span class="kw">theme_minimal</span>()<span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_classic</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
         <span class="dt">axis.title.y=</span><span class="kw">element_blank</span>())</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
@@ -1384,7 +1420,8 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 </tr>
 </tbody>
 </table>
-<p>Click the tabs to see the <strong>p-value summary plot</strong> or the <strong>original model output</strong></p>
+<p></br> </br></p>
+<p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values-1" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model1[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model1, <span class="dt">y=</span>VislistB_twilight.model1, <span class="dt">fill=</span>leaf.vs.flower)) <span class="op">+</span><span class="st"> </span>
@@ -1480,7 +1517,8 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 </tr>
 </tbody>
 </table>
-<p>Click the tabs to see the <strong>p-value summary plot</strong> or the <strong>original model output</strong></p>
+<p></br> </br></p>
+<p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values-2" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_d65.model1[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_d65.model1, <span class="dt">y=</span>VislistB_d65.model1, <span class="dt">fill=</span>leaf.vs.beetle)) <span class="op">+</span><span class="st"> </span>
@@ -1573,7 +1611,8 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 </tr>
 </tbody>
 </table>
-<p>Click the tabs to see the <strong>p-value summary plot</strong> or the <strong>original model output</strong></p>
+<p></br> </br></p>
+<p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values-3" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model1[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model1, <span class="dt">y=</span>VislistB_twilight.model1, <span class="dt">fill=</span>leaf.vs.beetle)) <span class="op">+</span><span class="st"> </span>
@@ -1669,7 +1708,8 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 </tr>
 </tbody>
 </table>
-<p>Click the tabs to see the <strong>p-value summary plot</strong> or the <strong>original model output</strong></p>
+<p></br> </br></p>
+<p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values-4" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model1[,<span class="dv">3</span><span class="op">:</span><span class="dv">5</span>,], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model1, <span class="dt">y=</span>VislistB_twilight.model1, <span class="dt">fill=</span>flower.vs.beetle)) <span class="op">+</span><span class="st"> </span>
@@ -1763,7 +1803,8 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 </tr>
 </tbody>
 </table>
-<p>Click the tabs to see the <strong>p-value summary plot</strong> or the <strong>original model output</strong></p>
+<p></br> </br></p>
+<p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values-5" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model1[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model1, <span class="dt">y=</span>VislistB_twilight.model1, <span class="dt">fill=</span>leaf.vs.flower)) <span class="op">+</span><span class="st"> </span>
@@ -1832,7 +1873,9 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 </div>
 <div id="result-of-visual-model-2-comparing-visual-systems-with-different-peak-of-lws-photoreceptor" class="section level3 tabset tabset-fade tabset-pills">
 <h3>Result of visual model 2: comparing visual systems with different peak of LWS photoreceptor</h3>
+<p></br></p>
 <p>Click the tabs to see the results in each comparison groups ( <strong>Leaf vs. Flower</strong> / <strong>Leaf vs. Beetle</strong> / <strong>Beetle vs. Flower</strong>) and under different light conditions ( <strong>Daylight</strong> / <strong>Twilight</strong>)</p>
+<p></br></p>
 <div id="leaf-vs-flower-1" class="section level4 tabset tabset-fade tabset-pills">
 <h4><strong>Leaf vs Flower</strong></h4>
 <div id="daylight-3" class="section level5 tabset tabset-fade tabset-pills">
@@ -1863,7 +1906,8 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 </tr>
 </tbody>
 </table>
-<p>Click the tabs to see the <strong>p-value summary plot</strong> or the <strong>original model output</strong></p>
+<p></br> </br></p>
+<p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values-6" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_d65.model2[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_d65.model2, <span class="dt">y=</span>VislistB_d65.model2, <span class="dt">fill=</span>leaf.vs.flower)) <span class="op">+</span><span class="st"> </span>
@@ -1953,7 +1997,8 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 </tr>
 </tbody>
 </table>
-<p>Click the tabs to see the <strong>p-value summary plot</strong> or the <strong>original model output</strong></p>
+<p></br> </br></p>
+<p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values-7" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model2[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model2, <span class="dt">y=</span>VislistB_twilight.model2, <span class="dt">fill=</span>leaf.vs.flower)) <span class="op">+</span><span class="st"> </span>
@@ -2094,7 +2139,8 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 </tr>
 </tbody>
 </table>
-<p>Click the tabs to see the <strong>p-value summary plot</strong> or the <strong>original model output</strong></p>
+<p></br> </br></p>
+<p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values-8" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_d65.model2[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_d65.model2, <span class="dt">y=</span>VislistB_d65.model2, <span class="dt">fill=</span>leaf.vs.beetle)) <span class="op">+</span><span class="st"> </span>
@@ -2184,7 +2230,8 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 </tr>
 </tbody>
 </table>
-<p>Click the tabs to see the <strong>p-value summary plot</strong> or the <strong>original model output</strong></p>
+<p></br> </br></p>
+<p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values-9" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model2[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model2, <span class="dt">y=</span>VislistB_twilight.model2, <span class="dt">fill=</span>leaf.vs.beetle)) <span class="op">+</span><span class="st"> </span>
@@ -2325,7 +2372,8 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 </tr>
 </tbody>
 </table>
-<p>Click the tabs to see the <strong>p-value summary plot</strong> or the <strong>original model output</strong></p>
+<p></br> </br></p>
+<p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values-10" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model2[,<span class="dv">3</span><span class="op">:</span><span class="dv">5</span>,], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model2, <span class="dt">y=</span>VislistB_twilight.model2, <span class="dt">fill=</span>flower.vs.beetle)) <span class="op">+</span><span class="st"> </span>
@@ -2464,7 +2512,8 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 </tr>
 </tbody>
 </table>
-<p>Click the tabs to see the <strong>p-value summary plot</strong> or the <strong>original model output</strong></p>
+<p></br> </br></p>
+<p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values-11" class="section level6">
 <h6>Pair-wise p-values</h6>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat1_twilight.model2[,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model2, <span class="dt">y=</span>VislistB_twilight.model2, <span class="dt">fill=</span>leaf.vs.flower)) <span class="op">+</span><span class="st"> </span>
@@ -2572,6 +2621,7 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## (Adjusted p values reported -- bonferroni method)</code></pre>
+<p></br> </br></p>
 </div>
 </div>
 </div>
@@ -2584,6 +2634,7 @@ heat1_twilight.model2&lt;-<span class="kw">data.frame</span>(<span class="kw">na
 <li>Colours are in accordence with the actual sample colouration in visible range.</li>
 <li>Lines of the same colors connect the same samples</li>
 </ul>
+<p></br></p>
 <div id="visual-model-1-2" class="section level2 tabset tabset-fade tabset-pills">
 <h2>Visual model 1</h2>
 <div id="daylight-6" class="section level3">
@@ -3037,7 +3088,12 @@ bf_twilight.model1&lt;-<span class="kw">ggplot</span>(mean.bf_twilight.model1, <
 <span class="co">#plot the contrasts from the 3 comparison groups together</span>
 figure_twilight.model1 &lt;-<span class="st"> </span><span class="kw">ggarrange</span>(lf_twilight.model1,lb_twilight.model1,bf_twilight.model1, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">1</span>)
 figure_twilight.model1</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+<div class="figure">
+<img src="index_files/figure-html/unnamed-chunk-55-1.png" alt="Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance." width="672" />
+<p class="caption">
+Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance.
+</p>
+</div>
 </div>
 </div>
 <div id="visual-model-2-2" class="section level2 tabset tabset-fade tabset-pills">
@@ -3552,7 +3608,12 @@ bf_twilight.model2&lt;-<span class="kw">ggplot</span>(mean.bf_twilight.model2, <
 
 figure_twilight.model2 &lt;-<span class="st"> </span><span class="kw">ggarrange</span>(lf_twilight.model2,lb_twilight.model2,bf_twilight.model2, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">1</span>)
 figure_twilight.model2</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-57-1.png" width="672" /></p>
+<div class="figure">
+<img src="index_files/figure-html/unnamed-chunk-57-1.png" alt="Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance." width="672" />
+<p class="caption">
+Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance.
+</p>
+</div>
 </div>
 </div>
 </div>

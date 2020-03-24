@@ -18,6 +18,8 @@ output:
 
 * Additionally, we tested the effect of red-shifted light environment on contrast by running the same models under twilight illumination.
 
+</br>
+</br>
 
 #Load R libraries 
 ```{r, warning=FALSE, message=FALSE, results='hide'}
@@ -39,7 +41,14 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE) # Suppress warnings in the H
 knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time when re-building the html document
 ```
 
+
+</br>
+</br>
+
 #Data description
+
+</br>
+
 ##Import and process the data
 * All the wavelength used in the models ranged from 300-800 nm.
 
@@ -65,6 +74,8 @@ dataset<- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measureme
   procspec(opt = "smooth", span = 0.1, fixneg = "zero") #smooth the spectra and lift <0 to 0
 ```
 
+</br>
+
 ##Spectra of the targets
 * Jewel beetles and their host plants (leaves and flowers): collected using integrating sphere
   + Leaves: 
@@ -84,7 +95,7 @@ dataset<- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measureme
 
 * We averaged of 3 measurements to generate a representative spectrum for each colour
 * The spectral data were smoothed with the span = 0.1, and those < 0 were lifted to 0
-```{r}
+```{r, fig.cap="Reflectance spectra of samples used in the visual models"}
 #assign categoryies to each spectrum
 category.list <- c("flower","leaf","beetle")
 category <- rep(category.list , c(47*501,46*501,37*501))
@@ -115,6 +126,10 @@ ggplot(dataset.plot.indivisually,aes(x=wavelength,y=reflectance, colour=category
   theme_classic()
 ```
 
+
+</br>
+</br>
+
 ##Visual sensitivities and visual systems
 * We created 9 sensitivity curves peaking at 380, 460, 520, 580, 600, 620, 640, 660, 680 nm and classified them into 4 photoreceptor types based on their peaks:
   + Ultraviolet sensitive (UVS): 380 nm
@@ -143,7 +158,7 @@ ggplot(dataset.plot.indivisually,aes(x=wavelength,y=reflectance, colour=category
     6. Visual system 680: 380 nm, 460 nm, 520 nm, 680 nm
 
 
-```{r}
+```{r, fig.cap="Sensitivity curves of the photoreceptors with different peak wavelengths."}
 wl<-specsensbuprest.model2[,1]
 peaks<-gather(specsensbuprest.model2[,2:10], peak, value) %>% cbind(wl)
 
@@ -161,23 +176,32 @@ ggplot(peaks,aes(x=wl, y=value, col=peak))+
 
 ```
 
+</br>
+</br>
 
 ##Illuminations
 * Two light environments: daylight and twilight (to represent red-shifted illumination).
-+ daylight: __D65__ from Commission internationale de l'eclairage CIE
++ daylight: __D65__ (standard daylight) from Commission internationale de l'eclairage CIE
 + twilight: measured at the Pinnacles Lookout in Alpine National Park, VIC, Australia at 18:15 on September 14th 2019.
-```{r}
+
+```{r, fig.cap="Relative irradiance of the standard daylight and twilight"}
 illum <- merge(irradiance.d65, irradiance.twilight) %>% gather(light, illuminace, -wl) 
 
 ggplot(illum, aes(x=wl, y=illuminace, color=light))+
 geom_line()+
 xlab("Wavelength (nm)")+
-ylab("Irradiance")+
+ylab("Relative irradiance")+
 theme_classic()
 ```
 
+</br>
+</br>
 
 #Run the visual models
+
+</br>
+</br>
+
 ##First: Quantum catch calculation
 * We calculated quantum catch of each visual system based on Fechner's law (the signal of the receptor channel is proportional to the logarithm of the quantum catch).
 * The average leaf was used for the background.
@@ -211,6 +235,10 @@ buprest640_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, 
 buprest660_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,9)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
 buprest680_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,10)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
 ```
+
+
+</br>
+</br>
 
 ##Second: Contrast calculation
 * We used a neural noise-limited model where the noise is proportional to the Weber fraction and is independent of the intensity of the signal received.
@@ -247,8 +275,12 @@ Cbuprest660_twilight = coldist(buprest660_twilight, noise="neural", achro=FALSE,
 Cbuprest680_twilight = coldist(buprest680_twilight, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 ```
 
+
+</br>
+</br>
+
 #Compare contrasts
-* Using GLMM to test if contasts were different among visual systems
+* To compare contrasts between visual systems, We performed Wald chisquare tests on generalised linear mixed models (GLMM) followed by posthoc tests.
 
 ```{r} 
 #creat different comparison groups for furthur GLMM analysis
@@ -583,6 +615,16 @@ compare.flower.vs.beetle_twilight.model2 <- com.bupcontrast.flower.vs.beetle_twi
 ```
 
 ##Check assumptions {.tabset .tabset-fade .tabset-pills}
+
+* Before running GLMM, we first check if the data follows the assumption of normality and homogeneity of variance
+
+</br>
+
+Click the tabs to choose the assumptions ( __Normality__ / __Homogeneity__ ) of the visual models ( __Visual model 1__ / __Visual model 2__ ) under different light conditions ( __Daylight__ / __Twilight__)
+
+</br>
+
+
 ```{r}
 #checking assumptions
 ##D65 - visual model 1
@@ -702,7 +744,13 @@ boxplot(compare.flower.vs.beetle_twilight.model2$dS~compare.flower.vs.beetle_twi
         names=c("Vis 580", "Vis 600", "Vis 620", "Vis 640", "Vis 660", "Vis 680"))
 ```
 
+
+</br>
+</br>
+
 ##GLMM results
+
+</br>
 
 ```{r}
 #GLMM - D65 - visual model 1
@@ -820,7 +868,11 @@ heat1_twilight.model2<-data.frame(names(p1_twilight.model2),as.numeric(str_extra
 
 ### Result of visual model 1: comparing visual systems with different photoreceptor combination {.tabset .tabset-fade .tabset-pills}
 
+</br>
+
 Click the tabs to see the results in each comparison groups ( __Leaf vs. Flower__ / __Leaf vs. Beetle__ / __Beetle vs. Flower__) and under different light conditions ( __Daylight__ / __Twilight__)
+
+</br>
 
 #### __Leaf vs Flower__ {.tabset .tabset-fade .tabset-pills}
 #####Daylight{.tabset .tabset-fade .tabset-pills}
@@ -829,7 +881,10 @@ Click the tabs to see the results in each comparison groups ( __Leaf vs. Flower_
 Anova(m.leaf.vs.flower_d65.model1) %>% pander()
 ```
 
-Click the tabs to see the __p-value summary plot__ or the __original model output__
+</br>
+</br>
+
+Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
 ######Pair-wise p-values 
 ```{r}
@@ -837,7 +892,7 @@ ggplot(data = heat1_d65.model1[,c(1,4:5)], aes(x=VislistA_d65.model1, y=VislistB
   geom_tile()+
   geom_text(aes(VislistA_d65.model1, VislistB_d65.model1, label = round(leaf.vs.flower, 2)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_minimal()+
+  theme_classic()+
   theme(axis.title.x=element_blank(),
         axis.title.y=element_blank())
 ```
@@ -852,7 +907,10 @@ sum.leaf.vs.flower_d65.model1
 Anova(m.leaf.vs.flower_twilight.model1) %>% pander()
 ```
 
-Click the tabs to see the __p-value summary plot__ or the __original model output__
+</br>
+</br>
+
+Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
 ######Pair-wise p-values
 ```{r}
@@ -876,7 +934,10 @@ sum.leaf.vs.flower_twilight.model1
 Anova(m.leaf.vs.beetle_d65.model1) %>% pander()
 ```
 
-Click the tabs to see the __p-value summary plot__ or the __original model output__
+</br>
+</br>
+
+Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
 ######Pair-wise p-values 
 ```{r}
@@ -899,7 +960,10 @@ sum.leaf.vs.beetle_d65.model1
 Anova(m.leaf.vs.beetle_twilight.model1) %>% pander()
 ```
 
-Click the tabs to see the __p-value summary plot__ or the __original model output__
+</br>
+</br>
+
+Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
 ######Pair-wise p-values
 ```{r}
@@ -923,7 +987,10 @@ sum.leaf.vs.beetle_twilight.model1
 Anova(m.flower.vs.beetle_twilight.model1) %>% pander()
 ```
 
-Click the tabs to see the __p-value summary plot__ or the __original model output__
+</br>
+</br>
+
+Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
 ######Pair-wise p-values 
 ```{r}
@@ -946,7 +1013,10 @@ sum.flower.vs.beetle_twilight.model1
 Anova(m.flower.vs.beetle_twilight.model1) %>% pander()
 ```
 
-Click the tabs to see the __p-value summary plot__ or the __original model output__
+</br>
+</br>
+
+Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
 ######Pair-wise p-values
 ```{r}
@@ -966,7 +1036,11 @@ sum.leaf.vs.flower_twilight.model1
 
 ### Result of visual model 2: comparing visual systems with different peak of LWS photoreceptor {.tabset .tabset-fade .tabset-pills}
 
+</br>
+
 Click the tabs to see the results in each comparison groups ( __Leaf vs. Flower__ / __Leaf vs. Beetle__ / __Beetle vs. Flower__) and under different light conditions ( __Daylight__ / __Twilight__)
+
+</br>
 
 #### __Leaf vs Flower__ {.tabset .tabset-fade .tabset-pills}
 
@@ -976,7 +1050,10 @@ Click the tabs to see the results in each comparison groups ( __Leaf vs. Flower_
 Anova(m.leaf.vs.flower_d65.model2) %>% pander()
 ```
 
-Click the tabs to see the __p-value summary plot__ or the __original model output__
+</br>
+</br>
+
+Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
 ######Pair-wise p-values 
 ```{r}
@@ -999,7 +1076,10 @@ sum.leaf.vs.flower_d65.model2
 Anova(m.leaf.vs.flower_twilight.model2) %>% pander()
 ```
 
-Click the tabs to see the __p-value summary plot__ or the __original model output__
+</br>
+</br>
+
+Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
 ######Pair-wise p-values
 ```{r}
@@ -1023,7 +1103,10 @@ sum.leaf.vs.flower_twilight.model2
 Anova(m.leaf.vs.beetle_d65.model2) %>% pander()
 ```
 
-Click the tabs to see the __p-value summary plot__ or the __original model output__
+</br>
+</br>
+
+Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
 ######Pair-wise p-values 
 ```{r}
@@ -1046,7 +1129,10 @@ sum.leaf.vs.beetle_d65.model2
 Anova(m.leaf.vs.beetle_twilight.model2) %>% pander()
 ```
 
-Click the tabs to see the __p-value summary plot__ or the __original model output__
+</br>
+</br>
+
+Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
 ######Pair-wise p-values
 ```{r}
@@ -1070,7 +1156,10 @@ sum.leaf.vs.beetle_twilight.model2
 Anova(m.flower.vs.beetle_twilight.model2) %>% pander()
 ```
 
-Click the tabs to see the __p-value summary plot__ or the __original model output__
+</br>
+</br>
+
+Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
 ######Pair-wise p-values 
 ```{r}
@@ -1093,7 +1182,10 @@ sum.flower.vs.beetle_twilight.model2
 Anova(m.flower.vs.beetle_twilight.model2) %>% pander()
 ```
 
-Click the tabs to see the __p-value summary plot__ or the __original model output__
+</br>
+</br>
+
+Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
 ######Pair-wise p-values
 ```{r}
@@ -1112,9 +1204,15 @@ sum.leaf.vs.flower_twilight.model2
 ```
 
 
+
+</br>
+</br>
+
 #Plot the contasts {.tabset .tabset-fade .tabset-pills}
 * Colours are in accordence with the actual sample colouration in visible range.
 * Lines of the same colors connect the same samples
+
+</br>
 
 ##Visual model 1 {.tabset .tabset-fade .tabset-pills}
 ###Daylight
@@ -1351,7 +1449,7 @@ figure_d65.model1
 ```
 
 ###Twilight
-```{r}
+```{r,fig.cap="Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
 #make flower vs leaf plot
 Vis1.lf_twilight.model1<- CvisUVSWMW.._twilight%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
@@ -1828,7 +1926,7 @@ figure_d65.model2
 ```
 
 ###Twilight
-```{r}
+```{r,fig.cap="Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
 #flower vs leaf
 Vis1.lf_twilight.model2<- Cbuprest580_twilight %>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
