@@ -1,8 +1,8 @@
 name: "Far-red Sensitivity"
 navbar:
-  title: "Visual sensitivity in the far-red enhances contrast against vegetation"
+  title: 
   left:
-    - text: 
+    - text: "Visual sensitivity in the far-red enhances contrast against vegetation"
       href: index.html
 output:
   html_document:
