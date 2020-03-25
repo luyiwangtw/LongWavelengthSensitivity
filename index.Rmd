@@ -1060,7 +1060,7 @@ sum.leaf.vs.beetle_twilight.model1
 #### __Beetle vs Flower__ {.tabset .tabset-fade .tabset-pills}
 #####Daylight{.tabset .tabset-fade .tabset-pills}
 ```{r}
-Anova(m.flower.vs.beetle_twilight.model1) %>% pander()
+Anova(m.flower.vs.beetle_d65.model1) %>% pander()
 ```
 
 </br>
@@ -1070,9 +1070,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat_twilight.model1, aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=flower.vs.beetle)) + 
+ggplot(data = heat_d65.model1, aes(x=VislistA_d65.model1, y=VislistB_d65.model1, fill=flower.vs.beetle)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = paste(format(round(flower.vs.beetle, 2), nsmall = 2), sig.flower.vs.beetle)))+
+  geom_text(aes(VislistA_d65.model1, VislistB_d65.model1, label = paste(format(round(flower.vs.beetle, 2), nsmall = 2), sig.flower.vs.beetle)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour 
   theme_bw()+
   theme(axis.title.x=element_blank(),

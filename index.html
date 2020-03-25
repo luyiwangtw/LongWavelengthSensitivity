@@ -1759,7 +1759,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 <h4><strong>Beetle vs Flower</strong></h4>
 <div id="daylight-2" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Daylight</h5>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.flower.vs.beetle_twilight.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.flower.vs.beetle_d65.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:78%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
@@ -1779,9 +1779,9 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.flower.vs.beetle</strong></td>
-<td align="center">257.8</td>
+<td align="center">273</td>
 <td align="center">3</td>
-<td align="center">1.331e-55</td>
+<td align="center">6.91e-59</td>
 </tr>
 </tbody>
 </table>
@@ -1789,9 +1789,9 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 <p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values-4" class="section level6">
 <h6>Pair-wise p-values</h6>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat_twilight.model1, <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model1, <span class="dt">y=</span>VislistB_twilight.model1, <span class="dt">fill=</span>flower.vs.beetle)) <span class="op">+</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat_d65.model1, <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_d65.model1, <span class="dt">y=</span>VislistB_d65.model1, <span class="dt">fill=</span>flower.vs.beetle)) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_twilight.model1, VislistB_twilight.model1, <span class="dt">label =</span> <span class="kw">paste</span>(<span class="kw">format</span>(<span class="kw">round</span>(flower.vs.beetle, <span class="dv">2</span>), <span class="dt">nsmall =</span> <span class="dv">2</span>), sig.flower.vs.beetle)))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_d65.model1, VislistB_d65.model1, <span class="dt">label =</span> <span class="kw">paste</span>(<span class="kw">format</span>(<span class="kw">round</span>(flower.vs.beetle, <span class="dv">2</span>), <span class="dt">nsmall =</span> <span class="dv">2</span>), sig.flower.vs.beetle)))<span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour </span>
 <span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
