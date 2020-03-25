@@ -775,13 +775,27 @@ p3_d65.model1<-sum.flower.vs.beetle_d65.model1[["test"]][["pvalues"]]
 VislistA_d65.model1<-c("Vis USL", "Vis USM","Vis USML","Vis USM","Vis USML","Vis USML")
 VislistB_d65.model1<-c("Vis UML", "Vis UML","Vis UML","Vis USL","Vis USL","Vis USW")
 
-heat1_d65.model1<-data.frame(names(p1_d65.model1),as.numeric(str_extract(p1_d65.model1,"([0-9]+).*$"))) %>% 
+heat_d65.model1<-data.frame(names(p1_d65.model1),as.numeric(str_extract(p1_d65.model1,"([0-9]+).*$"))) %>% 
   cbind(as.numeric(str_extract(p2_d65.model1,"([0-9]+).*$"))) %>% 
   cbind(as.numeric(str_extract(p3_d65.model1,"([0-9]+).*$"))) %>%
   dplyr:: rename(orignial.list = 1, leaf.vs.flower = 2, leaf.vs.beetle = 3, flower.vs.beetle = 4) %>% 
   cbind(VislistA_d65.model1) %>% 
   cbind(VislistB_d65.model1) %>% 
   dplyr::select(-orignial.list)
+
+##add asterisks for significant pairs
+heat_d65.model1$sig.leaf.vs.flower[heat_d65.model1$leaf.vs.flower > 0.05] <- ""
+heat_d65.model1$sig.leaf.vs.flower[heat_d65.model1$leaf.vs.flower < 0.05] <- "*"
+heat_d65.model1$sig.leaf.vs.flower[heat_d65.model1$leaf.vs.flower < 0.01] <- "**"
+heat_d65.model1$sig.leaf.vs.flower[heat_d65.model1$leaf.vs.flower < 0.0001] <- "***"
+heat_d65.model1$sig.leaf.vs.beetle[heat_d65.model1$leaf.vs.beetle > 0.05] <- ""
+heat_d65.model1$sig.leaf.vs.beetle[heat_d65.model1$leaf.vs.beetle < 0.05] <- "*"
+heat_d65.model1$sig.leaf.vs.beetle[heat_d65.model1$leaf.vs.beetle < 0.01] <- "**"
+heat_d65.model1$sig.leaf.vs.beetle[heat_d65.model1$leaf.vs.beetle < 0.0001] <- "***"
+heat_d65.model1$sig.flower.vs.beetle[heat_d65.model1$flower.vs.beetle > 0.05] <- ""
+heat_d65.model1$sig.flower.vs.beetle[heat_d65.model1$flower.vs.beetle < 0.05] <- "*"
+heat_d65.model1$sig.flower.vs.beetle[heat_d65.model1$flower.vs.beetle < 0.01] <- "**"
+heat_d65.model1$sig.flower.vs.beetle[heat_d65.model1$flower.vs.beetle < 0.0001] <- "***"
 
 
 #GLMM - D65 - visual model 2
@@ -803,13 +817,30 @@ p3_d65.model2<-sum.flower.vs.beetle_d65.model2[["test"]][["pvalues"]]
 VislistA_d65.model2<-c("Vis 600", "Vis 620","Vis 640","Vis 660","Vis 680","Vis 620","Vis 640","Vis 660","Vis 680","Vis 640","Vis 660","Vis 680","Vis 660","Vis 680","Vis 680")
 VislistB_d65.model2<-c("Vis 580","Vis 580","Vis 580","Vis 580","Vis 580","Vis 600","Vis 600","Vis 600","Vis 600","Vis 620","Vis 620","Vis 620","Vis 640","Vis 640","Vis 660")
 
-heat1_d65.model2<-data.frame(names(p1_d65.model2),as.numeric(str_extract(p1_d65.model2,"([0-9]+).*$"))) %>% 
+heat_d65.model2<-data.frame(names(p1_d65.model2),as.numeric(str_extract(p1_d65.model2,"([0-9]+).*$"))) %>% 
   cbind(as.numeric(str_extract(p2_d65.model2,"([0-9]+).*$"))) %>% 
   cbind(as.numeric(str_extract(p3_d65.model2,"([0-9]+).*$"))) %>%
   dplyr:: rename(orignial.list = 1, leaf.vs.flower = 2, leaf.vs.beetle = 3, flower.vs.beetle = 4) %>% 
   cbind(VislistA_d65.model2) %>% 
   cbind(VislistB_d65.model2) %>% 
   dplyr::select(-orignial.list)
+
+##add asterisks for significant pairs
+heat_d65.model2$sig.leaf.vs.flower[heat_d65.model2$leaf.vs.flower > 0.05] <- ""
+heat_d65.model2$sig.leaf.vs.flower[heat_d65.model2$leaf.vs.flower < 0.05] <- "*"
+heat_d65.model2$sig.leaf.vs.flower[heat_d65.model2$leaf.vs.flower < 0.01] <- "**"
+heat_d65.model2$sig.leaf.vs.flower[heat_d65.model2$leaf.vs.flower < 0.0001] <- "***"
+heat_d65.model2$sig.leaf.vs.beetle[heat_d65.model2$leaf.vs.beetle > 0.05] <- ""
+heat_d65.model2$sig.leaf.vs.beetle[heat_d65.model2$leaf.vs.beetle < 0.05] <- "*"
+heat_d65.model2$sig.leaf.vs.beetle[heat_d65.model2$leaf.vs.beetle < 0.01] <- "**"
+heat_d65.model2$sig.leaf.vs.beetle[heat_d65.model2$leaf.vs.beetle < 0.0001] <- "***"
+heat_d65.model2$sig.flower.vs.beetle[heat_d65.model2$flower.vs.beetle > 0.05] <- ""
+heat_d65.model2$sig.flower.vs.beetle[heat_d65.model2$flower.vs.beetle < 0.05] <- "*"
+heat_d65.model2$sig.flower.vs.beetle[heat_d65.model2$flower.vs.beetle < 0.01] <- "**"
+heat_d65.model2$sig.flower.vs.beetle[heat_d65.model2$flower.vs.beetle < 0.0001] <- "***"
+
+
+
 
 #GLMM - Twilight - visual model 1
 ##Leaf vs Flower
@@ -829,13 +860,29 @@ p3_twilight.model1<-sum.flower.vs.beetle_twilight.model1[["test"]][["pvalues"]]
 VislistA_twilight.model1<-c("Vis USL", "Vis USM","Vis USML","Vis USM","Vis USML","Vis USML")
 VislistB_twilight.model1<-c("Vis UML", "Vis UML","Vis UML","Vis USL","Vis USL","Vis USW")
 
-heat1_twilight.model1<-data.frame(names(p1_twilight.model1),as.numeric(str_extract(p1_twilight.model1,"([0-9]+).*$"))) %>% 
+heat_twilight.model1<-data.frame(names(p1_twilight.model1),as.numeric(str_extract(p1_twilight.model1,"([0-9]+).*$"))) %>% 
   cbind(as.numeric(str_extract(p2_twilight.model1,"([0-9]+).*$"))) %>% 
   cbind(as.numeric(str_extract(p3_twilight.model1,"([0-9]+).*$"))) %>%
   dplyr:: rename(orignial.list = 1, leaf.vs.flower = 2, leaf.vs.beetle = 3, flower.vs.beetle = 4) %>% 
   cbind(VislistA_twilight.model1) %>% 
   cbind(VislistB_twilight.model1) %>% 
   dplyr::select(-orignial.list)
+
+##add asterisks for significant pairs
+heat_twilight.model1$sig.leaf.vs.flower[heat_twilight.model1$leaf.vs.flower > 0.05] <- ""
+heat_twilight.model1$sig.leaf.vs.flower[heat_twilight.model1$leaf.vs.flower < 0.05] <- "*"
+heat_twilight.model1$sig.leaf.vs.flower[heat_twilight.model1$leaf.vs.flower < 0.01] <- "**"
+heat_twilight.model1$sig.leaf.vs.flower[heat_twilight.model1$leaf.vs.flower < 0.0001] <- "***"
+heat_twilight.model1$sig.leaf.vs.beetle[heat_twilight.model1$leaf.vs.beetle > 0.05] <- ""
+heat_twilight.model1$sig.leaf.vs.beetle[heat_twilight.model1$leaf.vs.beetle < 0.05] <- "*"
+heat_twilight.model1$sig.leaf.vs.beetle[heat_twilight.model1$leaf.vs.beetle < 0.01] <- "**"
+heat_twilight.model1$sig.leaf.vs.beetle[heat_twilight.model1$leaf.vs.beetle < 0.0001] <- "***"
+heat_twilight.model1$sig.flower.vs.beetle[heat_twilight.model1$flower.vs.beetle > 0.05] <- ""
+heat_twilight.model1$sig.flower.vs.beetle[heat_twilight.model1$flower.vs.beetle < 0.05] <- "*"
+heat_twilight.model1$sig.flower.vs.beetle[heat_twilight.model1$flower.vs.beetle < 0.01] <- "**"
+heat_twilight.model1$sig.flower.vs.beetle[heat_twilight.model1$flower.vs.beetle < 0.0001] <- "***"
+
+
 
 
 #GLMM - Twilight - visual model 2
@@ -856,7 +903,7 @@ p3_twilight.model2<-sum.flower.vs.beetle_twilight.model2[["test"]][["pvalues"]]
 VislistA_twilight.model2<-c("Vis 600", "Vis 620","Vis 640","Vis 660","Vis 680","Vis 620","Vis 640","Vis 660","Vis 680","Vis 640","Vis 660","Vis 680","Vis 660","Vis 680","Vis 680")
 VislistB_twilight.model2<-c("Vis 580","Vis 580","Vis 580","Vis 580","Vis 580","Vis 600","Vis 600","Vis 600","Vis 600","Vis 620","Vis 620","Vis 620","Vis 640","Vis 640","Vis 660")
 
-heat1_twilight.model2<-data.frame(names(p1_twilight.model2),as.numeric(str_extract(p1_twilight.model2,"([0-9]+).*$"))) %>% 
+heat_twilight.model2<-data.frame(names(p1_twilight.model2),as.numeric(str_extract(p1_twilight.model2,"([0-9]+).*$"))) %>% 
   cbind(as.numeric(str_extract(p2_twilight.model2,"([0-9]+).*$"))) %>% 
   cbind(as.numeric(str_extract(p3_twilight.model2,"([0-9]+).*$"))) %>%
   dplyr:: rename(orignial.list = 1, leaf.vs.flower = 2, leaf.vs.beetle = 3, flower.vs.beetle = 4) %>% 
@@ -864,6 +911,19 @@ heat1_twilight.model2<-data.frame(names(p1_twilight.model2),as.numeric(str_extra
   cbind(VislistB_twilight.model2) %>% 
   dplyr::select(-orignial.list)
 
+##add asterisks for significant pairs
+heat_twilight.model2$sig.leaf.vs.flower[heat_twilight.model2$leaf.vs.flower > 0.05] <- ""
+heat_twilight.model2$sig.leaf.vs.flower[heat_twilight.model2$leaf.vs.flower < 0.05] <- "*"
+heat_twilight.model2$sig.leaf.vs.flower[heat_twilight.model2$leaf.vs.flower < 0.01] <- "**"
+heat_twilight.model2$sig.leaf.vs.flower[heat_twilight.model2$leaf.vs.flower < 0.0001] <- "***"
+heat_twilight.model2$sig.leaf.vs.beetle[heat_twilight.model2$leaf.vs.beetle > 0.05] <- ""
+heat_twilight.model2$sig.leaf.vs.beetle[heat_twilight.model2$leaf.vs.beetle < 0.05] <- "*"
+heat_twilight.model2$sig.leaf.vs.beetle[heat_twilight.model2$leaf.vs.beetle < 0.01] <- "**"
+heat_twilight.model2$sig.leaf.vs.beetle[heat_twilight.model2$leaf.vs.beetle < 0.0001] <- "***"
+heat_twilight.model2$sig.flower.vs.beetle[heat_twilight.model2$flower.vs.beetle > 0.05] <- ""
+heat_twilight.model2$sig.flower.vs.beetle[heat_twilight.model2$flower.vs.beetle < 0.05] <- "*"
+heat_twilight.model2$sig.flower.vs.beetle[heat_twilight.model2$flower.vs.beetle < 0.01] <- "**"
+heat_twilight.model2$sig.flower.vs.beetle[heat_twilight.model2$flower.vs.beetle < 0.0001] <- "***"
 ```
 
 ### Result of visual model 1: comparing visual systems with different photoreceptor combination {.tabset .tabset-fade .tabset-pills}
@@ -888,9 +948,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat1_d65.model1[,c(1,4:5)], aes(x=VislistA_d65.model1, y=VislistB_d65.model1, fill=leaf.vs.flower)) + 
+ggplot(data = heat_d65.model1, aes(x=VislistA_d65.model1, y=VislistB_d65.model1, fill=leaf.vs.flower)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_d65.model1, VislistB_d65.model1, label = round(leaf.vs.flower, 2)))+
+  geom_text(aes(VislistA_d65.model1, VislistB_d65.model1, label = paste(format(round(leaf.vs.flower, 2), nsmall = 2), sig.leaf.vs.flower)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -918,9 +978,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values
 ```{r}
-ggplot(data = heat1_twilight.model1[,c(1,4:5)], aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=leaf.vs.flower)) + 
+ggplot(data = heat_twilight.model1, aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=leaf.vs.flower)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = round(leaf.vs.flower, 2)))+
+  geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = paste(format(round(leaf.vs.flower, 2), nsmall = 2), sig.leaf.vs.flower)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -949,9 +1009,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat1_d65.model1[,c(2,4:5)], aes(x=VislistA_d65.model1, y=VislistB_d65.model1, fill=leaf.vs.beetle)) + 
+ggplot(data = heat_d65.model1, aes(x=VislistA_d65.model1, y=VislistB_d65.model1, fill=leaf.vs.beetle)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_d65.model1, VislistB_d65.model1, label = round(leaf.vs.beetle, 2))) +
+  geom_text(aes(VislistA_d65.model1, VislistB_d65.model1, label = paste(format(round(leaf.vs.beetle, 2), nsmall = 2), sig.leaf.vs.beetle))) +
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -979,9 +1039,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values
 ```{r}
-ggplot(data = heat1_twilight.model1[,c(2,4:5)], aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=leaf.vs.beetle)) + 
+ggplot(data = heat_twilight.model1, aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=leaf.vs.beetle)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = round(leaf.vs.beetle, 2))) +
+  geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = paste(format(round(leaf.vs.beetle, 2), nsmall = 2), sig.leaf.vs.beetle))) +
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1010,9 +1070,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat1_twilight.model1[,3:5,], aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=flower.vs.beetle)) + 
+ggplot(data = heat_twilight.model1, aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=flower.vs.beetle)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = round(flower.vs.beetle, 2)))+
+  geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = paste(format(round(flower.vs.beetle, 2), nsmall = 2), sig.flower.vs.beetle)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour 
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1040,9 +1100,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values
 ```{r}
-ggplot(data = heat1_twilight.model1[,c(1,4:5)], aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=leaf.vs.flower)) + 
+ggplot(data = heat_twilight.model1, aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=flower.vs.beetle)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = round(leaf.vs.flower, 2)))+
+  geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = paste(format(round(flower.vs.beetle, 2), nsmall = 2), sig.flower.vs.beetle)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1086,9 +1146,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat1_d65.model2[,c(1,4:5)], aes(x=VislistA_d65.model2, y=VislistB_d65.model2, fill=leaf.vs.flower)) + 
+ggplot(data = heat_d65.model2, aes(x=VislistA_d65.model2, y=VislistB_d65.model2, fill=leaf.vs.flower)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_d65.model2, VislistB_d65.model2, label = round(leaf.vs.flower, 2)))+
+  geom_text(aes(VislistA_d65.model2, VislistB_d65.model2, label = paste(format(round(leaf.vs.flower, 2), nsmall = 2), sig.leaf.vs.flower)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1116,9 +1176,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values
 ```{r}
-ggplot(data = heat1_twilight.model2[,c(1,4:5)], aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=leaf.vs.flower)) + 
+ggplot(data = heat_twilight.model2, aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=leaf.vs.flower)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = round(leaf.vs.flower, 2)))+
+  geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = paste(format(round(leaf.vs.flower, 2), nsmall = 2), sig.leaf.vs.flower)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1147,9 +1207,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat1_d65.model2[,c(2,4:5)], aes(x=VislistA_d65.model2, y=VislistB_d65.model2, fill=leaf.vs.beetle)) + 
+ggplot(data = heat_d65.model2, aes(x=VislistA_d65.model2, y=VislistB_d65.model2, fill=leaf.vs.beetle)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_d65.model2, VislistB_d65.model2, label = round(leaf.vs.beetle, 2))) +
+  geom_text(aes(VislistA_d65.model2, VislistB_d65.model2, label = paste(format(round(leaf.vs.beetle, 2), nsmall = 2), sig.leaf.vs.beetle))) +
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1177,9 +1237,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values
 ```{r}
-ggplot(data = heat1_twilight.model2[,c(2,4:5)], aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=leaf.vs.beetle)) + 
+ggplot(data = heat_twilight.model2, aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=leaf.vs.beetle)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = round(leaf.vs.beetle, 2))) +
+  geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = paste(format(round(leaf.vs.beetle, 2), nsmall = 2), sig.leaf.vs.beetle))) +
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1208,9 +1268,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat1_twilight.model2[,3:5,], aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=flower.vs.beetle)) + 
+ggplot(data = heat_twilight.model2, aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=flower.vs.beetle)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = round(flower.vs.beetle, 2)))+
+  geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = paste(format(round(flower.vs.beetle, 2), nsmall = 2), sig.flower.vs.beetle)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour 
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1238,9 +1298,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values
 ```{r}
-ggplot(data = heat1_twilight.model2[,c(1,4:5)], aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=leaf.vs.flower)) + 
+ggplot(data = heat_twilight.model2, aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=leaf.vs.flower)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = round(leaf.vs.flower, 2)))+
+  geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2,  label = paste(format(round(leaf.vs.flower, 2), nsmall = 2), sig.leaf.vs.flower)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
