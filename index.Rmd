@@ -14,7 +14,7 @@ output:
 
 * Specifically, we varied the presence of a long wavelength sensitive photoreceptor and its wavelength of maximum sensitivity.
 
-* To make our study ecological relevant to far-red sensitivity, we focused on jewel beetles. 
+* To make our study ecological relevant to far-red sensitivity, we focused on jewel beetles and their host plants. 
 
 * Additionally, we tested the effect of red-shifted light environment on contrast by running the same models under twilight illumination.
 
@@ -181,8 +181,8 @@ ggplot(peaks,aes(x=wl, y=value, col=peak))+
 
 ##Illuminations
 * Two light environments: daylight and twilight (to represent red-shifted illumination).
-+ daylight: __D65__ (standard daylight) from Commission internationale de l'eclairage CIE
-+ twilight: measured at the Pinnacles Lookout in Alpine National Park, VIC, Australia at 18:15 on September 14th 2019.
+  + daylight: __D65__ (standard daylight) from Commission internationale de l'eclairage CIE
+  + twilight: measured at the Pinnacles Lookout in Alpine National Park, VIC, Australia at 18:15 on September 14th 2019.
 
 ```{r, fig.cap="Relative irradiance of the standard daylight and twilight"}
 illum <- merge(irradiance.d65, irradiance.twilight) %>% gather(light, illuminace, -wl) 
