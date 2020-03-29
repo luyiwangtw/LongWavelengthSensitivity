@@ -54,8 +54,10 @@ knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time wh
 
 ```{r import data,message=FALSE}
 #import sensitivity curves
-specsensbuprest.model1 <- read.csv("data/peak sensitivity 3.csv",header=TRUE) %>% as.rspec()
-specsensbuprest.model2 <- read.csv("data/peak sensitivity 4.csv",header=TRUE) %>% as.rspec()
+specsensbuprest.model1 <- read.csv("data/peak sensitivity 3.csv",header=TRUE) %>%
+  as.rspec()
+specsensbuprest.model2 <- read.csv("data/peak sensitivity 4.csv",header=TRUE) %>%
+  as.rspec()
 #import irradiance
 irradiance.d65 <- read.csv("data/d65.csv",header=TRUE) %>% 
   as.rspec(lim=c(300,800)) %>%  #set import range

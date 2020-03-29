@@ -473,8 +473,10 @@ div.tocify {
 <li>All the wavelength used in the models ranged from 300-800 nm.</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#import sensitivity curves</span>
-specsensbuprest.model1 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/peak sensitivity 3.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.rspec</span>()
-specsensbuprest.model2 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/peak sensitivity 4.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.rspec</span>()
+specsensbuprest.model1 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/peak sensitivity 3.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">as.rspec</span>()
+specsensbuprest.model2 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/peak sensitivity 4.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">as.rspec</span>()
 <span class="co">#import irradiance</span>
 irradiance.d65 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/d65.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">as.rspec</span>(<span class="dt">lim=</span><span class="kw">c</span>(<span class="dv">300</span>,<span class="dv">800</span>)) <span class="op">%&gt;%</span><span class="st">  </span><span class="co">#set import range</span>

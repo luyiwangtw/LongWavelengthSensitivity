@@ -1,0 +1,55 @@
+#check Normality with histogram
+
+#### Visual model 1 {.tabset .tabset-fade .tabset-pills}
+
+##### D65 
+```{r}
+
+residual.leaf.vs.flower.model1<- data.frame(res.leaf.vs.flower_d65.model1[["residuals"]])
+compare.leaf.vs.flower.model1$residual <- residual.leaf.vs.flower.model1 
+residual.leaf.vs.beetle.model1<- data.frame(res.leaf.vs.beetle_d65.model1[["residuals"]])
+compare.leaf.vs.beetle.model1$residual <- residual.leaf.vs.beetle.model1 
+residual.flower.vs.beetle.model1<- data.frame(res.flower.vs.beetle_d65.model1[["residuals"]])
+compare.flower.vs.beetle.model1$residual <- residual.flower.vs.beetle.model1 
+histogram( ~ residual | peak_wl.leaf.vs.flower, data=compare.leaf.vs.flower.model1,
+           xlab = "Residaul",
+           ylab = "Frequency",
+           nint=30,layout=c(1,4))
+histogram( ~ residual | peak_wl.leaf.vs.beetle, data=compare.leaf.vs.beetle.model1,
+           xlab = "Residaul",
+           ylab = "Frequency",
+           nint=30,layout=c(1,4))
+histogram( ~ residual | peak_wl.flower.vs.beetle, data=compare.flower.vs.beetle.model1,
+           xlab = "Residaul",
+           ylab = "Frequency",
+           nint=30,layout=c(1,4))
+
+qqnorm(res.leaf.vs.flower_d65.model1$residuals, main = "Leaf vs Flower")
+qqnorm(res.leaf.vs.beetle_d65.model1$residuals, main = "Leaf vs Beetle")
+qqnorm(res.flower.vs.beetle_d65.model1$residuals, main = "Beetle vs Flower")
+```
+
+##### Twilight
+```{r}
+par (mfrow=c(1,3))
+qqnorm(res.leaf.vs.flower_twilight.model1$residuals, main = "Leaf vs Flower")
+qqnorm(res.leaf.vs.beetle_twilight.model1$residuals, main = "Leaf vs Beetle")
+qqnorm(res.flower.vs.beetle_twilight.model1$residuals, main = "Beetle vs Flower")
+```
+
+#### Visual model 2 {.tabset .tabset-fade .tabset-pills}
+##### D65 
+```{r}
+par (mfrow=c(1,3))
+qqnorm(res.leaf.vs.flower_d65.model2$residuals, main = "Leaf vs Flower")
+qqnorm(res.leaf.vs.beetle_d65.model2$residuals, main = "Leaf vs Beetle")
+qqnorm(res.flower.vs.beetle_d65.model2$residuals, main = "Beetle vs Flower")
+```
+
+##### Twilight
+```{r}
+par (mfrow=c(1,3))
+qqnorm(res.leaf.vs.flower_twilight.model2$residuals, main = "Leaf vs Flower")
+qqnorm(res.leaf.vs.beetle_twilight.model2$residuals, main = "Leaf vs Beetle")
+qqnorm(res.flower.vs.beetle_twilight.model2$residuals, main = "Beetle vs Flower")
+```
