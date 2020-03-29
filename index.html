@@ -493,8 +493,8 @@ dataset&lt;-<span class="st"> </span><span class="kw">aggspec</span>(raw.dataset
 <span class="st">  </span><span class="kw">procspec</span>(<span class="dt">opt =</span> <span class="st">&quot;smooth&quot;</span>, <span class="dt">span =</span> <span class="fl">0.1</span>, <span class="dt">fixneg =</span> <span class="st">&quot;zero&quot;</span>) <span class="co">#smooth the spectra and lift &lt;0 to 0</span></code></pre></div>
 <p></br></p>
 </div>
-<div id="spectra-of-the-targets" class="section level2">
-<h2>Spectra of the targets</h2>
+<div id="spectral-reflectance-of-the-targets" class="section level2">
+<h2>Spectral reflectance of the targets</h2>
 <ul>
 <li>Jewel beetles and their host plants (leaves and flowers): collected using integrating sphere</li>
 <li>Leaves:
@@ -613,9 +613,11 @@ Sensitivity curves of the photoreceptors with different peak wavelengths.
 <div id="illuminations" class="section level2">
 <h2>Illuminations</h2>
 <ul>
-<li>Two light environments: daylight and twilight (to represent red-shifted illumination).</li>
-<li>daylight: <strong>D65</strong> (standard daylight) from Commission internationale de l’eclairage CIE</li>
-<li>twilight: measured at the Pinnacles Lookout in Alpine National Park, VIC, Australia at 18:15 on September 14th 2019.</li>
+<li><p>Two light environments: daylight and twilight (to represent red-shifted illumination).</p>
+<ul>
+<li>Daylight: <strong>D65</strong> (standard daylight) from Commission internationale de l’eclairage CIE</li>
+<li>Twilight: measured at the Pinnacles Lookout in Alpine National Park, VIC, Australia at 18:15 on September 14th 2019.</li>
+</ul></li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">illum &lt;-<span class="st"> </span><span class="kw">merge</span>(irradiance.d65, irradiance.twilight) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">gather</span>(light, illuminace, <span class="op">-</span>wl) 
 
@@ -672,7 +674,7 @@ buprest660_twilight=<span class="kw">vismodel</span>(dataset[<span class="dv">1<
 buprest680_twilight=<span class="kw">vismodel</span>(dataset[<span class="dv">1</span><span class="op">:</span><span class="dv">501</span>,], <span class="dt">visual =</span> specsensbuprest.model2[, <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">10</span>)], <span class="dt">bkg=</span>aveleaf<span class="op">$</span>aveleaf, <span class="dt">illum =</span> irradiance.twilight[<span class="dv">1</span><span class="op">:</span><span class="dv">501</span>,<span class="dv">2</span>], <span class="dt">qcatch =</span> <span class="st">&#39;fi&#39;</span>, <span class="dt">relative=</span><span class="ot">FALSE</span>, <span class="dt">vonkries=</span><span class="ot">TRUE</span>)</code></pre></div>
 <p></br> </br></p>
 </div>
-<div id="second-contrast-calculation" class="section level2">
+<div id="second-contrast-calculation" class="section level2 tabset tabset-fade tabset-pills">
 <h2>Second: Contrast calculation</h2>
 <ul>
 <li>We used a neural noise-limited model where the noise is proportional to the Weber fraction and is independent of the intensity of the signal received.</li>
@@ -706,7 +708,494 @@ Cbuprest620_twilight =<span class="st"> </span><span class="kw">coldist</span>(b
 Cbuprest640_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest640_twilight, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)
 Cbuprest660_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest660_twilight, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)
 Cbuprest680_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest680_twilight, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#combine all contrast value in each comparison group</span>
+
+<span class="co">#Daylight - model 1</span>
+
+##flower vs leaf
+Vis1.lf_d65.model1&lt;-<span class="st"> </span>CvisUVSWMW..<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis1.lf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lf&quot;</span>,<span class="dv">1</span>)
+Vis2.lf_d65.model1&lt;-CvisUV..MWLW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis2.lf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lf&quot;</span>,<span class="dv">1</span>)
+Vis3.lf_d65.model1&lt;-CvisUVSW..LW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis3.lf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lf&quot;</span>,<span class="dv">1</span>)
+Vis4.lf_d65.model1&lt;-CvisUVSWMWLW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis4.lf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lf&quot;</span>,<span class="dv">1</span>)
+allvis.lf_d65.model1&lt;-Vis1.lf_d65.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lf_d65.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lf_d65.model1) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis4.lf_d65.model1)
+
+##beetle vs leaf
+Vis1.lb_d65.model1&lt;-<span class="st"> </span>CvisUVSWMW..<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis1.lb_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lb&quot;</span>,<span class="dv">1</span>)
+Vis2.lb_d65.model1&lt;-CvisUV..MWLW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis2.lb_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lb&quot;</span>,<span class="dv">1</span>)
+Vis3.lb_d65.model1&lt;-CvisUVSW..LW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis3.lb_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lb&quot;</span>,<span class="dv">1</span>)
+Vis4.lb_d65.model1&lt;-CvisUVSWMWLW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis4.lb_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lb&quot;</span>,<span class="dv">1</span>)
+allvis.lb_d65.model1&lt;-Vis1.lb_d65.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lb_d65.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lb_d65.model1) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis4.lb_d65.model1)
+
+##beetle vs flower
+Vis1.bf_d65.model1&lt;-<span class="st"> </span>CvisUVSWMW..<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis1.bf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.bf&quot;</span>,<span class="dv">1</span>)
+Vis2.bf_d65.model1&lt;-CvisUV..MWLW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis2.bf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.bf&quot;</span>,<span class="dv">1</span>)
+Vis3.bf_d65.model1&lt;-CvisUVSW..LW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis3.bf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.bf&quot;</span>,<span class="dv">1</span>)
+Vis4.bf_d65.model1&lt;-CvisUVSWMWLW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis4.bf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.bf&quot;</span>,<span class="dv">1</span>)
+allvis.bf_d65.model1&lt;-Vis1.bf_d65.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.bf_d65.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.bf_d65.model1)<span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">rbind</span>(Vis4.bf_d65.model1)
+
+<span class="co">#Twiligth - model 1</span>
+##flower vs leaf
+Vis1.lf_twilight.model1&lt;-<span class="st"> </span>CvisUVSWMW.._twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis1.lf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lf&quot;</span>,<span class="dv">1</span>)
+Vis2.lf_twilight.model1&lt;-CvisUV..MWLW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis2.lf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lf&quot;</span>,<span class="dv">1</span>)
+Vis3.lf_twilight.model1&lt;-CvisUVSW..LW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis3.lf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lf&quot;</span>,<span class="dv">1</span>)
+Vis4.lf_twilight.model1&lt;-CvisUVSWMWLW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis4.lf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lf&quot;</span>,<span class="dv">1</span>)
+allvis.lf_twilight.model1&lt;-Vis1.lf_twilight.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lf_twilight.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lf_twilight.model1) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis4.lf_twilight.model1)
+
+##beetle vs leaf
+Vis1.lb_twilight.model1&lt;-<span class="st"> </span>CvisUVSWMW.._twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis1.lb_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lb&quot;</span>,<span class="dv">1</span>)
+Vis2.lb_twilight.model1&lt;-CvisUV..MWLW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis2.lb_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lb&quot;</span>,<span class="dv">1</span>)
+Vis3.lb_twilight.model1&lt;-CvisUVSW..LW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis3.lb_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lb&quot;</span>,<span class="dv">1</span>)
+Vis4.lb_twilight.model1&lt;-CvisUVSWMWLW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis4.lb_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lb&quot;</span>,<span class="dv">1</span>)
+allvis.lb_twilight.model1&lt;-Vis1.lb_twilight.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lb_twilight.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lb_twilight.model1) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis4.lb_twilight.model1)
+
+
+##beetle vs flower
+Vis1.bf_twilight.model1&lt;-<span class="st"> </span>CvisUVSWMW.._twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis1.bf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.bf&quot;</span>,<span class="dv">1</span>)
+Vis2.bf_twilight.model1&lt;-CvisUV..MWLW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis2.bf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.bf&quot;</span>,<span class="dv">1</span>)
+Vis3.bf_twilight.model1&lt;-CvisUVSW..LW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis3.bf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.bf&quot;</span>,<span class="dv">1</span>)
+Vis4.bf_twilight.model1&lt;-CvisUVSWMWLW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis4.bf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.bf&quot;</span>,<span class="dv">1</span>)
+allvis.bf_twilight.model1&lt;-Vis1.bf_twilight.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.bf_twilight.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.bf_twilight.model1) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis4.bf_twilight.model1)
+
+
+
+<span class="co">#Daylight - model 2</span>
+##flower vs leaf
+Vis1.lf_d65.model2&lt;-<span class="st"> </span>Cbuprest580<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis1.lf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lf&quot;</span>,<span class="dv">1</span>)
+Vis2.lf_d65.model2&lt;-Cbuprest600<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis2.lf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lf&quot;</span>,<span class="dv">1</span>)
+Vis3.lf_d65.model2&lt;-Cbuprest620<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis3.lf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lf&quot;</span>,<span class="dv">1</span>)
+Vis4.lf_d65.model2&lt;-Cbuprest640<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis4.lf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lf&quot;</span>,<span class="dv">1</span>)
+Vis5.lf_d65.model2&lt;-Cbuprest660<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis5.lf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis5.lf&quot;</span>,<span class="dv">1</span>)
+Vis6.lf_d65.model2&lt;-Cbuprest680<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis6.lf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis6.lf&quot;</span>,<span class="dv">1</span>)
+
+allvis.lf_d65.model2&lt;-Vis1.lf_d65.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lf_d65.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lf_d65.model2) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">rbind</span>(Vis4.lf_d65.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis5.lf_d65.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis6.lf_d65.model2)
+
+##beetle vs leaf
+Vis1.lb_d65.model2&lt;-<span class="st"> </span>Cbuprest580<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis1.lb_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lb&quot;</span>,<span class="dv">1</span>)
+Vis2.lb_d65.model2&lt;-Cbuprest600<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis2.lb_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lb&quot;</span>,<span class="dv">1</span>)
+Vis3.lb_d65.model2&lt;-Cbuprest620<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis3.lb_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lb&quot;</span>,<span class="dv">1</span>)
+Vis4.lb_d65.model2&lt;-Cbuprest640<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis4.lb_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lb&quot;</span>,<span class="dv">1</span>)
+Vis5.lb_d65.model2&lt;-Cbuprest660<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis5.lb_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis5.lb&quot;</span>,<span class="dv">1</span>)
+Vis6.lb_d65.model2&lt;-Cbuprest680<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis6.lb_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis6.lb&quot;</span>,<span class="dv">1</span>)
+
+allvis.lb_d65.model2&lt;-Vis1.lb_d65.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lb_d65.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lb_d65.model2) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">rbind</span>(Vis4.lb_d65.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis5.lb_d65.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis6.lb_d65.model2)
+
+
+##beetle vs flower
+Vis1.bf_d65.model2&lt;-<span class="st"> </span>Cbuprest580<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis1.bf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.bf&quot;</span>,<span class="dv">1</span>)
+Vis2.bf_d65.model2&lt;-Cbuprest600<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis2.bf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.bf&quot;</span>,<span class="dv">1</span>)
+Vis3.bf_d65.model2&lt;-Cbuprest620<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis3.bf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.bf&quot;</span>,<span class="dv">1</span>)
+Vis4.bf_d65.model2&lt;-Cbuprest640<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis4.bf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.bf&quot;</span>,<span class="dv">1</span>)
+Vis5.bf_d65.model2&lt;-Cbuprest660<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis5.bf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis5.bf&quot;</span>,<span class="dv">1</span>)
+Vis6.bf_d65.model2&lt;-Cbuprest680<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis6.bf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis6.bf&quot;</span>,<span class="dv">1</span>)
+
+allvis.bf_d65.model2&lt;-Vis1.bf_d65.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.bf_d65.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.bf_d65.model2) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">rbind</span>(Vis4.bf_d65.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis5.bf_d65.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis6.bf_d65.model2)
+
+
+##Twiligth - model 2
+##flower vs leaf
+Vis1.lf_twilight.model2&lt;-<span class="st"> </span>Cbuprest580_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis1.lf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lf&quot;</span>,<span class="dv">1</span>)
+Vis2.lf_twilight.model2&lt;-Cbuprest600_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis2.lf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lf&quot;</span>,<span class="dv">1</span>)
+Vis3.lf_twilight.model2&lt;-Cbuprest620_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis3.lf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lf&quot;</span>,<span class="dv">1</span>)
+Vis4.lf_twilight.model2&lt;-Cbuprest640_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis4.lf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lf&quot;</span>,<span class="dv">1</span>)
+Vis5.lf_twilight.model2&lt;-Cbuprest660_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis5.lf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis5.lf&quot;</span>,<span class="dv">1</span>)
+Vis6.lf_twilight.model2&lt;-Cbuprest680_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
+Vis6.lf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis6.lf&quot;</span>,<span class="dv">1</span>)
+
+allvis.lf_twilight.model2&lt;-Vis1.lf_twilight.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lf_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lf_twilight.model2) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">rbind</span>(Vis4.lf_twilight.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis5.lf_twilight.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis6.lf_twilight.model2)
+
+##beetle vs leaf
+Vis1.lb_twilight.model2&lt;-<span class="st"> </span>Cbuprest580_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis1.lb_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lb&quot;</span>,<span class="dv">1</span>)
+Vis2.lb_twilight.model2&lt;-Cbuprest600_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis2.lb_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lb&quot;</span>,<span class="dv">1</span>)
+Vis3.lb_twilight.model2&lt;-Cbuprest620_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis3.lb_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lb&quot;</span>,<span class="dv">1</span>)
+Vis4.lb_twilight.model2&lt;-Cbuprest640_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis4.lb_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lb&quot;</span>,<span class="dv">1</span>)
+Vis5.lb_twilight.model2&lt;-Cbuprest660_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis5.lb_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis5.lb&quot;</span>,<span class="dv">1</span>)
+Vis6.lb_twilight.model2&lt;-Cbuprest680_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
+Vis6.lb_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis6.lb&quot;</span>,<span class="dv">1</span>)
+
+allvis.lb_twilight.model2&lt;-Vis1.lb_twilight.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lb_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lb_twilight.model2) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">rbind</span>(Vis4.lb_twilight.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis5.lb_twilight.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis6.lb_twilight.model2)
+
+##beetle vs flower
+Vis1.bf_twilight.model2&lt;-<span class="st"> </span>Cbuprest580_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis1.bf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.bf&quot;</span>,<span class="dv">1</span>)
+Vis2.bf_twilight.model2&lt;-Cbuprest600_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis2.bf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.bf&quot;</span>,<span class="dv">1</span>)
+Vis3.bf_twilight.model2&lt;-Cbuprest620_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis3.bf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.bf&quot;</span>,<span class="dv">1</span>)
+Vis4.bf_twilight.model2&lt;-Cbuprest640_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis4.bf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.bf&quot;</span>,<span class="dv">1</span>)
+Vis5.bf_twilight.model2&lt;-Cbuprest660_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis5.bf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis5.bf&quot;</span>,<span class="dv">1</span>)
+Vis6.bf_twilight.model2&lt;-Cbuprest680_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
+Vis6.bf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis6.bf&quot;</span>,<span class="dv">1</span>)
+
+allvis.bf_twilight.model2&lt;-Vis1.bf_twilight.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.bf_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.bf_twilight.model2) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">rbind</span>(Vis4.bf_twilight.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis5.bf_twilight.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis6.bf_twilight.model2)</code></pre></div>
+<div id="visual-model-1" class="section level3 tabset tabset-fade tabset-pills">
+<h3>Visual model 1</h3>
+<p>The table shows the median contrast in each comparison group</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Visul model 1</span>
+system.list.model1&lt;-<span class="st"> </span><span class="kw">rbind.data.frame</span>(<span class="st">&quot;Vis USM&quot;</span>, <span class="st">&quot;Vis UML&quot;</span>, <span class="st">&quot;Vis USL&quot;</span>,  <span class="st">&quot;Vis USML&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">system =</span> <span class="dv">1</span>) <span class="co"># make a list of system names</span></code></pre></div>
+<div id="daylight" class="section level4">
+<h4>Daylight</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Daylight</span>
+##list contrast from each comparison group
+lf.contrast_d65.model1 &lt;-<span class="st"> </span><span class="kw">rbind.data.frame</span>(<span class="kw">median</span>(Vis1.lf_d65.model1<span class="op">$</span>dS), <span class="kw">median</span>(Vis2.lf_d65.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis3.lf_d65.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis4.lf_d65.model1<span class="op">$</span>dS))
+lb.contrast_d65.model1 &lt;-<span class="kw">rbind.data.frame</span>(<span class="kw">median</span>(Vis1.lb_d65.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis2.lb_d65.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis3.lb_d65.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis4.lb_d65.model1<span class="op">$</span>dS))
+bf.contrast_d65.model1 &lt;-<span class="kw">rbind.data.frame</span>(<span class="kw">median</span>(Vis1.bf_d65.model1<span class="op">$</span>dS), <span class="kw">median</span>(Vis2.bf_d65.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis3.bf_d65.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis4.bf_d65.model1<span class="op">$</span>dS))
+<span class="co">#combind comparison groups together in a table</span>
+contrast.list_d65.model1&lt;-<span class="st"> </span>system.list.model1 <span class="op">%&gt;%</span><span class="st">  </span><span class="kw">cbind</span>(lf.contrast_d65.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cbind</span>(lb.contrast_d65.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cbind</span>(bf.contrast_d65.model1) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">leaf.vs.flower =</span> <span class="dv">2</span>, <span class="dt">leaf.vs.beetle =</span> <span class="dv">3</span>, <span class="dt">beetle.vs.flower =</span> <span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>() 
+contrast.list_d65.model1</code></pre></div>
+<table style="width:88%;">
+<colgroup>
+<col width="15%" />
+<col width="23%" />
+<col width="23%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">system</th>
+<th align="center">leaf.vs.flower</th>
+<th align="center">leaf.vs.beetle</th>
+<th align="center">beetle.vs.flower</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Vis USM</td>
+<td align="center">4.744</td>
+<td align="center">2.975</td>
+<td align="center">5.155</td>
+</tr>
+<tr class="even">
+<td align="center">Vis UML</td>
+<td align="center">4.163</td>
+<td align="center">3.567</td>
+<td align="center">4.603</td>
+</tr>
+<tr class="odd">
+<td align="center">Vis USL</td>
+<td align="center">4.89</td>
+<td align="center">3.421</td>
+<td align="center">5.28</td>
+</tr>
+<tr class="even">
+<td align="center">Vis USML</td>
+<td align="center">5.347</td>
+<td align="center">4.036</td>
+<td align="center">5.887</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="twilight" class="section level4">
+<h4>Twilight</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Twilight</span>
+##list contrast from each comparison group
+lf.contrast_twilight.model1 &lt;-<span class="st"> </span><span class="kw">rbind.data.frame</span>(<span class="kw">median</span>(Vis1.lf_twilight.model1<span class="op">$</span>dS), <span class="kw">median</span>(Vis2.lf_twilight.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis3.lf_twilight.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis4.lf_twilight.model1<span class="op">$</span>dS))
+lb.contrast_twilight.model1 &lt;-<span class="kw">rbind.data.frame</span>(<span class="kw">median</span>(Vis1.lb_twilight.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis2.lb_twilight.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis3.lb_twilight.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis4.lb_twilight.model1<span class="op">$</span>dS))
+bf.contrast_twilight.model1 &lt;-<span class="kw">rbind.data.frame</span>(<span class="kw">median</span>(Vis1.bf_twilight.model1<span class="op">$</span>dS), <span class="kw">median</span>(Vis2.bf_twilight.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis3.bf_twilight.model1<span class="op">$</span>dS),<span class="kw">median</span>(Vis4.bf_twilight.model1<span class="op">$</span>dS))
+<span class="co">#combind comparison groups together in a table</span>
+contrast.list_twilight.model1&lt;-<span class="st"> </span>system.list.model1 <span class="op">%&gt;%</span><span class="st">  </span><span class="kw">cbind</span>(lf.contrast_twilight.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cbind</span>(lb.contrast_twilight.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cbind</span>(bf.contrast_twilight.model1) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">leaf.vs.flower =</span> <span class="dv">2</span>, <span class="dt">leaf.vs.beetle =</span> <span class="dv">3</span>, <span class="dt">beetle.vs.flower =</span> <span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()
+contrast.list_twilight.model1</code></pre></div>
+<table style="width:88%;">
+<colgroup>
+<col width="15%" />
+<col width="23%" />
+<col width="23%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">system</th>
+<th align="center">leaf.vs.flower</th>
+<th align="center">leaf.vs.beetle</th>
+<th align="center">beetle.vs.flower</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Vis USM</td>
+<td align="center">4.433</td>
+<td align="center">2.725</td>
+<td align="center">4.806</td>
+</tr>
+<tr class="even">
+<td align="center">Vis UML</td>
+<td align="center">4.033</td>
+<td align="center">3.438</td>
+<td align="center">4.368</td>
+</tr>
+<tr class="odd">
+<td align="center">Vis USL</td>
+<td align="center">4.715</td>
+<td align="center">3.187</td>
+<td align="center">4.962</td>
+</tr>
+<tr class="even">
+<td align="center">Vis USML</td>
+<td align="center">5.072</td>
+<td align="center">3.833</td>
+<td align="center">5.572</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="visual-model-2" class="section level3 tabset tabset-fade tabset-pills">
+<h3>Visual model 2</h3>
+<p>The table shows the median contrast in each comparison group</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">system.list.model2&lt;-<span class="st"> </span><span class="kw">rbind.data.frame</span>(<span class="st">&quot;Vis 580&quot;</span>, <span class="st">&quot;Vis 600&quot;</span>, <span class="st">&quot;Vis 620&quot;</span>, <span class="st">&quot;Vis 640&quot;</span>, <span class="st">&quot;Vis 660&quot;</span>, <span class="st">&quot;Vis 680&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">system =</span> <span class="dv">1</span>) <span class="co"># make a list of system names</span></code></pre></div>
+<div id="daylight-1" class="section level4">
+<h4>Daylight</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Daylight</span>
+##list contrast from each comparison group
+lf.contrast_d65.model2 &lt;-<span class="st"> </span><span class="kw">rbind.data.frame</span>(<span class="kw">median</span>(Vis1.lf_d65.model2<span class="op">$</span>dS), <span class="kw">median</span>(Vis2.lf_d65.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis3.lf_d65.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis4.lf_d65.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis5.lf_d65.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis6.lf_d65.model2<span class="op">$</span>dS))
+lb.contrast_d65.model2 &lt;-<span class="kw">rbind.data.frame</span>(<span class="kw">median</span>(Vis1.lb_d65.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis2.lb_d65.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis3.lb_d65.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis4.lb_d65.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis5.lb_d65.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis6.lb_d65.model2<span class="op">$</span>dS))
+bf.contrast_d65.model2 &lt;-<span class="kw">rbind.data.frame</span>(<span class="kw">median</span>(Vis1.bf_d65.model2<span class="op">$</span>dS), <span class="kw">median</span>(Vis2.bf_d65.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis3.bf_d65.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis4.bf_d65.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis5.bf_d65.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis6.bf_d65.model2<span class="op">$</span>dS))
+<span class="co">#combind comparison groups together in a table</span>
+contrast.list_d65.model2&lt;-<span class="st"> </span>system.list.model2 <span class="op">%&gt;%</span><span class="st">  </span><span class="kw">cbind</span>(lf.contrast_d65.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cbind</span>(lb.contrast_d65.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cbind</span>(bf.contrast_d65.model2) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">leaf.vs.flower =</span> <span class="dv">2</span>, <span class="dt">leaf.vs.beetle =</span> <span class="dv">3</span>, <span class="dt">beetle.vs.flower =</span> <span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>() 
+contrast.list_d65.model2</code></pre></div>
+<table style="width:86%;">
+<colgroup>
+<col width="13%" />
+<col width="23%" />
+<col width="23%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">system</th>
+<th align="center">leaf.vs.flower</th>
+<th align="center">leaf.vs.beetle</th>
+<th align="center">beetle.vs.flower</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Vis 580</td>
+<td align="center">5.347</td>
+<td align="center">4.036</td>
+<td align="center">5.887</td>
+</tr>
+<tr class="even">
+<td align="center">Vis 600</td>
+<td align="center">5.567</td>
+<td align="center">4.582</td>
+<td align="center">6.133</td>
+</tr>
+<tr class="odd">
+<td align="center">Vis 620</td>
+<td align="center">5.706</td>
+<td align="center">5.081</td>
+<td align="center">6.456</td>
+</tr>
+<tr class="even">
+<td align="center">Vis 640</td>
+<td align="center">5.832</td>
+<td align="center">5.362</td>
+<td align="center">6.734</td>
+</tr>
+<tr class="odd">
+<td align="center">Vis 660</td>
+<td align="center">5.703</td>
+<td align="center">5.484</td>
+<td align="center">6.971</td>
+</tr>
+<tr class="even">
+<td align="center">Vis 680</td>
+<td align="center">5.475</td>
+<td align="center">5.675</td>
+<td align="center">7.116</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="twilight-1" class="section level4">
+<h4>Twilight</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Twilight</span>
+##list contrast from each comparison group
+lf.contrast_twilight.model2 &lt;-<span class="st"> </span><span class="kw">rbind.data.frame</span>(<span class="kw">median</span>(Vis1.lf_twilight.model2<span class="op">$</span>dS), <span class="kw">median</span>(Vis2.lf_twilight.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis3.lf_twilight.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis4.lf_twilight.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis5.lf_twilight.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis6.lf_twilight.model2<span class="op">$</span>dS))
+lb.contrast_twilight.model2 &lt;-<span class="kw">rbind.data.frame</span>(<span class="kw">median</span>(Vis1.lb_twilight.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis2.lb_twilight.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis3.lb_twilight.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis4.lb_twilight.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis5.lb_twilight.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis6.lb_twilight.model2<span class="op">$</span>dS))
+bf.contrast_twilight.model2 &lt;-<span class="kw">rbind.data.frame</span>(<span class="kw">median</span>(Vis1.bf_twilight.model2<span class="op">$</span>dS), <span class="kw">median</span>(Vis2.bf_twilight.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis3.bf_twilight.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis4.bf_twilight.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis5.bf_twilight.model2<span class="op">$</span>dS),<span class="kw">median</span>(Vis6.bf_twilight.model2<span class="op">$</span>dS))
+<span class="co">#combind comparison groups together in a table</span>
+contrast.list_twilight.model2&lt;-<span class="st"> </span>system.list.model2 <span class="op">%&gt;%</span><span class="st">  </span><span class="kw">cbind</span>(lf.contrast_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cbind</span>(lb.contrast_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">cbind</span>(bf.contrast_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">leaf.vs.flower =</span> <span class="dv">2</span>, <span class="dt">leaf.vs.beetle =</span> <span class="dv">3</span>, <span class="dt">beetle.vs.flower =</span> <span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>() 
+contrast.list_twilight.model2</code></pre></div>
+<table style="width:86%;">
+<colgroup>
+<col width="13%" />
+<col width="23%" />
+<col width="23%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">system</th>
+<th align="center">leaf.vs.flower</th>
+<th align="center">leaf.vs.beetle</th>
+<th align="center">beetle.vs.flower</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Vis 580</td>
+<td align="center">5.072</td>
+<td align="center">3.833</td>
+<td align="center">5.572</td>
+</tr>
+<tr class="even">
+<td align="center">Vis 600</td>
+<td align="center">5.363</td>
+<td align="center">4.502</td>
+<td align="center">5.837</td>
+</tr>
+<tr class="odd">
+<td align="center">Vis 620</td>
+<td align="center">5.584</td>
+<td align="center">5.062</td>
+<td align="center">6.244</td>
+</tr>
+<tr class="even">
+<td align="center">Vis 640</td>
+<td align="center">5.644</td>
+<td align="center">5.329</td>
+<td align="center">6.587</td>
+</tr>
+<tr class="odd">
+<td align="center">Vis 660</td>
+<td align="center">5.36</td>
+<td align="center">5.631</td>
+<td align="center">6.893</td>
+</tr>
+<tr class="even">
+<td align="center">Vis 680</td>
+<td align="center">5.235</td>
+<td align="center">5.758</td>
+<td align="center">7.071</td>
+</tr>
+</tbody>
+</table>
 <p></br> </br></p>
+</div>
+</div>
 </div>
 </div>
 <div id="compare-contrasts" class="section level1">
@@ -1072,7 +1561,7 @@ res.leaf.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.leaf.v
 res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flower.vs.beetle.model2<span class="op">$</span>dS <span class="op">~</span><span class="st"> </span>compare.flower.vs.beetle.model2<span class="op">$</span>peak_wl.flower.vs.beetle)</code></pre></div>
 <div id="normality" class="section level3 tabset tabset-fade tabset-pills">
 <h3>Normality</h3>
-<div id="visual-model-1" class="section level4 tabset tabset-fade tabset-pills">
+<div id="visual-model-1-1" class="section level4 tabset tabset-fade tabset-pills">
 <h4>Visual model 1</h4>
 <div id="d65" class="section level5">
 <h5>D65</h5>
@@ -1080,18 +1569,18 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
 <span class="kw">qqnorm</span>(res.leaf.vs.flower_d65.model1<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Flower&quot;</span>)
 <span class="kw">qqnorm</span>(res.leaf.vs.beetle_d65.model1<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Beetle&quot;</span>)
 <span class="kw">qqnorm</span>(res.flower.vs.beetle_d65.model1<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 </div>
-<div id="twilight" class="section level5">
+<div id="twilight-2" class="section level5">
 <h5>Twilight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
 <span class="kw">qqnorm</span>(res.leaf.vs.flower_twilight.model1<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Flower&quot;</span>)
 <span class="kw">qqnorm</span>(res.leaf.vs.beetle_twilight.model1<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Beetle&quot;</span>)
 <span class="kw">qqnorm</span>(res.flower.vs.beetle_twilight.model1<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 </div>
 </div>
-<div id="visual-model-2" class="section level4 tabset tabset-fade tabset-pills">
+<div id="visual-model-2-1" class="section level4 tabset tabset-fade tabset-pills">
 <h4>Visual model 2</h4>
 <div id="d65-1" class="section level5">
 <h5>D65</h5>
@@ -1099,21 +1588,21 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
 <span class="kw">qqnorm</span>(res.leaf.vs.flower_d65.model2<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Flower&quot;</span>)
 <span class="kw">qqnorm</span>(res.leaf.vs.beetle_d65.model2<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Beetle&quot;</span>)
 <span class="kw">qqnorm</span>(res.flower.vs.beetle_d65.model2<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 </div>
-<div id="twilight-1" class="section level5">
+<div id="twilight-3" class="section level5">
 <h5>Twilight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
 <span class="kw">qqnorm</span>(res.leaf.vs.flower_twilight.model2<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Flower&quot;</span>)
 <span class="kw">qqnorm</span>(res.leaf.vs.beetle_twilight.model2<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Beetle&quot;</span>)
 <span class="kw">qqnorm</span>(res.flower.vs.beetle_twilight.model2<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
 </div>
 </div>
 </div>
 <div id="homoscedasticity" class="section level3 tabset tabset-fade tabset-pills">
 <h3>Homoscedasticity</h3>
-<div id="visual-model-1-1" class="section level4 tabset tabset-fade tabset-pills">
+<div id="visual-model-1-2" class="section level4 tabset tabset-fade tabset-pills">
 <h4>Visual model 1</h4>
 <div id="d65-2" class="section level5">
 <h5>D65</h5>
@@ -1127,9 +1616,9 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
 <span class="kw">boxplot</span>(compare.flower.vs.beetle.model1<span class="op">$</span>dS<span class="op">~</span>compare.flower.vs.beetle.model1<span class="op">$</span>peak_wl.flower.vs.beetle, <span class="dt">las=</span><span class="dv">2</span>,
         <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>,
         <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis UML&quot;</span>, <span class="st">&quot;Vis USL&quot;</span>, <span class="st">&quot;Vis USM&quot;</span>, <span class="st">&quot;Vis USML&quot;</span>))</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 </div>
-<div id="twilight-2" class="section level5">
+<div id="twilight-4" class="section level5">
 <h5>Twilight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
 <span class="kw">boxplot</span>(compare.leaf.vs.flower_twilight.model1<span class="op">$</span>dS<span class="op">~</span>compare.leaf.vs.flower_twilight.model1<span class="op">$</span>peak_wl.leaf.vs.flower, <span class="dt">las=</span><span class="dv">2</span>,
@@ -1141,10 +1630,10 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
 <span class="kw">boxplot</span>(compare.flower.vs.beetle_twilight.model1<span class="op">$</span>dS<span class="op">~</span>compare.flower.vs.beetle_twilight.model1<span class="op">$</span>peak_wl.flower.vs.beetle, <span class="dt">las=</span><span class="dv">2</span>,
         <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>,
         <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis UML&quot;</span>, <span class="st">&quot;Vis USL&quot;</span>, <span class="st">&quot;Vis USM&quot;</span>, <span class="st">&quot;Vis USML&quot;</span>))</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 </div>
 </div>
-<div id="visual-model-2-1" class="section level4 tabset tabset-fade tabset-pills">
+<div id="visual-model-2-2" class="section level4 tabset tabset-fade tabset-pills">
 <h4>Visual model 2</h4>
 <div id="d65-3" class="section level5">
 <h5>D65</h5>
@@ -1158,9 +1647,9 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
 <span class="kw">boxplot</span>(compare.flower.vs.beetle.model2<span class="op">$</span>dS<span class="op">~</span>compare.flower.vs.beetle.model2<span class="op">$</span>peak_wl.flower.vs.beetle, <span class="dt">las=</span><span class="dv">2</span>,
         <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>,
         <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis 580&quot;</span>, <span class="st">&quot;Vis 600&quot;</span>, <span class="st">&quot;Vis 620&quot;</span>, <span class="st">&quot;Vis 640&quot;</span>, <span class="st">&quot;Vis 660&quot;</span>, <span class="st">&quot;Vis 680&quot;</span>))</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 </div>
-<div id="twilight-3" class="section level5">
+<div id="twilight-5" class="section level5">
 <h5>Twilight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
 <span class="kw">boxplot</span>(compare.leaf.vs.flower_twilight.model2<span class="op">$</span>dS<span class="op">~</span>compare.leaf.vs.flower_twilight.model2<span class="op">$</span>peak_wl.leaf.vs.flower, <span class="dt">las=</span><span class="dv">2</span>,
@@ -1172,7 +1661,7 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
 <span class="kw">boxplot</span>(compare.flower.vs.beetle_twilight.model2<span class="op">$</span>dS<span class="op">~</span>compare.flower.vs.beetle_twilight.model2<span class="op">$</span>peak_wl.flower.vs.beetle, <span class="dt">las=</span><span class="dv">2</span>,
         <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>,
         <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis 580&quot;</span>, <span class="st">&quot;Vis 600&quot;</span>, <span class="st">&quot;Vis 620&quot;</span>, <span class="st">&quot;Vis 640&quot;</span>, <span class="st">&quot;Vis 660&quot;</span>, <span class="st">&quot;Vis 680&quot;</span>))</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <p></br> </br></p>
 </div>
 </div>
@@ -1359,7 +1848,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 <p></br></p>
 <div id="leaf-vs-flower" class="section level4 tabset tabset-fade tabset-pills">
 <h4><strong>Leaf vs Flower</strong></h4>
-<div id="daylight" class="section level5 tabset tabset-fade tabset-pills">
+<div id="daylight-2" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Daylight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.leaf.vs.flower_d65.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:75%;">
@@ -1402,7 +1891,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
                      <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
                      <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
 <span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 </div>
 <div id="original-model-output" class="section level6">
 <h6>Original model output</h6>
@@ -1457,7 +1946,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 ## (Adjusted p values reported -- bonferroni method)</code></pre>
 </div>
 </div>
-<div id="twilight-4" class="section level5 tabset tabset-fade tabset-pills">
+<div id="twilight-6" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Twilight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.leaf.vs.flower_twilight.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:75%;">
@@ -1500,7 +1989,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
                      <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
                      <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
 <span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-1" class="section level6">
 <h6>Original model output</h6>
@@ -1558,7 +2047,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 </div>
 <div id="leaf-vs-beetle" class="section level4 tabset tabset-fade tabset-pills">
 <h4><strong>Leaf vs Beetle</strong></h4>
-<div id="daylight-1" class="section level5 tabset tabset-fade tabset-pills">
+<div id="daylight-3" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Daylight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.leaf.vs.beetle_d65.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:75%;">
@@ -1601,7 +2090,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
                      <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
                      <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
 <span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-2" class="section level6">
 <h6>Original model output</h6>
@@ -1656,7 +2145,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 ## (Adjusted p values reported -- bonferroni method)</code></pre>
 </div>
 </div>
-<div id="twilight-5" class="section level5 tabset tabset-fade tabset-pills">
+<div id="twilight-7" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Twilight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.leaf.vs.beetle_twilight.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:75%;">
@@ -1699,7 +2188,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
                      <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
                      <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
 <span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-3" class="section level6">
 <h6>Original model output</h6>
@@ -1757,7 +2246,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 </div>
 <div id="beetle-vs-flower" class="section level4 tabset tabset-fade tabset-pills">
 <h4><strong>Beetle vs Flower</strong></h4>
-<div id="daylight-2" class="section level5 tabset tabset-fade tabset-pills">
+<div id="daylight-4" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Daylight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.flower.vs.beetle_d65.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:78%;">
@@ -1800,7 +2289,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
                      <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
                      <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
 <span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-4" class="section level6">
 <h6>Original model output</h6>
@@ -1856,7 +2345,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 ## (Adjusted p values reported -- bonferroni method)</code></pre>
 </div>
 </div>
-<div id="twilight-6" class="section level5 tabset tabset-fade tabset-pills">
+<div id="twilight-8" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Twilight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.flower.vs.beetle_twilight.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:78%;">
@@ -1899,7 +2388,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
                      <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
                      <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
 <span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-5" class="section level6">
 <h6>Original model output</h6>
@@ -1964,7 +2453,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 <p></br></p>
 <div id="leaf-vs-flower-1" class="section level4 tabset tabset-fade tabset-pills">
 <h4><strong>Leaf vs Flower</strong></h4>
-<div id="daylight-3" class="section level5 tabset tabset-fade tabset-pills">
+<div id="daylight-5" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Daylight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.leaf.vs.flower_d65.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:75%;">
@@ -2007,7 +2496,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
                      <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
                      <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
 <span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-6" class="section level6">
 <h6>Original model output</h6>
@@ -2059,7 +2548,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 ## (Adjusted p values reported -- bonferroni method)</code></pre>
 </div>
 </div>
-<div id="twilight-7" class="section level5 tabset tabset-fade tabset-pills">
+<div id="twilight-9" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Twilight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.leaf.vs.flower_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:75%;">
@@ -2102,7 +2591,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
                      <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
                      <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
 <span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-7" class="section level6">
 <h6>Original model output</h6>
@@ -2205,7 +2694,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 </div>
 <div id="leaf-vs-beetle-1" class="section level4 tabset tabset-fade tabset-pills">
 <h4><strong>Leaf vs Beetle</strong></h4>
-<div id="daylight-4" class="section level5 tabset tabset-fade tabset-pills">
+<div id="daylight-6" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Daylight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.leaf.vs.beetle_d65.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:75%;">
@@ -2248,7 +2737,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
                      <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
                      <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
 <span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-8" class="section level6">
 <h6>Original model output</h6>
@@ -2300,7 +2789,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 ## (Adjusted p values reported -- bonferroni method)</code></pre>
 </div>
 </div>
-<div id="twilight-8" class="section level5 tabset tabset-fade tabset-pills">
+<div id="twilight-10" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Twilight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.leaf.vs.beetle_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:75%;">
@@ -2343,7 +2832,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
                      <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
                      <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
 <span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-9" class="section level6">
 <h6>Original model output</h6>
@@ -2446,7 +2935,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 </div>
 <div id="beetle-vs-flower-1" class="section level4 tabset tabset-fade tabset-pills">
 <h4><strong>Beetle vs Flower</strong></h4>
-<div id="daylight-5" class="section level5 tabset tabset-fade tabset-pills">
+<div id="daylight-7" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Daylight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.flower.vs.beetle_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:78%;">
@@ -2489,7 +2978,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
                      <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
                      <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
 <span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-56-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-10" class="section level6">
 <h6>Original model output</h6>
@@ -2590,7 +3079,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 ## (Adjusted p values reported -- bonferroni method)</code></pre>
 </div>
 </div>
-<div id="twilight-9" class="section level5 tabset tabset-fade tabset-pills">
+<div id="twilight-11" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Twilight</h5>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.flower.vs.beetle_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:78%;">
@@ -2633,7 +3122,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
                      <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(), 
                      <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>() )<span class="op">+</span>
 <span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill =</span> <span class="st">&quot;p vaalue&quot;</span>)</code></pre></div>
-<p><img src="index_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
 </div>
 <div id="original-model-output-11" class="section level6">
 <h6>Original model output</h6>
@@ -2745,9 +3234,9 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 <li>Lines of the same colors connect the same samples</li>
 </ul>
 <p></br></p>
-<div id="visual-model-1-2" class="section level2 tabset tabset-fade tabset-pills">
+<div id="visual-model-1-3" class="section level2 tabset tabset-fade tabset-pills">
 <h2>Visual model 1</h2>
-<div id="daylight-6" class="section level3">
+<div id="daylight-8" class="section level3">
 <h3>Daylight</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#import the flower color code </span>
 color.code&lt;-<span class="kw">read.csv</span>(<span class="st">&quot;data/color code list.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>) 
@@ -2772,21 +3261,7 @@ beetle.colour.model1 &lt;-<span class="st"> </span>name.list <span class="op">%&
 
 
 <span class="co">#make flower vs leaf plot</span>
-Vis1.lf_d65.model1&lt;-<span class="st"> </span>CvisUVSWMW..<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis1.lf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lf&quot;</span>,<span class="dv">1</span>)
-Vis2.lf_d65.model1&lt;-CvisUV..MWLW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis2.lf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lf&quot;</span>,<span class="dv">1</span>)
-Vis3.lf_d65.model1&lt;-CvisUVSW..LW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis3.lf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lf&quot;</span>,<span class="dv">1</span>)
-Vis4.lf_d65.model1&lt;-CvisUVSWMWLW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis4.lf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lf&quot;</span>,<span class="dv">1</span>)
-allvis.lf_d65.model1&lt;-Vis1.lf_d65.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lf_d65.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lf_d65.model1) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis4.lf_d65.model1)
-
-<span class="co">#add the mean</span>
+##add the mean
 mean.lf_d65.model1&lt;-allvis.lf_d65.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">patch3 =</span> <span class="kw">paste</span>(allvis.lf_d65.model1<span class="op">$</span>vissys,allvis.lf_d65.model1<span class="op">$</span>patch1,<span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co">#create a new column &quot;patch3&quot; which combines the category info of patch1(flowers) and vissys</span>
 <span class="st">  </span><span class="kw">group_by</span>(patch3,vissys,patch1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean.dS.lf=</span><span class="kw">mean</span>(dS)) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -2794,13 +3269,13 @@ mean.lf_d65.model1&lt;-allvis.lf_d65.model1 <span class="op">%&gt;%</span><span 
 <span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>patch3) <span class="co">#remove the patch3 column because we don&#39;t need it anymore</span>
 
-<span class="co">#plot the mean</span>
+##plot the mean
 <span class="kw">names</span>(mean.lf_d65.model1)[<span class="kw">names</span>(mean.lf_d65.model1) <span class="op">==</span><span class="st"> &quot;patch1&quot;</span>] &lt;-<span class="st"> &quot;flowerID&quot;</span> 
 <span class="co">#rename the column &quot;patch1&quot; because somehow it doesn&#39;t work in the ggplot function</span>
 mean.lf_d65.model1&lt;-mean.lf_d65.model1[<span class="kw">order</span>(mean.lf_d65.model1<span class="op">$</span>flowerID),] 
 <span class="co">#make the data frame order by flowerID then when apply the colour code in the following step &quot;viridis&quot;, the colour will be consistent in the same comparison accross different visual systems</span>
 
-<span class="co">#combine the colour code list to the mean.bf for ploting</span>
+##combine the colour code list to the mean.bf for ploting
 mean.lf_d65.model1<span class="op">$</span>match.name&lt;-flower.colour.model1<span class="op">$</span>species <span class="co"># this column is just for checking if match correctly</span>
 mean.lf_d65.model1<span class="op">$</span>colour&lt;-flower.colour.model1<span class="op">$</span>colour
 
@@ -2841,22 +3316,7 @@ lf_d65.model1&lt;-<span class="kw">ggplot</span>(mean.lf_d65.model1, <span class
 
 
 <span class="co">#make beetle vs leaf plot</span>
-Vis1.lb_d65.model1&lt;-<span class="st"> </span>CvisUVSWMW..<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis1.lb_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lb&quot;</span>,<span class="dv">1</span>)
-Vis2.lb_d65.model1&lt;-CvisUV..MWLW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis2.lb_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lb&quot;</span>,<span class="dv">1</span>)
-Vis3.lb_d65.model1&lt;-CvisUVSW..LW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis3.lb_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lb&quot;</span>,<span class="dv">1</span>)
-Vis4.lb_d65.model1&lt;-CvisUVSWMWLW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis4.lb_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lb&quot;</span>,<span class="dv">1</span>)
-allvis.lb_d65.model1&lt;-Vis1.lb_d65.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lb_d65.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lb_d65.model1) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis4.lb_d65.model1)
-
-
-<span class="co">#add the mean</span>
+##add the mean
 mean.lb_d65.model1&lt;-allvis.lb_d65.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">patch3 =</span> <span class="kw">paste</span>(allvis.lb_d65.model1<span class="op">$</span>vissys,allvis.lb_d65.model1<span class="op">$</span>patch2,<span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co">#create a new column &quot;patch3&quot; which combines the category info of patch2(beetles) and vissys</span>
 <span class="st">  </span><span class="kw">group_by</span>(patch3,vissys,patch2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean.dS.lb=</span><span class="kw">mean</span>(dS)) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -2864,13 +3324,13 @@ mean.lb_d65.model1&lt;-allvis.lb_d65.model1 <span class="op">%&gt;%</span><span 
 <span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>patch3) <span class="co">#remove the patch3 column because we don&#39;t need it anymore</span>
 
-<span class="co">#plot the mean</span>
+##plot the mean
 <span class="kw">names</span>(mean.lb_d65.model1)[<span class="kw">names</span>(mean.lb_d65.model1) <span class="op">==</span><span class="st"> &quot;patch2&quot;</span>] &lt;-<span class="st"> &quot;beetleID&quot;</span>
 <span class="co">#rename the column &quot;patch1&quot; because somehow it doesn&#39;t work in the ggplot function</span>
 mean.lb_d65.model1&lt;-mean.lb_d65.model1[<span class="kw">order</span>(mean.lb_d65.model1<span class="op">$</span>beetleID),]
 <span class="co">#make the data frame order bt beetleID then when apply the colour code in the following step &quot;viridis&quot;, the colour will be consistent in the same comparison accross different visual systems</span>
 
-<span class="co">#combine the colour code list to the mean.bf for ploting</span>
+##combine the colour code list to the mean.bf for ploting
 mean.lb_d65.model1<span class="op">$</span>match.name&lt;-beetle.colour.model1<span class="op">$</span>species <span class="co"># this column is just for checking if match correctly</span>
 mean.lb_d65.model1<span class="op">$</span>colour&lt;-beetle.colour.model1<span class="op">$</span>colour
 
@@ -2908,23 +3368,7 @@ lb_d65.model1&lt;-<span class="kw">ggplot</span>(mean.lb_d65.model1, <span class
 
 
 <span class="co">#make beetle vs flower plot</span>
-Vis1.bf_d65.model1&lt;-<span class="st"> </span>CvisUVSWMW..<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis1.bf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.bf&quot;</span>,<span class="dv">1</span>)
-Vis2.bf_d65.model1&lt;-CvisUV..MWLW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis2.bf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.bf&quot;</span>,<span class="dv">1</span>)
-Vis3.bf_d65.model1&lt;-CvisUVSW..LW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis3.bf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.bf&quot;</span>,<span class="dv">1</span>)
-Vis4.bf_d65.model1&lt;-CvisUVSWMWLW<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis4.bf_d65.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.bf&quot;</span>,<span class="dv">1</span>)
-allvis.bf_d65.model1&lt;-Vis1.bf_d65.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.bf_d65.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.bf_d65.model1)<span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">rbind</span>(Vis4.bf_d65.model1)
-
-
-<span class="co">#add the mean</span>
+##add the mean
 mean.bf_d65.model1&lt;-allvis.bf_d65.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">patch3 =</span> <span class="kw">paste</span>(allvis.bf_d65.model1<span class="op">$</span>vissys,allvis.bf_d65.model1<span class="op">$</span>patch1,<span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co">#create a new column &quot;patch3&quot; which combines the category info of patch1(flowers) and vissys</span>
 <span class="st">  </span><span class="kw">group_by</span>(patch3,vissys,patch1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean.dS.bf=</span><span class="kw">mean</span>(dS)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co">#patch1(flowers</span>
@@ -2932,13 +3376,13 @@ mean.bf_d65.model1&lt;-allvis.bf_d65.model1 <span class="op">%&gt;%</span><span 
 <span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>patch3) <span class="co">#remove the patch3 column because we don&#39;t need it anymore</span>
 
-<span class="co">#plot the mean</span>
+##plot the mean
 <span class="kw">names</span>(mean.bf_d65.model1)[<span class="kw">names</span>(mean.bf_d65.model1) <span class="op">==</span><span class="st"> &quot;patch1&quot;</span>] &lt;-<span class="st"> &quot;flowerID&quot;</span>
 <span class="co">#rename the column &quot;patch1&quot; because somehow it doesn&#39;t work in the ggplot function</span>
 mean.bf_d65.model1&lt;-mean.bf_d65.model1[<span class="kw">order</span>(mean.bf_d65.model1<span class="op">$</span>flowerID),]
 <span class="co">#make the data frame order bt flowerID then when apply the colour code in the following step &quot;viridis&quot;, the colour will be consistent in the same comparison accross different visual systems</span>
 
-<span class="co">#combine the colour code list to the mean.bf for ploting</span>
+##combine the colour code list to the mean.bf for ploting
 mean.bf_d65.model1<span class="op">$</span>match.name&lt;-flower.colour.model1<span class="op">$</span>species <span class="co"># this column is just for checking if match correctly</span>
 mean.bf_d65.model1<span class="op">$</span>colour&lt;-flower.colour.model1<span class="op">$</span>colour
 
@@ -2979,30 +3423,16 @@ bf_d65.model1&lt;-<span class="kw">ggplot</span>(mean.bf_d65.model1, <span class
 figure_d65.model1 &lt;-<span class="st"> </span><span class="kw">ggarrange</span>(lf_d65.model1,lb_d65.model1,bf_d65.model1, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">1</span>)
 figure_d65.model1</code></pre></div>
 <div class="figure">
-<img src="index_files/figure-html/unnamed-chunk-54-1.png" alt="Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance." width="672" />
+<img src="index_files/figure-html/unnamed-chunk-61-1.png" alt="Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance." width="672" />
 <p class="caption">
 Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance.
 </p>
 </div>
 </div>
-<div id="twilight-10" class="section level3">
+<div id="twilight-12" class="section level3">
 <h3>Twilight</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#make flower vs leaf plot</span>
-Vis1.lf_twilight.model1&lt;-<span class="st"> </span>CvisUVSWMW.._twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis1.lf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lf&quot;</span>,<span class="dv">1</span>)
-Vis2.lf_twilight.model1&lt;-CvisUV..MWLW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis2.lf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lf&quot;</span>,<span class="dv">1</span>)
-Vis3.lf_twilight.model1&lt;-CvisUVSW..LW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis3.lf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lf&quot;</span>,<span class="dv">1</span>)
-Vis4.lf_twilight.model1&lt;-CvisUVSWMWLW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis4.lf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lf&quot;</span>,<span class="dv">1</span>)
-allvis.lf_twilight.model1&lt;-Vis1.lf_twilight.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lf_twilight.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lf_twilight.model1) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis4.lf_twilight.model1)
-
-<span class="co">#add the mean</span>
+##add the mean
 mean.lf_twilight.model1&lt;-allvis.lf_twilight.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">patch3 =</span> <span class="kw">paste</span>(allvis.lf_twilight.model1<span class="op">$</span>vissys,allvis.lf_twilight.model1<span class="op">$</span>patch1,<span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co">#create a new column &quot;patch3&quot; which combines the category info of patch1(flowers) and vissys</span>
 <span class="st">  </span><span class="kw">group_by</span>(patch3,vissys,patch1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean.dS.lf=</span><span class="kw">mean</span>(dS)) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -3010,13 +3440,13 @@ mean.lf_twilight.model1&lt;-allvis.lf_twilight.model1 <span class="op">%&gt;%</s
 <span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>patch3) <span class="co">#remove the patch3 column because we don&#39;t need it anymore</span>
 
-<span class="co">#plot the mean</span>
+##plot the mean
 <span class="kw">names</span>(mean.lf_twilight.model1)[<span class="kw">names</span>(mean.lf_twilight.model1) <span class="op">==</span><span class="st"> &quot;patch1&quot;</span>] &lt;-<span class="st"> &quot;flowerID&quot;</span> 
 <span class="co">#rename the column &quot;patch1&quot; because somehow it doesn&#39;t work in the ggplot function</span>
 mean.lf_twilight.model1&lt;-mean.lf_twilight.model1[<span class="kw">order</span>(mean.lf_twilight.model1<span class="op">$</span>flowerID),] 
 <span class="co">#make the data frame order by flowerID then when apply the colour code in the following step &quot;viridis&quot;, the colour will be consistent in the same comparison accross different visual systems</span>
 
-<span class="co">#combine the colour code list to the mean.bf for ploting</span>
+##combine the colour code list to the mean.bf for ploting
 mean.lf_twilight.model1<span class="op">$</span>match.name&lt;-flower.colour.model1<span class="op">$</span>species <span class="co"># this column is just for checking if match correctly</span>
 mean.lf_twilight.model1<span class="op">$</span>colour&lt;-flower.colour.model1<span class="op">$</span>colour
 
@@ -3056,22 +3486,7 @@ lf_twilight.model1&lt;-<span class="kw">ggplot</span>(mean.lf_twilight.model1, <
 
 
 <span class="co">#make beetle vs leaf plot</span>
-Vis1.lb_twilight.model1&lt;-<span class="st"> </span>CvisUVSWMW.._twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis1.lb_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lb&quot;</span>,<span class="dv">1</span>)
-Vis2.lb_twilight.model1&lt;-CvisUV..MWLW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis2.lb_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lb&quot;</span>,<span class="dv">1</span>)
-Vis3.lb_twilight.model1&lt;-CvisUVSW..LW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis3.lb_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lb&quot;</span>,<span class="dv">1</span>)
-Vis4.lb_twilight.model1&lt;-CvisUVSWMWLW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis4.lb_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lb&quot;</span>,<span class="dv">1</span>)
-allvis.lb_twilight.model1&lt;-Vis1.lb_twilight.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lb_twilight.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lb_twilight.model1) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis4.lb_twilight.model1)
-
-
-<span class="co">#add the mean</span>
+##add the mean
 mean.lb_twilight.model1&lt;-allvis.lb_twilight.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">patch3 =</span> <span class="kw">paste</span>(allvis.lb_twilight.model1<span class="op">$</span>vissys,allvis.lb_twilight.model1<span class="op">$</span>patch2,<span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co">#create a new column &quot;patch3&quot; which combines the category info of patch2(beetles) and vissys</span>
 <span class="st">  </span><span class="kw">group_by</span>(patch3,vissys,patch2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean.dS.lb=</span><span class="kw">mean</span>(dS)) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -3079,13 +3494,13 @@ mean.lb_twilight.model1&lt;-allvis.lb_twilight.model1 <span class="op">%&gt;%</s
 <span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>patch3) <span class="co">#remove the patch3 column because we don&#39;t need it anymore</span>
 
-<span class="co">#plot the mean</span>
+##plot the mean
 <span class="kw">names</span>(mean.lb_twilight.model1)[<span class="kw">names</span>(mean.lb_twilight.model1) <span class="op">==</span><span class="st"> &quot;patch2&quot;</span>] &lt;-<span class="st"> &quot;beetleID&quot;</span>
 <span class="co">#rename the column &quot;patch1&quot; because somehow it doesn&#39;t work in the ggplot function</span>
 mean.lb_twilight.model1&lt;-mean.lb_twilight.model1[<span class="kw">order</span>(mean.lb_twilight.model1<span class="op">$</span>beetleID),]
 <span class="co">#make the data frame order bt beetleID then when apply the colour code in the following step &quot;viridis&quot;, the colour will be consistent in the same comparison accross different visual systems</span>
 
-<span class="co">#combine the colour code list to the mean.bf for ploting</span>
+##combine the colour code list to the mean.bf for ploting
 mean.lb_twilight.model1<span class="op">$</span>match.name&lt;-beetle.colour.model1<span class="op">$</span>species <span class="co"># this column is just for checking if match correctly</span>
 mean.lb_twilight.model1<span class="op">$</span>colour&lt;-beetle.colour.model1<span class="op">$</span>colour
 
@@ -3124,25 +3539,8 @@ lb_twilight.model1&lt;-<span class="kw">ggplot</span>(mean.lb_twilight.model1, <
 
 
 
-
-
 <span class="co">#make beetle vs flower plot</span>
-Vis1.bf_twilight.model1&lt;-<span class="st"> </span>CvisUVSWMW.._twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis1.bf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.bf&quot;</span>,<span class="dv">1</span>)
-Vis2.bf_twilight.model1&lt;-CvisUV..MWLW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis2.bf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.bf&quot;</span>,<span class="dv">1</span>)
-Vis3.bf_twilight.model1&lt;-CvisUVSW..LW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis3.bf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.bf&quot;</span>,<span class="dv">1</span>)
-Vis4.bf_twilight.model1&lt;-CvisUVSWMWLW_twilight<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis4.bf_twilight.model1<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.bf&quot;</span>,<span class="dv">1</span>)
-allvis.bf_twilight.model1&lt;-Vis1.bf_twilight.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.bf_twilight.model1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.bf_twilight.model1) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis4.bf_twilight.model1)
-
-
-<span class="co">#add the mean</span>
+##add the mean
 mean.bf_twilight.model1&lt;-allvis.bf_twilight.model1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">patch3 =</span> <span class="kw">paste</span>(allvis.bf_twilight.model1<span class="op">$</span>vissys,allvis.bf_twilight.model1<span class="op">$</span>patch1,<span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co">#create a new column &quot;patch3&quot; which combines the category info of patch1(flowers) and vissys</span>
 <span class="st">  </span><span class="kw">group_by</span>(patch3,vissys,patch1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean.dS.bf=</span><span class="kw">mean</span>(dS)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co">#patch1(flowers</span>
@@ -3150,13 +3548,13 @@ mean.bf_twilight.model1&lt;-allvis.bf_twilight.model1 <span class="op">%&gt;%</s
 <span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>patch3) <span class="co">#remove the patch3 column because we don&#39;t need it anymore</span>
 
-<span class="co">#plot the mean</span>
+##plot the mean
 <span class="kw">names</span>(mean.bf_twilight.model1)[<span class="kw">names</span>(mean.bf_twilight.model1) <span class="op">==</span><span class="st"> &quot;patch1&quot;</span>] &lt;-<span class="st"> &quot;flowerID&quot;</span>
 <span class="co">#rename the column &quot;patch1&quot; because somehow it doesn&#39;t work in the ggplot function</span>
 mean.bf_twilight.model1&lt;-mean.bf_twilight.model1[<span class="kw">order</span>(mean.bf_twilight.model1<span class="op">$</span>flowerID),]
 <span class="co">#make the data frame order bt flowerID then when apply the colour code in the following step &quot;viridis&quot;, the colour will be consistent in the same comparison accross different visual systems</span>
 
-<span class="co">#combine the colour code list to the mean.bf for ploting</span>
+##combine the colour code list to the mean.bf for ploting
 mean.bf_twilight.model1<span class="op">$</span>match.name&lt;-flower.colour.model1<span class="op">$</span>species <span class="co"># this column is just for checking if match correctly</span>
 mean.bf_twilight.model1<span class="op">$</span>colour&lt;-flower.colour.model1<span class="op">$</span>colour
 
@@ -3199,16 +3597,16 @@ bf_twilight.model1&lt;-<span class="kw">ggplot</span>(mean.bf_twilight.model1, <
 figure_twilight.model1 &lt;-<span class="st"> </span><span class="kw">ggarrange</span>(lf_twilight.model1,lb_twilight.model1,bf_twilight.model1, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">1</span>)
 figure_twilight.model1</code></pre></div>
 <div class="figure">
-<img src="index_files/figure-html/unnamed-chunk-55-1.png" alt="Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance." width="672" />
+<img src="index_files/figure-html/unnamed-chunk-62-1.png" alt="Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance." width="672" />
 <p class="caption">
 Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance.
 </p>
 </div>
 </div>
 </div>
-<div id="visual-model-2-2" class="section level2 tabset tabset-fade tabset-pills">
+<div id="visual-model-2-3" class="section level2 tabset tabset-fade tabset-pills">
 <h2>Visual model 2</h2>
-<div id="daylight-7" class="section level3">
+<div id="daylight-9" class="section level3">
 <h3>Daylight</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#creat flower name list for visual model 2</span>
 flower.colour.model2 &lt;-<span class="st"> </span>name.list <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(species, <span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co">#select flower names</span>
@@ -3223,30 +3621,8 @@ beetle.colour.model2 &lt;-<span class="st"> </span>name.list <span class="op">%&
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">count =</span> <span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">uncount</span>(count) <span class="co">#repeat each row for 4 times for 6 visual systems</span>
 
 
-<span class="co">#flower vs leaf</span>
-Vis1.lf_d65.model2&lt;-<span class="st"> </span>Cbuprest580<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis1.lf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lf&quot;</span>,<span class="dv">1</span>)
-Vis2.lf_d65.model2&lt;-Cbuprest600<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis2.lf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lf&quot;</span>,<span class="dv">1</span>)
-Vis3.lf_d65.model2&lt;-Cbuprest620<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis3.lf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lf&quot;</span>,<span class="dv">1</span>)
-Vis4.lf_d65.model2&lt;-Cbuprest640<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis4.lf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lf&quot;</span>,<span class="dv">1</span>)
-Vis5.lf_d65.model2&lt;-Cbuprest660<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis5.lf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis5.lf&quot;</span>,<span class="dv">1</span>)
-Vis6.lf_d65.model2&lt;-Cbuprest680<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis6.lf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis6.lf&quot;</span>,<span class="dv">1</span>)
-
-allvis.lf_d65.model2&lt;-Vis1.lf_d65.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lf_d65.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lf_d65.model2) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">rbind</span>(Vis4.lf_d65.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis5.lf_d65.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis6.lf_d65.model2)
-
-<span class="co">#add the mean</span>
+<span class="co">#make flower vs leaf plot</span>
+##add the mean
 mean.lf_d65.model2&lt;-allvis.lf_d65.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">patch3 =</span> <span class="kw">paste</span>(allvis.lf_d65.model2<span class="op">$</span>vissys,allvis.lf_d65.model2<span class="op">$</span>patch1,<span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co">#create a new column &quot;patch3&quot; which combines the category info of patch1(flowers) and vissys</span>
 <span class="st">  </span><span class="kw">group_by</span>(patch3,vissys,patch1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean.dS.lf=</span><span class="kw">mean</span>(dS)) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -3254,13 +3630,13 @@ mean.lf_d65.model2&lt;-allvis.lf_d65.model2 <span class="op">%&gt;%</span><span 
 <span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>patch3) <span class="co">#remove the patch3 column because we don&#39;t need it anymore</span>
 
-<span class="co">#plot the mean</span>
+##plot the mean
 <span class="kw">names</span>(mean.lf_d65.model2)[<span class="kw">names</span>(mean.lf_d65.model2) <span class="op">==</span><span class="st"> &quot;patch1&quot;</span>] &lt;-<span class="st"> &quot;flowerID&quot;</span> 
 <span class="co">#rename the column &quot;patch1&quot; because somehow it doesn&#39;t work in the ggplot function</span>
 mean.lf_d65.model2&lt;-mean.lf_d65.model2[<span class="kw">order</span>(mean.lf_d65.model2<span class="op">$</span>flowerID),] 
 <span class="co">#make the data frame order by flowerID then when apply the colour code in the following step &quot;viridis&quot;, the colour will be consistent in the same comparison accross different visual systems</span>
 
-<span class="co">#combine the colour code list to the mean.bf for ploting</span>
+##combine the colour code list to the mean.bf for ploting
 mean.lf_d65.model2<span class="op">$</span>match.name&lt;-flower.colour.model2<span class="op">$</span>species <span class="co"># this column is just for checking if match correctly</span>
 mean.lf_d65.model2<span class="op">$</span>colour&lt;-flower.colour.model2<span class="op">$</span>colour
 
@@ -3302,31 +3678,8 @@ lf_d65.model2&lt;-<span class="kw">ggplot</span>(mean.lf_d65.model2, <span class
 <span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="kw">c</span>(<span class="st">&quot;Vis1.lf&quot;</span>, <span class="st">&quot;Vis2.lf&quot;</span>, <span class="st">&quot;Vis3.lf&quot;</span>,<span class="st">&quot;Vis4.lf&quot;</span>,<span class="st">&quot;Vis5.lf&quot;</span>,<span class="st">&quot;Vis6.lf&quot;</span>), <span class="dt">y =</span> <span class="dv">15</span>, <span class="dt">label =</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,<span class="st">&quot;e&quot;</span>,<span class="st">&quot;b&quot;</span>)) <span class="co">#add stitistical info</span>
 
 
-<span class="co">#beetle vs leaf</span>
-Vis1.lb_d65.model2&lt;-<span class="st"> </span>Cbuprest580<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis1.lb_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lb&quot;</span>,<span class="dv">1</span>)
-Vis2.lb_d65.model2&lt;-Cbuprest600<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis2.lb_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lb&quot;</span>,<span class="dv">1</span>)
-Vis3.lb_d65.model2&lt;-Cbuprest620<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis3.lb_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lb&quot;</span>,<span class="dv">1</span>)
-Vis4.lb_d65.model2&lt;-Cbuprest640<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis4.lb_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lb&quot;</span>,<span class="dv">1</span>)
-Vis5.lb_d65.model2&lt;-Cbuprest660<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis5.lb_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis5.lb&quot;</span>,<span class="dv">1</span>)
-Vis6.lb_d65.model2&lt;-Cbuprest680<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis6.lb_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis6.lb&quot;</span>,<span class="dv">1</span>)
-
-allvis.lb_d65.model2&lt;-Vis1.lb_d65.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lb_d65.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lb_d65.model2) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">rbind</span>(Vis4.lb_d65.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis5.lb_d65.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis6.lb_d65.model2)
-
-
-<span class="co">#add the mean</span>
+<span class="co">#make beetle vs leaf plot</span>
+##add the mean
 mean.lb_d65.model2&lt;-allvis.lb_d65.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">patch3 =</span> <span class="kw">paste</span>(allvis.lb_d65.model2<span class="op">$</span>vissys,allvis.lb_d65.model2<span class="op">$</span>patch2,<span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co">#create a new column &quot;patch3&quot; which combines the category info of patch2(beetles) and vissys</span>
 <span class="st">  </span><span class="kw">group_by</span>(patch3,vissys,patch2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean.dS.lb=</span><span class="kw">mean</span>(dS)) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -3334,13 +3687,13 @@ mean.lb_d65.model2&lt;-allvis.lb_d65.model2 <span class="op">%&gt;%</span><span 
 <span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>patch3) <span class="co">#remove the patch3 column because we don&#39;t need it anymore</span>
 
-<span class="co">#plot the mean</span>
+##plot the mean
 <span class="kw">names</span>(mean.lb_d65.model2)[<span class="kw">names</span>(mean.lb_d65.model2) <span class="op">==</span><span class="st"> &quot;patch2&quot;</span>] &lt;-<span class="st"> &quot;beetleID&quot;</span>
 <span class="co">#rename the column &quot;patch1&quot; because somehow it doesn&#39;t work in the ggplot function</span>
 mean.lb_d65.model2&lt;-mean.lb_d65.model2[<span class="kw">order</span>(mean.lb_d65.model2<span class="op">$</span>beetleID),]
 <span class="co">#make the data frame order bt beetleID then when apply the colour code in the following step &quot;viridis&quot;, the colour will be consistent in the same comparison accross different visual systems</span>
 
-<span class="co">#combine the colour code list to the mean.bf for ploting</span>
+##combine the colour code list to the mean.bf for ploting
 mean.lb_d65.model2<span class="op">$</span>match.name&lt;-beetle.colour.model2<span class="op">$</span>species <span class="co"># this column is just for checking if match correctly</span>
 mean.lb_d65.model2<span class="op">$</span>colour&lt;-beetle.colour.model2<span class="op">$</span>colour
 
@@ -3382,32 +3735,8 @@ lb_d65.model2&lt;-<span class="kw">ggplot</span>(mean.lb_d65.model2, <span class
 <span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="kw">c</span>(<span class="st">&quot;Vis1.lb&quot;</span>, <span class="st">&quot;Vis2.lb&quot;</span>, <span class="st">&quot;Vis3.lb&quot;</span>,<span class="st">&quot;Vis4.lb&quot;</span>,<span class="st">&quot;Vis5.lb&quot;</span>,<span class="st">&quot;Vis6.lb&quot;</span>), <span class="dt">y =</span> <span class="dv">15</span>, <span class="dt">label =</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,<span class="st">&quot;e&quot;</span>,<span class="st">&quot;f&quot;</span>)) <span class="co">#add stitistical info</span>
 
 
-<span class="co">#beetle vs leaf</span>
-Vis1.bf_d65.model2&lt;-<span class="st"> </span>Cbuprest580<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis1.bf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.bf&quot;</span>,<span class="dv">1</span>)
-Vis2.bf_d65.model2&lt;-Cbuprest600<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis2.bf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.bf&quot;</span>,<span class="dv">1</span>)
-Vis3.bf_d65.model2&lt;-Cbuprest620<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis3.bf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.bf&quot;</span>,<span class="dv">1</span>)
-Vis4.bf_d65.model2&lt;-Cbuprest640<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis4.bf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.bf&quot;</span>,<span class="dv">1</span>)
-Vis5.bf_d65.model2&lt;-Cbuprest660<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis5.bf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis5.bf&quot;</span>,<span class="dv">1</span>)
-Vis6.bf_d65.model2&lt;-Cbuprest680<span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis6.bf_d65.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis6.bf&quot;</span>,<span class="dv">1</span>)
-
-allvis.bf_d65.model2&lt;-Vis1.bf_d65.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.bf_d65.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.bf_d65.model2) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">rbind</span>(Vis4.bf_d65.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis5.bf_d65.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis6.bf_d65.model2)
-
-
-
-<span class="co">#add the mean</span>
+<span class="co">#make beetle vs flower plot</span>
+##add the mean
 mean.bf_d65.model2&lt;-allvis.bf_d65.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">patch3 =</span> <span class="kw">paste</span>(allvis.bf_d65.model2<span class="op">$</span>vissys,allvis.bf_d65.model2<span class="op">$</span>patch1,<span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co">#create a new column &quot;patch3&quot; which combines the category info of patch1(flowers) and vissys</span>
 <span class="st">  </span><span class="kw">group_by</span>(patch3,vissys,patch1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean.dS.bf=</span><span class="kw">mean</span>(dS)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co">#patch1(flowers</span>
@@ -3416,13 +3745,13 @@ mean.bf_d65.model2&lt;-allvis.bf_d65.model2 <span class="op">%&gt;%</span><span 
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>patch3) <span class="co">#remove the patch3 column because we don&#39;t need it anymore</span>
 
 
-<span class="co">#plot the mean dS</span>
+##plot the mean dS
 <span class="kw">names</span>(mean.bf_d65.model2)[<span class="kw">names</span>(mean.bf_d65.model2) <span class="op">==</span><span class="st"> &quot;patch1&quot;</span>] &lt;-<span class="st"> &quot;flowerID&quot;</span>
 <span class="co">#rename the column &quot;patch1&quot; because somehow it doesn&#39;t work in the ggplot function</span>
 mean.bf_d65.model2&lt;-mean.bf_d65.model2[<span class="kw">order</span>(mean.bf_d65.model2<span class="op">$</span>flowerID),]
 <span class="co">#make the data frame order bt flowerID then when apply the colour code in the following step &quot;viridis&quot;, the colour will be consistent in the same comparison accross different visual systems</span>
 
-<span class="co">#combine the colour code list to the mean.bf for ploting</span>
+##combine the colour code list to the mean.bf for ploting
 mean.bf_d65.model2<span class="op">$</span>match.name&lt;-flower.colour.model2<span class="op">$</span>species <span class="co"># this column is just for checking if match correctly</span>
 mean.bf_d65.model2<span class="op">$</span>colour&lt;-flower.colour.model2<span class="op">$</span>colour
 
@@ -3467,38 +3796,16 @@ bf_d65.model2&lt;-<span class="kw">ggplot</span>(mean.bf_d65.model2, <span class
 figure_d65.model2 &lt;-<span class="st"> </span><span class="kw">ggarrange</span>(lf_d65.model2,lb_d65.model2,bf_d65.model2, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">1</span>)
 figure_d65.model2</code></pre></div>
 <div class="figure">
-<img src="index_files/figure-html/unnamed-chunk-56-1.png" alt="Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance." width="672" />
+<img src="index_files/figure-html/unnamed-chunk-63-1.png" alt="Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance." width="672" />
 <p class="caption">
 Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance.
 </p>
 </div>
 </div>
-<div id="twilight-11" class="section level3">
+<div id="twilight-13" class="section level3">
 <h3>Twilight</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#flower vs leaf</span>
-Vis1.lf_twilight.model2&lt;-<span class="st"> </span>Cbuprest580_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis1.lf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lf&quot;</span>,<span class="dv">1</span>)
-Vis2.lf_twilight.model2&lt;-Cbuprest600_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis2.lf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lf&quot;</span>,<span class="dv">1</span>)
-Vis3.lf_twilight.model2&lt;-Cbuprest620_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis3.lf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lf&quot;</span>,<span class="dv">1</span>)
-Vis4.lf_twilight.model2&lt;-Cbuprest640_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis4.lf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lf&quot;</span>,<span class="dv">1</span>)
-Vis5.lf_twilight.model2&lt;-Cbuprest660_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis5.lf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis5.lf&quot;</span>,<span class="dv">1</span>)
-Vis6.lf_twilight.model2&lt;-Cbuprest680_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))
-Vis6.lf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis6.lf&quot;</span>,<span class="dv">1</span>)
-
-allvis.lf_twilight.model2&lt;-Vis1.lf_twilight.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lf_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lf_twilight.model2) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">rbind</span>(Vis4.lf_twilight.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis5.lf_twilight.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis6.lf_twilight.model2)
-
-<span class="co">#add the mean</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#make flower vs leaf plot</span>
+##add the mean
 mean.lf_twilight.model2&lt;-allvis.lf_twilight.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">patch3 =</span> <span class="kw">paste</span>(allvis.lf_twilight.model2<span class="op">$</span>vissys,allvis.lf_twilight.model2<span class="op">$</span>patch1,<span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co">#create a new column &quot;patch3&quot; which combines the category info of patch1(flowers) and vissys</span>
 <span class="st">  </span><span class="kw">group_by</span>(patch3,vissys,patch1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean.dS.lf=</span><span class="kw">mean</span>(dS)) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -3506,13 +3813,13 @@ mean.lf_twilight.model2&lt;-allvis.lf_twilight.model2 <span class="op">%&gt;%</s
 <span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>patch3) <span class="co">#remove the patch3 column because we don&#39;t need it anymore</span>
 
-<span class="co">#plot the mean</span>
+##plot the mean
 <span class="kw">names</span>(mean.lf_twilight.model2)[<span class="kw">names</span>(mean.lf_twilight.model2) <span class="op">==</span><span class="st"> &quot;patch1&quot;</span>] &lt;-<span class="st"> &quot;flowerID&quot;</span> 
 <span class="co">#rename the column &quot;patch1&quot; because somehow it doesn&#39;t work in the ggplot function</span>
 mean.lf_twilight.model2&lt;-mean.lf_twilight.model2[<span class="kw">order</span>(mean.lf_twilight.model2<span class="op">$</span>flowerID),] 
 <span class="co">#make the data frame order by flowerID then when apply the colour code in the following step &quot;viridis&quot;, the colour will be consistent in the same comparison accross different visual systems</span>
 
-<span class="co">#combine the colour code list to the mean.bf for ploting</span>
+##combine the colour code list to the mean.bf for ploting
 mean.lf_twilight.model2<span class="op">$</span>match.name&lt;-flower.colour.model2<span class="op">$</span>species <span class="co"># this column is just for checking if match correctly</span>
 mean.lf_twilight.model2<span class="op">$</span>colour&lt;-flower.colour.model2<span class="op">$</span>colour
 
@@ -3554,31 +3861,8 @@ lf_twilight.model2&lt;-<span class="kw">ggplot</span>(mean.lf_twilight.model2, <
 <span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="kw">c</span>(<span class="st">&quot;Vis1.lf&quot;</span>, <span class="st">&quot;Vis2.lf&quot;</span>, <span class="st">&quot;Vis3.lf&quot;</span>,<span class="st">&quot;Vis4.lf&quot;</span>,<span class="st">&quot;Vis5.lf&quot;</span>,<span class="st">&quot;Vis6.lf&quot;</span>), <span class="dt">y =</span> <span class="dv">15</span>, <span class="dt">label =</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,<span class="st">&quot;b&quot;</span>)) <span class="co">#add stitistical info</span>
 
 
-<span class="co">#beetle vs leaf</span>
-Vis1.lb_twilight.model2&lt;-<span class="st"> </span>Cbuprest580_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis1.lb_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.lb&quot;</span>,<span class="dv">1</span>)
-Vis2.lb_twilight.model2&lt;-Cbuprest600_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis2.lb_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.lb&quot;</span>,<span class="dv">1</span>)
-Vis3.lb_twilight.model2&lt;-Cbuprest620_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis3.lb_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.lb&quot;</span>,<span class="dv">1</span>)
-Vis4.lb_twilight.model2&lt;-Cbuprest640_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis4.lb_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.lb&quot;</span>,<span class="dv">1</span>)
-Vis5.lb_twilight.model2&lt;-Cbuprest660_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis5.lb_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis5.lb&quot;</span>,<span class="dv">1</span>)
-Vis6.lb_twilight.model2&lt;-Cbuprest680_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))
-Vis6.lb_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis6.lb&quot;</span>,<span class="dv">1</span>)
-
-allvis.lb_twilight.model2&lt;-Vis1.lb_twilight.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.lb_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.lb_twilight.model2) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">rbind</span>(Vis4.lb_twilight.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis5.lb_twilight.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis6.lb_twilight.model2)
-
-
-<span class="co">#add the mean</span>
+<span class="co">#make beetle vs leaf plot</span>
+##add the mean
 mean.lb_twilight.model2&lt;-allvis.lb_twilight.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">patch3 =</span> <span class="kw">paste</span>(allvis.lb_twilight.model2<span class="op">$</span>vissys,allvis.lb_twilight.model2<span class="op">$</span>patch2,<span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co">#create a new column &quot;patch3&quot; which combines the category info of patch2(beetles) and vissys</span>
 <span class="st">  </span><span class="kw">group_by</span>(patch3,vissys,patch2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean.dS.lb=</span><span class="kw">mean</span>(dS)) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -3586,13 +3870,13 @@ mean.lb_twilight.model2&lt;-allvis.lb_twilight.model2 <span class="op">%&gt;%</s
 <span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>patch3) <span class="co">#remove the patch3 column because we don&#39;t need it anymore</span>
 
-<span class="co">#plot the mean</span>
+##plot the mean
 <span class="kw">names</span>(mean.lb_twilight.model2)[<span class="kw">names</span>(mean.lb_twilight.model2) <span class="op">==</span><span class="st"> &quot;patch2&quot;</span>] &lt;-<span class="st"> &quot;beetleID&quot;</span>
 <span class="co">#rename the column &quot;patch1&quot; because somehow it doesn&#39;t work in the ggplot function</span>
 mean.lb_twilight.model2&lt;-mean.lb_twilight.model2[<span class="kw">order</span>(mean.lb_twilight.model2<span class="op">$</span>beetleID),]
 <span class="co">#make the data frame order bt beetleID then when apply the colour code in the following step &quot;viridis&quot;, the colour will be consistent in the same comparison accross different visual systems</span>
 
-<span class="co">#combine the colour code list to the mean.bf for ploting</span>
+##combine the colour code list to the mean.bf for ploting
 mean.lb_twilight.model2<span class="op">$</span>match.name&lt;-beetle.colour.model2<span class="op">$</span>species <span class="co"># this column is just for checking if match correctly</span>
 mean.lb_twilight.model2<span class="op">$</span>colour&lt;-beetle.colour.model2<span class="op">$</span>colour
 
@@ -3634,32 +3918,8 @@ lb_twilight.model2&lt;-<span class="kw">ggplot</span>(mean.lb_twilight.model2, <
 <span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="kw">c</span>(<span class="st">&quot;Vis1.lb&quot;</span>, <span class="st">&quot;Vis2.lb&quot;</span>, <span class="st">&quot;Vis3.lb&quot;</span>,<span class="st">&quot;Vis4.lb&quot;</span>,<span class="st">&quot;Vis5.lb&quot;</span>,<span class="st">&quot;Vis6.lb&quot;</span>), <span class="dt">y =</span> <span class="dv">15</span>, <span class="dt">label =</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>,<span class="st">&quot;d&quot;</span>,<span class="st">&quot;e&quot;</span>,<span class="st">&quot;f&quot;</span>)) <span class="co">#add stitistical info</span>
 
 
-<span class="co">#beetle vs leaf</span>
-Vis1.bf_twilight.model2&lt;-<span class="st"> </span>Cbuprest580_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis1.bf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis1.bf&quot;</span>,<span class="dv">1</span>)
-Vis2.bf_twilight.model2&lt;-Cbuprest600_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis2.bf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis2.bf&quot;</span>,<span class="dv">1</span>)
-Vis3.bf_twilight.model2&lt;-Cbuprest620_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis3.bf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis3.bf&quot;</span>,<span class="dv">1</span>)
-Vis4.bf_twilight.model2&lt;-Cbuprest640_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis4.bf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis4.bf&quot;</span>,<span class="dv">1</span>)
-Vis5.bf_twilight.model2&lt;-Cbuprest660_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis5.bf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis5.bf&quot;</span>,<span class="dv">1</span>)
-Vis6.bf_twilight.model2&lt;-Cbuprest680_twilight <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))
-Vis6.bf_twilight.model2<span class="op">$</span>vissys&lt;-<span class="kw">strrep</span>(<span class="st">&quot;Vis6.bf&quot;</span>,<span class="dv">1</span>)
-
-allvis.bf_twilight.model2&lt;-Vis1.bf_twilight.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis2.bf_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(Vis3.bf_twilight.model2) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">rbind</span>(Vis4.bf_twilight.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis5.bf_twilight.model2) <span class="op">%&gt;%</span><span class="kw">rbind</span>(Vis6.bf_twilight.model2)
-
-
-
-<span class="co">#add the mean</span>
+<span class="co">#make beetle vs flower plot</span>
+##add the mean
 mean.bf_twilight.model2&lt;-allvis.bf_twilight.model2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">patch3 =</span> <span class="kw">paste</span>(allvis.bf_twilight.model2<span class="op">$</span>vissys,allvis.bf_twilight.model2<span class="op">$</span>patch1,<span class="dt">sep=</span><span class="st">&quot;.&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co">#create a new column &quot;patch3&quot; which combines the category info of patch1(flowers) and vissys</span>
 <span class="st">  </span><span class="kw">group_by</span>(patch3,vissys,patch1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">mean.dS.bf=</span><span class="kw">mean</span>(dS)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co">#patch1(flowers</span>
@@ -3668,13 +3928,13 @@ mean.bf_twilight.model2&lt;-allvis.bf_twilight.model2 <span class="op">%&gt;%</s
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>patch3) <span class="co">#remove the patch3 column because we don&#39;t need it anymore</span>
 
 
-<span class="co">#plot the mean dS</span>
+##plot the mean dS
 <span class="kw">names</span>(mean.bf_twilight.model2)[<span class="kw">names</span>(mean.bf_twilight.model2) <span class="op">==</span><span class="st"> &quot;patch1&quot;</span>] &lt;-<span class="st"> &quot;flowerID&quot;</span>
 <span class="co">#rename the column &quot;patch1&quot; because somehow it doesn&#39;t work in the ggplot function</span>
 mean.bf_twilight.model2&lt;-mean.bf_twilight.model2[<span class="kw">order</span>(mean.bf_twilight.model2<span class="op">$</span>flowerID),]
 <span class="co">#make the data frame order bt flowerID then when apply the colour code in the following step &quot;viridis&quot;, the colour will be consistent in the same comparison accross different visual systems</span>
 
-<span class="co">#combine the colour code list to the mean.bf for ploting</span>
+##combine the colour code list to the mean.bf for ploting
 mean.bf_twilight.model2<span class="op">$</span>match.name&lt;-flower.colour.model2<span class="op">$</span>species <span class="co"># this column is just for checking if match correctly</span>
 mean.bf_twilight.model2<span class="op">$</span>colour&lt;-flower.colour.model2<span class="op">$</span>colour
 
@@ -3719,7 +3979,7 @@ bf_twilight.model2&lt;-<span class="kw">ggplot</span>(mean.bf_twilight.model2, <
 figure_twilight.model2 &lt;-<span class="st"> </span><span class="kw">ggarrange</span>(lf_twilight.model2,lb_twilight.model2,bf_twilight.model2, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">1</span>)
 figure_twilight.model2</code></pre></div>
 <div class="figure">
-<img src="index_files/figure-html/unnamed-chunk-57-1.png" alt="Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance." width="672" />
+<img src="index_files/figure-html/unnamed-chunk-64-1.png" alt="Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance." width="672" />
 <p class="caption">
 Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts &gt; 10 JND are from flowers that have very low UV reflectance.
 </p>

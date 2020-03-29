@@ -76,7 +76,7 @@ dataset<- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measureme
 
 </br>
 
-##Spectra of the targets
+##Spectral reflectance of the targets
 * Jewel beetles and their host plants (leaves and flowers): collected using integrating sphere
   + Leaves: 
     + sample source: mainly from Melton Gardens and Maranoa Gardens (4 from Melbourne roadsides).
@@ -181,8 +181,9 @@ ggplot(peaks,aes(x=wl, y=value, col=peak))+
 
 ##Illuminations
 * Two light environments: daylight and twilight (to represent red-shifted illumination).
-  + daylight: __D65__ (standard daylight) from Commission internationale de l'eclairage CIE
-  + twilight: measured at the Pinnacles Lookout in Alpine National Park, VIC, Australia at 18:15 on September 14th 2019.
+  
+    + Daylight: __D65__ (standard daylight) from Commission internationale de l'eclairage CIE
+    + Twilight: measured at the Pinnacles Lookout in Alpine National Park, VIC, Australia at 18:15 on September 14th 2019.
 
 ```{r, fig.cap="Relative irradiance of the standard daylight and twilight"}
 illum <- merge(irradiance.d65, irradiance.twilight) %>% gather(light, illuminace, -wl) 
@@ -240,7 +241,7 @@ buprest680_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, 
 </br>
 </br>
 
-##Second: Contrast calculation
+##Second: Contrast calculation {.tabset .tabset-fade .tabset-pills}
 * We used a neural noise-limited model where the noise is proportional to the Weber fraction and is independent of the intensity of the signal received.
 * Photoreceptor density is based on the opisn gene epxression of Emerald ash borer, _Agrilus planipennis_: 1.14, 1, 1.26, 1.38
 * The Weber fraction was asinged to be 0.1
@@ -274,8 +275,307 @@ Cbuprest640_twilight = coldist(buprest640_twilight, noise="neural", achro=FALSE,
 Cbuprest660_twilight = coldist(buprest660_twilight, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 Cbuprest680_twilight = coldist(buprest680_twilight, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 ```
+```{r}
+#combine all contrast value in each comparison group
+
+#Daylight - model 1
+
+##flower vs leaf
+Vis1.lf_d65.model1<- CvisUVSWMW..%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis1.lf_d65.model1$vissys<-strrep("Vis1.lf",1)
+Vis2.lf_d65.model1<-CvisUV..MWLW%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis2.lf_d65.model1$vissys<-strrep("Vis2.lf",1)
+Vis3.lf_d65.model1<-CvisUVSW..LW%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis3.lf_d65.model1$vissys<-strrep("Vis3.lf",1)
+Vis4.lf_d65.model1<-CvisUVSWMWLW%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis4.lf_d65.model1$vissys<-strrep("Vis4.lf",1)
+allvis.lf_d65.model1<-Vis1.lf_d65.model1 %>% rbind(Vis2.lf_d65.model1) %>% rbind(Vis3.lf_d65.model1) %>%rbind(Vis4.lf_d65.model1)
+
+##beetle vs leaf
+Vis1.lb_d65.model1<- CvisUVSWMW..%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis1.lb_d65.model1$vissys<-strrep("Vis1.lb",1)
+Vis2.lb_d65.model1<-CvisUV..MWLW%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis2.lb_d65.model1$vissys<-strrep("Vis2.lb",1)
+Vis3.lb_d65.model1<-CvisUVSW..LW%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis3.lb_d65.model1$vissys<-strrep("Vis3.lb",1)
+Vis4.lb_d65.model1<-CvisUVSWMWLW%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis4.lb_d65.model1$vissys<-strrep("Vis4.lb",1)
+allvis.lb_d65.model1<-Vis1.lb_d65.model1 %>% rbind(Vis2.lb_d65.model1) %>% rbind(Vis3.lb_d65.model1) %>%rbind(Vis4.lb_d65.model1)
+
+##beetle vs flower
+Vis1.bf_d65.model1<- CvisUVSWMW..%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis1.bf_d65.model1$vissys<-strrep("Vis1.bf",1)
+Vis2.bf_d65.model1<-CvisUV..MWLW%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis2.bf_d65.model1$vissys<-strrep("Vis2.bf",1)
+Vis3.bf_d65.model1<-CvisUVSW..LW%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis3.bf_d65.model1$vissys<-strrep("Vis3.bf",1)
+Vis4.bf_d65.model1<-CvisUVSWMWLW%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis4.bf_d65.model1$vissys<-strrep("Vis4.bf",1)
+allvis.bf_d65.model1<-Vis1.bf_d65.model1 %>% rbind(Vis2.bf_d65.model1) %>% rbind(Vis3.bf_d65.model1)%>%
+  rbind(Vis4.bf_d65.model1)
+
+#Twiligth - model 1
+##flower vs leaf
+Vis1.lf_twilight.model1<- CvisUVSWMW.._twilight%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis1.lf_twilight.model1$vissys<-strrep("Vis1.lf",1)
+Vis2.lf_twilight.model1<-CvisUV..MWLW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis2.lf_twilight.model1$vissys<-strrep("Vis2.lf",1)
+Vis3.lf_twilight.model1<-CvisUVSW..LW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis3.lf_twilight.model1$vissys<-strrep("Vis3.lf",1)
+Vis4.lf_twilight.model1<-CvisUVSWMWLW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis4.lf_twilight.model1$vissys<-strrep("Vis4.lf",1)
+allvis.lf_twilight.model1<-Vis1.lf_twilight.model1 %>% rbind(Vis2.lf_twilight.model1) %>% rbind(Vis3.lf_twilight.model1) %>%rbind(Vis4.lf_twilight.model1)
+
+##beetle vs leaf
+Vis1.lb_twilight.model1<- CvisUVSWMW.._twilight%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis1.lb_twilight.model1$vissys<-strrep("Vis1.lb",1)
+Vis2.lb_twilight.model1<-CvisUV..MWLW_twilight%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis2.lb_twilight.model1$vissys<-strrep("Vis2.lb",1)
+Vis3.lb_twilight.model1<-CvisUVSW..LW_twilight%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis3.lb_twilight.model1$vissys<-strrep("Vis3.lb",1)
+Vis4.lb_twilight.model1<-CvisUVSWMWLW_twilight%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis4.lb_twilight.model1$vissys<-strrep("Vis4.lb",1)
+allvis.lb_twilight.model1<-Vis1.lb_twilight.model1 %>% rbind(Vis2.lb_twilight.model1) %>% rbind(Vis3.lb_twilight.model1) %>%rbind(Vis4.lb_twilight.model1)
 
 
+##beetle vs flower
+Vis1.bf_twilight.model1<- CvisUVSWMW.._twilight%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis1.bf_twilight.model1$vissys<-strrep("Vis1.bf",1)
+Vis2.bf_twilight.model1<-CvisUV..MWLW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis2.bf_twilight.model1$vissys<-strrep("Vis2.bf",1)
+Vis3.bf_twilight.model1<-CvisUVSW..LW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis3.bf_twilight.model1$vissys<-strrep("Vis3.bf",1)
+Vis4.bf_twilight.model1<-CvisUVSWMWLW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis4.bf_twilight.model1$vissys<-strrep("Vis4.bf",1)
+allvis.bf_twilight.model1<-Vis1.bf_twilight.model1 %>% rbind(Vis2.bf_twilight.model1) %>% rbind(Vis3.bf_twilight.model1) %>%rbind(Vis4.bf_twilight.model1)
+
+
+
+#Daylight - model 2
+##flower vs leaf
+Vis1.lf_d65.model2<- Cbuprest580%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis1.lf_d65.model2$vissys<-strrep("Vis1.lf",1)
+Vis2.lf_d65.model2<-Cbuprest600%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis2.lf_d65.model2$vissys<-strrep("Vis2.lf",1)
+Vis3.lf_d65.model2<-Cbuprest620%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis3.lf_d65.model2$vissys<-strrep("Vis3.lf",1)
+Vis4.lf_d65.model2<-Cbuprest640%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis4.lf_d65.model2$vissys<-strrep("Vis4.lf",1)
+Vis5.lf_d65.model2<-Cbuprest660%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis5.lf_d65.model2$vissys<-strrep("Vis5.lf",1)
+Vis6.lf_d65.model2<-Cbuprest680%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis6.lf_d65.model2$vissys<-strrep("Vis6.lf",1)
+
+allvis.lf_d65.model2<-Vis1.lf_d65.model2 %>% rbind(Vis2.lf_d65.model2) %>% rbind(Vis3.lf_d65.model2) %>%
+  rbind(Vis4.lf_d65.model2) %>%rbind(Vis5.lf_d65.model2) %>%rbind(Vis6.lf_d65.model2)
+
+##beetle vs leaf
+Vis1.lb_d65.model2<- Cbuprest580%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis1.lb_d65.model2$vissys<-strrep("Vis1.lb",1)
+Vis2.lb_d65.model2<-Cbuprest600%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis2.lb_d65.model2$vissys<-strrep("Vis2.lb",1)
+Vis3.lb_d65.model2<-Cbuprest620%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis3.lb_d65.model2$vissys<-strrep("Vis3.lb",1)
+Vis4.lb_d65.model2<-Cbuprest640%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis4.lb_d65.model2$vissys<-strrep("Vis4.lb",1)
+Vis5.lb_d65.model2<-Cbuprest660%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis5.lb_d65.model2$vissys<-strrep("Vis5.lb",1)
+Vis6.lb_d65.model2<-Cbuprest680%>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis6.lb_d65.model2$vissys<-strrep("Vis6.lb",1)
+
+allvis.lb_d65.model2<-Vis1.lb_d65.model2 %>% rbind(Vis2.lb_d65.model2) %>% rbind(Vis3.lb_d65.model2) %>%
+  rbind(Vis4.lb_d65.model2) %>%rbind(Vis5.lb_d65.model2) %>%rbind(Vis6.lb_d65.model2)
+
+
+##beetle vs flower
+Vis1.bf_d65.model2<- Cbuprest580%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis1.bf_d65.model2$vissys<-strrep("Vis1.bf",1)
+Vis2.bf_d65.model2<-Cbuprest600%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis2.bf_d65.model2$vissys<-strrep("Vis2.bf",1)
+Vis3.bf_d65.model2<-Cbuprest620%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis3.bf_d65.model2$vissys<-strrep("Vis3.bf",1)
+Vis4.bf_d65.model2<-Cbuprest640%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis4.bf_d65.model2$vissys<-strrep("Vis4.bf",1)
+Vis5.bf_d65.model2<-Cbuprest660%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis5.bf_d65.model2$vissys<-strrep("Vis5.bf",1)
+Vis6.bf_d65.model2<-Cbuprest680%>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis6.bf_d65.model2$vissys<-strrep("Vis6.bf",1)
+
+allvis.bf_d65.model2<-Vis1.bf_d65.model2 %>% rbind(Vis2.bf_d65.model2) %>% rbind(Vis3.bf_d65.model2) %>%
+  rbind(Vis4.bf_d65.model2) %>%rbind(Vis5.bf_d65.model2) %>%rbind(Vis6.bf_d65.model2)
+
+
+##Twiligth - model 2
+##flower vs leaf
+Vis1.lf_twilight.model2<- Cbuprest580_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis1.lf_twilight.model2$vissys<-strrep("Vis1.lf",1)
+Vis2.lf_twilight.model2<-Cbuprest600_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis2.lf_twilight.model2$vissys<-strrep("Vis2.lf",1)
+Vis3.lf_twilight.model2<-Cbuprest620_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis3.lf_twilight.model2$vissys<-strrep("Vis3.lf",1)
+Vis4.lf_twilight.model2<-Cbuprest640_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis4.lf_twilight.model2$vissys<-strrep("Vis4.lf",1)
+Vis5.lf_twilight.model2<-Cbuprest660_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis5.lf_twilight.model2$vissys<-strrep("Vis5.lf",1)
+Vis6.lf_twilight.model2<-Cbuprest680_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+Vis6.lf_twilight.model2$vissys<-strrep("Vis6.lf",1)
+
+allvis.lf_twilight.model2<-Vis1.lf_twilight.model2 %>% rbind(Vis2.lf_twilight.model2) %>% rbind(Vis3.lf_twilight.model2) %>%
+  rbind(Vis4.lf_twilight.model2) %>%rbind(Vis5.lf_twilight.model2) %>%rbind(Vis6.lf_twilight.model2)
+
+##beetle vs leaf
+Vis1.lb_twilight.model2<- Cbuprest580_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis1.lb_twilight.model2$vissys<-strrep("Vis1.lb",1)
+Vis2.lb_twilight.model2<-Cbuprest600_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis2.lb_twilight.model2$vissys<-strrep("Vis2.lb",1)
+Vis3.lb_twilight.model2<-Cbuprest620_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis3.lb_twilight.model2$vissys<-strrep("Vis3.lb",1)
+Vis4.lb_twilight.model2<-Cbuprest640_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis4.lb_twilight.model2$vissys<-strrep("Vis4.lb",1)
+Vis5.lb_twilight.model2<-Cbuprest660_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis5.lb_twilight.model2$vissys<-strrep("Vis5.lb",1)
+Vis6.lb_twilight.model2<-Cbuprest680_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+Vis6.lb_twilight.model2$vissys<-strrep("Vis6.lb",1)
+
+allvis.lb_twilight.model2<-Vis1.lb_twilight.model2 %>% rbind(Vis2.lb_twilight.model2) %>% rbind(Vis3.lb_twilight.model2) %>%
+  rbind(Vis4.lb_twilight.model2) %>%rbind(Vis5.lb_twilight.model2) %>%rbind(Vis6.lb_twilight.model2)
+
+##beetle vs flower
+Vis1.bf_twilight.model2<- Cbuprest580_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis1.bf_twilight.model2$vissys<-strrep("Vis1.bf",1)
+Vis2.bf_twilight.model2<-Cbuprest600_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis2.bf_twilight.model2$vissys<-strrep("Vis2.bf",1)
+Vis3.bf_twilight.model2<-Cbuprest620_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis3.bf_twilight.model2$vissys<-strrep("Vis3.bf",1)
+Vis4.bf_twilight.model2<-Cbuprest640_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis4.bf_twilight.model2$vissys<-strrep("Vis4.bf",1)
+Vis5.bf_twilight.model2<-Cbuprest660_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis5.bf_twilight.model2$vissys<-strrep("Vis5.bf",1)
+Vis6.bf_twilight.model2<-Cbuprest680_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+Vis6.bf_twilight.model2$vissys<-strrep("Vis6.bf",1)
+
+allvis.bf_twilight.model2<-Vis1.bf_twilight.model2 %>% rbind(Vis2.bf_twilight.model2) %>% rbind(Vis3.bf_twilight.model2) %>%
+  rbind(Vis4.bf_twilight.model2) %>%rbind(Vis5.bf_twilight.model2) %>%rbind(Vis6.bf_twilight.model2)
+
+
+```
+
+###Visual model 1 {.tabset .tabset-fade .tabset-pills}
+The table shows the median contrast in each comparison group
+```{r}
+#Visul model 1
+system.list.model1<- rbind.data.frame("Vis USM", "Vis UML", "Vis USL",  "Vis USML") %>% rename(system = 1) # make a list of system names
+```
+
+####Daylight
+```{r}
+#Daylight
+##list contrast from each comparison group
+lf.contrast_d65.model1 <- rbind.data.frame(median(Vis1.lf_d65.model1$dS), median(Vis2.lf_d65.model1$dS),median(Vis3.lf_d65.model1$dS),median(Vis4.lf_d65.model1$dS))
+lb.contrast_d65.model1 <-rbind.data.frame(median(Vis1.lb_d65.model1$dS),median(Vis2.lb_d65.model1$dS),median(Vis3.lb_d65.model1$dS),median(Vis4.lb_d65.model1$dS))
+bf.contrast_d65.model1 <-rbind.data.frame(median(Vis1.bf_d65.model1$dS), median(Vis2.bf_d65.model1$dS),median(Vis3.bf_d65.model1$dS),median(Vis4.bf_d65.model1$dS))
+#combind comparison groups together in a table
+contrast.list_d65.model1<- system.list.model1 %>%  cbind(lf.contrast_d65.model1) %>% cbind(lb.contrast_d65.model1) %>% cbind(bf.contrast_d65.model1) %>% dplyr:: rename(leaf.vs.flower = 2, leaf.vs.beetle = 3, beetle.vs.flower = 4) %>% pander() 
+contrast.list_d65.model1
+```
+####Twilight
+```{r}
+#Twilight
+##list contrast from each comparison group
+lf.contrast_twilight.model1 <- rbind.data.frame(median(Vis1.lf_twilight.model1$dS), median(Vis2.lf_twilight.model1$dS),median(Vis3.lf_twilight.model1$dS),median(Vis4.lf_twilight.model1$dS))
+lb.contrast_twilight.model1 <-rbind.data.frame(median(Vis1.lb_twilight.model1$dS),median(Vis2.lb_twilight.model1$dS),median(Vis3.lb_twilight.model1$dS),median(Vis4.lb_twilight.model1$dS))
+bf.contrast_twilight.model1 <-rbind.data.frame(median(Vis1.bf_twilight.model1$dS), median(Vis2.bf_twilight.model1$dS),median(Vis3.bf_twilight.model1$dS),median(Vis4.bf_twilight.model1$dS))
+#combind comparison groups together in a table
+contrast.list_twilight.model1<- system.list.model1 %>%  cbind(lf.contrast_twilight.model1) %>% cbind(lb.contrast_twilight.model1) %>% cbind(bf.contrast_twilight.model1) %>% dplyr:: rename(leaf.vs.flower = 2, leaf.vs.beetle = 3, beetle.vs.flower = 4) %>% pander()
+contrast.list_twilight.model1
+```
+###Visual model 2 {.tabset .tabset-fade .tabset-pills}
+The table shows the median contrast in each comparison group
+```{r}
+system.list.model2<- rbind.data.frame("Vis 580", "Vis 600", "Vis 620", "Vis 640", "Vis 660", "Vis 680") %>% rename(system = 1) # make a list of system names
+```
+####Daylight
+```{r}
+#Daylight
+##list contrast from each comparison group
+lf.contrast_d65.model2 <- rbind.data.frame(median(Vis1.lf_d65.model2$dS), median(Vis2.lf_d65.model2$dS),median(Vis3.lf_d65.model2$dS),median(Vis4.lf_d65.model2$dS),median(Vis5.lf_d65.model2$dS),median(Vis6.lf_d65.model2$dS))
+lb.contrast_d65.model2 <-rbind.data.frame(median(Vis1.lb_d65.model2$dS),median(Vis2.lb_d65.model2$dS),median(Vis3.lb_d65.model2$dS),median(Vis4.lb_d65.model2$dS),median(Vis5.lb_d65.model2$dS),median(Vis6.lb_d65.model2$dS))
+bf.contrast_d65.model2 <-rbind.data.frame(median(Vis1.bf_d65.model2$dS), median(Vis2.bf_d65.model2$dS),median(Vis3.bf_d65.model2$dS),median(Vis4.bf_d65.model2$dS),median(Vis5.bf_d65.model2$dS),median(Vis6.bf_d65.model2$dS))
+#combind comparison groups together in a table
+contrast.list_d65.model2<- system.list.model2 %>%  cbind(lf.contrast_d65.model2) %>% cbind(lb.contrast_d65.model2) %>% cbind(bf.contrast_d65.model2) %>% dplyr:: rename(leaf.vs.flower = 2, leaf.vs.beetle = 3, beetle.vs.flower = 4) %>% pander() 
+contrast.list_d65.model2
+```
+####Twilight
+```{r}
+#Twilight
+##list contrast from each comparison group
+lf.contrast_twilight.model2 <- rbind.data.frame(median(Vis1.lf_twilight.model2$dS), median(Vis2.lf_twilight.model2$dS),median(Vis3.lf_twilight.model2$dS),median(Vis4.lf_twilight.model2$dS),median(Vis5.lf_twilight.model2$dS),median(Vis6.lf_twilight.model2$dS))
+lb.contrast_twilight.model2 <-rbind.data.frame(median(Vis1.lb_twilight.model2$dS),median(Vis2.lb_twilight.model2$dS),median(Vis3.lb_twilight.model2$dS),median(Vis4.lb_twilight.model2$dS),median(Vis5.lb_twilight.model2$dS),median(Vis6.lb_twilight.model2$dS))
+bf.contrast_twilight.model2 <-rbind.data.frame(median(Vis1.bf_twilight.model2$dS), median(Vis2.bf_twilight.model2$dS),median(Vis3.bf_twilight.model2$dS),median(Vis4.bf_twilight.model2$dS),median(Vis5.bf_twilight.model2$dS),median(Vis6.bf_twilight.model2$dS))
+#combind comparison groups together in a table
+contrast.list_twilight.model2<- system.list.model2 %>%  cbind(lf.contrast_twilight.model2) %>% cbind(lb.contrast_twilight.model2) %>% cbind(bf.contrast_twilight.model2) %>% dplyr:: rename(leaf.vs.flower = 2, leaf.vs.beetle = 3, beetle.vs.flower = 4) %>% pander() 
+contrast.list_twilight.model2
+```
 </br>
 </br>
 
@@ -1352,21 +1652,7 @@ beetle.colour.model1 <- name.list %>% filter(str_detect(species, "beetle")) %>% 
 
 
 #make flower vs leaf plot
-Vis1.lf_d65.model1<- CvisUVSWMW..%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis1.lf_d65.model1$vissys<-strrep("Vis1.lf",1)
-Vis2.lf_d65.model1<-CvisUV..MWLW%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis2.lf_d65.model1$vissys<-strrep("Vis2.lf",1)
-Vis3.lf_d65.model1<-CvisUVSW..LW%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis3.lf_d65.model1$vissys<-strrep("Vis3.lf",1)
-Vis4.lf_d65.model1<-CvisUVSWMWLW%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis4.lf_d65.model1$vissys<-strrep("Vis4.lf",1)
-allvis.lf_d65.model1<-Vis1.lf_d65.model1 %>% rbind(Vis2.lf_d65.model1) %>% rbind(Vis3.lf_d65.model1) %>%rbind(Vis4.lf_d65.model1)
-
-#add the mean
+##add the mean
 mean.lf_d65.model1<-allvis.lf_d65.model1 %>% mutate(patch3 = paste(allvis.lf_d65.model1$vissys,allvis.lf_d65.model1$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
   group_by(patch3,vissys,patch1) %>% summarize(mean.dS.lf=mean(dS)) %>% 
@@ -1374,13 +1660,13 @@ mean.lf_d65.model1<-allvis.lf_d65.model1 %>% mutate(patch3 = paste(allvis.lf_d65
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
-#plot the mean
+##plot the mean
 names(mean.lf_d65.model1)[names(mean.lf_d65.model1) == "patch1"] <- "flowerID" 
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
 mean.lf_d65.model1<-mean.lf_d65.model1[order(mean.lf_d65.model1$flowerID),] 
 #make the data frame order by flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
-#combine the colour code list to the mean.bf for ploting
+##combine the colour code list to the mean.bf for ploting
 mean.lf_d65.model1$match.name<-flower.colour.model1$species # this column is just for checking if match correctly
 mean.lf_d65.model1$colour<-flower.colour.model1$colour
 
@@ -1421,22 +1707,7 @@ lf_d65.model1<-ggplot(mean.lf_d65.model1, aes(x=vissys, y=mean.dS.lf,group=flowe
 
 
 #make beetle vs leaf plot
-Vis1.lb_d65.model1<- CvisUVSWMW..%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis1.lb_d65.model1$vissys<-strrep("Vis1.lb",1)
-Vis2.lb_d65.model1<-CvisUV..MWLW%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis2.lb_d65.model1$vissys<-strrep("Vis2.lb",1)
-Vis3.lb_d65.model1<-CvisUVSW..LW%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis3.lb_d65.model1$vissys<-strrep("Vis3.lb",1)
-Vis4.lb_d65.model1<-CvisUVSWMWLW%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis4.lb_d65.model1$vissys<-strrep("Vis4.lb",1)
-allvis.lb_d65.model1<-Vis1.lb_d65.model1 %>% rbind(Vis2.lb_d65.model1) %>% rbind(Vis3.lb_d65.model1) %>%rbind(Vis4.lb_d65.model1)
-
-
-#add the mean
+##add the mean
 mean.lb_d65.model1<-allvis.lb_d65.model1 %>% mutate(patch3 = paste(allvis.lb_d65.model1$vissys,allvis.lb_d65.model1$patch2,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch2(beetles) and vissys
   group_by(patch3,vissys,patch2) %>% summarize(mean.dS.lb=mean(dS)) %>% 
@@ -1444,13 +1715,13 @@ mean.lb_d65.model1<-allvis.lb_d65.model1 %>% mutate(patch3 = paste(allvis.lb_d65
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
-#plot the mean
+##plot the mean
 names(mean.lb_d65.model1)[names(mean.lb_d65.model1) == "patch2"] <- "beetleID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
 mean.lb_d65.model1<-mean.lb_d65.model1[order(mean.lb_d65.model1$beetleID),]
 #make the data frame order bt beetleID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
-#combine the colour code list to the mean.bf for ploting
+##combine the colour code list to the mean.bf for ploting
 mean.lb_d65.model1$match.name<-beetle.colour.model1$species # this column is just for checking if match correctly
 mean.lb_d65.model1$colour<-beetle.colour.model1$colour
 
@@ -1488,23 +1759,7 @@ lb_d65.model1<-ggplot(mean.lb_d65.model1, aes(x=vissys, y=mean.dS.lb,group=beetl
 
 
 #make beetle vs flower plot
-Vis1.bf_d65.model1<- CvisUVSWMW..%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis1.bf_d65.model1$vissys<-strrep("Vis1.bf",1)
-Vis2.bf_d65.model1<-CvisUV..MWLW%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis2.bf_d65.model1$vissys<-strrep("Vis2.bf",1)
-Vis3.bf_d65.model1<-CvisUVSW..LW%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis3.bf_d65.model1$vissys<-strrep("Vis3.bf",1)
-Vis4.bf_d65.model1<-CvisUVSWMWLW%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis4.bf_d65.model1$vissys<-strrep("Vis4.bf",1)
-allvis.bf_d65.model1<-Vis1.bf_d65.model1 %>% rbind(Vis2.bf_d65.model1) %>% rbind(Vis3.bf_d65.model1)%>%
-  rbind(Vis4.bf_d65.model1)
-
-
-#add the mean
+##add the mean
 mean.bf_d65.model1<-allvis.bf_d65.model1 %>% mutate(patch3 = paste(allvis.bf_d65.model1$vissys,allvis.bf_d65.model1$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
   group_by(patch3,vissys,patch1) %>% summarize(mean.dS.bf=mean(dS)) %>% #patch1(flowers
@@ -1512,13 +1767,13 @@ mean.bf_d65.model1<-allvis.bf_d65.model1 %>% mutate(patch3 = paste(allvis.bf_d65
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
-#plot the mean
+##plot the mean
 names(mean.bf_d65.model1)[names(mean.bf_d65.model1) == "patch1"] <- "flowerID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
 mean.bf_d65.model1<-mean.bf_d65.model1[order(mean.bf_d65.model1$flowerID),]
 #make the data frame order bt flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
-#combine the colour code list to the mean.bf for ploting
+##combine the colour code list to the mean.bf for ploting
 mean.bf_d65.model1$match.name<-flower.colour.model1$species # this column is just for checking if match correctly
 mean.bf_d65.model1$colour<-flower.colour.model1$colour
 
@@ -1563,21 +1818,7 @@ figure_d65.model1
 ###Twilight
 ```{r,fig.cap="Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
 #make flower vs leaf plot
-Vis1.lf_twilight.model1<- CvisUVSWMW.._twilight%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis1.lf_twilight.model1$vissys<-strrep("Vis1.lf",1)
-Vis2.lf_twilight.model1<-CvisUV..MWLW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis2.lf_twilight.model1$vissys<-strrep("Vis2.lf",1)
-Vis3.lf_twilight.model1<-CvisUVSW..LW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis3.lf_twilight.model1$vissys<-strrep("Vis3.lf",1)
-Vis4.lf_twilight.model1<-CvisUVSWMWLW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis4.lf_twilight.model1$vissys<-strrep("Vis4.lf",1)
-allvis.lf_twilight.model1<-Vis1.lf_twilight.model1 %>% rbind(Vis2.lf_twilight.model1) %>% rbind(Vis3.lf_twilight.model1) %>%rbind(Vis4.lf_twilight.model1)
-
-#add the mean
+##add the mean
 mean.lf_twilight.model1<-allvis.lf_twilight.model1 %>% mutate(patch3 = paste(allvis.lf_twilight.model1$vissys,allvis.lf_twilight.model1$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
   group_by(patch3,vissys,patch1) %>% summarize(mean.dS.lf=mean(dS)) %>% 
@@ -1585,13 +1826,13 @@ mean.lf_twilight.model1<-allvis.lf_twilight.model1 %>% mutate(patch3 = paste(all
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
-#plot the mean
+##plot the mean
 names(mean.lf_twilight.model1)[names(mean.lf_twilight.model1) == "patch1"] <- "flowerID" 
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
 mean.lf_twilight.model1<-mean.lf_twilight.model1[order(mean.lf_twilight.model1$flowerID),] 
 #make the data frame order by flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
-#combine the colour code list to the mean.bf for ploting
+##combine the colour code list to the mean.bf for ploting
 mean.lf_twilight.model1$match.name<-flower.colour.model1$species # this column is just for checking if match correctly
 mean.lf_twilight.model1$colour<-flower.colour.model1$colour
 
@@ -1631,22 +1872,7 @@ lf_twilight.model1<-ggplot(mean.lf_twilight.model1, aes(x=vissys, y=mean.dS.lf,g
 
 
 #make beetle vs leaf plot
-Vis1.lb_twilight.model1<- CvisUVSWMW.._twilight%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis1.lb_twilight.model1$vissys<-strrep("Vis1.lb",1)
-Vis2.lb_twilight.model1<-CvisUV..MWLW_twilight%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis2.lb_twilight.model1$vissys<-strrep("Vis2.lb",1)
-Vis3.lb_twilight.model1<-CvisUVSW..LW_twilight%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis3.lb_twilight.model1$vissys<-strrep("Vis3.lb",1)
-Vis4.lb_twilight.model1<-CvisUVSWMWLW_twilight%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis4.lb_twilight.model1$vissys<-strrep("Vis4.lb",1)
-allvis.lb_twilight.model1<-Vis1.lb_twilight.model1 %>% rbind(Vis2.lb_twilight.model1) %>% rbind(Vis3.lb_twilight.model1) %>%rbind(Vis4.lb_twilight.model1)
-
-
-#add the mean
+##add the mean
 mean.lb_twilight.model1<-allvis.lb_twilight.model1 %>% mutate(patch3 = paste(allvis.lb_twilight.model1$vissys,allvis.lb_twilight.model1$patch2,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch2(beetles) and vissys
   group_by(patch3,vissys,patch2) %>% summarize(mean.dS.lb=mean(dS)) %>% 
@@ -1654,13 +1880,13 @@ mean.lb_twilight.model1<-allvis.lb_twilight.model1 %>% mutate(patch3 = paste(all
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
-#plot the mean
+##plot the mean
 names(mean.lb_twilight.model1)[names(mean.lb_twilight.model1) == "patch2"] <- "beetleID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
 mean.lb_twilight.model1<-mean.lb_twilight.model1[order(mean.lb_twilight.model1$beetleID),]
 #make the data frame order bt beetleID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
-#combine the colour code list to the mean.bf for ploting
+##combine the colour code list to the mean.bf for ploting
 mean.lb_twilight.model1$match.name<-beetle.colour.model1$species # this column is just for checking if match correctly
 mean.lb_twilight.model1$colour<-beetle.colour.model1$colour
 
@@ -1699,25 +1925,8 @@ lb_twilight.model1<-ggplot(mean.lb_twilight.model1, aes(x=vissys, y=mean.dS.lb,g
 
 
 
-
-
 #make beetle vs flower plot
-Vis1.bf_twilight.model1<- CvisUVSWMW.._twilight%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis1.bf_twilight.model1$vissys<-strrep("Vis1.bf",1)
-Vis2.bf_twilight.model1<-CvisUV..MWLW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis2.bf_twilight.model1$vissys<-strrep("Vis2.bf",1)
-Vis3.bf_twilight.model1<-CvisUVSW..LW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis3.bf_twilight.model1$vissys<-strrep("Vis3.bf",1)
-Vis4.bf_twilight.model1<-CvisUVSWMWLW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis4.bf_twilight.model1$vissys<-strrep("Vis4.bf",1)
-allvis.bf_twilight.model1<-Vis1.bf_twilight.model1 %>% rbind(Vis2.bf_twilight.model1) %>% rbind(Vis3.bf_twilight.model1) %>%rbind(Vis4.bf_twilight.model1)
-
-
-#add the mean
+##add the mean
 mean.bf_twilight.model1<-allvis.bf_twilight.model1 %>% mutate(patch3 = paste(allvis.bf_twilight.model1$vissys,allvis.bf_twilight.model1$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
   group_by(patch3,vissys,patch1) %>% summarize(mean.dS.bf=mean(dS)) %>% #patch1(flowers
@@ -1725,13 +1934,13 @@ mean.bf_twilight.model1<-allvis.bf_twilight.model1 %>% mutate(patch3 = paste(all
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
-#plot the mean
+##plot the mean
 names(mean.bf_twilight.model1)[names(mean.bf_twilight.model1) == "patch1"] <- "flowerID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
 mean.bf_twilight.model1<-mean.bf_twilight.model1[order(mean.bf_twilight.model1$flowerID),]
 #make the data frame order bt flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
-#combine the colour code list to the mean.bf for ploting
+##combine the colour code list to the mean.bf for ploting
 mean.bf_twilight.model1$match.name<-flower.colour.model1$species # this column is just for checking if match correctly
 mean.bf_twilight.model1$colour<-flower.colour.model1$colour
 
@@ -1792,30 +2001,8 @@ beetle.colour.model2 <- name.list %>% filter(str_detect(species, "beetle")) %>% 
   mutate(count = 6) %>% uncount(count) #repeat each row for 4 times for 6 visual systems
 
 
-#flower vs leaf
-Vis1.lf_d65.model2<- Cbuprest580%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis1.lf_d65.model2$vissys<-strrep("Vis1.lf",1)
-Vis2.lf_d65.model2<-Cbuprest600%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis2.lf_d65.model2$vissys<-strrep("Vis2.lf",1)
-Vis3.lf_d65.model2<-Cbuprest620%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis3.lf_d65.model2$vissys<-strrep("Vis3.lf",1)
-Vis4.lf_d65.model2<-Cbuprest640%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis4.lf_d65.model2$vissys<-strrep("Vis4.lf",1)
-Vis5.lf_d65.model2<-Cbuprest660%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis5.lf_d65.model2$vissys<-strrep("Vis5.lf",1)
-Vis6.lf_d65.model2<-Cbuprest680%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis6.lf_d65.model2$vissys<-strrep("Vis6.lf",1)
-
-allvis.lf_d65.model2<-Vis1.lf_d65.model2 %>% rbind(Vis2.lf_d65.model2) %>% rbind(Vis3.lf_d65.model2) %>%
-  rbind(Vis4.lf_d65.model2) %>%rbind(Vis5.lf_d65.model2) %>%rbind(Vis6.lf_d65.model2)
-
-#add the mean
+#make flower vs leaf plot
+##add the mean
 mean.lf_d65.model2<-allvis.lf_d65.model2 %>% mutate(patch3 = paste(allvis.lf_d65.model2$vissys,allvis.lf_d65.model2$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
   group_by(patch3,vissys,patch1) %>% summarize(mean.dS.lf=mean(dS)) %>% 
@@ -1823,13 +2010,13 @@ mean.lf_d65.model2<-allvis.lf_d65.model2 %>% mutate(patch3 = paste(allvis.lf_d65
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
-#plot the mean
+##plot the mean
 names(mean.lf_d65.model2)[names(mean.lf_d65.model2) == "patch1"] <- "flowerID" 
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
 mean.lf_d65.model2<-mean.lf_d65.model2[order(mean.lf_d65.model2$flowerID),] 
 #make the data frame order by flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
-#combine the colour code list to the mean.bf for ploting
+##combine the colour code list to the mean.bf for ploting
 mean.lf_d65.model2$match.name<-flower.colour.model2$species # this column is just for checking if match correctly
 mean.lf_d65.model2$colour<-flower.colour.model2$colour
 
@@ -1871,31 +2058,8 @@ lf_d65.model2<-ggplot(mean.lf_d65.model2, aes(x=vissys, y=mean.dS.lf,group=flowe
   annotate("text", x = c("Vis1.lf", "Vis2.lf", "Vis3.lf","Vis4.lf","Vis5.lf","Vis6.lf"), y = 15, label =c("a","b","c","d","e","b")) #add stitistical info
 
 
-#beetle vs leaf
-Vis1.lb_d65.model2<- Cbuprest580%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis1.lb_d65.model2$vissys<-strrep("Vis1.lb",1)
-Vis2.lb_d65.model2<-Cbuprest600%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis2.lb_d65.model2$vissys<-strrep("Vis2.lb",1)
-Vis3.lb_d65.model2<-Cbuprest620%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis3.lb_d65.model2$vissys<-strrep("Vis3.lb",1)
-Vis4.lb_d65.model2<-Cbuprest640%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis4.lb_d65.model2$vissys<-strrep("Vis4.lb",1)
-Vis5.lb_d65.model2<-Cbuprest660%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis5.lb_d65.model2$vissys<-strrep("Vis5.lb",1)
-Vis6.lb_d65.model2<-Cbuprest680%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis6.lb_d65.model2$vissys<-strrep("Vis6.lb",1)
-
-allvis.lb_d65.model2<-Vis1.lb_d65.model2 %>% rbind(Vis2.lb_d65.model2) %>% rbind(Vis3.lb_d65.model2) %>%
-  rbind(Vis4.lb_d65.model2) %>%rbind(Vis5.lb_d65.model2) %>%rbind(Vis6.lb_d65.model2)
-
-
-#add the mean
+#make beetle vs leaf plot
+##add the mean
 mean.lb_d65.model2<-allvis.lb_d65.model2 %>% mutate(patch3 = paste(allvis.lb_d65.model2$vissys,allvis.lb_d65.model2$patch2,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch2(beetles) and vissys
   group_by(patch3,vissys,patch2) %>% summarize(mean.dS.lb=mean(dS)) %>% 
@@ -1903,13 +2067,13 @@ mean.lb_d65.model2<-allvis.lb_d65.model2 %>% mutate(patch3 = paste(allvis.lb_d65
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
-#plot the mean
+##plot the mean
 names(mean.lb_d65.model2)[names(mean.lb_d65.model2) == "patch2"] <- "beetleID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
 mean.lb_d65.model2<-mean.lb_d65.model2[order(mean.lb_d65.model2$beetleID),]
 #make the data frame order bt beetleID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
-#combine the colour code list to the mean.bf for ploting
+##combine the colour code list to the mean.bf for ploting
 mean.lb_d65.model2$match.name<-beetle.colour.model2$species # this column is just for checking if match correctly
 mean.lb_d65.model2$colour<-beetle.colour.model2$colour
 
@@ -1951,32 +2115,8 @@ lb_d65.model2<-ggplot(mean.lb_d65.model2, aes(x=vissys, y=mean.dS.lb,group=beetl
   annotate("text", x = c("Vis1.lb", "Vis2.lb", "Vis3.lb","Vis4.lb","Vis5.lb","Vis6.lb"), y = 15, label =c("a","b","c","d","e","f")) #add stitistical info
 
 
-#beetle vs leaf
-Vis1.bf_d65.model2<- Cbuprest580%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis1.bf_d65.model2$vissys<-strrep("Vis1.bf",1)
-Vis2.bf_d65.model2<-Cbuprest600%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis2.bf_d65.model2$vissys<-strrep("Vis2.bf",1)
-Vis3.bf_d65.model2<-Cbuprest620%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis3.bf_d65.model2$vissys<-strrep("Vis3.bf",1)
-Vis4.bf_d65.model2<-Cbuprest640%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis4.bf_d65.model2$vissys<-strrep("Vis4.bf",1)
-Vis5.bf_d65.model2<-Cbuprest660%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis5.bf_d65.model2$vissys<-strrep("Vis5.bf",1)
-Vis6.bf_d65.model2<-Cbuprest680%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis6.bf_d65.model2$vissys<-strrep("Vis6.bf",1)
-
-allvis.bf_d65.model2<-Vis1.bf_d65.model2 %>% rbind(Vis2.bf_d65.model2) %>% rbind(Vis3.bf_d65.model2) %>%
-  rbind(Vis4.bf_d65.model2) %>%rbind(Vis5.bf_d65.model2) %>%rbind(Vis6.bf_d65.model2)
-
-
-
-#add the mean
+#make beetle vs flower plot
+##add the mean
 mean.bf_d65.model2<-allvis.bf_d65.model2 %>% mutate(patch3 = paste(allvis.bf_d65.model2$vissys,allvis.bf_d65.model2$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
   group_by(patch3,vissys,patch1) %>% summarize(mean.dS.bf=mean(dS)) %>% #patch1(flowers
@@ -1985,13 +2125,13 @@ mean.bf_d65.model2<-allvis.bf_d65.model2 %>% mutate(patch3 = paste(allvis.bf_d65
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
 
-#plot the mean dS
+##plot the mean dS
 names(mean.bf_d65.model2)[names(mean.bf_d65.model2) == "patch1"] <- "flowerID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
 mean.bf_d65.model2<-mean.bf_d65.model2[order(mean.bf_d65.model2$flowerID),]
 #make the data frame order bt flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
-#combine the colour code list to the mean.bf for ploting
+##combine the colour code list to the mean.bf for ploting
 mean.bf_d65.model2$match.name<-flower.colour.model2$species # this column is just for checking if match correctly
 mean.bf_d65.model2$colour<-flower.colour.model2$colour
 
@@ -2039,30 +2179,8 @@ figure_d65.model2
 
 ###Twilight
 ```{r,fig.cap="Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
-#flower vs leaf
-Vis1.lf_twilight.model2<- Cbuprest580_twilight %>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis1.lf_twilight.model2$vissys<-strrep("Vis1.lf",1)
-Vis2.lf_twilight.model2<-Cbuprest600_twilight %>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis2.lf_twilight.model2$vissys<-strrep("Vis2.lf",1)
-Vis3.lf_twilight.model2<-Cbuprest620_twilight %>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis3.lf_twilight.model2$vissys<-strrep("Vis3.lf",1)
-Vis4.lf_twilight.model2<-Cbuprest640_twilight %>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis4.lf_twilight.model2$vissys<-strrep("Vis4.lf",1)
-Vis5.lf_twilight.model2<-Cbuprest660_twilight %>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis5.lf_twilight.model2$vissys<-strrep("Vis5.lf",1)
-Vis6.lf_twilight.model2<-Cbuprest680_twilight %>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis6.lf_twilight.model2$vissys<-strrep("Vis6.lf",1)
-
-allvis.lf_twilight.model2<-Vis1.lf_twilight.model2 %>% rbind(Vis2.lf_twilight.model2) %>% rbind(Vis3.lf_twilight.model2) %>%
-  rbind(Vis4.lf_twilight.model2) %>%rbind(Vis5.lf_twilight.model2) %>%rbind(Vis6.lf_twilight.model2)
-
-#add the mean
+#make flower vs leaf plot
+##add the mean
 mean.lf_twilight.model2<-allvis.lf_twilight.model2 %>% mutate(patch3 = paste(allvis.lf_twilight.model2$vissys,allvis.lf_twilight.model2$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
   group_by(patch3,vissys,patch1) %>% summarize(mean.dS.lf=mean(dS)) %>% 
@@ -2070,13 +2188,13 @@ mean.lf_twilight.model2<-allvis.lf_twilight.model2 %>% mutate(patch3 = paste(all
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
-#plot the mean
+##plot the mean
 names(mean.lf_twilight.model2)[names(mean.lf_twilight.model2) == "patch1"] <- "flowerID" 
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
 mean.lf_twilight.model2<-mean.lf_twilight.model2[order(mean.lf_twilight.model2$flowerID),] 
 #make the data frame order by flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
-#combine the colour code list to the mean.bf for ploting
+##combine the colour code list to the mean.bf for ploting
 mean.lf_twilight.model2$match.name<-flower.colour.model2$species # this column is just for checking if match correctly
 mean.lf_twilight.model2$colour<-flower.colour.model2$colour
 
@@ -2118,31 +2236,8 @@ lf_twilight.model2<-ggplot(mean.lf_twilight.model2, aes(x=vissys, y=mean.dS.lf,g
   annotate("text", x = c("Vis1.lf", "Vis2.lf", "Vis3.lf","Vis4.lf","Vis5.lf","Vis6.lf"), y = 15, label =c("a","b","c","c","d","b")) #add stitistical info
 
 
-#beetle vs leaf
-Vis1.lb_twilight.model2<- Cbuprest580_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis1.lb_twilight.model2$vissys<-strrep("Vis1.lb",1)
-Vis2.lb_twilight.model2<-Cbuprest600_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis2.lb_twilight.model2$vissys<-strrep("Vis2.lb",1)
-Vis3.lb_twilight.model2<-Cbuprest620_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis3.lb_twilight.model2$vissys<-strrep("Vis3.lb",1)
-Vis4.lb_twilight.model2<-Cbuprest640_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis4.lb_twilight.model2$vissys<-strrep("Vis4.lb",1)
-Vis5.lb_twilight.model2<-Cbuprest660_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis5.lb_twilight.model2$vissys<-strrep("Vis5.lb",1)
-Vis6.lb_twilight.model2<-Cbuprest680_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis6.lb_twilight.model2$vissys<-strrep("Vis6.lb",1)
-
-allvis.lb_twilight.model2<-Vis1.lb_twilight.model2 %>% rbind(Vis2.lb_twilight.model2) %>% rbind(Vis3.lb_twilight.model2) %>%
-  rbind(Vis4.lb_twilight.model2) %>%rbind(Vis5.lb_twilight.model2) %>%rbind(Vis6.lb_twilight.model2)
-
-
-#add the mean
+#make beetle vs leaf plot
+##add the mean
 mean.lb_twilight.model2<-allvis.lb_twilight.model2 %>% mutate(patch3 = paste(allvis.lb_twilight.model2$vissys,allvis.lb_twilight.model2$patch2,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch2(beetles) and vissys
   group_by(patch3,vissys,patch2) %>% summarize(mean.dS.lb=mean(dS)) %>% 
@@ -2150,13 +2245,13 @@ mean.lb_twilight.model2<-allvis.lb_twilight.model2 %>% mutate(patch3 = paste(all
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
-#plot the mean
+##plot the mean
 names(mean.lb_twilight.model2)[names(mean.lb_twilight.model2) == "patch2"] <- "beetleID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
 mean.lb_twilight.model2<-mean.lb_twilight.model2[order(mean.lb_twilight.model2$beetleID),]
 #make the data frame order bt beetleID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
-#combine the colour code list to the mean.bf for ploting
+##combine the colour code list to the mean.bf for ploting
 mean.lb_twilight.model2$match.name<-beetle.colour.model2$species # this column is just for checking if match correctly
 mean.lb_twilight.model2$colour<-beetle.colour.model2$colour
 
@@ -2198,32 +2293,8 @@ lb_twilight.model2<-ggplot(mean.lb_twilight.model2, aes(x=vissys, y=mean.dS.lb,g
   annotate("text", x = c("Vis1.lb", "Vis2.lb", "Vis3.lb","Vis4.lb","Vis5.lb","Vis6.lb"), y = 15, label =c("a","b","c","d","e","f")) #add stitistical info
 
 
-#beetle vs leaf
-Vis1.bf_twilight.model2<- Cbuprest580_twilight %>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis1.bf_twilight.model2$vissys<-strrep("Vis1.bf",1)
-Vis2.bf_twilight.model2<-Cbuprest600_twilight %>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis2.bf_twilight.model2$vissys<-strrep("Vis2.bf",1)
-Vis3.bf_twilight.model2<-Cbuprest620_twilight %>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis3.bf_twilight.model2$vissys<-strrep("Vis3.bf",1)
-Vis4.bf_twilight.model2<-Cbuprest640_twilight %>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis4.bf_twilight.model2$vissys<-strrep("Vis4.bf",1)
-Vis5.bf_twilight.model2<-Cbuprest660_twilight %>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis5.bf_twilight.model2$vissys<-strrep("Vis5.bf",1)
-Vis6.bf_twilight.model2<-Cbuprest680_twilight %>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis6.bf_twilight.model2$vissys<-strrep("Vis6.bf",1)
-
-allvis.bf_twilight.model2<-Vis1.bf_twilight.model2 %>% rbind(Vis2.bf_twilight.model2) %>% rbind(Vis3.bf_twilight.model2) %>%
-  rbind(Vis4.bf_twilight.model2) %>%rbind(Vis5.bf_twilight.model2) %>%rbind(Vis6.bf_twilight.model2)
-
-
-
-#add the mean
+#make beetle vs flower plot
+##add the mean
 mean.bf_twilight.model2<-allvis.bf_twilight.model2 %>% mutate(patch3 = paste(allvis.bf_twilight.model2$vissys,allvis.bf_twilight.model2$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
   group_by(patch3,vissys,patch1) %>% summarize(mean.dS.bf=mean(dS)) %>% #patch1(flowers
@@ -2232,13 +2303,13 @@ mean.bf_twilight.model2<-allvis.bf_twilight.model2 %>% mutate(patch3 = paste(all
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
 
-#plot the mean dS
+##plot the mean dS
 names(mean.bf_twilight.model2)[names(mean.bf_twilight.model2) == "patch1"] <- "flowerID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
 mean.bf_twilight.model2<-mean.bf_twilight.model2[order(mean.bf_twilight.model2$flowerID),]
 #make the data frame order bt flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
-#combine the colour code list to the mean.bf for ploting
+##combine the colour code list to the mean.bf for ploting
 mean.bf_twilight.model2$match.name<-flower.colour.model2$species # this column is just for checking if match correctly
 mean.bf_twilight.model2$colour<-flower.colour.model2$colour
 
