@@ -7,6 +7,13 @@ navbar:
   left:
     - text: "Visual sensitivity in the far-red enhances contrast against vegetation"
       href: index.html
+    - text: "Even space"
+      href: even_space.html
+    - text: "Sensitivity analysis"
+      href: sensitivity_analysis.html
+    - text: "Behavioural assay"
+      href: behavioural_assay.html
+      
 output:
   html_document:
     toc: true # table of content true

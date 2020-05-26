@@ -1,11 +1,15 @@
 ---
 title: "Visual sensitivity in the far-red enhances contrast against vegetation"
-subtitle: Supplementary Information
-author: "<br>Lu-Yi Wang^1^, Devi Stuart-Fox^1^, Geoff Walker^1^, Nicholas Roberts^2^ and Amanda Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne, Australia <br></br> ^2^School of Biological Sciences, University of Bristol, UK <br></br>"
-Date: "March 24th 2020"
+author: <br>Lu-Yi Wang^1^, Devi Stuart-Fox^1^, Geoff Walker^1^, Nicholas W. Roberts^2^
+  and Amanda Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne,
+  Australia <br></br> ^2^School of Biological Sciences, University of Bristol, UK
+  <br></br>
 output:
+  pdf_document: default
   html_document:
     theme: flatly
+subtitle: Supplementary Information
+Date: March 24 2020
 ---
   
 #Aims
@@ -54,9 +58,9 @@ knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time wh
 
 ```{r import data,message=FALSE}
 #import sensitivity curves
-specsensbuprest.model1 <- read.csv("data/peak sensitivity 3.csv",header=TRUE) %>%
+specsensbuprest.model1 <- read.csv("data/peak sensitivity for visual model 1.csv",header=TRUE) %>%
   as.rspec()
-specsensbuprest.model2 <- read.csv("data/peak sensitivity 4.csv",header=TRUE) %>%
+specsensbuprest.model2 <- read.csv("data/peak sensitivity for visual model 2.csv",header=TRUE) %>%
   as.rspec()
 #import irradiance
 irradiance.d65 <- read.csv("data/d65.csv",header=TRUE) %>% 
@@ -584,6 +588,12 @@ contrast.list_twilight.model2
 #Compare contrasts
 * To compare contrasts between visual systems, We performed Wald chisquare tests on generalised linear mixed models (GLMM) followed by posthoc tests.
 
+* In the models, we assigned
+    + Indenpendent variable: __contrast__
+    + Dependent variable: 
+        + Fixed factor: __visual system__
+        + Random factor: __sample ID__ of both targets in the comparison
+
 ```{r} 
 #creat different comparison groups for furthur GLMM analysis
 #Organize data before GLMM
@@ -955,7 +965,7 @@ res.flower.vs.beetle_twilight.model2<-lm(compare.flower.vs.beetle.model2$dS ~ co
 
 ##### D65 
 ```{r}
-par (mfrow=c(1,3))
+par (mfrow=c(1,3),pin=c(1.5, 1.5))
 qqnorm(res.leaf.vs.flower_d65.model1$residuals, main = "Leaf vs Flower")
 qqnorm(res.leaf.vs.beetle_d65.model1$residuals, main = "Leaf vs Beetle")
 qqnorm(res.flower.vs.beetle_d65.model1$residuals, main = "Beetle vs Flower")
@@ -963,7 +973,7 @@ qqnorm(res.flower.vs.beetle_d65.model1$residuals, main = "Beetle vs Flower")
 
 ##### Twilight
 ```{r}
-par (mfrow=c(1,3))
+par (mfrow=c(1,3),pin=c(1.5, 1.5))
 qqnorm(res.leaf.vs.flower_twilight.model1$residuals, main = "Leaf vs Flower")
 qqnorm(res.leaf.vs.beetle_twilight.model1$residuals, main = "Leaf vs Beetle")
 qqnorm(res.flower.vs.beetle_twilight.model1$residuals, main = "Beetle vs Flower")
@@ -972,7 +982,7 @@ qqnorm(res.flower.vs.beetle_twilight.model1$residuals, main = "Beetle vs Flower"
 #### Visual model 2 {.tabset .tabset-fade .tabset-pills}
 ##### D65 
 ```{r}
-par (mfrow=c(1,3))
+par (mfrow=c(1,3),pin=c(1.5, 1.5))
 qqnorm(res.leaf.vs.flower_d65.model2$residuals, main = "Leaf vs Flower")
 qqnorm(res.leaf.vs.beetle_d65.model2$residuals, main = "Leaf vs Beetle")
 qqnorm(res.flower.vs.beetle_d65.model2$residuals, main = "Beetle vs Flower")
@@ -980,7 +990,7 @@ qqnorm(res.flower.vs.beetle_d65.model2$residuals, main = "Beetle vs Flower")
 
 ##### Twilight
 ```{r}
-par (mfrow=c(1,3))
+par (mfrow=c(1,3),pin=c(1.5, 1.5))
 qqnorm(res.leaf.vs.flower_twilight.model2$residuals, main = "Leaf vs Flower")
 qqnorm(res.leaf.vs.beetle_twilight.model2$residuals, main = "Leaf vs Beetle")
 qqnorm(res.flower.vs.beetle_twilight.model2$residuals, main = "Beetle vs Flower")
@@ -991,7 +1001,7 @@ qqnorm(res.flower.vs.beetle_twilight.model2$residuals, main = "Beetle vs Flower"
 
 ##### D65
 ```{r}
-par (mfrow=c(1,3))
+par (mfrow=c(1,3),oma=c(2,2,0,0)) #oma=c() to creat space for common lables
 boxplot(compare.leaf.vs.flower.model1$dS~compare.leaf.vs.flower.model1$peak_wl.leaf.vs.flower, las=2,
         main = "Leaf vs Flower",
         names=c("Vis UML", "Vis USL", "Vis USM", "Vis USML"))
@@ -1001,11 +1011,13 @@ boxplot(compare.leaf.vs.beetle.model1$dS~compare.leaf.vs.beetle.model1$peak_wl.l
 boxplot(compare.flower.vs.beetle.model1$dS~compare.flower.vs.beetle.model1$peak_wl.flower.vs.beetle, las=2,
         main = "Beetle vs Flower",
         names=c("Vis UML", "Vis USL", "Vis USM", "Vis USML"))
+mtext("Visual system",side=1,line=0,outer=TRUE,cex=1.3) #side assigns the position of the text e.g. bottom
+mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0) #las assigns the orientation of the text
 ```
 
 ##### Twilight
 ```{r}
-par (mfrow=c(1,3))
+par (mfrow=c(1,3),oma=c(2,2,0,0))
 boxplot(compare.leaf.vs.flower_twilight.model1$dS~compare.leaf.vs.flower_twilight.model1$peak_wl.leaf.vs.flower, las=2,
         main = "Leaf vs Flower",
         names=c("Vis UML", "Vis USL", "Vis USM", "Vis USML"))
@@ -1015,12 +1027,14 @@ boxplot(compare.leaf.vs.beetle_twilight.model1$dS~compare.leaf.vs.beetle_twiligh
 boxplot(compare.flower.vs.beetle_twilight.model1$dS~compare.flower.vs.beetle_twilight.model1$peak_wl.flower.vs.beetle, las=2,
         main = "Beetle vs Flower",
         names=c("Vis UML", "Vis USL", "Vis USM", "Vis USML"))
+mtext("Visual system",side=1,line=0,outer=TRUE,cex=1.3)
+mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0)
 ```
 
 #### Visual model 2 {.tabset .tabset-fade .tabset-pills}
 ##### D65
 ```{r}
-par (mfrow=c(1,3))
+par (mfrow=c(1,3),oma=c(2,2,0,0))
 boxplot(compare.leaf.vs.flower.model2$dS~compare.leaf.vs.flower.model2$peak_wl.leaf.vs.flower, las=2,
         main = "Leaf vs Flower",
         names=c("Vis 580", "Vis 600", "Vis 620", "Vis 640", "Vis 660", "Vis 680"))
@@ -1030,11 +1044,13 @@ boxplot(compare.leaf.vs.beetle.model2$dS~compare.leaf.vs.beetle.model2$peak_wl.l
 boxplot(compare.flower.vs.beetle.model2$dS~compare.flower.vs.beetle.model2$peak_wl.flower.vs.beetle, las=2,
         main = "Beetle vs Flower",
         names=c("Vis 580", "Vis 600", "Vis 620", "Vis 640", "Vis 660", "Vis 680"))
+mtext("Visual system",side=1,line=0,outer=TRUE,cex=1.3)
+mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0)
 ```
 
 ##### Twilight 
 ```{r}
-par (mfrow=c(1,3))
+par (mfrow=c(1,3),oma=c(2,2,0,0))
 boxplot(compare.leaf.vs.flower_twilight.model2$dS~compare.leaf.vs.flower_twilight.model2$peak_wl.leaf.vs.flower, las=2,
         main = "Leaf vs Flower",
         names=c("Vis 580", "Vis 600", "Vis 620", "Vis 640", "Vis 660", "Vis 680"))
@@ -1044,6 +1060,8 @@ boxplot(compare.leaf.vs.beetle_twilight.model2$dS~compare.leaf.vs.beetle_twiligh
 boxplot(compare.flower.vs.beetle_twilight.model2$dS~compare.flower.vs.beetle_twilight.model2$peak_wl.flower.vs.beetle, las=2,
         main = "Beetle vs Flower",
         names=c("Vis 580", "Vis 600", "Vis 620", "Vis 640", "Vis 660", "Vis 680"))
+mtext("Visual system",side=1,line=0,outer=TRUE,cex=1.3)
+mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0)
 ```
 
 
@@ -1387,7 +1405,7 @@ ggplot(data = heat_d65.model1, aes(x=VislistA_d65.model1, y=VislistB_d65.model1,
 
 ######Original model output
 ```{r}
-sum.flower.vs.beetle_twilight.model1
+sum.flower.vs.beetle_d65.model1
 ```
 
 #####Twilight{.tabset .tabset-fade .tabset-pills}
@@ -1560,7 +1578,7 @@ sum.leaf.vs.beetle_twilight.model2
 #### __Beetle vs Flower__ {.tabset .tabset-fade .tabset-pills}
 #####Daylight{.tabset .tabset-fade .tabset-pills}
 ```{r}
-Anova(m.flower.vs.beetle_twilight.model2) %>% pander()
+Anova(m.flower.vs.beetle_d65.model2) %>% pander()
 ```
 
 </br>
@@ -1570,9 +1588,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat_twilight.model2, aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=flower.vs.beetle)) + 
+ggplot(data = heat_d65.model2, aes(x=VislistA_d65.model2, y=VislistB_d65.model2, fill=flower.vs.beetle)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = paste(format(round(flower.vs.beetle, 2), nsmall = 2), sig.flower.vs.beetle)))+
+  geom_text(aes(VislistA_d65.model2, VislistB_d65.model2, label = paste(format(round(flower.vs.beetle, 2), nsmall = 2), sig.flower.vs.beetle)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour 
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1585,7 +1603,7 @@ ggplot(data = heat_twilight.model2, aes(x=VislistA_twilight.model2, y=VislistB_t
 
 ######Original model output
 ```{r}
-sum.flower.vs.beetle_twilight.model2
+sum.flower.vs.beetle_d65.model2
 ```
 
 #####Twilight{.tabset .tabset-fade .tabset-pills}
@@ -2356,3 +2374,16 @@ bf_twilight.model2<-ggplot(mean.bf_twilight.model2, aes(x=vissys, y=mean.dS.bf,g
 figure_twilight.model2 <- ggarrange(lf_twilight.model2,lb_twilight.model2,bf_twilight.model2, ncol = 3, nrow = 1)
 figure_twilight.model2
 ```
+
+#Summary
+
+* Visual models using hypothetical insect visual systems indicate that long wavelength sensitivity enhances the contrast of beetle colours against leaf backgrounds; whereas short wavelength sensitivity enhances the contrast of flowers with both leaves and beetles. 
+</br>
+</br>
+* Tetrachromacy consistently increases contrast compared to trichromacy, with the largest increase of 1.4-fold observed in the comparison between beetles and leaves. 
+</br>
+</br>
+* The optimal peak sensitivity of the LWS photoreceptor depends on what is being viewed. When comparing beetle colours with both leaves and flowers, contrast increases with increasing LWS λmax, whereas when comparing flowers with leaves, contrast is maximized with a LWS photoreceptor peak sensitivity of 640 nm.
+</br>
+</br>
+* The contrasts in the corresponding comparisons were qualitatively similar in twilight models.

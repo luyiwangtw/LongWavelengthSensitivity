@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content=" Lu-Yi Wang1, Devi Stuart-Fox1, Geoff Walker1, Nicholas W. Roberts2 and Amanda Franklin1   1School of Biosciences, The University of Melbourne, Australia   2School of Biological Sciences, University of Bristol, UK" />
+
+
+<title>Behavioural assay</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Visual sensitivity in the far-red enhances contrast against vegetation</a>
+</li>
+<li>
+  <a href="even_space.html">Even space</a>
+</li>
+<li>
+  <a href="sensitivity_analysis.html">Sensitivity analysis</a>
+</li>
+<li>
+  <a href="behavioural_assay.html">Behavioural assay</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Behavioural assay</h1>
+<h3 class="subtitle">Supplementary Information</h3>
+<h4 class="author"><br>Lu-Yi Wang<sup>1</sup>, Devi Stuart-Fox<sup>1</sup>, Geoff Walker<sup>1</sup>, Nicholas W. Roberts<sup>2</sup> and Amanda Franklin<sup>1</sup> <br></br> <sup>1</sup>School of Biosciences, The University of Melbourne, Australia <br></br> <sup>2</sup>School of Biological Sciences, University of Bristol, UK <br></br></h4>
+
+</div>
+
+
+<div id="aim" class="section level1">
+<h1>Aim</h1>
+<p>Both opsin expression and electroretinogram data indicate that jewel beetles have a LWS photoreceptor with sensitivity potentially extending into the far red. However, their visual sensitivities have not been confirmed with behavioural data. Here, we conducted a behavioral assay to confirm their long wavelength sensitivity in living jewel beetles.</p>
+<p></br> </br></p>
+</div>
+<div id="materials-and-methods" class="section level1">
+<h1>Materials and methods</h1>
+<p>To test the behavioural response of jewel beetles to long wavelengths, we conducted bi-choice behavioural experiments based on their positive phototaxis. We used a neutral-grey Y-maze as an arena (10 cm high; two 15 cm wide x 20 cm long arms with a 20 cm wide x 15 cm long base) with a light stimulus at the end of one arm and no stimulus at the end of the other. The lit arm was shifted between trials to prevent bias in arm preference. To create the light stimulus, we used a light panel with 6 LED diodes of the same peak wavelength with a piece of diffuse paper placed 1 cm in front. The peak wavelengths of the diodes used in this experiment ranged from 590 to 735 nm and were performed in the order of: 590, 680, 700, 720, 735, 645 nm. The shorter wavelength in the last trial was to ensure that there was no significant fatigue in beetles after all trials and the responses were reliable. Each beetle was exposed to all light stimuli and received at least 10-minute break between trials. All trials were conducted in a dark room with an indirect dim light.</p>
+<p></br> </br></p>
+<div class="figure">
+<img src="image/ymaze.png" alt="Figure caption: Y-maze setup." width="70%" />
+<p class="caption">
+Figure caption: Y-maze setup.
+</p>
+</div>
+<p></br> </br></p>
+<p>Each trial lasted for 3 minutes and started when the beetle was introduced into the base of the Y-maze. We defined a valid choice as the beetle approaching closer than 5 cm to the diffuse paper at the end of the lit arm. If the beetle made a valid choice before 3 minutes, we stopped the trial and recorded the individual as attracted to that wavelength. Otherwise, the trial ended at 3 minutes and a second trial was performed 10 minutes later with same wavelength to ensure the consistency of its response. If the beetle made a valid choice in the second trial, we then recorded the individual as attracted to that wavelength despite its failure in the first trial. If the beetle still failed to make a valid choice in the second trial, we recorded the individual as not attracted to the wavelength (including in the base zone, dark arm, and in the lit arm but not &lt;5 cm to the end). In total, 28 individuals from 2 species (16 <em>Castiarina dimidiata</em> and 12 <em>C. flavopicta</em>) completed the 6-wavelength trial series. Every trial was video recorded using a camera with night mode. </br> </br> We used the beetles’ responses (attracted / not attracted) in the behavioural trials to obtain a response curve over 590-735 nm by fitting a logistic regression for the 2 species, separately. In the model, we set the response of the beetles as dependent variable, peak wavelength of the light source as a fixed factor, and individual ID as a random factor to account for repeated trials for each individual. </br> </br> For details of beetle collection, please see the main text.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lme4)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(pavo)
+<span class="kw">library</span>(ggpubr)</code></pre></div>
+<p></br> </br></p>
+</div>
+<div id="behavioural-results" class="section level1">
+<h1>Behavioural results</h1>
+<p>Behavioural experiments confirmed far-red sensitivity in both species of jewel beetle. 96% of jewel beetles were attracted by light at 590 nm and c.a. 87% of them still responded to light at 645 nm (<em>C. dimidiata</em>: 100% and 96%; <em>C. flavopicta</em>, 93% and 78%; at 590 nm and 645 nm). The percentage of the respondents (i.e. those reached &lt;5 cm to the end the lit arm) decreased steadily after 590 nm in <em>C. flavopicta</em> down to 735 nm, whereas the decrease is more abrupt in <em>C. dimidiata</em> after 680 nm. At 700 nm, <em>C. dimidiata</em> and <em>C. flavopicta</em> had a response rate of 56% and 39%, respectively. The 50% response rate was at c.a. 704 nm for <em>C. dimidiata</em> and c.a. 685 nm for* C. flavopicta<em>. Only one </em>C. dimidiata* individual responded to light at 735 nm. </br> </br></p>
+<div class="figure">
+<img src="behavioural_assay_files/figure-html/unnamed-chunk-4-1.png" alt="Figure caption: Results of the behavioural experiments on two jewel beetles. Green represents *Castiarina dimidiata* and blue represent *C. flavopicta*. Logistic regression lines show beetles&lt;U+2019&gt; high response rate at 700 nm. 95 % confidence intervals in shaded regions. Red rectangle highlighted the location of the &lt;U+2018&gt;red edge&lt;U+2019&gt;" width="672" />
+<p class="caption">
+Figure caption: Results of the behavioural experiments on two jewel beetles. Green represents <em>Castiarina dimidiata</em> and blue represent <em>C. flavopicta</em>. Logistic regression lines show beetles<U+2019> high response rate at 700 nm. 95 % confidence intervals in shaded regions. Red rectangle highlighted the location of the <U+2018>red edge<U+2019>
+</p>
+</div>
+<p></br> </br></p>
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<p>The behavioural experiment suggests that jewel beetles have long wavelength sensitivity spanning the ‘red edge’. </br> </br></p>
+</div>
+<div id="supplementary-images" class="section level1 tabset tabset-fade tabset-pills">
+<h1>Supplementary images</h1>
+<p></br> </br></p>
+<div id="led-peaks" class="section level2">
+<h2>LED peaks</h2>
+<p></br> </br></p>
+<div class="figure">
+<img src="image/led_peaks.png" alt="Figure caption: Relative irradiance of the LED lights used in behavioural trials." width="70%" />
+<p class="caption">
+Figure caption: Relative irradiance of the LED lights used in behavioural trials.
+</p>
+</div>
+</div>
+<div id="dim-light" class="section level2">
+<h2>Dim light</h2>
+<p></br> </br></p>
+<div class="figure">
+<img src="image/dim_light.png" alt="Figure caption: The dim light in the environment." width="70%" />
+<p class="caption">
+Figure caption: The dim light in the environment.
+</p>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

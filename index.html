@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content=" Lu-Yi Wang1, Devi Stuart-Fox1, Geoff Walker1, Nicholas Roberts2 and Amanda Franklin1   1School of Biosciences, The University of Melbourne, Australia   2School of Biological Sciences, University of Bristol, UK" />
+<meta name="author" content=" Lu-Yi Wang1, Devi Stuart-Fox1, Geoff Walker1, Nicholas W. Roberts2 and Amanda Franklin1   1School of Biosciences, The University of Melbourne, Australia   2School of Biological Sciences, University of Bristol, UK" />
 
 
 <title>Visual sensitivity in the far-red enhances contrast against vegetation</title>
@@ -412,6 +412,15 @@ div.tocify {
         <li>
   <a href="index.html">Visual sensitivity in the far-red enhances contrast against vegetation</a>
 </li>
+<li>
+  <a href="even_space.html">Even space</a>
+</li>
+<li>
+  <a href="sensitivity_analysis.html">Sensitivity analysis</a>
+</li>
+<li>
+  <a href="behavioural_assay.html">Behavioural assay</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -434,7 +443,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Visual sensitivity in the far-red enhances contrast against vegetation</h1>
 <h3 class="subtitle">Supplementary Information</h3>
-<h4 class="author"><br>Lu-Yi Wang<sup>1</sup>, Devi Stuart-Fox<sup>1</sup>, Geoff Walker<sup>1</sup>, Nicholas Roberts<sup>2</sup> and Amanda Franklin<sup>1</sup> <br></br> <sup>1</sup>School of Biosciences, The University of Melbourne, Australia <br></br> <sup>2</sup>School of Biological Sciences, University of Bristol, UK <br></br></h4>
+<h4 class="author"><br>Lu-Yi Wang<sup>1</sup>, Devi Stuart-Fox<sup>1</sup>, Geoff Walker<sup>1</sup>, Nicholas W. Roberts<sup>2</sup> and Amanda Franklin<sup>1</sup> <br></br> <sup>1</sup>School of Biosciences, The University of Melbourne, Australia <br></br> <sup>2</sup>School of Biological Sciences, University of Bristol, UK <br></br></h4>
 
 </div>
 
@@ -473,9 +482,9 @@ div.tocify {
 <li>All the wavelength used in the models ranged from 300-800 nm.</li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#import sensitivity curves</span>
-specsensbuprest.model1 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/peak sensitivity 3.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
+specsensbuprest.model1 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/peak sensitivity for visual model 1.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">as.rspec</span>()
-specsensbuprest.model2 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/peak sensitivity 4.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
+specsensbuprest.model2 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/peak sensitivity for visual model 2.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">as.rspec</span>()
 <span class="co">#import irradiance</span>
 irradiance.d65 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/d65.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -1203,7 +1212,16 @@ contrast.list_twilight.model2</code></pre></div>
 <div id="compare-contrasts" class="section level1">
 <h1>Compare contrasts</h1>
 <ul>
-<li>To compare contrasts between visual systems, We performed Wald chisquare tests on generalised linear mixed models (GLMM) followed by posthoc tests.</li>
+<li><p>To compare contrasts between visual systems, We performed Wald chisquare tests on generalised linear mixed models (GLMM) followed by posthoc tests.</p></li>
+<li>In the models, we assigned
+<ul>
+<li>Indenpendent variable: <strong>contrast</strong></li>
+<li>Dependent variable:
+<ul>
+<li>Fixed factor: <strong>visual system</strong></li>
+<li>Random factor: <strong>sample ID</strong> of both targets in the comparison</li>
+</ul></li>
+</ul></li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#creat different comparison groups for furthur GLMM analysis</span>
 <span class="co">#Organize data before GLMM</span>
@@ -1567,7 +1585,7 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
 <h4>Visual model 1</h4>
 <div id="d65" class="section level5">
 <h5>D65</h5>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="dt">pin=</span><span class="kw">c</span>(<span class="fl">1.5</span>, <span class="fl">1.5</span>))
 <span class="kw">qqnorm</span>(res.leaf.vs.flower_d65.model1<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Flower&quot;</span>)
 <span class="kw">qqnorm</span>(res.leaf.vs.beetle_d65.model1<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Beetle&quot;</span>)
 <span class="kw">qqnorm</span>(res.flower.vs.beetle_d65.model1<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>)</code></pre></div>
@@ -1575,7 +1593,7 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
 </div>
 <div id="twilight-2" class="section level5">
 <h5>Twilight</h5>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="dt">pin=</span><span class="kw">c</span>(<span class="fl">1.5</span>, <span class="fl">1.5</span>))
 <span class="kw">qqnorm</span>(res.leaf.vs.flower_twilight.model1<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Flower&quot;</span>)
 <span class="kw">qqnorm</span>(res.leaf.vs.beetle_twilight.model1<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Beetle&quot;</span>)
 <span class="kw">qqnorm</span>(res.flower.vs.beetle_twilight.model1<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>)</code></pre></div>
@@ -1586,7 +1604,7 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
 <h4>Visual model 2</h4>
 <div id="d65-1" class="section level5">
 <h5>D65</h5>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="dt">pin=</span><span class="kw">c</span>(<span class="fl">1.5</span>, <span class="fl">1.5</span>))
 <span class="kw">qqnorm</span>(res.leaf.vs.flower_d65.model2<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Flower&quot;</span>)
 <span class="kw">qqnorm</span>(res.leaf.vs.beetle_d65.model2<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Beetle&quot;</span>)
 <span class="kw">qqnorm</span>(res.flower.vs.beetle_d65.model2<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>)</code></pre></div>
@@ -1594,7 +1612,7 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
 </div>
 <div id="twilight-3" class="section level5">
 <h5>Twilight</h5>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="dt">pin=</span><span class="kw">c</span>(<span class="fl">1.5</span>, <span class="fl">1.5</span>))
 <span class="kw">qqnorm</span>(res.leaf.vs.flower_twilight.model2<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Flower&quot;</span>)
 <span class="kw">qqnorm</span>(res.leaf.vs.beetle_twilight.model2<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Leaf vs Beetle&quot;</span>)
 <span class="kw">qqnorm</span>(res.flower.vs.beetle_twilight.model2<span class="op">$</span>residuals, <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>)</code></pre></div>
@@ -1608,7 +1626,7 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
 <h4>Visual model 1</h4>
 <div id="d65-2" class="section level5">
 <h5>D65</h5>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>)) <span class="co">#oma=c() to creat space for common lables</span>
 <span class="kw">boxplot</span>(compare.leaf.vs.flower.model1<span class="op">$</span>dS<span class="op">~</span>compare.leaf.vs.flower.model1<span class="op">$</span>peak_wl.leaf.vs.flower, <span class="dt">las=</span><span class="dv">2</span>,
         <span class="dt">main =</span> <span class="st">&quot;Leaf vs Flower&quot;</span>,
         <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis UML&quot;</span>, <span class="st">&quot;Vis USL&quot;</span>, <span class="st">&quot;Vis USM&quot;</span>, <span class="st">&quot;Vis USML&quot;</span>))
@@ -1617,12 +1635,14 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
         <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis UML&quot;</span>, <span class="st">&quot;Vis USL&quot;</span>, <span class="st">&quot;Vis USM&quot;</span>, <span class="st">&quot;Vis USML&quot;</span>))
 <span class="kw">boxplot</span>(compare.flower.vs.beetle.model1<span class="op">$</span>dS<span class="op">~</span>compare.flower.vs.beetle.model1<span class="op">$</span>peak_wl.flower.vs.beetle, <span class="dt">las=</span><span class="dv">2</span>,
         <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>,
-        <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis UML&quot;</span>, <span class="st">&quot;Vis USL&quot;</span>, <span class="st">&quot;Vis USM&quot;</span>, <span class="st">&quot;Vis USML&quot;</span>))</code></pre></div>
+        <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis UML&quot;</span>, <span class="st">&quot;Vis USL&quot;</span>, <span class="st">&quot;Vis USM&quot;</span>, <span class="st">&quot;Vis USML&quot;</span>))
+<span class="kw">mtext</span>(<span class="st">&quot;Visual system&quot;</span>,<span class="dt">side=</span><span class="dv">1</span>,<span class="dt">line=</span><span class="dv">0</span>,<span class="dt">outer=</span><span class="ot">TRUE</span>,<span class="dt">cex=</span><span class="fl">1.3</span>) <span class="co">#side assigns the position of the text e.g. bottom</span>
+<span class="kw">mtext</span>(<span class="st">&quot;Contrast (JND)&quot;</span>,<span class="dt">side=</span><span class="dv">2</span>,<span class="dt">line=</span><span class="dv">0</span>,<span class="dt">outer=</span><span class="ot">TRUE</span>,<span class="dt">cex=</span><span class="fl">1.3</span>,<span class="dt">las=</span><span class="dv">0</span>) <span class="co">#las assigns the orientation of the text</span></code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 </div>
 <div id="twilight-4" class="section level5">
 <h5>Twilight</h5>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))
 <span class="kw">boxplot</span>(compare.leaf.vs.flower_twilight.model1<span class="op">$</span>dS<span class="op">~</span>compare.leaf.vs.flower_twilight.model1<span class="op">$</span>peak_wl.leaf.vs.flower, <span class="dt">las=</span><span class="dv">2</span>,
         <span class="dt">main =</span> <span class="st">&quot;Leaf vs Flower&quot;</span>,
         <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis UML&quot;</span>, <span class="st">&quot;Vis USL&quot;</span>, <span class="st">&quot;Vis USM&quot;</span>, <span class="st">&quot;Vis USML&quot;</span>))
@@ -1631,7 +1651,9 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
         <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis UML&quot;</span>, <span class="st">&quot;Vis USL&quot;</span>, <span class="st">&quot;Vis USM&quot;</span>, <span class="st">&quot;Vis USML&quot;</span>))
 <span class="kw">boxplot</span>(compare.flower.vs.beetle_twilight.model1<span class="op">$</span>dS<span class="op">~</span>compare.flower.vs.beetle_twilight.model1<span class="op">$</span>peak_wl.flower.vs.beetle, <span class="dt">las=</span><span class="dv">2</span>,
         <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>,
-        <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis UML&quot;</span>, <span class="st">&quot;Vis USL&quot;</span>, <span class="st">&quot;Vis USM&quot;</span>, <span class="st">&quot;Vis USML&quot;</span>))</code></pre></div>
+        <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis UML&quot;</span>, <span class="st">&quot;Vis USL&quot;</span>, <span class="st">&quot;Vis USM&quot;</span>, <span class="st">&quot;Vis USML&quot;</span>))
+<span class="kw">mtext</span>(<span class="st">&quot;Visual system&quot;</span>,<span class="dt">side=</span><span class="dv">1</span>,<span class="dt">line=</span><span class="dv">0</span>,<span class="dt">outer=</span><span class="ot">TRUE</span>,<span class="dt">cex=</span><span class="fl">1.3</span>)
+<span class="kw">mtext</span>(<span class="st">&quot;Contrast (JND)&quot;</span>,<span class="dt">side=</span><span class="dv">2</span>,<span class="dt">line=</span><span class="dv">0</span>,<span class="dt">outer=</span><span class="ot">TRUE</span>,<span class="dt">cex=</span><span class="fl">1.3</span>,<span class="dt">las=</span><span class="dv">0</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 </div>
 </div>
@@ -1639,7 +1661,7 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
 <h4>Visual model 2</h4>
 <div id="d65-3" class="section level5">
 <h5>D65</h5>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))
 <span class="kw">boxplot</span>(compare.leaf.vs.flower.model2<span class="op">$</span>dS<span class="op">~</span>compare.leaf.vs.flower.model2<span class="op">$</span>peak_wl.leaf.vs.flower, <span class="dt">las=</span><span class="dv">2</span>,
         <span class="dt">main =</span> <span class="st">&quot;Leaf vs Flower&quot;</span>,
         <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis 580&quot;</span>, <span class="st">&quot;Vis 600&quot;</span>, <span class="st">&quot;Vis 620&quot;</span>, <span class="st">&quot;Vis 640&quot;</span>, <span class="st">&quot;Vis 660&quot;</span>, <span class="st">&quot;Vis 680&quot;</span>))
@@ -1648,12 +1670,14 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
         <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis 580&quot;</span>, <span class="st">&quot;Vis 600&quot;</span>, <span class="st">&quot;Vis 620&quot;</span>, <span class="st">&quot;Vis 640&quot;</span>, <span class="st">&quot;Vis 660&quot;</span>, <span class="st">&quot;Vis 680&quot;</span>))
 <span class="kw">boxplot</span>(compare.flower.vs.beetle.model2<span class="op">$</span>dS<span class="op">~</span>compare.flower.vs.beetle.model2<span class="op">$</span>peak_wl.flower.vs.beetle, <span class="dt">las=</span><span class="dv">2</span>,
         <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>,
-        <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis 580&quot;</span>, <span class="st">&quot;Vis 600&quot;</span>, <span class="st">&quot;Vis 620&quot;</span>, <span class="st">&quot;Vis 640&quot;</span>, <span class="st">&quot;Vis 660&quot;</span>, <span class="st">&quot;Vis 680&quot;</span>))</code></pre></div>
+        <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis 580&quot;</span>, <span class="st">&quot;Vis 600&quot;</span>, <span class="st">&quot;Vis 620&quot;</span>, <span class="st">&quot;Vis 640&quot;</span>, <span class="st">&quot;Vis 660&quot;</span>, <span class="st">&quot;Vis 680&quot;</span>))
+<span class="kw">mtext</span>(<span class="st">&quot;Visual system&quot;</span>,<span class="dt">side=</span><span class="dv">1</span>,<span class="dt">line=</span><span class="dv">0</span>,<span class="dt">outer=</span><span class="ot">TRUE</span>,<span class="dt">cex=</span><span class="fl">1.3</span>)
+<span class="kw">mtext</span>(<span class="st">&quot;Contrast (JND)&quot;</span>,<span class="dt">side=</span><span class="dv">2</span>,<span class="dt">line=</span><span class="dv">0</span>,<span class="dt">outer=</span><span class="ot">TRUE</span>,<span class="dt">cex=</span><span class="fl">1.3</span>,<span class="dt">las=</span><span class="dv">0</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 </div>
 <div id="twilight-5" class="section level5">
 <h5>Twilight</h5>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">par</span> (<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="dt">oma=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">0</span>,<span class="dv">0</span>))
 <span class="kw">boxplot</span>(compare.leaf.vs.flower_twilight.model2<span class="op">$</span>dS<span class="op">~</span>compare.leaf.vs.flower_twilight.model2<span class="op">$</span>peak_wl.leaf.vs.flower, <span class="dt">las=</span><span class="dv">2</span>,
         <span class="dt">main =</span> <span class="st">&quot;Leaf vs Flower&quot;</span>,
         <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis 580&quot;</span>, <span class="st">&quot;Vis 600&quot;</span>, <span class="st">&quot;Vis 620&quot;</span>, <span class="st">&quot;Vis 640&quot;</span>, <span class="st">&quot;Vis 660&quot;</span>, <span class="st">&quot;Vis 680&quot;</span>))
@@ -1662,7 +1686,9 @@ res.flower.vs.beetle_twilight.model2&lt;-<span class="kw">lm</span>(compare.flow
         <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis 580&quot;</span>, <span class="st">&quot;Vis 600&quot;</span>, <span class="st">&quot;Vis 620&quot;</span>, <span class="st">&quot;Vis 640&quot;</span>, <span class="st">&quot;Vis 660&quot;</span>, <span class="st">&quot;Vis 680&quot;</span>))
 <span class="kw">boxplot</span>(compare.flower.vs.beetle_twilight.model2<span class="op">$</span>dS<span class="op">~</span>compare.flower.vs.beetle_twilight.model2<span class="op">$</span>peak_wl.flower.vs.beetle, <span class="dt">las=</span><span class="dv">2</span>,
         <span class="dt">main =</span> <span class="st">&quot;Beetle vs Flower&quot;</span>,
-        <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis 580&quot;</span>, <span class="st">&quot;Vis 600&quot;</span>, <span class="st">&quot;Vis 620&quot;</span>, <span class="st">&quot;Vis 640&quot;</span>, <span class="st">&quot;Vis 660&quot;</span>, <span class="st">&quot;Vis 680&quot;</span>))</code></pre></div>
+        <span class="dt">names=</span><span class="kw">c</span>(<span class="st">&quot;Vis 580&quot;</span>, <span class="st">&quot;Vis 600&quot;</span>, <span class="st">&quot;Vis 620&quot;</span>, <span class="st">&quot;Vis 640&quot;</span>, <span class="st">&quot;Vis 660&quot;</span>, <span class="st">&quot;Vis 680&quot;</span>))
+<span class="kw">mtext</span>(<span class="st">&quot;Visual system&quot;</span>,<span class="dt">side=</span><span class="dv">1</span>,<span class="dt">line=</span><span class="dv">0</span>,<span class="dt">outer=</span><span class="ot">TRUE</span>,<span class="dt">cex=</span><span class="fl">1.3</span>)
+<span class="kw">mtext</span>(<span class="st">&quot;Contrast (JND)&quot;</span>,<span class="dt">side=</span><span class="dv">2</span>,<span class="dt">line=</span><span class="dv">0</span>,<span class="dt">outer=</span><span class="ot">TRUE</span>,<span class="dt">cex=</span><span class="fl">1.3</span>,<span class="dt">las=</span><span class="dv">0</span>)</code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <p></br> </br></p>
 </div>
@@ -2295,7 +2321,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 </div>
 <div id="original-model-output-4" class="section level6">
 <h6>Original model output</h6>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sum.flower.vs.beetle_twilight.model1</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sum.flower.vs.beetle_d65.model1</code></pre></div>
 <pre><code>## 
 ##   Simultaneous Tests for General Linear Hypotheses
 ## 
@@ -2303,45 +2329,44 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 ## 
 ## 
 ## Fit: lmer(formula = dS ~ peak_wl.flower.vs.beetle + (1 | patch2) + 
-##     (1 | patch1), data = compare.flower.vs.beetle_twilight.model1, 
-##     REML = F)
+##     (1 | patch1), data = compare.flower.vs.beetle.model1, REML = F)
 ## 
 ## Linear Hypotheses:
-##                                                                                                Estimate
-## contrast.UVSW..LW.flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0  0.35978
-## contrast.UVSWMW...flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0  0.24697
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0  1.03501
-## contrast.UVSWMW...flower.vs.beetle_twilight - contrast.UVSW..LW.flower.vs.beetle_twilight == 0 -0.11280
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UVSW..LW.flower.vs.beetle_twilight == 0  0.67523
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UVSWMW...flower.vs.beetle_twilight == 0  0.78803
-##                                                                                                Std. Error
-## contrast.UVSW..LW.flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0    0.06753
-## contrast.UVSWMW...flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0    0.06753
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0    0.06753
-## contrast.UVSWMW...flower.vs.beetle_twilight - contrast.UVSW..LW.flower.vs.beetle_twilight == 0    0.06753
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UVSW..LW.flower.vs.beetle_twilight == 0    0.06753
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UVSWMW...flower.vs.beetle_twilight == 0    0.06753
-##                                                                                                z value
-## contrast.UVSW..LW.flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0   5.328
-## contrast.UVSWMW...flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0   3.657
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0  15.327
-## contrast.UVSWMW...flower.vs.beetle_twilight - contrast.UVSW..LW.flower.vs.beetle_twilight == 0  -1.670
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UVSW..LW.flower.vs.beetle_twilight == 0   9.999
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UVSWMW...flower.vs.beetle_twilight == 0  11.670
-##                                                                                                Pr(&gt;|z|)
-## contrast.UVSW..LW.flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0 5.96e-07
-## contrast.UVSWMW...flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0  0.00153
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## contrast.UVSWMW...flower.vs.beetle_twilight - contrast.UVSW..LW.flower.vs.beetle_twilight == 0  0.56893
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UVSW..LW.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UVSWMW...flower.vs.beetle_twilight == 0  &lt; 2e-16
-##                                                                                                   
-## contrast.UVSW..LW.flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0 ***
-## contrast.UVSWMW...flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0 ** 
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UV..MWLW.flower.vs.beetle_twilight == 0 ***
-## contrast.UVSWMW...flower.vs.beetle_twilight - contrast.UVSW..LW.flower.vs.beetle_twilight == 0    
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UVSW..LW.flower.vs.beetle_twilight == 0 ***
-## contrast.UVSWMWLW.flower.vs.beetle_twilight - contrast.UVSWMW...flower.vs.beetle_twilight == 0 ***
+##                                                                              Estimate
+## contrast.UVSW..LW.flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0  0.46394
+## contrast.UVSWMW...flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0  0.31435
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0  1.16476
+## contrast.UVSWMW...flower.vs.beetle - contrast.UVSW..LW.flower.vs.beetle == 0 -0.14959
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UVSW..LW.flower.vs.beetle == 0  0.70081
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UVSWMW...flower.vs.beetle == 0  0.85040
+##                                                                              Std. Error
+## contrast.UVSW..LW.flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0    0.07297
+## contrast.UVSWMW...flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0    0.07297
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0    0.07297
+## contrast.UVSWMW...flower.vs.beetle - contrast.UVSW..LW.flower.vs.beetle == 0    0.07297
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UVSW..LW.flower.vs.beetle == 0    0.07297
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UVSWMW...flower.vs.beetle == 0    0.07297
+##                                                                              z value
+## contrast.UVSW..LW.flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0   6.358
+## contrast.UVSWMW...flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0   4.308
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0  15.962
+## contrast.UVSWMW...flower.vs.beetle - contrast.UVSW..LW.flower.vs.beetle == 0  -2.050
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UVSW..LW.flower.vs.beetle == 0   9.604
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UVSWMW...flower.vs.beetle == 0  11.654
+##                                                                              Pr(&gt;|z|)
+## contrast.UVSW..LW.flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0 1.23e-09
+## contrast.UVSWMW...flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0 9.89e-05
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0  &lt; 2e-16
+## contrast.UVSWMW...flower.vs.beetle - contrast.UVSW..LW.flower.vs.beetle == 0    0.242
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UVSW..LW.flower.vs.beetle == 0  &lt; 2e-16
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UVSWMW...flower.vs.beetle == 0  &lt; 2e-16
+##                                                                                 
+## contrast.UVSW..LW.flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0 ***
+## contrast.UVSWMW...flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0 ***
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UV..MWLW.flower.vs.beetle == 0 ***
+## contrast.UVSWMW...flower.vs.beetle - contrast.UVSW..LW.flower.vs.beetle == 0    
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UVSW..LW.flower.vs.beetle == 0 ***
+## contrast.UVSWMWLW.flower.vs.beetle - contrast.UVSWMW...flower.vs.beetle == 0 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## (Adjusted p values reported -- bonferroni method)</code></pre>
@@ -2939,7 +2964,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 <h4><strong>Beetle vs Flower</strong></h4>
 <div id="daylight-7" class="section level5 tabset tabset-fade tabset-pills">
 <h5>Daylight</h5>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.flower.vs.beetle_twilight.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Anova</span>(m.flower.vs.beetle_d65.model2) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:78%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
@@ -2959,7 +2984,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.flower.vs.beetle</strong></td>
-<td align="center">4750</td>
+<td align="center">2651</td>
 <td align="center">5</td>
 <td align="center">0</td>
 </tr>
@@ -2969,9 +2994,9 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 <p>Click the tabs to see posthoc results ( <strong>p-value summary plot</strong> / <strong>original model output</strong> )</p>
 <div id="pair-wise-p-values-10" class="section level6">
 <h6>Pair-wise p-values</h6>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat_twilight.model2, <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_twilight.model2, <span class="dt">y=</span>VislistB_twilight.model2, <span class="dt">fill=</span>flower.vs.beetle)) <span class="op">+</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> heat_d65.model2, <span class="kw">aes</span>(<span class="dt">x=</span>VislistA_d65.model2, <span class="dt">y=</span>VislistB_d65.model2, <span class="dt">fill=</span>flower.vs.beetle)) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_tile</span>(<span class="dt">colour=</span><span class="st">&quot;white&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>)<span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_twilight.model2, VislistB_twilight.model2, <span class="dt">label =</span> <span class="kw">paste</span>(<span class="kw">format</span>(<span class="kw">round</span>(flower.vs.beetle, <span class="dv">2</span>), <span class="dt">nsmall =</span> <span class="dv">2</span>), sig.flower.vs.beetle)))<span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(VislistA_d65.model2, VislistB_d65.model2, <span class="dt">label =</span> <span class="kw">paste</span>(<span class="kw">format</span>(<span class="kw">round</span>(flower.vs.beetle, <span class="dv">2</span>), <span class="dt">nsmall =</span> <span class="dv">2</span>), sig.flower.vs.beetle)))<span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_continuous</span>(<span class="dt">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="dt">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="dt">limit=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))<span class="op">+</span><span class="st"> </span><span class="co">#delete if want to reverse the colour </span>
 <span class="st">  </span><span class="kw">theme_bw</span>()<span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.title.x=</span><span class="kw">element_blank</span>(),
@@ -2984,7 +3009,7 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 </div>
 <div id="original-model-output-10" class="section level6">
 <h6>Original model output</h6>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sum.flower.vs.beetle_twilight.model2</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sum.flower.vs.beetle_d65.model2</code></pre></div>
 <pre><code>## 
 ##   Simultaneous Tests for General Linear Hypotheses
 ## 
@@ -2992,90 +3017,41 @@ heat_twilight.model2<span class="op">$</span>sig.flower.vs.beetle[heat_twilight.
 ## 
 ## 
 ## Fit: lmer(formula = dS ~ peak_wl.flower.vs.beetle + (1 | patch2) + 
-##     (1 | patch1), data = compare.flower.vs.beetle_twilight.model2, 
-##     REML = F)
+##     (1 | patch1), data = compare.flower.vs.beetle.model2, REML = F)
 ## 
 ## Linear Hypotheses:
-##                                                                          Estimate
-## bup600.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  0.30286
-## bup620.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  0.69141
-## bup640.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  1.07424
-## bup660.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  1.38676
-## bup680.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  1.61180
-## bup620.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0  0.38855
-## bup640.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0  0.77138
-## bup660.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0  1.08390
-## bup680.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0  1.30894
-## bup640.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0  0.38282
-## bup660.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0  0.69535
-## bup680.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0  0.92039
-## bup660.flower.vs.beetle_twilight - bup640.flower.vs.beetle_twilight == 0  0.31252
-## bup680.flower.vs.beetle_twilight - bup640.flower.vs.beetle_twilight == 0  0.53757
-## bup680.flower.vs.beetle_twilight - bup660.flower.vs.beetle_twilight == 0  0.22505
-##                                                                          Std. Error
-## bup600.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0    0.02877
-## bup620.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0    0.02877
-## bup640.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0    0.02877
-## bup660.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0    0.02877
-## bup680.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0    0.02877
-## bup620.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0    0.02877
-## bup640.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0    0.02877
-## bup660.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0    0.02877
-## bup680.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0    0.02877
-## bup640.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0    0.02877
-## bup660.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0    0.02877
-## bup680.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0    0.02877
-## bup660.flower.vs.beetle_twilight - bup640.flower.vs.beetle_twilight == 0    0.02877
-## bup680.flower.vs.beetle_twilight - bup640.flower.vs.beetle_twilight == 0    0.02877
-## bup680.flower.vs.beetle_twilight - bup660.flower.vs.beetle_twilight == 0    0.02877
-##                                                                          z value
-## bup600.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  10.528
-## bup620.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  24.034
-## bup640.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  37.342
-## bup660.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  48.206
-## bup680.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  56.029
-## bup620.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0  13.507
-## bup640.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0  26.814
-## bup660.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0  37.678
-## bup680.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0  45.501
-## bup640.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0  13.308
-## bup660.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0  24.171
-## bup680.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0  31.994
-## bup660.flower.vs.beetle_twilight - bup640.flower.vs.beetle_twilight == 0  10.864
-## bup680.flower.vs.beetle_twilight - bup640.flower.vs.beetle_twilight == 0  18.687
-## bup680.flower.vs.beetle_twilight - bup660.flower.vs.beetle_twilight == 0   7.823
-##                                                                          Pr(&gt;|z|)
-## bup600.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup620.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup640.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup660.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup680.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup620.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup640.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup660.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup680.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup640.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup660.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup680.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup660.flower.vs.beetle_twilight - bup640.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup680.flower.vs.beetle_twilight - bup640.flower.vs.beetle_twilight == 0  &lt; 2e-16
-## bup680.flower.vs.beetle_twilight - bup660.flower.vs.beetle_twilight == 0 7.66e-14
-##                                                                             
-## bup600.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0 ***
-## bup620.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0 ***
-## bup640.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0 ***
-## bup660.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0 ***
-## bup680.flower.vs.beetle_twilight - bup580.flower.vs.beetle_twilight == 0 ***
-## bup620.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0 ***
-## bup640.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0 ***
-## bup660.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0 ***
-## bup680.flower.vs.beetle_twilight - bup600.flower.vs.beetle_twilight == 0 ***
-## bup640.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0 ***
-## bup660.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0 ***
-## bup680.flower.vs.beetle_twilight - bup620.flower.vs.beetle_twilight == 0 ***
-## bup660.flower.vs.beetle_twilight - bup640.flower.vs.beetle_twilight == 0 ***
-## bup680.flower.vs.beetle_twilight - bup640.flower.vs.beetle_twilight == 0 ***
-## bup680.flower.vs.beetle_twilight - bup660.flower.vs.beetle_twilight == 0 ***
+##                                                        Estimate Std. Error
+## bup600.flower.vs.beetle - bup580.flower.vs.beetle == 0  0.21815    0.02929
+## bup620.flower.vs.beetle - bup580.flower.vs.beetle == 0  0.48581    0.02929
+## bup640.flower.vs.beetle - bup580.flower.vs.beetle == 0  0.76924    0.02929
+## bup660.flower.vs.beetle - bup580.flower.vs.beetle == 0  1.02944    0.02929
+## bup680.flower.vs.beetle - bup580.flower.vs.beetle == 0  1.23885    0.02929
+## bup620.flower.vs.beetle - bup600.flower.vs.beetle == 0  0.26765    0.02929
+## bup640.flower.vs.beetle - bup600.flower.vs.beetle == 0  0.55109    0.02929
+## bup660.flower.vs.beetle - bup600.flower.vs.beetle == 0  0.81129    0.02929
+## bup680.flower.vs.beetle - bup600.flower.vs.beetle == 0  1.02070    0.02929
+## bup640.flower.vs.beetle - bup620.flower.vs.beetle == 0  0.28343    0.02929
+## bup660.flower.vs.beetle - bup620.flower.vs.beetle == 0  0.54364    0.02929
+## bup680.flower.vs.beetle - bup620.flower.vs.beetle == 0  0.75304    0.02929
+## bup660.flower.vs.beetle - bup640.flower.vs.beetle == 0  0.26020    0.02929
+## bup680.flower.vs.beetle - bup640.flower.vs.beetle == 0  0.46961    0.02929
+## bup680.flower.vs.beetle - bup660.flower.vs.beetle == 0  0.20941    0.02929
+##                                                        z value Pr(&gt;|z|)    
+## bup600.flower.vs.beetle - bup580.flower.vs.beetle == 0   7.449 1.41e-12 ***
+## bup620.flower.vs.beetle - bup580.flower.vs.beetle == 0  16.589  &lt; 2e-16 ***
+## bup640.flower.vs.beetle - bup580.flower.vs.beetle == 0  26.267  &lt; 2e-16 ***
+## bup660.flower.vs.beetle - bup580.flower.vs.beetle == 0  35.152  &lt; 2e-16 ***
+## bup680.flower.vs.beetle - bup580.flower.vs.beetle == 0  42.303  &lt; 2e-16 ***
+## bup620.flower.vs.beetle - bup600.flower.vs.beetle == 0   9.140  &lt; 2e-16 ***
+## bup640.flower.vs.beetle - bup600.flower.vs.beetle == 0  18.818  &lt; 2e-16 ***
+## bup660.flower.vs.beetle - bup600.flower.vs.beetle == 0  27.703  &lt; 2e-16 ***
+## bup680.flower.vs.beetle - bup600.flower.vs.beetle == 0  34.854  &lt; 2e-16 ***
+## bup640.flower.vs.beetle - bup620.flower.vs.beetle == 0   9.678  &lt; 2e-16 ***
+## bup660.flower.vs.beetle - bup620.flower.vs.beetle == 0  18.564  &lt; 2e-16 ***
+## bup680.flower.vs.beetle - bup620.flower.vs.beetle == 0  25.714  &lt; 2e-16 ***
+## bup660.flower.vs.beetle - bup640.flower.vs.beetle == 0   8.885  &lt; 2e-16 ***
+## bup680.flower.vs.beetle - bup640.flower.vs.beetle == 0  16.036  &lt; 2e-16 ***
+## bup680.flower.vs.beetle - bup660.flower.vs.beetle == 0   7.151 1.30e-11 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## (Adjusted p values reported -- bonferroni method)</code></pre>
@@ -3988,6 +3964,15 @@ Contrast comparison between visual systems with the LWS photoreceptor peaking at
 </div>
 </div>
 </div>
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<ul>
+<li>Visual models using hypothetical insect visual systems indicate that long wavelength sensitivity enhances the contrast of beetle colours against leaf backgrounds; whereas short wavelength sensitivity enhances the contrast of flowers with both leaves and beetles. </br> </br></li>
+<li>Tetrachromacy consistently increases contrast compared to trichromacy, with the largest increase of 1.4-fold observed in the comparison between beetles and leaves. </br> </br></li>
+<li>The optimal peak sensitivity of the LWS photoreceptor depends on what is being viewed. When comparing beetle colours with both leaves and flowers, contrast increases with increasing LWS λmax, whereas when comparing flowers with leaves, contrast is maximized with a LWS photoreceptor peak sensitivity of 640 nm. </br> </br></li>
+<li>The contrasts in the corresponding comparisons were qualitatively similar in twilight models.</li>
+</ul>
 </div>
 
 
