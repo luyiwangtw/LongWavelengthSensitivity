@@ -8,6 +8,8 @@ output:
   pdf_document: default
   html_document:
     theme: flatly
+    toc: true
+    toc_depth: 2
 subtitle: Supplementary Information
 Date: May 26 2020
 ---
