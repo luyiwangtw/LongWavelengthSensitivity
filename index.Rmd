@@ -14,7 +14,7 @@ subtitle: Supplementary Information
 Date: March 24 2020
 ---
   
-#Aims
+#The aims
   
 * We investigated the potential benefit of long wavelength sensitivity by modelling the visual contrast in representative insect vision.
 

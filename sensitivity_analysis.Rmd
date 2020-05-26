@@ -13,7 +13,7 @@ output:
 subtitle: Supplementary Information
 Date: May 26 2020
 ---
-#Aims
+#The aim
 
 To tested whether the modelling results were sensitive to the photoreceptor ratios used, we repeated analyses using published ratios that represent the known variation in insects. Specifically, we repeated the set of models where tetrachromats have λmax of the LWS photoreceptor increasing from 580 nm to 680 nm.
 </br>

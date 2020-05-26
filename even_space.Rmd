@@ -13,7 +13,7 @@ output:
 subtitle: Supplementary Information
 Date: May 26 2020
 ---
-#Aims
+#The aim
 
 Here, we tested the effect of even spacing of sensitivities on colour discrimination in a tetrachromatic visual system. Specifically, we ran visual models with __an evenly spaced visual system__ and __an unevenly spaced visual system__, then compared spectral contrast in all three comparison groups (‘leaf vs. flower’, ‘leaf vs. beetle’, ‘beetle vs. flower’). 
 </br>
