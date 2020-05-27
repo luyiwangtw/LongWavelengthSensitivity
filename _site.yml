@@ -5,8 +5,10 @@ navbar:
   author: "<br>Lu-Yi Wang^1^, Devi Stuart-Fox^1^, Geoff Walker^1^, Nicholas Roberts^2^ and Amanda Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne, Australia <br></br> ^2^School of Biological Sciences, University of Bristol, UK <br></br>"
   Date: "March 24th 2020"
   left:
-    - text: "Visual sensitivity in the far-red enhances contrast against vegetation"
+    - text: "Overview"
       href: index.html
+    - text: "Main models"
+      href: main_models.html
     - text: "Even space"
       href: even_space.html
     - text: "Sensitivity analysis"

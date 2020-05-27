@@ -11,7 +11,7 @@ output:
     toc: true
     toc_depth: 2
 subtitle: Supplementary Information
-Date: May 26 2020
+Date: May 27 2020
 ---
 #The aim
 
@@ -141,7 +141,7 @@ ggplot(combine.curves,aes(x=wl, y=value, linetype=system.type, color=peak))+
 
 #Data description
 
-We used the same spectral data of the beetles and plants as in the main models (see "Visual sensitivity in the far-red enhances contrast against vegetation").
+We used the same spectral data of the beetles and plants as in the main models (see "Main models").
 
 </br>
 </br>
