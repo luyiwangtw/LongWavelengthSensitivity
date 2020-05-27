@@ -15,7 +15,7 @@ Date: May 27 2020
 ---
 
 ```{r pressure, echo=FALSE, fig.cap="Figure caption: A jewel beetle feeding on _Eucalyptus_ flowers. Credit: Amanda Franklin.", out.width = '100%'}
-knitr::include_graphics("image/jewel_beetle.jpg")
+knitr::include_graphics("image/jewel_beetle.png")
 ```
 </br>
 </br>
