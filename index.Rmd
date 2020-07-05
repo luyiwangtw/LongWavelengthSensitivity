@@ -1,7 +1,7 @@
 ---
 title: "Overview"
 author: <br>Lu-Yi Wang^1^, Devi Stuart-Fox^1^, Geoff Walker^1^, Nicholas W. Roberts^2^
-  and Amanda Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne,
+  and Amanda M. Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne,
   Australia <br></br> ^2^School of Biological Sciences, University of Bristol, UK
   <br></br>
 output:
@@ -20,16 +20,16 @@ knitr::include_graphics("image/jewel_beetle.png")
 </br>
 </br>
 
-In this online document, we visualized the results of visual models and bebaviroual assay in the paper "". We provide the code for the analyses step by step, and hope it is clearer than just providing a R script file for the readers.
+In this online document, we describe the analyses and results of visual models and behavioural assays in the paper "". We provide the code for users to run the analyses step-by-step, and produce the figures from the manuscript.
 
 This document is divided into four parts:
 
 1. [Main models](main_models.html) : Shows the main visual models in the papepr. Additionally, we combined the models using twilight illumination here for comparison.
 
-2. [Even space](even_space.html) : Test for the effect of even spacing in visual system.
+2. [Even space](even_space.html) : Test for the effect of evenly spaced photoreceptors on chromatic contrast.
 
 3. [Sensitivity analysis](sensitivity_analysis.html): Test if the modelling results are sensitive to photoreceptor ratio.
 
-4. [Behaviroual assay](behairoual_assay.html): Details about the behaviorual assay which we tested if the living jewel beetles could response to long wavelength light.
+4. [Behavioural assay](behairoual_assay.html): Details about the behavioural assay which we tested if the living jewel beetles could respond to long wavelength light.
 
 

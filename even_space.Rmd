@@ -1,7 +1,7 @@
 ---
-title: "The efect of even space in visual system"
+title: "The effect of evenly spaced photoreceptors on chromatic contrast"
 author: <br>Lu-Yi Wang^1^, Devi Stuart-Fox^1^, Geoff Walker^1^, Nicholas W. Roberts^2^
-  and Amanda Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne,
+  and Amanda M. Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne,
   Australia <br></br> ^2^School of Biological Sciences, University of Bristol, UK
   <br></br>
 output:
@@ -18,7 +18,7 @@ Date: May 27 2020
 Here, we tested the effect of even spacing of sensitivities on colour discrimination in a tetrachromatic visual system. Specifically, we ran visual models with __an evenly spaced visual system__ and __an unevenly spaced visual system__, then compared spectral contrast in all three comparison groups (‘leaf vs. flower’, ‘leaf vs. beetle’, ‘beetle vs. flower’). 
 </br>
 </br>
-These two visual systems have the same upper and lower sensitivities with varying distribution of the two middle sensitivities. The evenly spaced visual system has peak sensitivities at 380 nm, 480 nm, 580 nm, and 680 nm, while Vis 680 is used to represent the unevenly spaced visual system, with peak sensitivities at 380 nm, 460 nm, 520 nm, and 680 nm. 
+These two visual systems have the same upper and lower sensitivities with varying distribution of the two middle sensitivities. The evenly spaced visual system has peak sensitivities at 380 nm, 480 nm, 580 nm, and 680 nm, while Vis 680 from the [Main models](main_models.html) section is used to represent the unevenly spaced visual system, with peak sensitivities at 380 nm, 460 nm, 520 nm, and 680 nm. 
 </br>
 </br>
 The model parameters and the statistical methods remain the same as described in the main text.
@@ -112,7 +112,7 @@ ylab("Relative irradiance")+
 theme_classic()
 ```
 
-```{r, fig.cap="Sensitivity curves of the even spaced visual system and the unvenspaced visual system (Vis 680).",echo=FALSE,message=FALSE, warning=FALSE}
+```{r, fig.cap="Sensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (Vis 680; dotted lines).",echo=FALSE,message=FALSE, warning=FALSE}
 #plot the visual systems
 system.list <- c("even space","uneven space")
 system.type <- rep(system.list , c(1*501,1*501))
@@ -141,7 +141,7 @@ ggplot(combine.curves,aes(x=wl, y=value, linetype=system.type, color=peak))+
 
 #Data description
 
-We used the same spectral data of the beetles and plants as in the main models (see "Main models").
+We used the same spectral data collected from beetles and plants as described in the [Main models](main_models.html) section.
 
 </br>
 </br>
@@ -152,9 +152,10 @@ We used the same spectral data of the beetles and plants as in the main models (
 </br>
 
 ##First: Quantum catch calculation
-* We calculated quantum catch of each visual system based on Fechner's law (the signal of the receptor channel is proportional to the logarithm of the quantum catch).
-* The average leaf was used for the background.
-* von Kries chromatic adaptation was applied to correct the colour.
+* We used the `vismodel` function in the package pavo to calculate quantum catch.
+* For each visual system, quantum catch was calculated based on Fechner's law (the signal of the receptor channel is proportional to the logarithm of the quantum catch).
+* The average of all leaf spectra was used as the background adapting light.
+* The von Kries chromatic adaptation was applied.
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 
 #Quantum catch - D65
@@ -174,9 +175,10 @@ buprest680_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, 
 </br>
 
 ##Second: Contrast calculation {.tabset .tabset-fade .tabset-pills}
+* To calculate chromatic contrast we used the `coldist` function in pavo.
 * We used a neural noise-limited model where the noise is proportional to the Weber fraction and is independent of the intensity of the signal received.
-* Photoreceptor density is based on the opisn gene epxression of Emerald ash borer, _Agrilus planipennis_: 1.14, 1, 1.26, 1.38
-* The Weber fraction was asinged to be 0.1
+* Photoreceptor density is based on the opsin gene expression of Emerald ash borer, _Agrilus planipennis_: 1.14, 1, 1.26, 1.38.
+* The Weber fraction was 0.1.
 
 </br>
 </br>
@@ -289,10 +291,10 @@ contrast.list_twilight.even.space
 </br>
 
 #Compare contrasts
-* To compare contrasts between visual systems, We performed Wald chisquare tests on general linear mixed models (GLMM) followed by posthoc tests.
+* To compare contrasts between visual systems, We conducted Wald chi-square tests on generalised linear mixed models (GLMM) followed by posthoc tests.
 
 * In the models, we assigned
-    + Indenpendent variable: __contrast__
+    + Independent variable: __contrast__
     + Dependent variable: 
         + Fixed factor: __visual system__
         + Random factor: __sample ID__ of both targets in the comparison

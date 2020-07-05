@@ -1,7 +1,7 @@
 ---
 title: "Main models: Visual sensitivity in the far-red enhances contrast against vegetation"
 author: <br>Lu-Yi Wang^1^, Devi Stuart-Fox^1^, Geoff Walker^1^, Nicholas W. Roberts^2^
-  and Amanda Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne,
+  and Amanda M. Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne,
   Australia <br></br> ^2^School of Biological Sciences, University of Bristol, UK
   <br></br>
 output:
@@ -16,11 +16,11 @@ Date: May 27 2020
 
 #The aims
   
-* We investigated the potential benefit of long wavelength sensitivity by modelling the visual contrast in representative insect vision.
+* We used visual modelling to investigate the potential benefit of long wavelength sensitivity for insects.
 
-* Specifically, we varied the presence of a long wavelength sensitive photoreceptor and its wavelength of maximum sensitivity.
+* Specifically, we varied the presence of a long wavelength sensitive photoreceptor and its peak sensitivity.
 
-* To make our study ecological relevant to far-red sensitivity, we focused on jewel beetles and their host plants. 
+* Our study focused on jewel beetles and their host plants because jewel beetles have sensitivity in the far red. 
 
 * Additionally, we tested the effect of red-shifted light environment on contrast by running the same models under twilight illumination.
 
@@ -56,7 +56,7 @@ knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time wh
 </br>
 
 ##Import and process the data
-* All the wavelength used in the models ranged from 300-800 nm.
+* The wavelength range for all data used in the models was 300-800 nm.
 
 ```{r import data,message=FALSE}
 #import sensitivity curves
@@ -85,24 +85,24 @@ dataset<- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measureme
 </br>
 
 ##Spectral reflectance of the targets
-* Jewel beetles and their host plants (leaves and flowers): collected using integrating sphere
+* Jewel beetles and their host plants (leaves and flowers)
   + Leaves: 
     + sample source: mainly from Melton Gardens and Maranoa Gardens (4 from Melbourne roadsides).
-    + colour: green
-    + totla number: 46 (all are from the host plant genus of Australian jewel beetles)
+    + colour (to human vision): green
+    + total number: 46 (all are from the host plant genus of Australian jewel beetles)
   
   + Flowers: 
     + sample source: mainly from Melton Gardens and Maranoa Gardens (4 from Melbourne roadsides).
-    + colour: white (10), pink (11), red (10), yellow (9), orange (3), and purple (4)
-    + total number: 47 (from 46 species, exactly the same species for leaves reflectance)
+    + colour (to human vision): white (10), pink (11), red (10), yellow (9), orange (3), and purple (4)
+    + total number: 47 (from 46 species, the same species for leaf reflectance)
   
   + Beetles:
     + sample source: Australian jewel beetles from, ANIC (29) and our own collection
-    + colour: red, pink, yellow/orange, green, blue, velvet, black
-    + totla number: 37
+    + colour (to human vision): red, pink, yellow/orange, green, blue, velvet, black
+    + total number: 37
 
 * We averaged of 3 measurements to generate a representative spectrum for each colour
-* The spectral data were smoothed with the span = 0.1, and those < 0 were lifted to 0
+* The spectral data were smoothed with the span = 0.1, and those < 0 were shifted to 0
 ```{r, fig.cap="Reflectance spectra of the targets"}
 #assign categoryies to each spectrum
 category.list <- c("flower","leaf","beetle")
@@ -139,25 +139,27 @@ ggplot(dataset.plot.indivisually,aes(x=wavelength,y=reflectance, colour=category
 </br>
 
 ##Visual sensitivities and visual systems
-* We created 9 sensitivity curves peaking at 380, 460, 520, 580, 600, 620, 640, 660, 680 nm and classified them into 4 photoreceptor types based on their peaks:
+* We created nine sensitivity curves peaking at 380, 460, 520, 580, 600, 620, 640, 660, 680 nm and classified them into 4 photoreceptor types based on their peaks: 
   + Ultraviolet sensitive (UVS): 380 nm
   + Short-wavelength sensitive (SWS): 460 nm
   + Medium-wavelength sensitive (MWS): 520 nm
   + Long-wavelength sensitive (LWS): 580, 600, 620, 640, 660, 680 nm
 
-* Based on these sensitivities, we created several different visual systems for 2 visual models:
+* Based on these sensitivities, we created several different visual systems to test two different questions: 
+  + What is the benefit of possessing a long wavelength photoreceptor?
+  + Is there an benefit to shifting the peak sensitivity of the long wavelength photoreceptor?
   
 ***
-* In the first model ( __Visual model 1__ ), we tested effect of having an LWS photoreceptor. We compared the contrast between 3 trichromatic visual system with varied photoreceptor combination. We also tested an extra receptor the extent to which enhanced the contrast by comparing with a tetrachromatic visual system.
-  + Visual systems in __visual model 1__: 
+* For the first question we compared the contrast between 3 trichromatic visual system with varied photoreceptor combination. We also tested whether an extra receptor enhanced chromatic contrast by comparing the trichromatic visual systems with a tetrachromatic visual system.
+  + Visual systems used: 
     1. Visual system USM: 380 nm, 460 nm, 520 nm (UVS,SWS,MWS)
     2. Visual system UML: 380 nm, 520 nm, 580 nm (UVS,MWS,LWS)
     3. Visual system USL: 380 nm, 460 nm, 580 nm (UVS,SWS,LWS)
     4. Visual system USML: 380 nm, 460 nm, 520 nm, 580 nm (UVS,SWS,MWS,LWS)
 
 ***
-* In the second model ( __Visual model 2__ ), we tested how the contrast changed as peak sensitivity increased by systematically increasing the peak sensitivity of the LWS photoreceptor from 580-680 nm.
-  + Visual systems in __visual model 2__:
+* For the second question, we tested how the contrast changed as peak sensitivity increased by systematically increasing the peak sensitivity of the LWS photoreceptor from 580-680 nm.
+  + Visual systems used:
     1. Visual system 580: 380 nm, 460 nm, 520 nm, 580 nm
     2. Visual system 600: 380 nm, 460 nm, 520 nm, 600 nm
     3. Visual system 620: 380 nm, 460 nm, 520 nm, 620 nm
@@ -175,8 +177,8 @@ ggplot(peaks,aes(x=wl, y=value, col=peak))+
   geom_line()+
   guides(color=guide_legend(title="peak sensitivity"))+
   scale_color_manual(
-    values = c("olivedrab4", "orange1", "orange3","darkorange3", "orangered1", "red2","red4", "darkorchid4", "dodgerblue3"),
-    labels=c("320 nm", "460 nm","520 nm", "580 nm", "600 nm", "620 nm", "640 nm", "660 nm", "680 nm" ),
+    values = c("darkorchid4", "dodgerblue3", "olivedrab4", "orange1", "orange3","darkorange3", "orangered1", "red2","red4"),
+    labels=c("380 nm", "460 nm","520 nm", "580 nm", "600 nm", "620 nm", "640 nm", "660 nm", "680 nm" ),
     breaks=peak.order)+
   xlab("Wavelength (nm)")+ 
   ylab("Relative spectral sensitivity")+
@@ -193,7 +195,7 @@ ggplot(peaks,aes(x=wl, y=value, col=peak))+
     + Daylight: __D65__ (standard daylight) from Commission internationale de l'eclairage CIE
     + Twilight: measured at the Pinnacles Lookout in Alpine National Park, VIC, Australia at 18:15 on September 14th 2019.
 
-```{r, fig.cap="Relative irradiance of the standard daylight and twilight"}
+```{r, fig.cap="Relative irradiance of standard daylight and twilight"}
 illum <- merge(irradiance.d65, irradiance.twilight) %>% gather(light, illuminace, -wl) 
 
 ggplot(illum, aes(x=wl, y=illuminace, color=light))+
@@ -212,9 +214,10 @@ theme_classic()
 </br>
 
 ##First: Quantum catch calculation
-* We calculated quantum catch of each visual system based on Fechner's law (the signal of the receptor channel is proportional to the logarithm of the quantum catch).
-* The average leaf was used for the background.
-* von Kries chromatic adaptation was applied to correct the colour.
+* We used the `vismodel` function in the package pavo to calculate quantum catch.
+* For each visual system, quantum catch was calculated based on Fechner's law (the signal of the receptor channel is proportional to the logarithm of the quantum catch).
+* The average of all leaf spectra was used as the background adapting light.
+* The von Kries chromatic adaptation was applied.
 ```{r,message=FALSE}
 #Quantum catch - D65 - Visual model 1
 visUVSWMW..=vismodel(dataset[1:501,], visual = specsensbuprest.model1[, 1:4], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
@@ -250,9 +253,10 @@ buprest680_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, 
 </br>
 
 ##Second: Contrast calculation {.tabset .tabset-fade .tabset-pills}
+* To calculate chromatic contrast we used the `coldist` function in pavo.
 * We used a neural noise-limited model where the noise is proportional to the Weber fraction and is independent of the intensity of the signal received.
-* Photoreceptor density is based on the opisn gene epxression of Emerald ash borer, _Agrilus planipennis_: 1.14, 1, 1.26, 1.38
-* The Weber fraction was asinged to be 0.1
+* Photoreceptor density is based on the opsin gene expression of Emerald ash borer, _Agrilus planipennis_: 1.14, 1, 1.26, 1.38.
+* The Weber fraction was 0.1.
 
 ```{r,message=FALSE}
 #Contrast calculation- D65 - Visual model 1
@@ -588,10 +592,10 @@ contrast.list_twilight.model2
 </br>
 
 #Compare contrasts
-* To compare contrasts between visual systems, We performed Wald chisquare tests on generalised linear mixed models (GLMM) followed by posthoc tests.
+* To compare contrasts between visual systems, We conducted Wald chi-square tests on generalised linear mixed models (GLMM) followed by posthoc tests.
 
 * In the models, we assigned
-    + Indenpendent variable: __contrast__
+    + Independent variable: __contrast__
     + Dependent variable: 
         + Fixed factor: __visual system__
         + Random factor: __sample ID__ of both targets in the comparison
@@ -930,7 +934,7 @@ compare.flower.vs.beetle_twilight.model2 <- com.bupcontrast.flower.vs.beetle_twi
 
 ##Check assumptions {.tabset .tabset-fade .tabset-pills}
 
-* Before running GLMM, we first check if the data follows the assumption of normality and homogeneity of variance
+* Before running the GLMMs, we first check if the data follows the assumption of normality and homogeneity of variance
 
 </br>
 
@@ -1248,11 +1252,11 @@ heat_twilight.model2$sig.flower.vs.beetle[heat_twilight.model2$flower.vs.beetle 
 heat_twilight.model2$sig.flower.vs.beetle[heat_twilight.model2$flower.vs.beetle < 0.0001] <- "***"
 ```
 
-### Result of visual model 1: comparing visual systems with different photoreceptor combination {.tabset .tabset-fade .tabset-pills}
+### Results of visual model 1: comparing visual systems with different photoreceptor combinations {.tabset .tabset-fade .tabset-pills}
 
 </br>
 
-Click the tabs to see the results in each comparison groups ( __Leaf vs. Flower__ / __Leaf vs. Beetle__ / __Beetle vs. Flower__) and under different light conditions ( __Daylight__ / __Twilight__)
+Click the tabs to see the results for each comparison group ( __Leaf vs. Flower__ / __Leaf vs. Beetle__ / __Beetle vs. Flower__) and under different light conditions ( __Daylight__ / __Twilight__)
 
 </br>
 
@@ -1445,11 +1449,11 @@ sum.leaf.vs.flower_twilight.model1
 </br>
 
 
-### Result of visual model 2: comparing visual systems with different peak of LWS photoreceptor {.tabset .tabset-fade .tabset-pills}
+### Results of visual model 2: comparing visual systems with different LWS peak sensitivities {.tabset .tabset-fade .tabset-pills}
 
 </br>
 
-Click the tabs to see the results in each comparison groups ( __Leaf vs. Flower__ / __Leaf vs. Beetle__ / __Beetle vs. Flower__) and under different light conditions ( __Daylight__ / __Twilight__)
+Click the tabs to see the results for each comparison group ( __Leaf vs. Flower__ / __Leaf vs. Beetle__ / __Beetle vs. Flower__) and under different light conditions ( __Daylight__ / __Twilight__)
 
 </br>
 
@@ -1643,14 +1647,14 @@ sum.leaf.vs.flower_twilight.model2
 </br>
 
 #Plot the contasts {.tabset .tabset-fade .tabset-pills}
-* Colours are in accordence with the actual sample colouration in visible range.
-* Lines of the same colors connect the same samples
+* Colours approximate human perception of either flower (left and right) or beetle (centre) colouration.
+* Lines of the same colors connect the same sample
 
 </br>
 
 ##Visual model 1 {.tabset .tabset-fade .tabset-pills}
 ###Daylight
-```{r,fig.cap="Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
+```{r,fig.cap="Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
 #import the flower color code 
 color.code<-read.csv("data/color code list.csv",header=TRUE) 
 
@@ -2385,7 +2389,7 @@ figure_twilight.model2
 * Tetrachromacy consistently increases contrast compared to trichromacy, with the largest increase of 1.4-fold observed in the comparison between beetles and leaves. 
 </br>
 </br>
-* The optimal peak sensitivity of the LWS photoreceptor depends on what is being viewed. When comparing beetle colours with both leaves and flowers, contrast increases with increasing LWS λmax, whereas when comparing flowers with leaves, contrast is maximized with a LWS photoreceptor peak sensitivity of 640 nm.
+* The optimal peak sensitivity of the LWS photoreceptor depends on what is being viewed. When comparing beetle colours with both leaves and flowers, contrast increases with increasing LWS peak sensitivity, whereas when comparing flowers with leaves, contrast is maximized with a LWS photoreceptor peak sensitivity of 640 nm.
 </br>
 </br>
 * The contrasts in the corresponding comparisons were qualitatively similar in twilight models.

@@ -1,7 +1,7 @@
 ---
 title: "Behavioural assay"
 author: <br>Lu-Yi Wang^1^, Devi Stuart-Fox^1^, Geoff Walker^1^, Nicholas W. Roberts^2^
-  and Amanda Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne,
+  and Amanda M. Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne,
   Australia <br></br> ^2^School of Biological Sciences, University of Bristol, UK
   <br></br>
 output:
