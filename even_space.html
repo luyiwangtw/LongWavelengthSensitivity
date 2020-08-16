@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content=" Lu-Yi Wang1, Devi Stuart-Fox1, Geoff Walker1, Nicholas W. Roberts2 and Amanda Franklin1   1School of Biosciences, The University of Melbourne, Australia   2School of Biological Sciences, University of Bristol, UK" />
+<meta name="author" content=" Lu-Yi Wang1, Devi Stuart-Fox1, Geoff Walker1, Nicholas W. Roberts2 and Amanda M. Franklin1   1School of Biosciences, The University of Melbourne, Australia   2School of Biological Sciences, University of Bristol, UK" />
 
 
-<title>The efect of even space in visual system</title>
+<title>The effect of evenly spaced photoreceptors on chromatic contrast</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -370,27 +370,27 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">The efect of even space in visual system</h1>
+<h1 class="title toc-ignore">The effect of evenly spaced photoreceptors on chromatic contrast</h1>
 <h3 class="subtitle">Supplementary Information</h3>
-<h4 class="author"><br>Lu-Yi Wang<sup>1</sup>, Devi Stuart-Fox<sup>1</sup>, Geoff Walker<sup>1</sup>, Nicholas W. Roberts<sup>2</sup> and Amanda Franklin<sup>1</sup> <br></br> <sup>1</sup>School of Biosciences, The University of Melbourne, Australia <br></br> <sup>2</sup>School of Biological Sciences, University of Bristol, UK <br></br></h4>
+<h4 class="author"><br>Lu-Yi Wang<sup>1</sup>, Devi Stuart-Fox<sup>1</sup>, Geoff Walker<sup>1</sup>, Nicholas W. Roberts<sup>2</sup> and Amanda M. Franklin<sup>1</sup> <br></br> <sup>1</sup>School of Biosciences, The University of Melbourne, Australia <br></br> <sup>2</sup>School of Biological Sciences, University of Bristol, UK <br></br></h4>
 
 </div>
 
 
 <div id="the-aim" class="section level1">
 <h1>The aim</h1>
-<p>Here, we tested the effect of even spacing of sensitivities on colour discrimination in a tetrachromatic visual system. Specifically, we ran visual models with <strong>an evenly spaced visual system</strong> and <strong>an unevenly spaced visual system</strong>, then compared spectral contrast in all three comparison groups (‘leaf vs. flower’, ‘leaf vs. beetle’, ‘beetle vs. flower’). </br> </br> These two visual systems have the same upper and lower sensitivities with varying distribution of the two middle sensitivities. The evenly spaced visual system has peak sensitivities at 380 nm, 480 nm, 580 nm, and 680 nm, while Vis 680 is used to represent the unevenly spaced visual system, with peak sensitivities at 380 nm, 460 nm, 520 nm, and 680 nm. </br> </br> The model parameters and the statistical methods remain the same as described in the main text.</p>
+<p>Here, we tested the effect of even spacing of sensitivities on colour discrimination in a tetrachromatic visual system. Specifically, we ran visual models with <strong>an evenly spaced visual system</strong> and <strong>an unevenly spaced visual system</strong>, then compared spectral contrast in all three comparison groups (‘leaf vs. flower’, ‘leaf vs. beetle’, ‘beetle vs. flower’). </br> </br> These two visual systems have the same upper and lower sensitivities with varying distribution of the two middle sensitivities. The evenly spaced visual system has peak sensitivities at 380 nm, 473 nm, 567 nm, and 660 nm, while Vis 660 from the <a href="main_models.html">Main models</a> section is used to represent the unevenly spaced visual system, with peak sensitivities at 380 nm, 460 nm, 520 nm, and 660 nm. </br> </br> The model parameters and the statistical methods remain the same as described in the main text.</p>
 <div class="figure">
-<img src="even_space_files/figure-html/unnamed-chunk-4-1.png" alt="Sensitivity curves of the even spaced visual system and the unvenspaced visual system (Vis 680)." width="672" />
+<img src="even_space_files/figure-html/unnamed-chunk-4-1.png" alt="Sensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (Vis 660; dotted lines)." width="672" />
 <p class="caption">
-Sensitivity curves of the even spaced visual system and the unvenspaced visual system (Vis 680).
+Sensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (Vis 660; dotted lines).
 </p>
 </div>
 <p></br> </br></p>
 </div>
 <div id="data-description" class="section level1">
 <h1>Data description</h1>
-<p>We used the same spectral data of the beetles and plants as in the main models (see “Main models”).</p>
+<p>We used the same spectral data collected from beetles and plants as described in the <a href="main_models.html">Main models</a> section.</p>
 <p></br> </br></p>
 </div>
 <div id="run-the-visual-models" class="section level1">
@@ -399,18 +399,20 @@ Sensitivity curves of the even spaced visual system and the unvenspaced visual s
 <div id="first-quantum-catch-calculation" class="section level2">
 <h2>First: Quantum catch calculation</h2>
 <ul>
-<li>We calculated quantum catch of each visual system based on Fechner’s law (the signal of the receptor channel is proportional to the logarithm of the quantum catch).</li>
-<li>The average leaf was used for the background.</li>
-<li>von Kries chromatic adaptation was applied to correct the colour.</li>
+<li>We used the <code>vismodel</code> function in the package pavo to calculate quantum catch.</li>
+<li>For each visual system, quantum catch was calculated based on Fechner’s law (the signal of the receptor channel is proportional to the logarithm of the quantum catch).</li>
+<li>The average of all leaf spectra was used as the background adapting light.</li>
+<li>The von Kries chromatic adaptation was applied.</li>
 </ul>
 <p></br> </br></p>
 </div>
 <div id="second-contrast-calculation" class="section level2 tabset tabset-fade tabset-pills">
 <h2>Second: Contrast calculation</h2>
 <ul>
+<li>To calculate chromatic contrast we used the <code>coldist</code> function in pavo.</li>
 <li>We used a neural noise-limited model where the noise is proportional to the Weber fraction and is independent of the intensity of the signal received.</li>
-<li>Photoreceptor density is based on the opisn gene epxression of Emerald ash borer, <em>Agrilus planipennis</em>: 1.14, 1, 1.26, 1.38</li>
-<li>The Weber fraction was asinged to be 0.1</li>
+<li>Photoreceptor density is based on the opsin gene expression of Emerald ash borer, <em>Agrilus planipennis</em>: 1.14, 1, 1.26, 1.38.</li>
+<li>The Weber fraction was 0.1.</li>
 </ul>
 <p></br> </br></p>
 <p>The table shows the median contrast in each comparison group</p>
@@ -434,15 +436,15 @@ Sensitivity curves of the even spaced visual system and the unvenspaced visual s
 <tbody>
 <tr class="odd">
 <td align="center">even space</td>
-<td align="center">5.297</td>
-<td align="center">5.448</td>
-<td align="center">6.914</td>
+<td align="center">7.598</td>
+<td align="center">7.203</td>
+<td align="center">7.748</td>
 </tr>
 <tr class="even">
-<td align="center">Vis 680</td>
-<td align="center">5.475</td>
-<td align="center">5.675</td>
-<td align="center">7.116</td>
+<td align="center">Vis 660</td>
+<td align="center">7.703</td>
+<td align="center">7.421</td>
+<td align="center">7.846</td>
 </tr>
 </tbody>
 </table>
@@ -468,15 +470,15 @@ Sensitivity curves of the even spaced visual system and the unvenspaced visual s
 <tbody>
 <tr class="odd">
 <td align="center">even space</td>
-<td align="center">5.179</td>
-<td align="center">5.538</td>
-<td align="center">6.862</td>
+<td align="center">0.9564</td>
+<td align="center">0.7175</td>
+<td align="center">1.044</td>
 </tr>
 <tr class="even">
-<td align="center">Vis 680</td>
-<td align="center">5.235</td>
-<td align="center">5.758</td>
-<td align="center">7.071</td>
+<td align="center">Vis 660</td>
+<td align="center">0.9717</td>
+<td align="center">0.7268</td>
+<td align="center">1.063</td>
 </tr>
 </tbody>
 </table>
@@ -484,13 +486,13 @@ Sensitivity curves of the even spaced visual system and the unvenspaced visual s
 </div>
 </div>
 </div>
-<div id="compare-contrasts" class="section level1">
+<div id="compare-contrasts" class="section level1 tabset tabset-fade tabset-pills">
 <h1>Compare contrasts</h1>
 <ul>
-<li><p>To compare contrasts between visual systems, We performed Wald chisquare tests on general linear mixed models (GLMM) followed by posthoc tests.</p></li>
+<li><p>To compare contrasts between visual systems, We conducted Wald chi-square tests on generalised linear mixed models (GLMM) followed by posthoc tests.</p></li>
 <li>In the models, we assigned
 <ul>
-<li>Indenpendent variable: <strong>contrast</strong></li>
+<li>Independent variable: <strong>contrast</strong></li>
 <li>Dependent variable:
 <ul>
 <li>Fixed factor: <strong>visual system</strong></li>
@@ -499,10 +501,10 @@ Sensitivity curves of the even spaced visual system and the unvenspaced visual s
 </ul></li>
 </ul>
 <p></br></p>
-<div id="leaf-vs-flower" class="section level3 tabset tabset-fade tabset-pills">
-<h3><strong>Leaf vs Flower</strong></h3>
-<div id="daylight-1" class="section level4">
-<h4>Daylight</h4>
+<div id="leaf-vs-flower" class="section level2 tabset tabset-fade tabset-pills">
+<h2><strong>Leaf vs Flower</strong></h2>
+<div id="daylight-1" class="section level3">
+<h3>Daylight</h3>
 <table style="width:75%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
@@ -522,16 +524,16 @@ Sensitivity curves of the even spaced visual system and the unvenspaced visual s
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.leaf.vs.flower</strong></td>
-<td align="center">71.48</td>
+<td align="center">55.03</td>
 <td align="center">1</td>
-<td align="center">2.807e-17</td>
+<td align="center">1.186e-13</td>
 </tr>
 </tbody>
 </table>
 <p></br> </br></p>
 </div>
-<div id="twilight-1" class="section level4">
-<h4>Twilight</h4>
+<div id="twilight-1" class="section level3">
+<h3>Twilight</h3>
 <table style="width:75%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
@@ -551,19 +553,19 @@ Sensitivity curves of the even spaced visual system and the unvenspaced visual s
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.leaf.vs.flower</strong></td>
-<td align="center">43.83</td>
+<td align="center">40.47</td>
 <td align="center">1</td>
-<td align="center">3.579e-11</td>
+<td align="center">1.998e-10</td>
 </tr>
 </tbody>
 </table>
 <p></br> </br></p>
 </div>
 </div>
-<div id="leaf-vs-beetle" class="section level3 tabset tabset-fade tabset-pills">
-<h3><strong>Leaf vs Beetle</strong></h3>
-<div id="daylight-2" class="section level4">
-<h4>Daylight</h4>
+<div id="leaf-vs-beetle" class="section level2 tabset tabset-fade tabset-pills">
+<h2><strong>Leaf vs Beetle</strong></h2>
+<div id="daylight-2" class="section level3">
+<h3>Daylight</h3>
 <table style="width:75%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
@@ -583,16 +585,16 @@ Sensitivity curves of the even spaced visual system and the unvenspaced visual s
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.leaf.vs.beetle</strong></td>
-<td align="center">15.26</td>
+<td align="center">58.22</td>
 <td align="center">1</td>
-<td align="center">9.381e-05</td>
+<td align="center">2.341e-14</td>
 </tr>
 </tbody>
 </table>
 <p></br> </br></p>
 </div>
-<div id="twilight-2" class="section level4">
-<h4>Twilight</h4>
+<div id="twilight-2" class="section level3">
+<h3>Twilight</h3>
 <table style="width:75%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
@@ -612,19 +614,19 @@ Sensitivity curves of the even spaced visual system and the unvenspaced visual s
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.leaf.vs.beetle</strong></td>
-<td align="center">12.04</td>
+<td align="center">43.04</td>
 <td align="center">1</td>
-<td align="center">0.0005219</td>
+<td align="center">5.357e-11</td>
 </tr>
 </tbody>
 </table>
 <p></br> </br></p>
 </div>
 </div>
-<div id="beetle-vs-flower" class="section level3 tabset tabset-fade tabset-pills">
-<h3><strong>Beetle vs Flower</strong></h3>
-<div id="daylight-3" class="section level4">
-<h4>Daylight</h4>
+<div id="beetle-vs-flower" class="section level2 tabset tabset-fade tabset-pills">
+<h2><strong>Beetle vs Flower</strong></h2>
+<div id="daylight-3" class="section level3">
+<h3>Daylight</h3>
 <table style="width:78%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
@@ -644,16 +646,16 @@ Sensitivity curves of the even spaced visual system and the unvenspaced visual s
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.flower.vs.beetle</strong></td>
-<td align="center">50.78</td>
+<td align="center">15.53</td>
 <td align="center">1</td>
-<td align="center">1.032e-12</td>
+<td align="center">8.108e-05</td>
 </tr>
 </tbody>
 </table>
 <p></br> </br></p>
 </div>
-<div id="twilight-3" class="section level4">
-<h4>Twilight</h4>
+<div id="twilight-3" class="section level3">
+<h3>Twilight</h3>
 <table style="width:78%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
@@ -673,9 +675,9 @@ Sensitivity curves of the even spaced visual system and the unvenspaced visual s
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.flower.vs.beetle</strong></td>
-<td align="center">61.27</td>
+<td align="center">11.32</td>
 <td align="center">1</td>
-<td align="center">4.975e-15</td>
+<td align="center">0.0007652</td>
 </tr>
 </tbody>
 </table>
@@ -685,7 +687,7 @@ Sensitivity curves of the even spaced visual system and the unvenspaced visual s
 </div>
 <div id="summary" class="section level1">
 <h1>Summary</h1>
-<p>For all three comparison groups, Vis 680 (unevenly spaced visual system) has significantly higher contrast than the evenly spaced visual system. This indicates that the minimal improvement or lack of improvement in contrast beyond 640 nm shown in the main text is not the result of uneven spacing between photoreceptors.</p>
+<p>For all three comparison groups, Vis 660 (unevenly spaced visual system) has significantly higher contrast than the evenly spaced visual system. This indicates that the minimal improvement or lack of improvement in contrast beyond 640 nm shown in the main text is not the result of uneven spacing between photoreceptors.</p>
 </div>
 
 

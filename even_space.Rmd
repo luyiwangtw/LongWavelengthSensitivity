@@ -11,14 +11,14 @@ output:
     toc: true
     toc_depth: 2
 subtitle: Supplementary Information
-Date: May 27 2020
+Date: July 28 2020
 ---
 #The aim
 
 Here, we tested the effect of even spacing of sensitivities on colour discrimination in a tetrachromatic visual system. Specifically, we ran visual models with __an evenly spaced visual system__ and __an unevenly spaced visual system__, then compared spectral contrast in all three comparison groups (‘leaf vs. flower’, ‘leaf vs. beetle’, ‘beetle vs. flower’). 
 </br>
 </br>
-These two visual systems have the same upper and lower sensitivities with varying distribution of the two middle sensitivities. The evenly spaced visual system has peak sensitivities at 380 nm, 480 nm, 580 nm, and 680 nm, while Vis 680 from the [Main models](main_models.html) section is used to represent the unevenly spaced visual system, with peak sensitivities at 380 nm, 460 nm, 520 nm, and 680 nm. 
+These two visual systems have the same upper and lower sensitivities with varying distribution of the two middle sensitivities. The evenly spaced visual system has peak sensitivities at 380 nm, 473 nm, 567 nm, and 660 nm, while Vis 660 from the [Main models](main_models.html) section is used to represent the unevenly spaced visual system, with peak sensitivities at 380 nm, 460 nm, 520 nm, and 660 nm. 
 </br>
 </br>
 The model parameters and the statistical methods remain the same as described in the main text.
@@ -44,12 +44,12 @@ knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time wh
 
 ```{r import data,echo=FALSE,message=FALSE, warning=FALSE}
 #import sensitivity curves
-even.space <- read.csv("data/peak sensitivity even space.csv",header=TRUE) %>%
+even.space <- read.csv("data/peak sensitivity_even space.csv",header=TRUE) %>%
   as.rspec()
-# sensmodel(c(380,480,580,680),range = c(300, 800),
+# sensmodel(c(380,480,580,660),range = c(300, 800),
 #                    lambdacut = NULL,beta=TRUE,
 #                    oiltype = NULL, om = NULL) %>% as.rspec()
-specsensbuprest.model2 <- read.csv("data/peak sensitivity for visual model 2.csv",header=TRUE) %>%
+specsensbuprest.model2 <- read.csv("data/peak sensitivity_filter shift_aim2.csv",header=TRUE) %>%
   as.rspec()
 #import irradiance
 irradiance.d65 <- read.csv("data/d65.csv",header=TRUE) %>% 
@@ -112,13 +112,13 @@ ylab("Relative irradiance")+
 theme_classic()
 ```
 
-```{r, fig.cap="Sensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (Vis 680; dotted lines).",echo=FALSE,message=FALSE, warning=FALSE}
+```{r, fig.cap="Sensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (Vis 660; dotted lines).",echo=FALSE,message=FALSE, warning=FALSE}
 #plot the visual systems
 system.list <- c("even space","uneven space")
 system.type <- rep(system.list , c(1*501,1*501))
 visevencurve<-even.space %>%  rename( UVS = 2, SWS = 3, MWS = 4, LWS = 5)
-vis680curve<-specsensbuprest.model2[,c(1,2,3,4,10)] %>%  rename( UVS = 2, SWS = 3, MWS = 4, LWS = 5)
-combine.curves <- visevencurve %>%  rbind(vis680curve) %>% cbind(system.type) %>%
+vis660curve<-specsensbuprest.model2[,c(1,2,3,4,9)] %>%  rename( UVS = 2, SWS = 3, MWS = 4, LWS = 5)
+combine.curves <- visevencurve %>%  rbind(vis660curve) %>% cbind(system.type) %>%
   gather( peak, value, -wl, -system.type) 
 
 ggplot(combine.curves,aes(x=wl, y=value, linetype=system.type, color=peak))+
@@ -165,9 +165,9 @@ buprest.even.space.d65=vismodel(dataset[1:501,], visual = even.space, bkg=avelea
 buprest.even.space.twilight=vismodel(dataset[1:501,], visual = even.space, bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
 
 
-#Vis680
-buprest680=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,10)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-buprest680_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,10)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+#Vis660
+buprest660=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,9)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+buprest660_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,9)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
 ```
 
 
@@ -188,11 +188,11 @@ buprest680_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, 
 Cbuprest.even.space.d65 = coldist(buprest.even.space.d65, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 
 #Contrast calculation- twilight
-Cbuprest.even.space.twilight = coldist(buprest.even.space.twilight, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
+Cbuprest.even.space.twilight = coldist(buprest.even.space.twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 
-#Vis680
-Cbuprest680 = coldist(buprest680, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
-Cbuprest680_twilight = coldist(buprest680_twilight, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
+#Vis660
+Cbuprest660 = coldist(buprest660, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
+Cbuprest660_twilight = coldist(buprest660_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 ```
 
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
@@ -230,45 +230,56 @@ Vis.bf_twilight.even.space<- Cbuprest.even.space.twilight %>% filter(str_detect(
   filter(str_detect(patch2,"beetle"))
 Vis.bf_twilight.even.space$vissys<-strrep("Vis1.bf",1)
 
-#Vis680
-Vis6.lf_d65.model2<-Cbuprest680%>% filter(str_detect(patch1,"flower")) %>% 
+#Vis660
+Vis5.lf_d65.model2<-Cbuprest660%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis6.lf_d65.model2$vissys<-strrep("Vis6.lf",1)
-Vis6.lb_d65.model2<-Cbuprest680%>% filter(str_detect(patch2,"beetle")) %>% 
+Vis5.lf_d65.model2$vissys<-strrep("Vis5.lf",1)
+Vis5.lb_d65.model2<-Cbuprest660%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis6.lb_d65.model2$vissys<-strrep("Vis6.lb",1)
-Vis6.bf_d65.model2<-Cbuprest680%>% filter(str_detect(patch1,"flower")) %>% 
+Vis5.lb_d65.model2$vissys<-strrep("Vis5.lb",1)
+Vis5.bf_d65.model2<-Cbuprest660%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis6.bf_d65.model2$vissys<-strrep("Vis6.bf",1)
-Vis6.lf_twilight.model2<-Cbuprest680_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+Vis5.bf_d65.model2$vissys<-strrep("Vis5.bf",1)
+Vis5.lf_twilight.model2<-Cbuprest660_twilight %>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis6.lf_twilight.model2$vissys<-strrep("Vis6.lf",1)
-Vis6.lb_twilight.model2<-Cbuprest680_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+Vis5.lf_twilight.model2$vissys<-strrep("Vis5.lf",1)
+Vis5.lb_twilight.model2<-Cbuprest660_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis6.lb_twilight.model2$vissys<-strrep("Vis6.lb",1)
-Vis6.bf_twilight.model2<-Cbuprest680_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+Vis5.lb_twilight.model2$vissys<-strrep("Vis5.lb",1)
+Vis5.bf_twilight.model2<-Cbuprest660_twilight %>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis6.bf_twilight.model2$vissys<-strrep("Vis6.bf",1)
+Vis5.bf_twilight.model2$vissys<-strrep("Vis5.bf",1)
 
 ```
 
 The table shows the median contrast in each comparison group
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
-system.list.even.space<- rbind.data.frame("even space", "Vis 680") %>% rename(system = 1) # make a list of system names
+system.list.even.space<- rbind.data.frame("even space", "Vis 660") %>% rename(system = 1) # make a list of system names
 ```
 
 ###Daylight
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 #Daylight
 ##list contrast from each comparison group
-lf.contrast_d65.even.space <-rbind.data.frame(median(Vis.lf_d65.even.space$dS),median(Vis6.lf_d65.model2$dS))
-lb.contrast_d65.even.space<-rbind.data.frame(median(Vis.lb_d65.even.space$dS),median(Vis6.lb_d65.model2$dS))
-bf.contrast_d65.even.space <-rbind.data.frame(median(Vis.bf_d65.even.space$dS),median(Vis6.bf_d65.model2$dS))
+lf.contrast_d65.even.space <-rbind.data.frame(median(Vis.lf_d65.even.space$dS),median(Vis5.lf_d65.model2$dS))
+lb.contrast_d65.even.space <-rbind.data.frame(median(Vis.lb_d65.even.space$dS),median(Vis5.lb_d65.model2$dS))
+bf.contrast_d65.even.space <-rbind.data.frame(median(Vis.bf_d65.even.space$dS),median(Vis5.bf_d65.model2$dS))
 
 
 #combind comparison groups together in a table
 contrast.list_d65.even.space <- system.list.even.space %>% cbind(lf.contrast_d65.even.space) %>% cbind(lb.contrast_d65.even.space) %>% cbind(bf.contrast_d65.even.space) %>% dplyr:: rename(leaf.vs.flower = 2, leaf.vs.beetle = 3, beetle.vs.flower = 4) %>% pander() 
 contrast.list_d65.even.space
+
+#to generate max and min medians from each comparison group
+##for even space sivual system
+# list( max(Vis.lf_d65.even.space$dS), min(Vis.lf_d65.even.space$dS))
+# list( max(Vis.lb_d65.even.space$dS), min(Vis.lb_d65.even.space$dS))
+# list( max(Vis.bf_d65.even.space$dS), min(Vis.bf_d65.even.space$dS))
+# 
+# ##for Vis660 sivual system
+# list( max(Vis5.lf_d65.model2$dS), min(Vis5.lf_d65.model2$dS))
+# list( max(Vis5.lb_d65.model2$dS), min(Vis5.lb_d65.model2$dS))
+# list( max(Vis5.bf_d65.model2$dS), min(Vis5.bf_d65.model2$dS))
 ```
 
 </br>
@@ -278,9 +289,9 @@ contrast.list_d65.even.space
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 #Twilight
 ##list contrast from each comparison group
-lf.contrast_twilight.even.space <- rbind.data.frame(median(Vis.lf_twilight.even.space$dS),median(Vis6.lf_twilight.model2$dS))
-lb.contrast_twilight.even.space <- rbind.data.frame(median(Vis.lb_twilight.even.space$dS),median(Vis6.lb_twilight.model2$dS))
-bf.contrast_twilight.even.space <- rbind.data.frame(median(Vis.bf_twilight.even.space$dS),median(Vis6.bf_twilight.model2$dS))
+lf.contrast_twilight.even.space <- rbind.data.frame(median(Vis.lf_twilight.even.space$dS),median(Vis5.lf_twilight.model2$dS))
+lb.contrast_twilight.even.space <- rbind.data.frame(median(Vis.lb_twilight.even.space$dS),median(Vis5.lb_twilight.model2$dS))
+bf.contrast_twilight.even.space <- rbind.data.frame(median(Vis.bf_twilight.even.space$dS),median(Vis5.bf_twilight.model2$dS))
 
 #combind comparison groups together in a table
 contrast.list_twilight.even.space <- system.list.even.space %>% cbind(lf.contrast_twilight.even.space) %>% cbind(lb.contrast_twilight.even.space) %>% cbind(bf.contrast_twilight.even.space) %>% dplyr:: rename(leaf.vs.flower = 2, leaf.vs.beetle = 3, beetle.vs.flower = 4) %>% pander() 
@@ -290,7 +301,7 @@ contrast.list_twilight.even.space
 </br>
 </br>
 
-#Compare contrasts
+#Compare contrasts {.tabset .tabset-fade .tabset-pills}
 * To compare contrasts between visual systems, We conducted Wald chi-square tests on generalised linear mixed models (GLMM) followed by posthoc tests.
 
 * In the models, we assigned
@@ -307,48 +318,48 @@ contrast.list_twilight.even.space
 ##flower vs leaf
 Cbuprest.even.space.leaf.vs.flower=
   Cbuprest.even.space.d65 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest680.leaf.vs.flower=
-  Cbuprest680 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
+Cbuprest660.leaf.vs.flower=
+  Cbuprest660 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
 
-Cbuprest.leaf.vs.flower.even.space.Vis680=
-  Cbuprest.even.space.leaf.vs.flower %>% rbind(Cbuprest680.leaf.vs.flower) 
+Cbuprest.leaf.vs.flower.even.space.Vis660=
+  Cbuprest.even.space.leaf.vs.flower %>% rbind(Cbuprest660.leaf.vs.flower) 
 
 bup.even.space.leaf.vs.flower<-Cbuprest.even.space.leaf.vs.flower[,3]
-bup680.leaf.vs.flower<-Cbuprest680.leaf.vs.flower[,3]
+bup660.leaf.vs.flower<-Cbuprest660.leaf.vs.flower[,3]
 
-com.bupcontrast.leaf.vs.flower.even.space<-cbind(Cbuprest.leaf.vs.flower.even.space.Vis680[,1:2],bup.even.space.leaf.vs.flower,bup680.leaf.vs.flower)
+com.bupcontrast.leaf.vs.flower.even.space<-cbind(Cbuprest.leaf.vs.flower.even.space.Vis660[,1:2],bup.even.space.leaf.vs.flower,bup660.leaf.vs.flower)
 compare.leaf.vs.flower.even.space <- com.bupcontrast.leaf.vs.flower.even.space %>%
   gather(key = "peak_wl.leaf.vs.flower", value = "dS", 3:4)
 
 ##beetle vs leaf
 Cbuprest.even.space.leaf.vs.beetle=
   Cbuprest.even.space.d65 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest680.leaf.vs.beetle=
-  Cbuprest680 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
+Cbuprest660.leaf.vs.beetle=
+  Cbuprest660 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
 
-Cbuprest.leaf.vs.beetle.even.space.Vis680=
-  Cbuprest.even.space.leaf.vs.beetle %>% rbind(Cbuprest680.leaf.vs.beetle)
+Cbuprest.leaf.vs.beetle.even.space.Vis660=
+  Cbuprest.even.space.leaf.vs.beetle %>% rbind(Cbuprest660.leaf.vs.beetle)
 
 bup.even.space.leaf.vs.beetle<-Cbuprest.even.space.leaf.vs.beetle[,3]
-bup680.leaf.vs.beetle<-Cbuprest680.leaf.vs.beetle[,3]
+bup660.leaf.vs.beetle<-Cbuprest660.leaf.vs.beetle[,3]
 
-com.bupcontrast.leaf.vs.beetle.even.space<-cbind(Cbuprest.leaf.vs.beetle.even.space.Vis680[,1:2],bup.even.space.leaf.vs.beetle,bup680.leaf.vs.beetle)
+com.bupcontrast.leaf.vs.beetle.even.space<-cbind(Cbuprest.leaf.vs.beetle.even.space.Vis660[,1:2],bup.even.space.leaf.vs.beetle,bup660.leaf.vs.beetle)
 compare.leaf.vs.beetle.even.space <- com.bupcontrast.leaf.vs.beetle.even.space %>%
   gather(key = "peak_wl.leaf.vs.beetle", value = "dS", 3:4)
 
 ##beetle vs flower
 Cbuprest.even.space.flower.vs.beetle=
   Cbuprest.even.space.d65 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest680.flower.vs.beetle=
-  Cbuprest680 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
+Cbuprest660.flower.vs.beetle=
+  Cbuprest660 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
 
-Cbuprest.flower.vs.beetle.even.space.Vis680=
-  Cbuprest.even.space.flower.vs.beetle %>%  rbind(Cbuprest680.flower.vs.beetle)
+Cbuprest.flower.vs.beetle.even.space.Vis660=
+  Cbuprest.even.space.flower.vs.beetle %>%  rbind(Cbuprest660.flower.vs.beetle)
 
 bup.even.space.flower.vs.beetle<-Cbuprest.even.space.flower.vs.beetle[,3]
-bup680.flower.vs.beetle<-Cbuprest680.flower.vs.beetle[,3]
+bup660.flower.vs.beetle<-Cbuprest660.flower.vs.beetle[,3]
 
-com.bupcontrast.flower.vs.beetle.even.space<-cbind(Cbuprest.flower.vs.beetle.even.space.Vis680[,1:2],bup.even.space.flower.vs.beetle,bup680.flower.vs.beetle)
+com.bupcontrast.flower.vs.beetle.even.space<-cbind(Cbuprest.flower.vs.beetle.even.space.Vis660[,1:2],bup.even.space.flower.vs.beetle,bup660.flower.vs.beetle)
 compare.flower.vs.beetle.even.space <- com.bupcontrast.flower.vs.beetle.even.space %>%
   gather(key = "peak_wl.flower.vs.beetle", value = "dS", 3:4)
 
@@ -357,48 +368,48 @@ compare.flower.vs.beetle.even.space <- com.bupcontrast.flower.vs.beetle.even.spa
 ##flower vs leaf
 Cbuprest.even.space.leaf.vs.flower_twilight=
   Cbuprest.even.space.twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest680.leaf.vs.flower_twilight=
-  Cbuprest680_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
+Cbuprest660.leaf.vs.flower_twilight=
+  Cbuprest660_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
 
-Cbuprest.leaf.vs.flower.even.space.Vis680.twilight=
-  Cbuprest.even.space.leaf.vs.flower_twilight %>% rbind(Cbuprest680.leaf.vs.flower_twilight) 
+Cbuprest.leaf.vs.flower.even.space.Vis660.twilight=
+  Cbuprest.even.space.leaf.vs.flower_twilight %>% rbind(Cbuprest660.leaf.vs.flower_twilight) 
 
 bup.even.space.leaf.vs.flower_twilight<-Cbuprest.even.space.leaf.vs.flower_twilight[,3]
-bup680.leaf.vs.flower_twilight<-Cbuprest680.leaf.vs.flower_twilight[,3]
+bup660.leaf.vs.flower_twilight<-Cbuprest660.leaf.vs.flower_twilight[,3]
 
-com.bupcontrast.leaf.vs.flower.even.space_twilight<-cbind(Cbuprest.leaf.vs.flower.even.space.Vis680.twilight[,1:2],bup.even.space.leaf.vs.flower_twilight,bup680.leaf.vs.flower_twilight)
+com.bupcontrast.leaf.vs.flower.even.space_twilight<-cbind(Cbuprest.leaf.vs.flower.even.space.Vis660.twilight[,1:2],bup.even.space.leaf.vs.flower_twilight,bup660.leaf.vs.flower_twilight)
 compare.leaf.vs.flower.even.space_twilight <- com.bupcontrast.leaf.vs.flower.even.space_twilight %>%
   gather(key = "peak_wl.leaf.vs.flower", value = "dS", 3:4)
 
 ##beetle vs leaf
 Cbuprest.even.space.leaf.vs.beetle_twilight=
   Cbuprest.even.space.twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest680.leaf.vs.beetle_twilight=
-  Cbuprest680_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
+Cbuprest660.leaf.vs.beetle_twilight=
+  Cbuprest660_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
 
-Cbuprest.leaf.vs.beetler.even.space.Vis680.twilight=
-  Cbuprest.even.space.leaf.vs.beetle_twilight  %>%  rbind(Cbuprest680.leaf.vs.beetle_twilight)
+Cbuprest.leaf.vs.beetler.even.space.Vis660.twilight=
+  Cbuprest.even.space.leaf.vs.beetle_twilight  %>%  rbind(Cbuprest660.leaf.vs.beetle_twilight)
 
 bup.even.space.leaf.vs.beetle_twilight<-Cbuprest.even.space.leaf.vs.beetle_twilight[,3]
-bup680.leaf.vs.beetle_twilight<-Cbuprest680.leaf.vs.beetle_twilight[,3]
+bup660.leaf.vs.beetle_twilight<-Cbuprest660.leaf.vs.beetle_twilight[,3]
 
-com.bupcontrast.leaf.vs.beetle.even.space_twilight<-cbind(Cbuprest.leaf.vs.beetler.even.space.Vis680.twilight[,1:2],bup.even.space.leaf.vs.beetle_twilight,bup680.leaf.vs.beetle_twilight)
+com.bupcontrast.leaf.vs.beetle.even.space_twilight<-cbind(Cbuprest.leaf.vs.beetler.even.space.Vis660.twilight[,1:2],bup.even.space.leaf.vs.beetle_twilight,bup660.leaf.vs.beetle_twilight)
 compare.leaf.vs.beetle.even.space_twilight <- com.bupcontrast.leaf.vs.beetle.even.space_twilight %>%
   gather(key = "peak_wl.leaf.vs.beetle", value = "dS", 3:4)
 
 ##beetle vs flower
 Cbuprest.even.space.flower.vs.beetle_twilight=
   Cbuprest.even.space.twilight %>% filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest680.flower.vs.beetle_twilight=
-  Cbuprest680_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
+Cbuprest660.flower.vs.beetle_twilight=
+  Cbuprest660_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
 
-Cbuprest.flower.vs.beetle.even.space.Vis680.twilight=
-  Cbuprest.even.space.flower.vs.beetle_twilight %>% rbind(Cbuprest680.flower.vs.beetle_twilight)
+Cbuprest.flower.vs.beetle.even.space.Vis660.twilight=
+  Cbuprest.even.space.flower.vs.beetle_twilight %>% rbind(Cbuprest660.flower.vs.beetle_twilight)
 
 bup.even.space.flower.vs.beetle_twilight<-Cbuprest.even.space.flower.vs.beetle_twilight[,3]
-bup680.flower.vs.beetle_twilight<-Cbuprest680.flower.vs.beetle_twilight[,3]
+bup660.flower.vs.beetle_twilight<-Cbuprest660.flower.vs.beetle_twilight[,3]
 
-com.bupcontrast.flower.vs.beetle.even.space_twilight<-cbind(Cbuprest.flower.vs.beetle.even.space.Vis680.twilight[,1:2],bup.even.space.flower.vs.beetle_twilight,bup680.flower.vs.beetle_twilight)
+com.bupcontrast.flower.vs.beetle.even.space_twilight<-cbind(Cbuprest.flower.vs.beetle.even.space.Vis660.twilight[,1:2],bup.even.space.flower.vs.beetle_twilight,bup660.flower.vs.beetle_twilight)
 compare.flower.vs.beetle.even.space_twilight <- com.bupcontrast.flower.vs.beetle.even.space_twilight %>%
   gather(key = "peak_wl.flower.vs.beetle", value = "dS", 3:4)
 
@@ -434,8 +445,8 @@ m.flower.vs.beetle_twilight.even.space  <- lmer(dS~peak_wl.flower.vs.beetle + (1
 sum.flower.vs.beetle_twilight.even.space  <-summary(glht(m.flower.vs.beetle_twilight.even.space , linfct = mcp(peak_wl.flower.vs.beetle = "Tukey")), test = adjusted("bonferroni"))
 ```
 
-### __Leaf vs Flower__ {.tabset .tabset-fade .tabset-pills}
-####Daylight
+## __Leaf vs Flower__ {.tabset .tabset-fade .tabset-pills}
+###Daylight
 
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 Anova(m.leaf.vs.flower_d65.even.space) %>% pander()
@@ -445,7 +456,7 @@ Anova(m.leaf.vs.flower_d65.even.space) %>% pander()
 </br>
 
 
-####Twilight
+###Twilight
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 Anova(m.leaf.vs.flower_twilight.even.space) %>% pander()
 ```
@@ -454,8 +465,8 @@ Anova(m.leaf.vs.flower_twilight.even.space) %>% pander()
 </br>
 
 
-### __Leaf vs Beetle__ {.tabset .tabset-fade .tabset-pills}
-####Daylight
+## __Leaf vs Beetle__ {.tabset .tabset-fade .tabset-pills}
+###Daylight
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 Anova(m.leaf.vs.beetle_d65.even.space) %>% pander()
 ```
@@ -464,7 +475,7 @@ Anova(m.leaf.vs.beetle_d65.even.space) %>% pander()
 </br>
 
 
-####Twilight
+###Twilight
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 Anova(m.leaf.vs.beetle_twilight.even.space) %>% pander()
 ```
@@ -473,8 +484,8 @@ Anova(m.leaf.vs.beetle_twilight.even.space) %>% pander()
 </br>
 
 
-### __Beetle vs Flower__ {.tabset .tabset-fade .tabset-pills}
-####Daylight
+## __Beetle vs Flower__ {.tabset .tabset-fade .tabset-pills}
+###Daylight
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 Anova(m.flower.vs.beetle_d65.even.space) %>% pander()
 ```
@@ -482,7 +493,7 @@ Anova(m.flower.vs.beetle_d65.even.space) %>% pander()
 </br>
 </br>
 
-####Twilight
+###Twilight
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 Anova(m.flower.vs.beetle_twilight.even.space) %>% pander()
 ```
@@ -492,4 +503,4 @@ Anova(m.flower.vs.beetle_twilight.even.space) %>% pander()
 
 
 #Summary
-For all three comparison groups, Vis 680 (unevenly spaced visual system) has significantly higher contrast than the evenly spaced visual system. This indicates that the minimal improvement or lack of improvement in contrast beyond 640 nm shown in the main text is not the result of uneven spacing between photoreceptors. 
+For all three comparison groups, Vis 660 (unevenly spaced visual system) has significantly higher contrast than the evenly spaced visual system. This indicates that the minimal improvement or lack of improvement in contrast beyond 640 nm shown in the main text is not the result of uneven spacing between photoreceptors. 
