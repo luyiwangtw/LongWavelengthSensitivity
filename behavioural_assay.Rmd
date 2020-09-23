@@ -1,9 +1,5 @@
 ---
 title: "Behavioural assay"
-author: <br>Lu-Yi Wang^1^, Devi Stuart-Fox^1^, Geoff Walker^1^, Nicholas W. Roberts^2^
-  and Amanda M. Franklin^1^ <br></br> ^1^School of Biosciences, The University of Melbourne,
-  Australia <br></br> ^2^School of Biological Sciences, University of Bristol, UK
-  <br></br>
 output:
   pdf_document: default
   html_document:
@@ -11,11 +7,11 @@ output:
     toc: true
     toc_depth: 2
 subtitle: Supplementary Information
-Date: May 27 2020
+Date: August 31 2020
 ---
 #The aim
 
-Both opsin expression and electroretinogram data indicate that jewel beetles have a LWS photoreceptor with sensitivity potentially extending into the far red. However, their visual sensitivities have not been confirmed with behavioural data. Here, we conducted a behavioral assay to confirm their long wavelength sensitivity in living jewel beetles.
+Intracellular recordings, opsin expression and electroretinogram data indicate that jewel beetles have a LWS photoreceptor with sensitivity potentially extending into the far red. However, their visual sensitivities have not been confirmed with behavioural data. Here, we conducted a behavioral assay to confirm their long wavelength sensitivity in living jewel beetles.
 
 </br>
 </br>
@@ -39,7 +35,7 @@ Each trial lasted for 3 minutes and started when the beetle was introduced into 
 We used the beetles’ responses (attracted / not attracted) in the behavioural trials to obtain a response curve over 590-735 nm by fitting a logistic regression for the 2 species, separately. In the model, we set the response of the beetles as dependent variable, peak wavelength of the light source as a fixed factor, and individual ID as a random factor to account for repeated trials for each individual.
 </br>
 </br>
-For details of beetle collection, please see the main text.
+For details of beetle collection, please see the main text of the paper.
 
 
 ```{r,warning=FALSE, message=FALSE, results='hide'}
@@ -111,26 +107,46 @@ newdat1.Cf$attracted<-plogis(newdat1.Cf$attracted) ##can track the corresponding
 
 #Behavioural results
 
-Behavioural experiments confirmed far-red sensitivity in both species of jewel beetle. 96% of jewel beetles were attracted by light at 590 nm and c.a. 87% of them still responded to light at 645 nm (*C. dimidiata*: 100% and 96%; *C. flavopicta*, 93% and 78%; at 590 nm and 645 nm). The percentage of the respondents (i.e. those reached <5 cm to the end the lit arm) decreased steadily after 590 nm in *C. flavopicta* down to 735 nm, whereas the decrease is more abrupt in *C. dimidiata* after 680 nm. At 700 nm, *C. dimidiata* and *C. flavopicta* had a response rate of 56% and 39%, respectively. The 50% response rate was at c.a. 704 nm for *C. dimidiata* and c.a. 685 nm for* C. flavopicta*. Only one *C. dimidiata* individual responded to light at 735 nm.
+Behavioural experiments confirmed far-red sensitivity in both species of jewel beetle. 96% of jewel beetles were attracted by light at 590 nm and c.a. 87% of them still responded to light at 645 nm (*C. dimidiata*: 100% and 96%; *C. flavopicta*, 93% and 78%; at 590 nm and 645 nm). The percentage of the respondents (i.e. those reached <5 cm to the end the lit arm) decreased steadily after 590 nm in *C. flavopicta* down to 735 nm, whereas the decrease is more abrupt in *C. dimidiata* after 680 nm. At 700 nm, *C. dimidiata* and *C. flavopicta* had a response rate of 56% and 39%, respectively. The 50% response rate was at c.a. 704 nm for *C. dimidiata* and c.a. 685 nm for *C. flavopicta*. Only one *C. dimidiata* individual responded to light at 735 nm.
 </br>
 </br>
 
-```{r, fig.cap="Figure caption: Results of the behavioural experiments on two jewel beetles. Green represents *Castiarina dimidiata* and blue represent *C. flavopicta*. Logistic regression lines show beetles’ high response rate at 700 nm. 95 % confidence intervals in shaded regions. Red rectangle highlighted the location of the ‘red edge’", echo=FALSE}
+```{r, fig.cap="Figure caption: Results of the behavioural experiments on two jewel beetles. Blue represents *Castiarina dimidiata* and yellow represent *C. flavopicta*. Logistic regression lines show beetles’ high response rate at 700 nm. 95 % confidence intervals in shaded regions. The green dashed line shows the mean leaf reflectance spectrum from our dataset.", echo=FALSE}
+#re-scale the average leaf reflectacne
+aveleaf <- read.csv("data/aveleaf.csv")
+aveleaf$attracted <- (aveleaf$aveleaf)/60
+aveleaf <- aveleaf %>% 
+  rename(
+    wavelength = wl
+    )
+aveleaf <- aveleaf[59:93,]
 datacombined<- ymaze.Cdimidiata %>% rbind(ymaze.Cflavopicta)
 ggplot(datacombined, aes(x=wavelength, y=attracted))+
-  annotate("rect", xmin=695, xmax=705, ymin=0, ymax=Inf, alpha=0.2, fill="red")+
-  geom_jitter(data=ymaze.Cflavopicta,height=0.01,width=5, alpha=0.5, size= 3, color="#153E7E")+
-  geom_jitter(data=ymaze.Cdimidiata,height=0.01,width=5, alpha=0.5, size= 3, color="#008000")+
-  geom_ribbon(data=newdat1.Cd, alpha=0.3, fill="#008000", aes(ymax=phi.Cd, ymin=plo.Cd))+
-  geom_ribbon(data=newdat1.Cf, alpha=0.3,fill="#153E7E", aes(ymax=phi.Cf, ymin=plo.Cf))+
-  geom_line(data=newdat1.Cd, aes(x=wavelength, y=attracted), color="#008000")+  
-  geom_line(data=newdat1.Cf, aes(x=wavelength, y=attracted), color="#153E7E")+
-  geom_hline(yintercept=0.50, color="grey60",linetype="dashed")+
-  scale_x_continuous(breaks = seq(600, 740, by = 20))+
-  xlab("Wavelength (nm)")+
-  ylab("Attraction rate (%)")+
-  theme(legend.position="right")+
+  geom_jitter(data=ymaze.Cflavopicta,height=0.01,width=5, alpha=0.5, size= 3, color="#FC6A03")+
+  geom_jitter(data=ymaze.Cdimidiata,height=0.01,width=5, alpha=0.5, size= 3, color="#153E7E")+
+  geom_ribbon(data=newdat1.Cf, alpha=0.3,fill="#FC6A03", aes(ymax=phi.Cf, ymin=plo.Cf))+
+  geom_ribbon(data=newdat1.Cd, alpha=0.3, fill="#153E7E", aes(ymax=phi.Cd, ymin=plo.Cd))+ 
+  geom_line(data=newdat1.Cf, aes(x=wavelength, y=attracted), color="#FC6A03")+
+  geom_line(data=newdat1.Cd, aes(x=wavelength, y=attracted), color="#153E7E")+ 
+  geom_hline(yintercept=0.50, color="grey60")+
+  geom_line(data=aveleaf, color="#008000", linetype = "dashed")+
+  scale_x_continuous(breaks = seq(580, 780, by = 20))+
+  scale_y_continuous(sec.axis = sec_axis(~.*(6/10), name = "Reflectance"))+
   theme_classic()
+# ggplot(datacombined, aes(x=wavelength, y=attracted))+
+#   annotate("rect", xmin=695, xmax=705, ymin=0, ymax=Inf, alpha=0.2, fill="red")+
+#   geom_jitter(data=ymaze.Cflavopicta,height=0.01,width=5, alpha=0.5, size= 3, color="#153E7E")+
+#   geom_jitter(data=ymaze.Cdimidiata,height=0.01,width=5, alpha=0.5, size= 3, color="#008000")+
+#   geom_ribbon(data=newdat1.Cd, alpha=0.3, fill="#008000", aes(ymax=phi.Cd, ymin=plo.Cd))+
+#   geom_ribbon(data=newdat1.Cf, alpha=0.3,fill="#153E7E", aes(ymax=phi.Cf, ymin=plo.Cf))+
+#   geom_line(data=newdat1.Cd, aes(x=wavelength, y=attracted), color="#008000")+  
+#   geom_line(data=newdat1.Cf, aes(x=wavelength, y=attracted), color="#153E7E")+
+#   geom_hline(yintercept=0.50, color="grey60",linetype="dashed")+
+#   scale_x_continuous(breaks = seq(600, 740, by = 20))+
+#   xlab("Wavelength (nm)")+
+#   ylab("Attraction rate (%)")+
+#   theme(legend.position="right")+
+#   theme_classic()
 ```
  
 </br>

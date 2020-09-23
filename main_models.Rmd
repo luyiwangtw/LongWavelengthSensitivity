@@ -11,7 +11,7 @@ output:
     toc: true
     toc_depth: 2
 subtitle: Supplementary Information
-Date: July 28 2020
+Date: August 31 2020
 ---
 
 #The aims
@@ -60,9 +60,9 @@ knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time wh
 
 ```{r import data,message=FALSE}
 #import sensitivity curves
-specsensbuprest.model1 <- read.csv("data/peak sensitivity_filter shift_aim1.csv",header=TRUE) %>%
+specsensbuprest.aim1 <- read.csv("data/peak sensitivity_filter shift_aim1.csv",header=TRUE) %>%
   as.rspec()
-specsensbuprest.model2 <- read.csv("data/peak sensitivity_filter shift_aim2.csv",header=TRUE) %>%
+specsensbuprest.aim2 <- read.csv("data/peak sensitivity_filter shift_aim2.csv",header=TRUE) %>%
   as.rspec()
 #import irradiance
 irradiance.d65 <- read.csv("data/d65.csv",header=TRUE) %>% 
@@ -77,7 +77,7 @@ irradiance.twilight <- read.csv("data/civil twilight.csv",header=TRUE) %>%
 aveleaf <- read.csv("data/aveleaf.csv",header=TRUE) %>% as.rspec()
 
 #import and combind beetle, flower, leaf together
-raw.dataset<-read.csv("data/pooled_spec_2019.csv",header=TRUE) %>% as.rspec()
+raw.dataset<-read.csv("data/refelectance spectra.csv",header=TRUE) %>% as.rspec()
 dataset<- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measurements to a representative one
   procspec(opt = "smooth", span = 0.1, fixneg = "zero") #smooth the spectra and lift <0 to 0
 ```
@@ -87,12 +87,12 @@ dataset<- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measureme
 ##Spectral reflectance of the targets
 * Jewel beetles and their host plants (leaves and flowers)
     + Leaves: 
-        + sample source: mainly from Melton Gardens and Maranoa Gardens (4 from Melbourne roadsides).
+        + sample source: mainly from Melton Gardens and Maranoa Gardens (4 from Meblourne roadsides).
         + colour (to human vision): green
         + total number: 46 (all are from the host plant genus of Australian jewel beetles)
   
     + Flowers: 
-        + sample source: mainly from Melton Gardens and Maranoa Gardens (4 from Melbourne roadsides).
+        + sample source: mainly from Melton Gardens and Maranoa Gardens (4 from Meblourne roadsides).
         + colour (to human vision): white (10), pink (11), red (10), yellow (9), orange (3), and purple (4)
         + total number: 47 (from 46 species, the same species for leaf reflectance)
   
@@ -103,7 +103,7 @@ dataset<- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measureme
 
 * We averaged of 3 measurements to generate a representative spectrum for each colour
 * The spectral data were smoothed with the span = 0.1, and those < 0 were lifted to 0
-```{r, fig.cap="Reflectance spectra of the targets"}
+```{r, fig.cap="Figure caption: Reflectance spectra of the targets"}
 #assign categoryies to each spectrum
 category.list <- c("flower","leaf","beetle")
 category <- rep(category.list , c(47*501,46*501,37*501))
@@ -154,24 +154,24 @@ ggplot(dataset.plot.indivisually,aes(x=wavelength,y=reflectance, colour=category
 ***
 * For the first question we compared the contrast between 3 trichromatic visual system with varied photoreceptor combination. We also tested whether an extra receptor enhanced chromatic contrast by comparing the trichromatic visual systems with a tetrachromatic visual system.
     + Visual systems used: 
-        1. Visual system USM: 380 nm, 460 nm, 520 nm (UVS,SWS,MWS)
-        2. Visual system UML: 380 nm, 520 nm, 580 nm (UVS,MWS,LWS)
-        3. Visual system USL: 380 nm, 460 nm, 580 nm (UVS,SWS,LWS)
-        4. Visual system USML: 380 nm, 460 nm, 520 nm, 580 nm (UVS,SWS,MWS,LWS)
+        1. Visual system USM (USM): 380 nm, 460 nm, 520 nm (UVS,SWS,MWS)
+        2. Visual system UML (UML): 380 nm, 520 nm, 580 nm (UVS,MWS,LWS)
+        3. Visual system USL (USL): 380 nm, 460 nm, 580 nm (UVS,SWS,LWS)
+        4. Visual system USML (USML): 380 nm, 460 nm, 520 nm, 580 nm (UVS,SWS,MWS,LWS)
 
 ***
 * For the second question, we tested how the contrast changed as peak sensitivity increased by systematically increasing the peak sensitivity of the LWS photoreceptor from 580-660 nm.
     + Visual systems used:
-        1. Visual system 580: 380 nm, 460 nm, 520 nm, 580 nm
-        2. Visual system 600: 380 nm, 460 nm, 520 nm, 600 nm
-        3. Visual system 620: 380 nm, 460 nm, 520 nm, 620 nm
-        4. Visual system 640: 380 nm, 460 nm, 520 nm, 640 nm
-        5. Visual system 660: 380 nm, 460 nm, 520 nm, 660 nm
+        1. Visual system 580 (VS 580): 380 nm, 460 nm, 520 nm, 580 nm
+        2. Visual system 600 (VS 600): 380 nm, 460 nm, 520 nm, 600 nm
+        3. Visual system 620 (VS 620): 380 nm, 460 nm, 520 nm, 620 nm
+        4. Visual system 640 (VS 640): 380 nm, 460 nm, 520 nm, 640 nm
+        5. Visual system 660 (VS 660): 380 nm, 460 nm, 520 nm, 660 nm
 
 
-```{r, fig.cap="Sensitivity curves of the photoreceptors with different peak wavelengths."}
-wl<-specsensbuprest.model2[,1]
-peaks<-gather(specsensbuprest.model2[,2:9], peak, value) %>% cbind(wl)
+```{r, fig.cap="Figure caption: Sensitivity curves of the photoreceptors with different peak wavelengths."}
+wl<-specsensbuprest.aim2[,1]
+peaks<-gather(specsensbuprest.aim2[,2:9], peak, value) %>% cbind(wl)
 
 peak.order <- c("UVS.380.A1.", "SWS.460.A1.", "MWS.520.A1.", "LWS.570.A1..filter580.", "LWS.570.A1..filter600.", "LWS.570.A1..filter620.", "LWS.570.A1..filter640.", "LWS.570.A1..filter660.") #to order the peaks in the legend
 ggplot(peaks,aes(x=wl, y=value, col=peak))+
@@ -196,7 +196,7 @@ ggplot(peaks,aes(x=wl, y=value, col=peak))+
     + Daylight: __D65__ (standard daylight) from Commission internationale de l'eclairage CIE
     + Twilight: measured at the Pinnacles Lookout in Alpine National Park, VIC, Australia at 18:15 on September 14th 2019.
 
-```{r, fig.cap="Relative irradiance of standard daylight and twilight"}
+```{r, fig.cap="Figure caption: Relative irradiance of standard daylight and twilight"}
 illum <- merge(irradiance.d65, irradiance.twilight) %>% gather(light, illuminace, -wl) 
 
 ggplot(illum, aes(x=wl, y=illuminace, color=light))+
@@ -220,32 +220,32 @@ theme_classic()
 * The average of all leaf spectra was used as the background adapting light.
 * The von Kries chromatic adaptation was applied.
 ```{r,message=FALSE}
-#Quantum catch - D65 - Visual model 1
-visUVSWMW..=vismodel(dataset[1:501,], visual = specsensbuprest.model1[, 1:4], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-visUV..MWLW=vismodel(dataset[1:501,], visual = specsensbuprest.model1[, c(1,2,4,5)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-visUVSW..LW=vismodel(dataset[1:501,], visual = specsensbuprest.model1[, c(1,2,3,5)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-visUVSWMWLW=vismodel(dataset[1:501,], visual = specsensbuprest.model1[, 1:5], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+#Quantum catch - D65 - aim 1
+vsUSM=vismodel(dataset[1:501,], visual = specsensbuprest.aim1[, 1:4], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+vsUML=vismodel(dataset[1:501,], visual = specsensbuprest.aim1[, c(1,2,4,5)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+vsUSL=vismodel(dataset[1:501,], visual = specsensbuprest.aim1[, c(1,2,3,5)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+vsUSML=vismodel(dataset[1:501,], visual = specsensbuprest.aim1[, 1:5], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
 
-#Quantum catch - D65 - Visual model 2
-buprest580=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, 1:5], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-buprest600=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,6)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-buprest620=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,7)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-buprest640=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,8)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-buprest660=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,9)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+#Quantum catch - D65 - Aim 2
+buprest580=vismodel(dataset[1:501,], visual = specsensbuprest.aim2[, 1:5], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+buprest600=vismodel(dataset[1:501,], visual = specsensbuprest.aim2[, c(1,2,3,4,6)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+buprest620=vismodel(dataset[1:501,], visual = specsensbuprest.aim2[, c(1,2,3,4,7)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+buprest640=vismodel(dataset[1:501,], visual = specsensbuprest.aim2[, c(1,2,3,4,8)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+buprest660=vismodel(dataset[1:501,], visual = specsensbuprest.aim2[, c(1,2,3,4,9)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
 
 
-#Quantum catch - twilight - Visual model 1
-visUVSWMW.._twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model1[, 1:4], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-visUV..MWLW_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model1[, c(1,2,4,5)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-visUVSW..LW_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model1[, c(1,2,3,5)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-visUVSWMWLW_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model1[, 1:5], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+#Quantum catch - twilight - aim 1
+vsUSM_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.aim1[, 1:4], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+vsUML_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.aim1[, c(1,2,4,5)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+vsUSL_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.aim1[, c(1,2,3,5)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+vsUSML_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.aim1[, 1:5], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
 
-#Quantum catch - twilight - Visual model 2
-buprest580_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, 1:5], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-buprest600_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,6)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-buprest620_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,7)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-buprest640_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,8)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-buprest660_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,9)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+#Quantum catch - twilight - Aim 2
+buprest580_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.aim2[, 1:5], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+buprest600_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.aim2[, c(1,2,3,4,6)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+buprest620_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.aim2[, c(1,2,3,4,7)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+buprest640_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.aim2[, c(1,2,3,4,8)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
+buprest660_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.aim2[, c(1,2,3,4,9)], bkg=aveleaf$aveleaf, illum = irradiance.twilight[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
 
 ```
 
@@ -264,26 +264,26 @@ buprest660_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, 
 * In the models using twilight illuminance, we took the photo shot noise into account.
 
 ```{r,message=FALSE}
-#Contrast calculation- D65 - Visual model 1
-CvisUVSWMW.. = coldist(visUVSWMW.., noise="neural", achro=FALSE, n = c(1.6027, 1.4059, 1.7714), weber = 0.0883, weber.ref = 3) 
-CvisUV..MWLW = coldist(visUV..MWLW, noise="neural", achro=FALSE, n = c(1.4416, 1.5933, 1.7451), weber = 0.0889, weber.ref = 3)
-CvisUVSW..LW = coldist(visUVSW..LW, noise="neural", achro=FALSE, n = c(1.5481, 1.3580, 1.8740), weber = 0.0858, weber.ref = 3)
-CvisUVSWMWLW = coldist(visUVSWMWLW, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
+#Contrast calculation- D65 - aim 1
+CvsUSM = coldist(vsUSM, noise="neural", achro=FALSE, n = c(1.6027, 1.4059, 1.7714), weber = 0.0883, weber.ref = 3) 
+CvsUML = coldist(vsUML, noise="neural", achro=FALSE, n = c(1.4416, 1.5933, 1.7451), weber = 0.0889, weber.ref = 3)
+CvsUSL = coldist(vsUSL, noise="neural", achro=FALSE, n = c(1.5481, 1.3580, 1.8740), weber = 0.0858, weber.ref = 3)
+CvsUSML = coldist(vsUSML, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 
-#Contrast calculation- D65 - Visual model 2
+#Contrast calculation- D65 - Aim 2
 Cbuprest580 = coldist(buprest580, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 Cbuprest600 = coldist(buprest600, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 Cbuprest620 = coldist(buprest620, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 Cbuprest640 = coldist(buprest640, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 Cbuprest660 = coldist(buprest660, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 
-#Contrast calculation- twilight - Visual model 1
-CvisUVSWMW.._twilight = coldist(visUVSWMW.._twilight, noise="quantum", achro=FALSE, n = c(1.6027, 1.4059, 1.7714), weber = 0.0883, weber.ref = 3)  
-CvisUV..MWLW_twilight = coldist(visUV..MWLW_twilight, noise="quantum", achro=FALSE, n = c(1.4416, 1.5933, 1.7451), weber = 0.0889, weber.ref = 3)
-CvisUVSW..LW_twilight = coldist(visUVSW..LW_twilight, noise="quantum", achro=FALSE, n = c(1.5481, 1.3580, 1.8740), weber = 0.0858, weber.ref = 3)
-CvisUVSWMWLW_twilight = coldist(visUVSWMWLW_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1,  weber.ref = 4)
+#Contrast calculation- twilight - aim 1
+CvsUSM_twilight = coldist(vsUSM_twilight, noise="quantum", achro=FALSE, n = c(1.6027, 1.4059, 1.7714), weber = 0.0883, weber.ref = 3)  
+CvsUML_twilight = coldist(vsUML_twilight, noise="quantum", achro=FALSE, n = c(1.4416, 1.5933, 1.7451), weber = 0.0889, weber.ref = 3)
+CvsUSL_twilight = coldist(vsUSL_twilight, noise="quantum", achro=FALSE, n = c(1.5481, 1.3580, 1.8740), weber = 0.0858, weber.ref = 3)
+CvsUSML_twilight = coldist(vsUSML_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1,  weber.ref = 4)
 
-#Contrast calculation- twilight - Visual model 2
+#Contrast calculation- twilight - Aim 2
 Cbuprest580_twilight = coldist(buprest580_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 Cbuprest600_twilight = coldist(buprest600_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
 Cbuprest620_twilight = coldist(buprest620_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
@@ -294,280 +294,280 @@ Cbuprest660_twilight = coldist(buprest660_twilight, noise="quantum", achro=FALSE
 ```{r}
 #combine all contrast value in each comparison group
 
-#Daylight - model 1
+#Daylight - aim 1
 
 ##flower vs leaf
-Vis1.lf_d65.model1<- CvisUVSWMW..%>% filter(str_detect(patch1,"flower")) %>% 
+VS1.fl_d65.aim1<- CvsUSM%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis1.lf_d65.model1$vissys<-strrep("Vis1.lf",1)
-Vis2.lf_d65.model1<-CvisUV..MWLW%>% filter(str_detect(patch1,"flower")) %>% 
+VS1.fl_d65.aim1$vissys<-strrep("VS1.fl",1)
+VS2.fl_d65.aim1<-CvsUML%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis2.lf_d65.model1$vissys<-strrep("Vis2.lf",1)
-Vis3.lf_d65.model1<-CvisUVSW..LW%>% filter(str_detect(patch1,"flower")) %>% 
+VS2.fl_d65.aim1$vissys<-strrep("VS2.fl",1)
+VS3.fl_d65.aim1<-CvsUSL%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis3.lf_d65.model1$vissys<-strrep("Vis3.lf",1)
-Vis4.lf_d65.model1<-CvisUVSWMWLW%>% filter(str_detect(patch1,"flower")) %>% 
+VS3.fl_d65.aim1$vissys<-strrep("VS3.fl",1)
+VS4.fl_d65.aim1<-CvsUSML%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis4.lf_d65.model1$vissys<-strrep("Vis4.lf",1)
-allvis.lf_d65.model1<-Vis1.lf_d65.model1 %>% rbind(Vis2.lf_d65.model1) %>% rbind(Vis3.lf_d65.model1) %>%rbind(Vis4.lf_d65.model1)
+VS4.fl_d65.aim1$vissys<-strrep("VS4.fl",1)
+allvis.fl_d65.aim1<-VS1.fl_d65.aim1 %>% rbind(VS2.fl_d65.aim1) %>% rbind(VS3.fl_d65.aim1) %>%rbind(VS4.fl_d65.aim1)
 
 ##beetle vs leaf
-Vis1.lb_d65.model1<- CvisUVSWMW..%>% filter(str_detect(patch2,"beetle")) %>% 
+VS1.bl_d65.aim1<- CvsUSM%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis1.lb_d65.model1$vissys<-strrep("Vis1.lb",1)
-Vis2.lb_d65.model1<-CvisUV..MWLW%>% filter(str_detect(patch2,"beetle")) %>% 
+VS1.bl_d65.aim1$vissys<-strrep("VS1.bl",1)
+VS2.bl_d65.aim1<-CvsUML%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis2.lb_d65.model1$vissys<-strrep("Vis2.lb",1)
-Vis3.lb_d65.model1<-CvisUVSW..LW%>% filter(str_detect(patch2,"beetle")) %>% 
+VS2.bl_d65.aim1$vissys<-strrep("VS2.bl",1)
+VS3.bl_d65.aim1<-CvsUSL%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis3.lb_d65.model1$vissys<-strrep("Vis3.lb",1)
-Vis4.lb_d65.model1<-CvisUVSWMWLW%>% filter(str_detect(patch2,"beetle")) %>% 
+VS3.bl_d65.aim1$vissys<-strrep("VS3.bl",1)
+VS4.bl_d65.aim1<-CvsUSML%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis4.lb_d65.model1$vissys<-strrep("Vis4.lb",1)
-allvis.lb_d65.model1<-Vis1.lb_d65.model1 %>% rbind(Vis2.lb_d65.model1) %>% rbind(Vis3.lb_d65.model1) %>%rbind(Vis4.lb_d65.model1)
+VS4.bl_d65.aim1$vissys<-strrep("VS4.bl",1)
+allvis.bl_d65.aim1<-VS1.bl_d65.aim1 %>% rbind(VS2.bl_d65.aim1) %>% rbind(VS3.bl_d65.aim1) %>%rbind(VS4.bl_d65.aim1)
 
 ##beetle vs flower
-Vis1.bf_d65.model1<- CvisUVSWMW..%>% filter(str_detect(patch1,"flower")) %>% 
+VS1.bf_d65.aim1<- CvsUSM%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis1.bf_d65.model1$vissys<-strrep("Vis1.bf",1)
-Vis2.bf_d65.model1<-CvisUV..MWLW%>% filter(str_detect(patch1,"flower")) %>% 
+VS1.bf_d65.aim1$vissys<-strrep("VS1.bf",1)
+VS2.bf_d65.aim1<-CvsUML%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis2.bf_d65.model1$vissys<-strrep("Vis2.bf",1)
-Vis3.bf_d65.model1<-CvisUVSW..LW%>% filter(str_detect(patch1,"flower")) %>% 
+VS2.bf_d65.aim1$vissys<-strrep("VS2.bf",1)
+VS3.bf_d65.aim1<-CvsUSL%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis3.bf_d65.model1$vissys<-strrep("Vis3.bf",1)
-Vis4.bf_d65.model1<-CvisUVSWMWLW%>% filter(str_detect(patch1,"flower")) %>% 
+VS3.bf_d65.aim1$vissys<-strrep("VS3.bf",1)
+VS4.bf_d65.aim1<-CvsUSML%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis4.bf_d65.model1$vissys<-strrep("Vis4.bf",1)
-allvis.bf_d65.model1<-Vis1.bf_d65.model1 %>% rbind(Vis2.bf_d65.model1) %>% rbind(Vis3.bf_d65.model1)%>%
-  rbind(Vis4.bf_d65.model1)
+VS4.bf_d65.aim1$vissys<-strrep("VS4.bf",1)
+allvis.bf_d65.aim1<-VS1.bf_d65.aim1 %>% rbind(VS2.bf_d65.aim1) %>% rbind(VS3.bf_d65.aim1)%>%
+  rbind(VS4.bf_d65.aim1)
 
-#Twiligth - model 1
+#Twiligth - aim 1
 ##flower vs leaf
-Vis1.lf_twilight.model1<- CvisUVSWMW.._twilight%>% filter(str_detect(patch1,"flower")) %>% 
+VS1.fl_twilight.aim1<- CvsUSM_twilight%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis1.lf_twilight.model1$vissys<-strrep("Vis1.lf",1)
-Vis2.lf_twilight.model1<-CvisUV..MWLW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
+VS1.fl_twilight.aim1$vissys<-strrep("VS1.fl",1)
+VS2.fl_twilight.aim1<-CvsUML_twilight%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis2.lf_twilight.model1$vissys<-strrep("Vis2.lf",1)
-Vis3.lf_twilight.model1<-CvisUVSW..LW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
+VS2.fl_twilight.aim1$vissys<-strrep("VS2.fl",1)
+VS3.fl_twilight.aim1<-CvsUSL_twilight%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis3.lf_twilight.model1$vissys<-strrep("Vis3.lf",1)
-Vis4.lf_twilight.model1<-CvisUVSWMWLW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
+VS3.fl_twilight.aim1$vissys<-strrep("VS3.fl",1)
+VS4.fl_twilight.aim1<-CvsUSML_twilight%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis4.lf_twilight.model1$vissys<-strrep("Vis4.lf",1)
-allvis.lf_twilight.model1<-Vis1.lf_twilight.model1 %>% rbind(Vis2.lf_twilight.model1) %>% rbind(Vis3.lf_twilight.model1) %>%rbind(Vis4.lf_twilight.model1)
+VS4.fl_twilight.aim1$vissys<-strrep("VS4.fl",1)
+allvis.fl_twilight.aim1<-VS1.fl_twilight.aim1 %>% rbind(VS2.fl_twilight.aim1) %>% rbind(VS3.fl_twilight.aim1) %>%rbind(VS4.fl_twilight.aim1)
 
 ##beetle vs leaf
-Vis1.lb_twilight.model1<- CvisUVSWMW.._twilight%>% filter(str_detect(patch2,"beetle")) %>% 
+VS1.bl_twilight.aim1<- CvsUSM_twilight%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis1.lb_twilight.model1$vissys<-strrep("Vis1.lb",1)
-Vis2.lb_twilight.model1<-CvisUV..MWLW_twilight%>% filter(str_detect(patch2,"beetle")) %>% 
+VS1.bl_twilight.aim1$vissys<-strrep("VS1.bl",1)
+VS2.bl_twilight.aim1<-CvsUML_twilight%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis2.lb_twilight.model1$vissys<-strrep("Vis2.lb",1)
-Vis3.lb_twilight.model1<-CvisUVSW..LW_twilight%>% filter(str_detect(patch2,"beetle")) %>% 
+VS2.bl_twilight.aim1$vissys<-strrep("VS2.bl",1)
+VS3.bl_twilight.aim1<-CvsUSL_twilight%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis3.lb_twilight.model1$vissys<-strrep("Vis3.lb",1)
-Vis4.lb_twilight.model1<-CvisUVSWMWLW_twilight%>% filter(str_detect(patch2,"beetle")) %>% 
+VS3.bl_twilight.aim1$vissys<-strrep("VS3.bl",1)
+VS4.bl_twilight.aim1<-CvsUSML_twilight%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis4.lb_twilight.model1$vissys<-strrep("Vis4.lb",1)
-allvis.lb_twilight.model1<-Vis1.lb_twilight.model1 %>% rbind(Vis2.lb_twilight.model1) %>% rbind(Vis3.lb_twilight.model1) %>%rbind(Vis4.lb_twilight.model1)
-
-
-##beetle vs flower
-Vis1.bf_twilight.model1<- CvisUVSWMW.._twilight%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis1.bf_twilight.model1$vissys<-strrep("Vis1.bf",1)
-Vis2.bf_twilight.model1<-CvisUV..MWLW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis2.bf_twilight.model1$vissys<-strrep("Vis2.bf",1)
-Vis3.bf_twilight.model1<-CvisUVSW..LW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis3.bf_twilight.model1$vissys<-strrep("Vis3.bf",1)
-Vis4.bf_twilight.model1<-CvisUVSWMWLW_twilight%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis4.bf_twilight.model1$vissys<-strrep("Vis4.bf",1)
-allvis.bf_twilight.model1<-Vis1.bf_twilight.model1 %>% rbind(Vis2.bf_twilight.model1) %>% rbind(Vis3.bf_twilight.model1) %>%rbind(Vis4.bf_twilight.model1)
-
-
-
-#Daylight - model 2
-##flower vs leaf
-Vis1.lf_d65.model2<- Cbuprest580%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis1.lf_d65.model2$vissys<-strrep("Vis1.lf",1)
-Vis2.lf_d65.model2<-Cbuprest600%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis2.lf_d65.model2$vissys<-strrep("Vis2.lf",1)
-Vis3.lf_d65.model2<-Cbuprest620%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis3.lf_d65.model2$vissys<-strrep("Vis3.lf",1)
-Vis4.lf_d65.model2<-Cbuprest640%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis4.lf_d65.model2$vissys<-strrep("Vis4.lf",1)
-Vis5.lf_d65.model2<-Cbuprest660%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-Vis5.lf_d65.model2$vissys<-strrep("Vis5.lf",1)
-
-allvis.lf_d65.model2<-Vis1.lf_d65.model2 %>% rbind(Vis2.lf_d65.model2) %>% rbind(Vis3.lf_d65.model2) %>%
-  rbind(Vis4.lf_d65.model2) %>%rbind(Vis5.lf_d65.model2)
-
-##beetle vs leaf
-Vis1.lb_d65.model2<- Cbuprest580%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis1.lb_d65.model2$vissys<-strrep("Vis1.lb",1)
-Vis2.lb_d65.model2<-Cbuprest600%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis2.lb_d65.model2$vissys<-strrep("Vis2.lb",1)
-Vis3.lb_d65.model2<-Cbuprest620%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis3.lb_d65.model2$vissys<-strrep("Vis3.lb",1)
-Vis4.lb_d65.model2<-Cbuprest640%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis4.lb_d65.model2$vissys<-strrep("Vis4.lb",1)
-Vis5.lb_d65.model2<-Cbuprest660%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-Vis5.lb_d65.model2$vissys<-strrep("Vis5.lb",1)
-
-allvis.lb_d65.model2<-Vis1.lb_d65.model2 %>% rbind(Vis2.lb_d65.model2) %>% rbind(Vis3.lb_d65.model2) %>%
-  rbind(Vis4.lb_d65.model2) %>%rbind(Vis5.lb_d65.model2) 
+VS4.bl_twilight.aim1$vissys<-strrep("VS4.bl",1)
+allvis.bl_twilight.aim1<-VS1.bl_twilight.aim1 %>% rbind(VS2.bl_twilight.aim1) %>% rbind(VS3.bl_twilight.aim1) %>%rbind(VS4.bl_twilight.aim1)
 
 
 ##beetle vs flower
-Vis1.bf_d65.model2<- Cbuprest580%>% filter(str_detect(patch1,"flower")) %>% 
+VS1.bf_twilight.aim1<- CvsUSM_twilight%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis1.bf_d65.model2$vissys<-strrep("Vis1.bf",1)
-Vis2.bf_d65.model2<-Cbuprest600%>% filter(str_detect(patch1,"flower")) %>% 
+VS1.bf_twilight.aim1$vissys<-strrep("VS1.bf",1)
+VS2.bf_twilight.aim1<-CvsUML_twilight%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis2.bf_d65.model2$vissys<-strrep("Vis2.bf",1)
-Vis3.bf_d65.model2<-Cbuprest620%>% filter(str_detect(patch1,"flower")) %>% 
+VS2.bf_twilight.aim1$vissys<-strrep("VS2.bf",1)
+VS3.bf_twilight.aim1<-CvsUSL_twilight%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis3.bf_d65.model2$vissys<-strrep("Vis3.bf",1)
-Vis4.bf_d65.model2<-Cbuprest640%>% filter(str_detect(patch1,"flower")) %>% 
+VS3.bf_twilight.aim1$vissys<-strrep("VS3.bf",1)
+VS4.bf_twilight.aim1<-CvsUSML_twilight%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis4.bf_d65.model2$vissys<-strrep("Vis4.bf",1)
-Vis5.bf_d65.model2<-Cbuprest660%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-Vis5.bf_d65.model2$vissys<-strrep("Vis5.bf",1)
+VS4.bf_twilight.aim1$vissys<-strrep("VS4.bf",1)
+allvis.bf_twilight.aim1<-VS1.bf_twilight.aim1 %>% rbind(VS2.bf_twilight.aim1) %>% rbind(VS3.bf_twilight.aim1) %>%rbind(VS4.bf_twilight.aim1)
 
-allvis.bf_d65.model2<-Vis1.bf_d65.model2 %>% rbind(Vis2.bf_d65.model2) %>% rbind(Vis3.bf_d65.model2) %>%
-  rbind(Vis4.bf_d65.model2) %>%rbind(Vis5.bf_d65.model2) 
 
-##Twiligth - model 2
+
+#Daylight - aim 2
 ##flower vs leaf
-Vis1.lf_twilight.model2<- Cbuprest580_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+VS1.fl_d65.aim2<- Cbuprest580%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis1.lf_twilight.model2$vissys<-strrep("Vis1.lf",1)
-Vis2.lf_twilight.model2<-Cbuprest600_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+VS1.fl_d65.aim2$vissys<-strrep("VS1.fl",1)
+VS2.fl_d65.aim2<-Cbuprest600%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis2.lf_twilight.model2$vissys<-strrep("Vis2.lf",1)
-Vis3.lf_twilight.model2<-Cbuprest620_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+VS2.fl_d65.aim2$vissys<-strrep("VS2.fl",1)
+VS3.fl_d65.aim2<-Cbuprest620%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis3.lf_twilight.model2$vissys<-strrep("Vis3.lf",1)
-Vis4.lf_twilight.model2<-Cbuprest640_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+VS3.fl_d65.aim2$vissys<-strrep("VS3.fl",1)
+VS4.fl_d65.aim2<-Cbuprest640%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis4.lf_twilight.model2$vissys<-strrep("Vis4.lf",1)
-Vis5.lf_twilight.model2<-Cbuprest660_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+VS4.fl_d65.aim2$vissys<-strrep("VS4.fl",1)
+VS5.fl_d65.aim2<-Cbuprest660%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
-Vis5.lf_twilight.model2$vissys<-strrep("Vis5.lf",1)
+VS5.fl_d65.aim2$vissys<-strrep("VS5.fl",1)
 
-allvis.lf_twilight.model2<-Vis1.lf_twilight.model2 %>% rbind(Vis2.lf_twilight.model2) %>% rbind(Vis3.lf_twilight.model2) %>%
-  rbind(Vis4.lf_twilight.model2) %>%rbind(Vis5.lf_twilight.model2)
+allvis.fl_d65.aim2<-VS1.fl_d65.aim2 %>% rbind(VS2.fl_d65.aim2) %>% rbind(VS3.fl_d65.aim2) %>%
+  rbind(VS4.fl_d65.aim2) %>%rbind(VS5.fl_d65.aim2)
 
 ##beetle vs leaf
-Vis1.lb_twilight.model2<- Cbuprest580_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+VS1.bl_d65.aim2<- Cbuprest580%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis1.lb_twilight.model2$vissys<-strrep("Vis1.lb",1)
-Vis2.lb_twilight.model2<-Cbuprest600_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+VS1.bl_d65.aim2$vissys<-strrep("VS1.bl",1)
+VS2.bl_d65.aim2<-Cbuprest600%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis2.lb_twilight.model2$vissys<-strrep("Vis2.lb",1)
-Vis3.lb_twilight.model2<-Cbuprest620_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+VS2.bl_d65.aim2$vissys<-strrep("VS2.bl",1)
+VS3.bl_d65.aim2<-Cbuprest620%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis3.lb_twilight.model2$vissys<-strrep("Vis3.lb",1)
-Vis4.lb_twilight.model2<-Cbuprest640_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+VS3.bl_d65.aim2$vissys<-strrep("VS3.bl",1)
+VS4.bl_d65.aim2<-Cbuprest640%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis4.lb_twilight.model2$vissys<-strrep("Vis4.lb",1)
-Vis5.lb_twilight.model2<-Cbuprest660_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+VS4.bl_d65.aim2$vissys<-strrep("VS4.bl",1)
+VS5.bl_d65.aim2<-Cbuprest660%>% filter(str_detect(patch2,"beetle")) %>% 
   filter(str_detect(patch1,"leaves"))
-Vis5.lb_twilight.model2$vissys<-strrep("Vis5.lb",1)
+VS5.bl_d65.aim2$vissys<-strrep("VS5.bl",1)
 
-allvis.lb_twilight.model2<-Vis1.lb_twilight.model2 %>% rbind(Vis2.lb_twilight.model2) %>% rbind(Vis3.lb_twilight.model2) %>% rbind(Vis4.lb_twilight.model2) %>%rbind(Vis5.lb_twilight.model2)
+allvis.bl_d65.aim2<-VS1.bl_d65.aim2 %>% rbind(VS2.bl_d65.aim2) %>% rbind(VS3.bl_d65.aim2) %>%
+  rbind(VS4.bl_d65.aim2) %>%rbind(VS5.bl_d65.aim2) 
+
 
 ##beetle vs flower
-Vis1.bf_twilight.model2<- Cbuprest580_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+VS1.bf_d65.aim2<- Cbuprest580%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis1.bf_twilight.model2$vissys<-strrep("Vis1.bf",1)
-Vis2.bf_twilight.model2<-Cbuprest600_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+VS1.bf_d65.aim2$vissys<-strrep("VS1.bf",1)
+VS2.bf_d65.aim2<-Cbuprest600%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis2.bf_twilight.model2$vissys<-strrep("Vis2.bf",1)
-Vis3.bf_twilight.model2<-Cbuprest620_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+VS2.bf_d65.aim2$vissys<-strrep("VS2.bf",1)
+VS3.bf_d65.aim2<-Cbuprest620%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis3.bf_twilight.model2$vissys<-strrep("Vis3.bf",1)
-Vis4.bf_twilight.model2<-Cbuprest640_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+VS3.bf_d65.aim2$vissys<-strrep("VS3.bf",1)
+VS4.bf_d65.aim2<-Cbuprest640%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis4.bf_twilight.model2$vissys<-strrep("Vis4.bf",1)
-Vis5.bf_twilight.model2<-Cbuprest660_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+VS4.bf_d65.aim2$vissys<-strrep("VS4.bf",1)
+VS5.bf_d65.aim2<-Cbuprest660%>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"beetle"))
-Vis5.bf_twilight.model2$vissys<-strrep("Vis5.bf",1)
+VS5.bf_d65.aim2$vissys<-strrep("VS5.bf",1)
 
-allvis.bf_twilight.model2<-Vis1.bf_twilight.model2 %>% rbind(Vis2.bf_twilight.model2) %>% rbind(Vis3.bf_twilight.model2) %>% rbind(Vis4.bf_twilight.model2) %>%rbind(Vis5.bf_twilight.model2)
+allvis.bf_d65.aim2<-VS1.bf_d65.aim2 %>% rbind(VS2.bf_d65.aim2) %>% rbind(VS3.bf_d65.aim2) %>%
+  rbind(VS4.bf_d65.aim2) %>%rbind(VS5.bf_d65.aim2) 
+
+##Twiligth - aim 2
+##flower vs leaf
+VS1.fl_twilight.aim2<- Cbuprest580_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+VS1.fl_twilight.aim2$vissys<-strrep("VS1.fl",1)
+VS2.fl_twilight.aim2<-Cbuprest600_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+VS2.fl_twilight.aim2$vissys<-strrep("VS2.fl",1)
+VS3.fl_twilight.aim2<-Cbuprest620_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+VS3.fl_twilight.aim2$vissys<-strrep("VS3.fl",1)
+VS4.fl_twilight.aim2<-Cbuprest640_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+VS4.fl_twilight.aim2$vissys<-strrep("VS4.fl",1)
+VS5.fl_twilight.aim2<-Cbuprest660_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"leaves"))
+VS5.fl_twilight.aim2$vissys<-strrep("VS5.fl",1)
+
+allvis.fl_twilight.aim2<-VS1.fl_twilight.aim2 %>% rbind(VS2.fl_twilight.aim2) %>% rbind(VS3.fl_twilight.aim2) %>%
+  rbind(VS4.fl_twilight.aim2) %>%rbind(VS5.fl_twilight.aim2)
+
+##beetle vs leaf
+VS1.bl_twilight.aim2<- Cbuprest580_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+VS1.bl_twilight.aim2$vissys<-strrep("VS1.bl",1)
+VS2.bl_twilight.aim2<-Cbuprest600_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+VS2.bl_twilight.aim2$vissys<-strrep("VS2.bl",1)
+VS3.bl_twilight.aim2<-Cbuprest620_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+VS3.bl_twilight.aim2$vissys<-strrep("VS3.bl",1)
+VS4.bl_twilight.aim2<-Cbuprest640_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+VS4.bl_twilight.aim2$vissys<-strrep("VS4.bl",1)
+VS5.bl_twilight.aim2<-Cbuprest660_twilight %>% filter(str_detect(patch2,"beetle")) %>% 
+  filter(str_detect(patch1,"leaves"))
+VS5.bl_twilight.aim2$vissys<-strrep("VS5.bl",1)
+
+allvis.bl_twilight.aim2<-VS1.bl_twilight.aim2 %>% rbind(VS2.bl_twilight.aim2) %>% rbind(VS3.bl_twilight.aim2) %>% rbind(VS4.bl_twilight.aim2) %>%rbind(VS5.bl_twilight.aim2)
+
+##beetle vs flower
+VS1.bf_twilight.aim2<- Cbuprest580_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+VS1.bf_twilight.aim2$vissys<-strrep("VS1.bf",1)
+VS2.bf_twilight.aim2<-Cbuprest600_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+VS2.bf_twilight.aim2$vissys<-strrep("VS2.bf",1)
+VS3.bf_twilight.aim2<-Cbuprest620_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+VS3.bf_twilight.aim2$vissys<-strrep("VS3.bf",1)
+VS4.bf_twilight.aim2<-Cbuprest640_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+VS4.bf_twilight.aim2$vissys<-strrep("VS4.bf",1)
+VS5.bf_twilight.aim2<-Cbuprest660_twilight %>% filter(str_detect(patch1,"flower")) %>% 
+  filter(str_detect(patch2,"beetle"))
+VS5.bf_twilight.aim2$vissys<-strrep("VS5.bf",1)
+
+allvis.bf_twilight.aim2<-VS1.bf_twilight.aim2 %>% rbind(VS2.bf_twilight.aim2) %>% rbind(VS3.bf_twilight.aim2) %>% rbind(VS4.bf_twilight.aim2) %>%rbind(VS5.bf_twilight.aim2)
 ```
 
-###Visual model 1 {.tabset .tabset-fade .tabset-pills}
+###Aim 1 {.tabset .tabset-fade .tabset-pills}
 The table shows the median contrast in each comparison group
 ```{r}
-#Visul model 1
-system.list.model1<- rbind.data.frame("Vis USM", "Vis UML", "Vis USL",  "Vis USML") %>% rename(system = 1) # make a list of system names
+#Aim 1
+system.list.aim1<- rbind.data.frame("USM", "UML", "USL",  "USML") %>% rename(system = 1) # make a list of system names
 ```
 
 ####Daylight
 ```{r}
 #Daylight
 ##list contrast from each comparison group
-lf.contrast_d65.model1 <- rbind.data.frame(median(Vis1.lf_d65.model1$dS), median(Vis2.lf_d65.model1$dS),median(Vis3.lf_d65.model1$dS),median(Vis4.lf_d65.model1$dS))
-lb.contrast_d65.model1 <-rbind.data.frame(median(Vis1.lb_d65.model1$dS),median(Vis2.lb_d65.model1$dS),median(Vis3.lb_d65.model1$dS),median(Vis4.lb_d65.model1$dS))
-bf.contrast_d65.model1 <-rbind.data.frame(median(Vis1.bf_d65.model1$dS), median(Vis2.bf_d65.model1$dS),median(Vis3.bf_d65.model1$dS),median(Vis4.bf_d65.model1$dS))
+fl.contrast_d65.aim1 <- rbind.data.frame(median(VS1.fl_d65.aim1$dS), median(VS2.fl_d65.aim1$dS),median(VS3.fl_d65.aim1$dS),median(VS4.fl_d65.aim1$dS))
+bl.contrast_d65.aim1 <-rbind.data.frame(median(VS1.bl_d65.aim1$dS),median(VS2.bl_d65.aim1$dS),median(VS3.bl_d65.aim1$dS),median(VS4.bl_d65.aim1$dS))
+bf.contrast_d65.aim1 <-rbind.data.frame(median(VS1.bf_d65.aim1$dS), median(VS2.bf_d65.aim1$dS),median(VS3.bf_d65.aim1$dS),median(VS4.bf_d65.aim1$dS))
 #combind comparison groups together in a table
-contrast.list_d65.model1<- system.list.model1 %>%  cbind(lf.contrast_d65.model1) %>% cbind(lb.contrast_d65.model1) %>% cbind(bf.contrast_d65.model1) %>% dplyr:: rename(leaf.vs.flower = 2, leaf.vs.beetle = 3, beetle.vs.flower = 4) %>% pander() 
-contrast.list_d65.model1
+contrast.list_d65.aim1<- system.list.aim1 %>%  cbind(fl.contrast_d65.aim1) %>% cbind(bl.contrast_d65.aim1) %>% cbind(bf.contrast_d65.aim1) %>% dplyr:: rename(flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% pander() 
+contrast.list_d65.aim1
 ```
 ####Twilight
 ```{r}
 #Twilight
 ##list contrast from each comparison group
-lf.contrast_twilight.model1 <- rbind.data.frame(median(Vis1.lf_twilight.model1$dS), median(Vis2.lf_twilight.model1$dS),median(Vis3.lf_twilight.model1$dS),median(Vis4.lf_twilight.model1$dS))
-lb.contrast_twilight.model1 <-rbind.data.frame(median(Vis1.lb_twilight.model1$dS),median(Vis2.lb_twilight.model1$dS),median(Vis3.lb_twilight.model1$dS),median(Vis4.lb_twilight.model1$dS))
-bf.contrast_twilight.model1 <-rbind.data.frame(median(Vis1.bf_twilight.model1$dS), median(Vis2.bf_twilight.model1$dS),median(Vis3.bf_twilight.model1$dS),median(Vis4.bf_twilight.model1$dS))
+fl.contrast_twilight.aim1 <- rbind.data.frame(median(VS1.fl_twilight.aim1$dS), median(VS2.fl_twilight.aim1$dS),median(VS3.fl_twilight.aim1$dS),median(VS4.fl_twilight.aim1$dS))
+bl.contrast_twilight.aim1 <-rbind.data.frame(median(VS1.bl_twilight.aim1$dS),median(VS2.bl_twilight.aim1$dS),median(VS3.bl_twilight.aim1$dS),median(VS4.bl_twilight.aim1$dS))
+bf.contrast_twilight.aim1 <-rbind.data.frame(median(VS1.bf_twilight.aim1$dS), median(VS2.bf_twilight.aim1$dS),median(VS3.bf_twilight.aim1$dS),median(VS4.bf_twilight.aim1$dS))
 #combind comparison groups together in a table
-contrast.list_twilight.model1<- system.list.model1 %>%  cbind(lf.contrast_twilight.model1) %>% cbind(lb.contrast_twilight.model1) %>% cbind(bf.contrast_twilight.model1) %>% dplyr:: rename(leaf.vs.flower = 2, leaf.vs.beetle = 3, beetle.vs.flower = 4) %>% pander()
-contrast.list_twilight.model1
+contrast.list_twilight.aim1<- system.list.aim1 %>%  cbind(fl.contrast_twilight.aim1) %>% cbind(bl.contrast_twilight.aim1) %>% cbind(bf.contrast_twilight.aim1) %>% dplyr:: rename(flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% pander()
+contrast.list_twilight.aim1
 ```
-###Visual model 2 {.tabset .tabset-fade .tabset-pills}
+###Aim 2 {.tabset .tabset-fade .tabset-pills}
 The table shows the median contrast in each comparison group
 ```{r}
-system.list.model2<- rbind.data.frame("Vis 580", "Vis 600", "Vis 620", "Vis 640", "Vis 660") %>% rename(system = 1) # make a list of system names
+system.list.aim2<- rbind.data.frame("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660") %>% rename(system = 1) # make a list of system names
 ```
 ####Daylight
 ```{r}
 #Daylight
 ##list contrast from each comparison group
-lf.contrast_d65.model2 <- rbind.data.frame(median(Vis1.lf_d65.model2$dS), median(Vis2.lf_d65.model2$dS),median(Vis3.lf_d65.model2$dS),median(Vis4.lf_d65.model2$dS),median(Vis5.lf_d65.model2$dS))
-lb.contrast_d65.model2 <-rbind.data.frame(median(Vis1.lb_d65.model2$dS),median(Vis2.lb_d65.model2$dS),median(Vis3.lb_d65.model2$dS),median(Vis4.lb_d65.model2$dS),median(Vis5.lb_d65.model2$dS))
-bf.contrast_d65.model2 <-rbind.data.frame(median(Vis1.bf_d65.model2$dS), median(Vis2.bf_d65.model2$dS),median(Vis3.bf_d65.model2$dS),median(Vis4.bf_d65.model2$dS),median(Vis5.bf_d65.model2$dS))
+fl.contrast_d65.aim2 <- rbind.data.frame(median(VS1.fl_d65.aim2$dS), median(VS2.fl_d65.aim2$dS),median(VS3.fl_d65.aim2$dS),median(VS4.fl_d65.aim2$dS),median(VS5.fl_d65.aim2$dS))
+bl.contrast_d65.aim2 <-rbind.data.frame(median(VS1.bl_d65.aim2$dS),median(VS2.bl_d65.aim2$dS),median(VS3.bl_d65.aim2$dS),median(VS4.bl_d65.aim2$dS),median(VS5.bl_d65.aim2$dS))
+bf.contrast_d65.aim2 <-rbind.data.frame(median(VS1.bf_d65.aim2$dS), median(VS2.bf_d65.aim2$dS),median(VS3.bf_d65.aim2$dS),median(VS4.bf_d65.aim2$dS),median(VS5.bf_d65.aim2$dS))
 #combind comparison groups together in a table
-contrast.list_d65.model2<- system.list.model2 %>%  cbind(lf.contrast_d65.model2) %>% cbind(lb.contrast_d65.model2) %>% cbind(bf.contrast_d65.model2) %>% dplyr:: rename(leaf.vs.flower = 2, leaf.vs.beetle = 3, beetle.vs.flower = 4) %>% pander() 
-contrast.list_d65.model2
+contrast.list_d65.aim2<- system.list.aim2 %>%  cbind(fl.contrast_d65.aim2) %>% cbind(bl.contrast_d65.aim2) %>% cbind(bf.contrast_d65.aim2) %>% dplyr:: rename(flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% pander() 
+contrast.list_d65.aim2
 ```
 ####Twilight
 ```{r}
 #Twilight
 ##list contrast from each comparison group
-lf.contrast_twilight.model2 <- rbind.data.frame(median(Vis1.lf_twilight.model2$dS), median(Vis2.lf_twilight.model2$dS),median(Vis3.lf_twilight.model2$dS),median(Vis4.lf_twilight.model2$dS),median(Vis5.lf_twilight.model2$dS))
-lb.contrast_twilight.model2 <-rbind.data.frame(median(Vis1.lb_twilight.model2$dS),median(Vis2.lb_twilight.model2$dS),median(Vis3.lb_twilight.model2$dS),median(Vis4.lb_twilight.model2$dS),median(Vis5.lb_twilight.model2$dS))
-bf.contrast_twilight.model2 <-rbind.data.frame(median(Vis1.bf_twilight.model2$dS), median(Vis2.bf_twilight.model2$dS),median(Vis3.bf_twilight.model2$dS),median(Vis4.bf_twilight.model2$dS),median(Vis5.bf_twilight.model2$dS))
+fl.contrast_twilight.aim2 <- rbind.data.frame(median(VS1.fl_twilight.aim2$dS), median(VS2.fl_twilight.aim2$dS),median(VS3.fl_twilight.aim2$dS),median(VS4.fl_twilight.aim2$dS),median(VS5.fl_twilight.aim2$dS))
+bl.contrast_twilight.aim2 <-rbind.data.frame(median(VS1.bl_twilight.aim2$dS),median(VS2.bl_twilight.aim2$dS),median(VS3.bl_twilight.aim2$dS),median(VS4.bl_twilight.aim2$dS),median(VS5.bl_twilight.aim2$dS))
+bf.contrast_twilight.aim2 <-rbind.data.frame(median(VS1.bf_twilight.aim2$dS), median(VS2.bf_twilight.aim2$dS),median(VS3.bf_twilight.aim2$dS),median(VS4.bf_twilight.aim2$dS),median(VS5.bf_twilight.aim2$dS))
 #combind comparison groups together in a table
-contrast.list_twilight.model2<- system.list.model2 %>%  cbind(lf.contrast_twilight.model2) %>% cbind(lb.contrast_twilight.model2) %>% cbind(bf.contrast_twilight.model2) %>% dplyr:: rename(leaf.vs.flower = 2, leaf.vs.beetle = 3, beetle.vs.flower = 4) %>% pander() 
-contrast.list_twilight.model2
+contrast.list_twilight.aim2<- system.list.aim2 %>%  cbind(fl.contrast_twilight.aim2) %>% cbind(bl.contrast_twilight.aim2) %>% cbind(bf.contrast_twilight.aim2) %>% dplyr:: rename(flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% pander() 
+contrast.list_twilight.aim2
 ```
 </br>
 </br>
@@ -585,311 +585,311 @@ contrast.list_twilight.model2
 #creat different comparison groups for furthur GLMM analysis
 #Organize data before GLMM
 
-#D65 - visual model 1
+#D65 - aim 1
 ##flower vs leaf
-CvisUVSWMW...leaf.vs.flower=
-  CvisUVSWMW.. %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-CvisUV..MWLW.leaf.vs.flower=
-  CvisUV..MWLW %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-CvisUVSW..LW.leaf.vs.flower=
-  CvisUVSW..LW %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-CvisUVSWMWLW.leaf.vs.flower=
-  CvisUVSWMWLW %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
+CvsUSM.flower.vs.leaf=
+  CvsUSM %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
+CvsUML.flower.vs.leaf=
+  CvsUML %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
+CvsUSL.flower.vs.leaf=
+  CvsUSL %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
+CvsUSML.flower.vs.leaf=
+  CvsUSML %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
 
-C.leaf.vs.flower.model1=
-  CvisUVSWMW...leaf.vs.flower %>% rbind(CvisUV..MWLW.leaf.vs.flower) %>% 
-  rbind(CvisUVSW..LW.leaf.vs.flower)%>% rbind(CvisUVSWMWLW.leaf.vs.flower)
+C.flower.vs.leaf.aim1=
+  CvsUSM.flower.vs.leaf %>% rbind(CvsUML.flower.vs.leaf) %>% 
+  rbind(CvsUSL.flower.vs.leaf)%>% rbind(CvsUSML.flower.vs.leaf)
 
-contrast.UVSWMW...leaf.vs.flower<-CvisUVSWMW...leaf.vs.flower[,3]
-contrast.UV..MWLW.leaf.vs.flower<-CvisUV..MWLW.leaf.vs.flower[,3]
-contrast.UVSW..LW.leaf.vs.flower<-CvisUVSW..LW.leaf.vs.flower[,3]
-contrast.UVSWMWLW.leaf.vs.flower<-CvisUVSWMWLW.leaf.vs.flower[,3]
+contrast.UVSWMW...flower.vs.leaf<-CvsUSM.flower.vs.leaf[,3]
+contrast.UV..MWLW.flower.vs.leaf<-CvsUML.flower.vs.leaf[,3]
+contrast.UVSW..LW.flower.vs.leaf<-CvsUSL.flower.vs.leaf[,3]
+contrast.UVSWMWLW.flower.vs.leaf<-CvsUSML.flower.vs.leaf[,3]
 
-com.contrast.leaf.vs.flower.model1<-cbind(CvisUVSWMW...leaf.vs.flower[,1:2],contrast.UVSWMW...leaf.vs.flower,contrast.UV..MWLW.leaf.vs.flower,contrast.UVSW..LW.leaf.vs.flower,contrast.UVSWMWLW.leaf.vs.flower)
-compare.leaf.vs.flower.model1 <- com.contrast.leaf.vs.flower.model1 %>%
-  gather(key = "peak_wl.leaf.vs.flower", value = "dS", 3:6)
+com.contrast.flower.vs.leaf.aim1<-cbind(CvsUSM.flower.vs.leaf[,1:2],contrast.UVSWMW...flower.vs.leaf,contrast.UV..MWLW.flower.vs.leaf,contrast.UVSW..LW.flower.vs.leaf,contrast.UVSWMWLW.flower.vs.leaf)
+compare.flower.vs.leaf.aim1 <- com.contrast.flower.vs.leaf.aim1 %>%
+  gather(key = "peak_wl.flower.vs.leaf", value = "dS", 3:6)
 
 ##beetle vs leaf
-CvisUVSWMW...leaf.vs.beetle=
-  CvisUVSWMW.. %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-CvisUV..MWLW.leaf.vs.beetle=
-  CvisUV..MWLW %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-CvisUVSW..LW.leaf.vs.beetle=
-  CvisUVSW..LW %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-CvisUVSWMWLW.leaf.vs.beetle=
-  CvisUVSWMWLW %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
+CvsUSM.beetle.vs.leaf=
+  CvsUSM %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
+CvsUML.beetle.vs.leaf=
+  CvsUML %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
+CvsUSL.beetle.vs.leaf=
+  CvsUSL %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
+CvsUSML.beetle.vs.leaf=
+  CvsUSML %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
 
-C.leaf.vs.beetle.model1=
-  CvisUVSWMW...leaf.vs.beetle %>% rbind(CvisUV..MWLW.leaf.vs.beetle) %>% 
-  rbind(CvisUVSW..LW.leaf.vs.beetle)%>%  rbind(CvisUVSWMWLW.leaf.vs.beetle)
+C.beetle.vs.leaf.aim1=
+  CvsUSM.beetle.vs.leaf %>% rbind(CvsUML.beetle.vs.leaf) %>% 
+  rbind(CvsUSL.beetle.vs.leaf)%>%  rbind(CvsUSML.beetle.vs.leaf)
 
-contrast.UVSWMW...leaf.vs.beetle<-CvisUVSWMW...leaf.vs.beetle[,3]
-contrast.UV..MWLW.leaf.vs.beetle<-CvisUV..MWLW.leaf.vs.beetle[,3]
-contrast.UVSW..LW.leaf.vs.beetle<-CvisUVSW..LW.leaf.vs.beetle[,3]
-contrast.UVSWMWLW.leaf.vs.beetle<-CvisUVSWMWLW.leaf.vs.beetle[,3]
+contrast.UVSWMW...beetle.vs.leaf<-CvsUSM.beetle.vs.leaf[,3]
+contrast.UV..MWLW.beetle.vs.leaf<-CvsUML.beetle.vs.leaf[,3]
+contrast.UVSW..LW.beetle.vs.leaf<-CvsUSL.beetle.vs.leaf[,3]
+contrast.UVSWMWLW.beetle.vs.leaf<-CvsUSML.beetle.vs.leaf[,3]
 
-com.contrast.leaf.vs.beetle.model1<-cbind(CvisUVSWMW...leaf.vs.beetle[,1:2],contrast.UVSWMW...leaf.vs.beetle,contrast.UV..MWLW.leaf.vs.beetle,contrast.UVSW..LW.leaf.vs.beetle,contrast.UVSWMWLW.leaf.vs.beetle)
-compare.leaf.vs.beetle.model1 <- com.contrast.leaf.vs.beetle.model1 %>%
-  gather(key = "peak_wl.leaf.vs.beetle", value = "dS", 3:6)
+com.contrast.beetle.vs.leaf.aim1<-cbind(CvsUSM.beetle.vs.leaf[,1:2],contrast.UVSWMW...beetle.vs.leaf,contrast.UV..MWLW.beetle.vs.leaf,contrast.UVSW..LW.beetle.vs.leaf,contrast.UVSWMWLW.beetle.vs.leaf)
+compare.beetle.vs.leaf.aim1 <- com.contrast.beetle.vs.leaf.aim1 %>%
+  gather(key = "peak_wl.beetle.vs.leaf", value = "dS", 3:6)
 
 ##beetle vs flower
-CvisUVSWMW...flower.vs.beetle=
-  CvisUVSWMW.. %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-CvisUV..MWLW.flower.vs.beetle=
-  CvisUV..MWLW %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-CvisUVSW..LW.flower.vs.beetle=
-  CvisUVSW..LW %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-CvisUVSWMWLW.flower.vs.beetle=
-  CvisUVSWMWLW %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
+CvsUSM.beetle.vs.flower=
+  CvsUSM %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
+CvsUML.beetle.vs.flower=
+  CvsUML %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
+CvsUSL.beetle.vs.flower=
+  CvsUSL %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
+CvsUSML.beetle.vs.flower=
+  CvsUSML %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
 
-C.flower.vs.beetle.model1=
-  CvisUVSWMW...flower.vs.beetle %>% rbind(CvisUV..MWLW.flower.vs.beetle) %>% 
-  rbind(CvisUVSW..LW.flower.vs.beetle) %>%  rbind(CvisUVSWMWLW.flower.vs.beetle)
+C.beetle.vs.flower.aim1=
+  CvsUSM.beetle.vs.flower %>% rbind(CvsUML.beetle.vs.flower) %>% 
+  rbind(CvsUSL.beetle.vs.flower) %>%  rbind(CvsUSML.beetle.vs.flower)
 
-contrast.UVSWMW...flower.vs.beetle<-CvisUVSWMW...flower.vs.beetle[,3]
-contrast.UV..MWLW.flower.vs.beetle<-CvisUV..MWLW.flower.vs.beetle[,3]
-contrast.UVSW..LW.flower.vs.beetle<-CvisUVSW..LW.flower.vs.beetle[,3]
-contrast.UVSWMWLW.flower.vs.beetle<-CvisUVSWMWLW.flower.vs.beetle[,3]
+contrast.UVSWMW...beetle.vs.flower<-CvsUSM.beetle.vs.flower[,3]
+contrast.UV..MWLW.beetle.vs.flower<-CvsUML.beetle.vs.flower[,3]
+contrast.UVSW..LW.beetle.vs.flower<-CvsUSL.beetle.vs.flower[,3]
+contrast.UVSWMWLW.beetle.vs.flower<-CvsUSML.beetle.vs.flower[,3]
 
-com.contrast.flower.vs.beetle.model1<-cbind(CvisUVSWMW...flower.vs.beetle[,1:2],contrast.UVSWMW...flower.vs.beetle,contrast.UV..MWLW.flower.vs.beetle,contrast.UVSW..LW.flower.vs.beetle,contrast.UVSWMWLW.flower.vs.beetle)
-compare.flower.vs.beetle.model1 <- com.contrast.flower.vs.beetle.model1 %>%
-  gather(key = "peak_wl.flower.vs.beetle", value = "dS", 3:6)
+com.contrast.beetle.vs.flower.aim1<-cbind(CvsUSM.beetle.vs.flower[,1:2],contrast.UVSWMW...beetle.vs.flower,contrast.UV..MWLW.beetle.vs.flower,contrast.UVSW..LW.beetle.vs.flower,contrast.UVSWMWLW.beetle.vs.flower)
+compare.beetle.vs.flower.aim1 <- com.contrast.beetle.vs.flower.aim1 %>%
+  gather(key = "peak_wl.beetle.vs.flower", value = "dS", 3:6)
 
 
 
-#D65 - visual model 2
+#D65 - Aim 2
 ##flower vs leaf
-Cbuprest580.leaf.vs.flower=
+Cbuprest580.flower.vs.leaf=
   Cbuprest580 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest600.leaf.vs.flower=
+Cbuprest600.flower.vs.leaf=
   Cbuprest600 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest620.leaf.vs.flower=
+Cbuprest620.flower.vs.leaf=
   Cbuprest620 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest640.leaf.vs.flower=
+Cbuprest640.flower.vs.leaf=
   Cbuprest640 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest660.leaf.vs.flower=
+Cbuprest660.flower.vs.leaf=
   Cbuprest660 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
 
-Cbuprest.leaf.vs.flower.model2=
-  Cbuprest580.leaf.vs.flower %>% rbind(Cbuprest600.leaf.vs.flower) %>%
-  rbind(Cbuprest620.leaf.vs.flower)%>% rbind(Cbuprest640.leaf.vs.flower) %>% rbind(Cbuprest660.leaf.vs.flower) 
+Cbuprest.flower.vs.leaf.aim2=
+  Cbuprest580.flower.vs.leaf %>% rbind(Cbuprest600.flower.vs.leaf) %>%
+  rbind(Cbuprest620.flower.vs.leaf)%>% rbind(Cbuprest640.flower.vs.leaf) %>% rbind(Cbuprest660.flower.vs.leaf) 
 
-bup580.leaf.vs.flower<-Cbuprest580.leaf.vs.flower[,3]
-bup600.leaf.vs.flower<-Cbuprest600.leaf.vs.flower[,3]
-bup620.leaf.vs.flower<-Cbuprest620.leaf.vs.flower[,3]
-bup640.leaf.vs.flower<-Cbuprest640.leaf.vs.flower[,3]
-bup660.leaf.vs.flower<-Cbuprest660.leaf.vs.flower[,3]
+bup580.flower.vs.leaf<-Cbuprest580.flower.vs.leaf[,3]
+bup600.flower.vs.leaf<-Cbuprest600.flower.vs.leaf[,3]
+bup620.flower.vs.leaf<-Cbuprest620.flower.vs.leaf[,3]
+bup640.flower.vs.leaf<-Cbuprest640.flower.vs.leaf[,3]
+bup660.flower.vs.leaf<-Cbuprest660.flower.vs.leaf[,3]
 
-com.bupcontrast.leaf.vs.flower.model2<-cbind(Cbuprest.leaf.vs.flower.model2[,1:2],bup580.leaf.vs.flower,bup600.leaf.vs.flower,bup620.leaf.vs.flower,bup640.leaf.vs.flower,bup660.leaf.vs.flower)
-compare.leaf.vs.flower.model2 <- com.bupcontrast.leaf.vs.flower.model2 %>%
-  gather(key = "peak_wl.leaf.vs.flower", value = "dS", 3:7)
+com.bupcontrast.flower.vs.leaf.aim2<-cbind(Cbuprest.flower.vs.leaf.aim2[,1:2],bup580.flower.vs.leaf,bup600.flower.vs.leaf,bup620.flower.vs.leaf,bup640.flower.vs.leaf,bup660.flower.vs.leaf)
+compare.flower.vs.leaf.aim2 <- com.bupcontrast.flower.vs.leaf.aim2 %>%
+  gather(key = "peak_wl.flower.vs.leaf", value = "dS", 3:7)
 
 ##beetle vs leaf
-Cbuprest580.leaf.vs.beetle=
+Cbuprest580.beetle.vs.leaf=
   Cbuprest580 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest600.leaf.vs.beetle=
+Cbuprest600.beetle.vs.leaf=
   Cbuprest600 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest620.leaf.vs.beetle=
+Cbuprest620.beetle.vs.leaf=
   Cbuprest620 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest640.leaf.vs.beetle=
+Cbuprest640.beetle.vs.leaf=
   Cbuprest640 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest660.leaf.vs.beetle=
+Cbuprest660.beetle.vs.leaf=
   Cbuprest660 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
 
-Cbuprest.leaf.vs.beetle.model2=
-  Cbuprest580.leaf.vs.beetle  %>% rbind(Cbuprest600.leaf.vs.beetle)%>%
-  rbind(Cbuprest620.leaf.vs.beetle)%>% rbind(Cbuprest640.leaf.vs.beetle) %>% rbind(Cbuprest660.leaf.vs.beetle)
+Cbuprest.beetle.vs.leaf.aim2=
+  Cbuprest580.beetle.vs.leaf  %>% rbind(Cbuprest600.beetle.vs.leaf)%>%
+  rbind(Cbuprest620.beetle.vs.leaf)%>% rbind(Cbuprest640.beetle.vs.leaf) %>% rbind(Cbuprest660.beetle.vs.leaf)
 
-bup580.leaf.vs.beetle<-Cbuprest580.leaf.vs.beetle[,3]
-bup600.leaf.vs.beetle<-Cbuprest600.leaf.vs.beetle[,3]
-bup620.leaf.vs.beetle<-Cbuprest620.leaf.vs.beetle[,3]
-bup640.leaf.vs.beetle<-Cbuprest640.leaf.vs.beetle[,3]
-bup660.leaf.vs.beetle<-Cbuprest660.leaf.vs.beetle[,3]
+bup580.beetle.vs.leaf<-Cbuprest580.beetle.vs.leaf[,3]
+bup600.beetle.vs.leaf<-Cbuprest600.beetle.vs.leaf[,3]
+bup620.beetle.vs.leaf<-Cbuprest620.beetle.vs.leaf[,3]
+bup640.beetle.vs.leaf<-Cbuprest640.beetle.vs.leaf[,3]
+bup660.beetle.vs.leaf<-Cbuprest660.beetle.vs.leaf[,3]
 
-com.bupcontrast.leaf.vs.beetle.model2<-cbind(Cbuprest.leaf.vs.beetle.model2[,1:2],bup580.leaf.vs.beetle,bup600.leaf.vs.beetle,bup620.leaf.vs.beetle,bup640.leaf.vs.beetle,bup660.leaf.vs.beetle)
-compare.leaf.vs.beetle.model2 <- com.bupcontrast.leaf.vs.beetle.model2 %>%
-  gather(key = "peak_wl.leaf.vs.beetle", value = "dS", 3:7)
+com.bupcontrast.beetle.vs.leaf.aim2<-cbind(Cbuprest.beetle.vs.leaf.aim2[,1:2],bup580.beetle.vs.leaf,bup600.beetle.vs.leaf,bup620.beetle.vs.leaf,bup640.beetle.vs.leaf,bup660.beetle.vs.leaf)
+compare.beetle.vs.leaf.aim2 <- com.bupcontrast.beetle.vs.leaf.aim2 %>%
+  gather(key = "peak_wl.beetle.vs.leaf", value = "dS", 3:7)
 
 ##beetle vs flower
-Cbuprest580.flower.vs.beetle=
+Cbuprest580.beetle.vs.flower=
   Cbuprest580 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest600.flower.vs.beetle=
+Cbuprest600.beetle.vs.flower=
   Cbuprest600 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest620.flower.vs.beetle=
+Cbuprest620.beetle.vs.flower=
   Cbuprest620 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest640.flower.vs.beetle=
+Cbuprest640.beetle.vs.flower=
   Cbuprest640 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest660.flower.vs.beetle=
+Cbuprest660.beetle.vs.flower=
   Cbuprest660 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
 
-Cbuprest.flower.vs.beetle.model2=
-  Cbuprest580.flower.vs.beetle %>% rbind(Cbuprest600.flower.vs.beetle) %>% 
-  rbind(Cbuprest620.flower.vs.beetle)%>% rbind(Cbuprest640.flower.vs.beetle) %>% 
-  rbind(Cbuprest660.flower.vs.beetle)
+Cbuprest.beetle.vs.flower.aim2=
+  Cbuprest580.beetle.vs.flower %>% rbind(Cbuprest600.beetle.vs.flower) %>% 
+  rbind(Cbuprest620.beetle.vs.flower)%>% rbind(Cbuprest640.beetle.vs.flower) %>% 
+  rbind(Cbuprest660.beetle.vs.flower)
 
-bup580.flower.vs.beetle<-Cbuprest580.flower.vs.beetle[,3]
-bup600.flower.vs.beetle<-Cbuprest600.flower.vs.beetle[,3]
-bup620.flower.vs.beetle<-Cbuprest620.flower.vs.beetle[,3]
-bup640.flower.vs.beetle<-Cbuprest640.flower.vs.beetle[,3]
-bup660.flower.vs.beetle<-Cbuprest660.flower.vs.beetle[,3]
+bup580.beetle.vs.flower<-Cbuprest580.beetle.vs.flower[,3]
+bup600.beetle.vs.flower<-Cbuprest600.beetle.vs.flower[,3]
+bup620.beetle.vs.flower<-Cbuprest620.beetle.vs.flower[,3]
+bup640.beetle.vs.flower<-Cbuprest640.beetle.vs.flower[,3]
+bup660.beetle.vs.flower<-Cbuprest660.beetle.vs.flower[,3]
 
-com.bupcontrast.flower.vs.beetle.model2<-cbind(Cbuprest.flower.vs.beetle.model2[,1:2],bup580.flower.vs.beetle,bup600.flower.vs.beetle,bup620.flower.vs.beetle,bup640.flower.vs.beetle,bup660.flower.vs.beetle)
-compare.flower.vs.beetle.model2 <- com.bupcontrast.flower.vs.beetle.model2 %>%
-  gather(key = "peak_wl.flower.vs.beetle", value = "dS", 3:7)
+com.bupcontrast.beetle.vs.flower.aim2<-cbind(Cbuprest.beetle.vs.flower.aim2[,1:2],bup580.beetle.vs.flower,bup600.beetle.vs.flower,bup620.beetle.vs.flower,bup640.beetle.vs.flower,bup660.beetle.vs.flower)
+compare.beetle.vs.flower.aim2 <- com.bupcontrast.beetle.vs.flower.aim2 %>%
+  gather(key = "peak_wl.beetle.vs.flower", value = "dS", 3:7)
 
 
-#Twilight - visual model 1
+#Twilight - aim 1
 ##flower vs leaf
-CvisUVSWMW...leaf.vs.flower_twilight=
-  CvisUVSWMW.._twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-CvisUV..MWLW.leaf.vs.flower_twilight=
-  CvisUV..MWLW_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-CvisUVSW..LW.leaf.vs.flower_twilight=
-  CvisUVSW..LW_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-CvisUVSWMWLW.leaf.vs.flower_twilight=
-  CvisUVSWMWLW_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
+CvsUSM.flower.vs.leaf_twilight=
+  CvsUSM_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
+CvsUML.flower.vs.leaf_twilight=
+  CvsUML_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
+CvsUSL.flower.vs.leaf_twilight=
+  CvsUSL_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
+CvsUSML.flower.vs.leaf_twilight=
+  CvsUSML_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
 
-C.leaf.vs.flower_twilight.model1=
-  CvisUVSWMW...leaf.vs.flower_twilight %>% rbind(CvisUV..MWLW.leaf.vs.flower_twilight) %>% 
-  rbind(CvisUVSW..LW.leaf.vs.flower_twilight)%>% rbind(CvisUVSWMWLW.leaf.vs.flower_twilight)
+C.flower.vs.leaf_twilight.aim1=
+  CvsUSM.flower.vs.leaf_twilight %>% rbind(CvsUML.flower.vs.leaf_twilight) %>% 
+  rbind(CvsUSL.flower.vs.leaf_twilight)%>% rbind(CvsUSML.flower.vs.leaf_twilight)
 
-contrast.UVSWMW...leaf.vs.flower_twilight<-CvisUVSWMW...leaf.vs.flower_twilight[,3]
-contrast.UV..MWLW.leaf.vs.flower_twilight<-CvisUV..MWLW.leaf.vs.flower_twilight[,3]
-contrast.UVSW..LW.leaf.vs.flower_twilight<-CvisUVSW..LW.leaf.vs.flower_twilight[,3]
-contrast.UVSWMWLW.leaf.vs.flower_twilight<-CvisUVSWMWLW.leaf.vs.flower_twilight[,3]
+contrast.UVSWMW...flower.vs.leaf_twilight<-CvsUSM.flower.vs.leaf_twilight[,3]
+contrast.UV..MWLW.flower.vs.leaf_twilight<-CvsUML.flower.vs.leaf_twilight[,3]
+contrast.UVSW..LW.flower.vs.leaf_twilight<-CvsUSL.flower.vs.leaf_twilight[,3]
+contrast.UVSWMWLW.flower.vs.leaf_twilight<-CvsUSML.flower.vs.leaf_twilight[,3]
 
-com.contrast.leaf.vs.flower_twilight.model1<-cbind(CvisUVSWMW...leaf.vs.flower_twilight[,1:2],contrast.UVSWMW...leaf.vs.flower_twilight,contrast.UV..MWLW.leaf.vs.flower_twilight,contrast.UVSW..LW.leaf.vs.flower_twilight,contrast.UVSWMWLW.leaf.vs.flower_twilight)
-compare.leaf.vs.flower_twilight.model1 <- com.contrast.leaf.vs.flower_twilight.model1 %>%
-  gather(key = "peak_wl.leaf.vs.flower", value = "dS", 3:6)
+com.contrast.flower.vs.leaf_twilight.aim1<-cbind(CvsUSM.flower.vs.leaf_twilight[,1:2],contrast.UVSWMW...flower.vs.leaf_twilight,contrast.UV..MWLW.flower.vs.leaf_twilight,contrast.UVSW..LW.flower.vs.leaf_twilight,contrast.UVSWMWLW.flower.vs.leaf_twilight)
+compare.flower.vs.leaf_twilight.aim1 <- com.contrast.flower.vs.leaf_twilight.aim1 %>%
+  gather(key = "peak_wl.flower.vs.leaf", value = "dS", 3:6)
 
 ##beetle vs leaf
-CvisUVSWMW...leaf.vs.beetle_twilight=
-  CvisUVSWMW.._twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-CvisUV..MWLW.leaf.vs.beetle_twilight=
-  CvisUV..MWLW_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-CvisUVSW..LW.leaf.vs.beetle_twilight=
-  CvisUVSW..LW_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-CvisUVSWMWLW.leaf.vs.beetle_twilight=
-  CvisUVSWMWLW_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
+CvsUSM.beetle.vs.leaf_twilight=
+  CvsUSM_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
+CvsUML.beetle.vs.leaf_twilight=
+  CvsUML_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
+CvsUSL.beetle.vs.leaf_twilight=
+  CvsUSL_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
+CvsUSML.beetle.vs.leaf_twilight=
+  CvsUSML_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
 
-C.leaf.vs.beetle_twilight.model1=
-  CvisUVSWMW...leaf.vs.beetle_twilight %>% rbind(CvisUV..MWLW.leaf.vs.beetle_twilight) %>% 
-  rbind(CvisUVSW..LW.leaf.vs.beetle_twilight)%>%  rbind(CvisUVSWMWLW.leaf.vs.beetle_twilight)
+C.beetle.vs.leaf_twilight.aim1=
+  CvsUSM.beetle.vs.leaf_twilight %>% rbind(CvsUML.beetle.vs.leaf_twilight) %>% 
+  rbind(CvsUSL.beetle.vs.leaf_twilight)%>%  rbind(CvsUSML.beetle.vs.leaf_twilight)
 
-contrast.UVSWMW...leaf.vs.beetle_twilight<-CvisUVSWMW...leaf.vs.beetle_twilight[,3]
-contrast.UV..MWLW.leaf.vs.beetle_twilight<-CvisUV..MWLW.leaf.vs.beetle_twilight[,3]
-contrast.UVSW..LW.leaf.vs.beetle_twilight<-CvisUVSW..LW.leaf.vs.beetle_twilight[,3]
-contrast.UVSWMWLW.leaf.vs.beetle_twilight<-CvisUVSWMWLW.leaf.vs.beetle_twilight[,3]
+contrast.UVSWMW...beetle.vs.leaf_twilight<-CvsUSM.beetle.vs.leaf_twilight[,3]
+contrast.UV..MWLW.beetle.vs.leaf_twilight<-CvsUML.beetle.vs.leaf_twilight[,3]
+contrast.UVSW..LW.beetle.vs.leaf_twilight<-CvsUSL.beetle.vs.leaf_twilight[,3]
+contrast.UVSWMWLW.beetle.vs.leaf_twilight<-CvsUSML.beetle.vs.leaf_twilight[,3]
 
-com.contrast.leaf.vs.beetle_twilight.model1<-cbind(CvisUVSWMW...leaf.vs.beetle_twilight[,1:2],contrast.UVSWMW...leaf.vs.beetle_twilight,contrast.UV..MWLW.leaf.vs.beetle_twilight,contrast.UVSW..LW.leaf.vs.beetle_twilight,contrast.UVSWMWLW.leaf.vs.beetle_twilight)
-compare.leaf.vs.beetle_twilight.model1 <- com.contrast.leaf.vs.beetle_twilight.model1 %>%
-  gather(key = "peak_wl.leaf.vs.beetle", value = "dS", 3:6)
+com.contrast.beetle.vs.leaf_twilight.aim1<-cbind(CvsUSM.beetle.vs.leaf_twilight[,1:2],contrast.UVSWMW...beetle.vs.leaf_twilight,contrast.UV..MWLW.beetle.vs.leaf_twilight,contrast.UVSW..LW.beetle.vs.leaf_twilight,contrast.UVSWMWLW.beetle.vs.leaf_twilight)
+compare.beetle.vs.leaf_twilight.aim1 <- com.contrast.beetle.vs.leaf_twilight.aim1 %>%
+  gather(key = "peak_wl.beetle.vs.leaf", value = "dS", 3:6)
 
 ##beetle vs flower
-CvisUVSWMW...flower.vs.beetle_twilight=
-  CvisUVSWMW.._twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-CvisUV..MWLW.flower.vs.beetle_twilight=
-  CvisUV..MWLW_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-CvisUVSW..LW.flower.vs.beetle_twilight=
-  CvisUVSW..LW_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-CvisUVSWMWLW.flower.vs.beetle_twilight=
-  CvisUVSWMWLW_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
+CvsUSM.beetle.vs.flower_twilight=
+  CvsUSM_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
+CvsUML.beetle.vs.flower_twilight=
+  CvsUML_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
+CvsUSL.beetle.vs.flower_twilight=
+  CvsUSL_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
+CvsUSML.beetle.vs.flower_twilight=
+  CvsUSML_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
 
-C.flower.vs.beetle_twilight.model1=
-  CvisUVSWMW...flower.vs.beetle_twilight %>% rbind(CvisUV..MWLW.flower.vs.beetle_twilight) %>% 
-  rbind(CvisUVSW..LW.flower.vs.beetle_twilight) %>%  rbind(CvisUVSWMWLW.flower.vs.beetle_twilight)
+C.beetle.vs.flower_twilight.aim1=
+  CvsUSM.beetle.vs.flower_twilight %>% rbind(CvsUML.beetle.vs.flower_twilight) %>% 
+  rbind(CvsUSL.beetle.vs.flower_twilight) %>%  rbind(CvsUSML.beetle.vs.flower_twilight)
 
-contrast.UVSWMW...flower.vs.beetle_twilight<-CvisUVSWMW...flower.vs.beetle_twilight[,3]
-contrast.UV..MWLW.flower.vs.beetle_twilight<-CvisUV..MWLW.flower.vs.beetle_twilight[,3]
-contrast.UVSW..LW.flower.vs.beetle_twilight<-CvisUVSW..LW.flower.vs.beetle_twilight[,3]
-contrast.UVSWMWLW.flower.vs.beetle_twilight<-CvisUVSWMWLW.flower.vs.beetle_twilight[,3]
+contrast.UVSWMW...beetle.vs.flower_twilight<-CvsUSM.beetle.vs.flower_twilight[,3]
+contrast.UV..MWLW.beetle.vs.flower_twilight<-CvsUML.beetle.vs.flower_twilight[,3]
+contrast.UVSW..LW.beetle.vs.flower_twilight<-CvsUSL.beetle.vs.flower_twilight[,3]
+contrast.UVSWMWLW.beetle.vs.flower_twilight<-CvsUSML.beetle.vs.flower_twilight[,3]
 
-com.contrast.flower.vs.beetle_twilight.model1<-cbind(CvisUVSWMW...flower.vs.beetle_twilight[,1:2],contrast.UVSWMW...flower.vs.beetle_twilight,contrast.UV..MWLW.flower.vs.beetle_twilight,contrast.UVSW..LW.flower.vs.beetle_twilight,contrast.UVSWMWLW.flower.vs.beetle_twilight)
-compare.flower.vs.beetle_twilight.model1 <- com.contrast.flower.vs.beetle_twilight.model1 %>%
-  gather(key = "peak_wl.flower.vs.beetle", value = "dS", 3:6)
+com.contrast.beetle.vs.flower_twilight.aim1<-cbind(CvsUSM.beetle.vs.flower_twilight[,1:2],contrast.UVSWMW...beetle.vs.flower_twilight,contrast.UV..MWLW.beetle.vs.flower_twilight,contrast.UVSW..LW.beetle.vs.flower_twilight,contrast.UVSWMWLW.beetle.vs.flower_twilight)
+compare.beetle.vs.flower_twilight.aim1 <- com.contrast.beetle.vs.flower_twilight.aim1 %>%
+  gather(key = "peak_wl.beetle.vs.flower", value = "dS", 3:6)
 
 
 
-#Twilight - visual model 2
+#Twilight - Aim 2
 ##flower vs leaf
-Cbuprest580.leaf.vs.flower_twilight=
+Cbuprest580.flower.vs.leaf_twilight=
   Cbuprest580_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest600.leaf.vs.flower_twilight=
+Cbuprest600.flower.vs.leaf_twilight=
   Cbuprest600_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest620.leaf.vs.flower_twilight=
+Cbuprest620.flower.vs.leaf_twilight=
   Cbuprest620_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest640.leaf.vs.flower_twilight=
+Cbuprest640.flower.vs.leaf_twilight=
   Cbuprest640_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest660.leaf.vs.flower_twilight=
+Cbuprest660.flower.vs.leaf_twilight=
   Cbuprest660_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
 
-Cbuprest.leaf.vs.flower_twilight.model2=
-  Cbuprest580.leaf.vs.flower_twilight %>% rbind(Cbuprest600.leaf.vs.flower_twilight) %>%
-  rbind(Cbuprest620.leaf.vs.flower_twilight)%>% rbind(Cbuprest640.leaf.vs.flower_twilight) %>% rbind(Cbuprest660.leaf.vs.flower_twilight)
+Cbuprest.flower.vs.leaf_twilight.aim2=
+  Cbuprest580.flower.vs.leaf_twilight %>% rbind(Cbuprest600.flower.vs.leaf_twilight) %>%
+  rbind(Cbuprest620.flower.vs.leaf_twilight)%>% rbind(Cbuprest640.flower.vs.leaf_twilight) %>% rbind(Cbuprest660.flower.vs.leaf_twilight)
 
-bup580.leaf.vs.flower_twilight<-Cbuprest580.leaf.vs.flower_twilight[,3]
-bup600.leaf.vs.flower_twilight<-Cbuprest600.leaf.vs.flower_twilight[,3]
-bup620.leaf.vs.flower_twilight<-Cbuprest620.leaf.vs.flower_twilight[,3]
-bup640.leaf.vs.flower_twilight<-Cbuprest640.leaf.vs.flower_twilight[,3]
-bup660.leaf.vs.flower_twilight<-Cbuprest660.leaf.vs.flower_twilight[,3]
+bup580.flower.vs.leaf_twilight<-Cbuprest580.flower.vs.leaf_twilight[,3]
+bup600.flower.vs.leaf_twilight<-Cbuprest600.flower.vs.leaf_twilight[,3]
+bup620.flower.vs.leaf_twilight<-Cbuprest620.flower.vs.leaf_twilight[,3]
+bup640.flower.vs.leaf_twilight<-Cbuprest640.flower.vs.leaf_twilight[,3]
+bup660.flower.vs.leaf_twilight<-Cbuprest660.flower.vs.leaf_twilight[,3]
 
-com.bupcontrast.leaf.vs.flower_twilight.model2<-cbind(Cbuprest.leaf.vs.flower_twilight.model2[,1:2],bup580.leaf.vs.flower_twilight,bup600.leaf.vs.flower_twilight,bup620.leaf.vs.flower_twilight,bup640.leaf.vs.flower_twilight,bup660.leaf.vs.flower_twilight)
-compare.leaf.vs.flower_twilight.model2 <- com.bupcontrast.leaf.vs.flower_twilight.model2 %>%
-  gather(key = "peak_wl.leaf.vs.flower", value = "dS", 3:7)
+com.bupcontrast.flower.vs.leaf_twilight.aim2<-cbind(Cbuprest.flower.vs.leaf_twilight.aim2[,1:2],bup580.flower.vs.leaf_twilight,bup600.flower.vs.leaf_twilight,bup620.flower.vs.leaf_twilight,bup640.flower.vs.leaf_twilight,bup660.flower.vs.leaf_twilight)
+compare.flower.vs.leaf_twilight.aim2 <- com.bupcontrast.flower.vs.leaf_twilight.aim2 %>%
+  gather(key = "peak_wl.flower.vs.leaf", value = "dS", 3:7)
 
 ##beetle vs leaf
-Cbuprest580.leaf.vs.beetle_twilight=
+Cbuprest580.beetle.vs.leaf_twilight=
   Cbuprest580_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest600.leaf.vs.beetle_twilight=
+Cbuprest600.beetle.vs.leaf_twilight=
   Cbuprest600_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest620.leaf.vs.beetle_twilight=
+Cbuprest620.beetle.vs.leaf_twilight=
   Cbuprest620_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest640.leaf.vs.beetle_twilight=
+Cbuprest640.beetle.vs.leaf_twilight=
   Cbuprest640_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest660.leaf.vs.beetle_twilight=
+Cbuprest660.beetle.vs.leaf_twilight=
   Cbuprest660_twilight %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
 
-Cbuprest.leaf.vs.beetle_twilight.model2=
-  Cbuprest580.leaf.vs.beetle_twilight  %>% rbind(Cbuprest600.leaf.vs.beetle_twilight)%>%
-  rbind(Cbuprest620.leaf.vs.beetle_twilight)%>% rbind(Cbuprest640.leaf.vs.beetle_twilight) %>%
-  rbind(Cbuprest660.leaf.vs.beetle_twilight)
+Cbuprest.beetle.vs.leaf_twilight.aim2=
+  Cbuprest580.beetle.vs.leaf_twilight  %>% rbind(Cbuprest600.beetle.vs.leaf_twilight)%>%
+  rbind(Cbuprest620.beetle.vs.leaf_twilight)%>% rbind(Cbuprest640.beetle.vs.leaf_twilight) %>%
+  rbind(Cbuprest660.beetle.vs.leaf_twilight)
 
-bup580.leaf.vs.beetle_twilight<-Cbuprest580.leaf.vs.beetle_twilight[,3]
-bup600.leaf.vs.beetle_twilight<-Cbuprest600.leaf.vs.beetle_twilight[,3]
-bup620.leaf.vs.beetle_twilight<-Cbuprest620.leaf.vs.beetle_twilight[,3]
-bup640.leaf.vs.beetle_twilight<-Cbuprest640.leaf.vs.beetle_twilight[,3]
-bup660.leaf.vs.beetle_twilight<-Cbuprest660.leaf.vs.beetle_twilight[,3]
+bup580.beetle.vs.leaf_twilight<-Cbuprest580.beetle.vs.leaf_twilight[,3]
+bup600.beetle.vs.leaf_twilight<-Cbuprest600.beetle.vs.leaf_twilight[,3]
+bup620.beetle.vs.leaf_twilight<-Cbuprest620.beetle.vs.leaf_twilight[,3]
+bup640.beetle.vs.leaf_twilight<-Cbuprest640.beetle.vs.leaf_twilight[,3]
+bup660.beetle.vs.leaf_twilight<-Cbuprest660.beetle.vs.leaf_twilight[,3]
 
-com.bupcontrast.leaf.vs.beetle_twilight.model2<-cbind(Cbuprest.leaf.vs.beetle_twilight.model2[,1:2],bup580.leaf.vs.beetle_twilight,bup600.leaf.vs.beetle_twilight,bup620.leaf.vs.beetle_twilight,bup640.leaf.vs.beetle_twilight,bup660.leaf.vs.beetle_twilight)
-compare.leaf.vs.beetle_twilight.model2 <- com.bupcontrast.leaf.vs.beetle_twilight.model2 %>%
-  gather(key = "peak_wl.leaf.vs.beetle", value = "dS", 3:7)
+com.bupcontrast.beetle.vs.leaf_twilight.aim2<-cbind(Cbuprest.beetle.vs.leaf_twilight.aim2[,1:2],bup580.beetle.vs.leaf_twilight,bup600.beetle.vs.leaf_twilight,bup620.beetle.vs.leaf_twilight,bup640.beetle.vs.leaf_twilight,bup660.beetle.vs.leaf_twilight)
+compare.beetle.vs.leaf_twilight.aim2 <- com.bupcontrast.beetle.vs.leaf_twilight.aim2 %>%
+  gather(key = "peak_wl.beetle.vs.leaf", value = "dS", 3:7)
 
 ##beetle vs flower
-Cbuprest580.flower.vs.beetle_twilight=
+Cbuprest580.beetle.vs.flower_twilight=
   Cbuprest580_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest600.flower.vs.beetle_twilight=
+Cbuprest600.beetle.vs.flower_twilight=
   Cbuprest600_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest620.flower.vs.beetle_twilight=
+Cbuprest620.beetle.vs.flower_twilight=
   Cbuprest620_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest640.flower.vs.beetle_twilight=
+Cbuprest640.beetle.vs.flower_twilight=
   Cbuprest640_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest660.flower.vs.beetle_twilight=
+Cbuprest660.beetle.vs.flower_twilight=
   Cbuprest660_twilight %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
 
-Cbuprest.flower.vs.beetle_twilight.model2=
-  Cbuprest580.flower.vs.beetle_twilight %>%rbind(Cbuprest600.flower.vs.beetle_twilight) %>% 
-  rbind(Cbuprest620.flower.vs.beetle_twilight) %>% rbind(Cbuprest640.flower.vs.beetle_twilight) %>% 
-  rbind(Cbuprest660.flower.vs.beetle_twilight)
+Cbuprest.beetle.vs.flower_twilight.aim2=
+  Cbuprest580.beetle.vs.flower_twilight %>%rbind(Cbuprest600.beetle.vs.flower_twilight) %>% 
+  rbind(Cbuprest620.beetle.vs.flower_twilight) %>% rbind(Cbuprest640.beetle.vs.flower_twilight) %>% 
+  rbind(Cbuprest660.beetle.vs.flower_twilight)
 
-bup580.flower.vs.beetle_twilight<-Cbuprest580.flower.vs.beetle_twilight[,3]
-bup600.flower.vs.beetle_twilight<-Cbuprest600.flower.vs.beetle_twilight[,3]
-bup620.flower.vs.beetle_twilight<-Cbuprest620.flower.vs.beetle_twilight[,3]
-bup640.flower.vs.beetle_twilight<-Cbuprest640.flower.vs.beetle_twilight[,3]
-bup660.flower.vs.beetle_twilight<-Cbuprest660.flower.vs.beetle_twilight[,3]
+bup580.beetle.vs.flower_twilight<-Cbuprest580.beetle.vs.flower_twilight[,3]
+bup600.beetle.vs.flower_twilight<-Cbuprest600.beetle.vs.flower_twilight[,3]
+bup620.beetle.vs.flower_twilight<-Cbuprest620.beetle.vs.flower_twilight[,3]
+bup640.beetle.vs.flower_twilight<-Cbuprest640.beetle.vs.flower_twilight[,3]
+bup660.beetle.vs.flower_twilight<-Cbuprest660.beetle.vs.flower_twilight[,3]
 
-com.bupcontrast.flower.vs.beetle_twilight.model2<-cbind(Cbuprest.flower.vs.beetle_twilight.model2[,1:2],bup580.flower.vs.beetle_twilight,bup600.flower.vs.beetle_twilight,bup620.flower.vs.beetle_twilight,bup640.flower.vs.beetle_twilight,bup660.flower.vs.beetle_twilight)
-compare.flower.vs.beetle_twilight.model2 <- com.bupcontrast.flower.vs.beetle_twilight.model2 %>%
-  gather(key = "peak_wl.flower.vs.beetle", value = "dS", 3:7)
+com.bupcontrast.beetle.vs.flower_twilight.aim2<-cbind(Cbuprest.beetle.vs.flower_twilight.aim2[,1:2],bup580.beetle.vs.flower_twilight,bup600.beetle.vs.flower_twilight,bup620.beetle.vs.flower_twilight,bup640.beetle.vs.flower_twilight,bup660.beetle.vs.flower_twilight)
+compare.beetle.vs.flower_twilight.aim2 <- com.bupcontrast.beetle.vs.flower_twilight.aim2 %>%
+  gather(key = "peak_wl.beetle.vs.flower", value = "dS", 3:7)
 
 ```
 
@@ -899,85 +899,85 @@ compare.flower.vs.beetle_twilight.model2 <- com.bupcontrast.flower.vs.beetle_twi
 
 </br>
 
-Click the tabs to choose the assumptions ( __Normality__ / __Homogeneity__ ) of the visual models ( __Visual model 1__ / __Visual model 2__ ) under different light conditions ( __Daylight__ / __Twilight__)
+Click the tabs to choose the assumptions ( __Normality__ / __Homogeneity__ ) of the visual models ( __Aim 1__ / __Aim 2__ ) under different light conditions ( __Daylight__ / __Twilight__)
 
 </br>
 
 
 ```{r}
 #checking assumptions
-##D65 - visual model 1
-res.leaf.vs.flower_d65.model1<-lm(compare.leaf.vs.flower.model1$dS ~ compare.leaf.vs.flower.model1$peak_wl.leaf.vs.flower)
-res.leaf.vs.beetle_d65.model1<-lm(compare.leaf.vs.beetle.model1$dS ~ compare.leaf.vs.beetle.model1$peak_wl.leaf.vs.beetle)
-res.flower.vs.beetle_d65.model1<-lm(compare.flower.vs.beetle.model1$dS ~ compare.flower.vs.beetle.model1$peak_wl.flower.vs.beetle)
+##D65 - aim 1
+res.flower.vs.leaf_d65.aim1<-lm(compare.flower.vs.leaf.aim1$dS ~ compare.flower.vs.leaf.aim1$peak_wl.flower.vs.leaf)
+res.beetle.vs.leaf_d65.aim1<-lm(compare.beetle.vs.leaf.aim1$dS ~ compare.beetle.vs.leaf.aim1$peak_wl.beetle.vs.leaf)
+res.beetle.vs.flower_d65.aim1<-lm(compare.beetle.vs.flower.aim1$dS ~ compare.beetle.vs.flower.aim1$peak_wl.beetle.vs.flower)
 
-##D65 - visual model 2
-res.leaf.vs.flower_d65.model2<-lm(compare.leaf.vs.flower.model2$dS ~ compare.leaf.vs.flower.model2$peak_wl.leaf.vs.flower)
-res.leaf.vs.beetle_d65.model2<-lm(compare.leaf.vs.beetle.model2$dS ~ compare.leaf.vs.beetle.model2$peak_wl.leaf.vs.beetle)
-res.flower.vs.beetle_d65.model2<-lm(compare.flower.vs.beetle.model2$dS ~ compare.flower.vs.beetle.model2$peak_wl.flower.vs.beetle)
+##D65 - Aim 2
+res.flower.vs.leaf_d65.aim2<-lm(compare.flower.vs.leaf.aim2$dS ~ compare.flower.vs.leaf.aim2$peak_wl.flower.vs.leaf)
+res.beetle.vs.leaf_d65.aim2<-lm(compare.beetle.vs.leaf.aim2$dS ~ compare.beetle.vs.leaf.aim2$peak_wl.beetle.vs.leaf)
+res.beetle.vs.flower_d65.aim2<-lm(compare.beetle.vs.flower.aim2$dS ~ compare.beetle.vs.flower.aim2$peak_wl.beetle.vs.flower)
 
-##Twilight - visual model 1
-res.leaf.vs.flower_twilight.model1<-lm(compare.leaf.vs.flower.model1$dS ~ compare.leaf.vs.flower.model1$peak_wl.leaf.vs.flower)
-res.leaf.vs.beetle_twilight.model1<-lm(compare.leaf.vs.beetle.model1$dS ~ compare.leaf.vs.beetle.model1$peak_wl.leaf.vs.beetle)
-res.flower.vs.beetle_twilight.model1<-lm(compare.flower.vs.beetle.model1$dS ~ compare.flower.vs.beetle.model1$peak_wl.flower.vs.beetle)
+##Twilight - aim 1
+res.flower.vs.leaf_twilight.aim1<-lm(compare.flower.vs.leaf.aim1$dS ~ compare.flower.vs.leaf.aim1$peak_wl.flower.vs.leaf)
+res.beetle.vs.leaf_twilight.aim1<-lm(compare.beetle.vs.leaf.aim1$dS ~ compare.beetle.vs.leaf.aim1$peak_wl.beetle.vs.leaf)
+res.beetle.vs.flower_twilight.aim1<-lm(compare.beetle.vs.flower.aim1$dS ~ compare.beetle.vs.flower.aim1$peak_wl.beetle.vs.flower)
 
-##Twilight - visual model 2
-res.leaf.vs.flower_twilight.model2<-lm(compare.leaf.vs.flower.model2$dS ~ compare.leaf.vs.flower.model2$peak_wl.leaf.vs.flower)
-res.leaf.vs.beetle_twilight.model2<-lm(compare.leaf.vs.beetle.model2$dS ~ compare.leaf.vs.beetle.model2$peak_wl.leaf.vs.beetle)
-res.flower.vs.beetle_twilight.model2<-lm(compare.flower.vs.beetle.model2$dS ~ compare.flower.vs.beetle.model2$peak_wl.flower.vs.beetle)
+##Twilight - Aim 2
+res.flower.vs.leaf_twilight.aim2<-lm(compare.flower.vs.leaf.aim2$dS ~ compare.flower.vs.leaf.aim2$peak_wl.flower.vs.leaf)
+res.beetle.vs.leaf_twilight.aim2<-lm(compare.beetle.vs.leaf.aim2$dS ~ compare.beetle.vs.leaf.aim2$peak_wl.beetle.vs.leaf)
+res.beetle.vs.flower_twilight.aim2<-lm(compare.beetle.vs.flower.aim2$dS ~ compare.beetle.vs.flower.aim2$peak_wl.beetle.vs.flower)
 ```
 
 ### Normality {.tabset .tabset-fade .tabset-pills}
-#### Visual model 1 {.tabset .tabset-fade .tabset-pills}
+#### Aim 1 {.tabset .tabset-fade .tabset-pills}
 
 ##### D65 
 ```{r}
 par (mfrow=c(1,3),pin=c(1.5, 1.5))
-qqnorm(res.leaf.vs.flower_d65.model1$residuals, main = "Leaf vs Flower")
-qqnorm(res.leaf.vs.beetle_d65.model1$residuals, main = "Leaf vs Beetle")
-qqnorm(res.flower.vs.beetle_d65.model1$residuals, main = "Beetle vs Flower")
+qqnorm(res.flower.vs.leaf_d65.aim1$residuals, main = "Flower vs Leaf")
+qqnorm(res.beetle.vs.leaf_d65.aim1$residuals, main = "Beetle vs Leaf")
+qqnorm(res.beetle.vs.flower_d65.aim1$residuals, main = "Beetle vs Flower")
 ```
 
 ##### Twilight
 ```{r}
 par (mfrow=c(1,3),pin=c(1.5, 1.5))
-qqnorm(res.leaf.vs.flower_twilight.model1$residuals, main = "Leaf vs Flower")
-qqnorm(res.leaf.vs.beetle_twilight.model1$residuals, main = "Leaf vs Beetle")
-qqnorm(res.flower.vs.beetle_twilight.model1$residuals, main = "Beetle vs Flower")
+qqnorm(res.flower.vs.leaf_twilight.aim1$residuals, main = "Flower vs Leaf")
+qqnorm(res.beetle.vs.leaf_twilight.aim1$residuals, main = "Beetle vs Leaf")
+qqnorm(res.beetle.vs.flower_twilight.aim1$residuals, main = "Beetle vs Flower")
 ```
 
-#### Visual model 2 {.tabset .tabset-fade .tabset-pills}
+#### Aim 2 {.tabset .tabset-fade .tabset-pills}
 ##### D65 
 ```{r}
 par (mfrow=c(1,3),pin=c(1.5, 1.5))
-qqnorm(res.leaf.vs.flower_d65.model2$residuals, main = "Leaf vs Flower")
-qqnorm(res.leaf.vs.beetle_d65.model2$residuals, main = "Leaf vs Beetle")
-qqnorm(res.flower.vs.beetle_d65.model2$residuals, main = "Beetle vs Flower")
+qqnorm(res.flower.vs.leaf_d65.aim2$residuals, main = "Flower vs Leaf")
+qqnorm(res.beetle.vs.leaf_d65.aim2$residuals, main = "Beetle vs Leaf")
+qqnorm(res.beetle.vs.flower_d65.aim2$residuals, main = "Beetle vs Flower")
 ```
 
 ##### Twilight
 ```{r}
 par (mfrow=c(1,3),pin=c(1.5, 1.5))
-qqnorm(res.leaf.vs.flower_twilight.model2$residuals, main = "Leaf vs Flower")
-qqnorm(res.leaf.vs.beetle_twilight.model2$residuals, main = "Leaf vs Beetle")
-qqnorm(res.flower.vs.beetle_twilight.model2$residuals, main = "Beetle vs Flower")
+qqnorm(res.flower.vs.leaf_twilight.aim2$residuals, main = "Flower vs Leaf")
+qqnorm(res.beetle.vs.leaf_twilight.aim2$residuals, main = "Beetle vs Leaf")
+qqnorm(res.beetle.vs.flower_twilight.aim2$residuals, main = "Beetle vs Flower")
 ```
 
 ### Homoscedasticity {.tabset .tabset-fade .tabset-pills}
-#### Visual model 1 {.tabset .tabset-fade .tabset-pills}
+#### Aim 1 {.tabset .tabset-fade .tabset-pills}
 
 ##### D65
 ```{r}
 par (mfrow=c(1,3),oma=c(2,2,0,0)) #oma=c() to creat space for common lables
-boxplot(compare.leaf.vs.flower.model1$dS~compare.leaf.vs.flower.model1$peak_wl.leaf.vs.flower, las=2,
-        main = "Leaf vs Flower",
-        names=c("Vis UML", "Vis USL", "Vis USM", "Vis USML"))
-boxplot(compare.leaf.vs.beetle.model1$dS~compare.leaf.vs.beetle.model1$peak_wl.leaf.vs.beetle, las=2,
-        main = "Leaf vs Beetle",
-        names=c("Vis UML", "Vis USL", "Vis USM", "Vis USML"))
-boxplot(compare.flower.vs.beetle.model1$dS~compare.flower.vs.beetle.model1$peak_wl.flower.vs.beetle, las=2,
+boxplot(compare.flower.vs.leaf.aim1$dS~compare.flower.vs.leaf.aim1$peak_wl.flower.vs.leaf, las=2,
+        main = "Flower vs Leaf",
+        names=c("UML", "USL", "USM", "USML"))
+boxplot(compare.beetle.vs.leaf.aim1$dS~compare.beetle.vs.leaf.aim1$peak_wl.beetle.vs.leaf, las=2,
+        main = "Beetle vs Leaf",
+        names=c("UML", "USL", "USM", "USML"))
+boxplot(compare.beetle.vs.flower.aim1$dS~compare.beetle.vs.flower.aim1$peak_wl.beetle.vs.flower, las=2,
         main = "Beetle vs Flower",
-        names=c("Vis UML", "Vis USL", "Vis USM", "Vis USML"))
+        names=c("UML", "USL", "USM", "USML"))
 mtext("Visual system",side=1,line=0,outer=TRUE,cex=1.3) #side assigns the position of the text e.g. bottom
 mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0) #las assigns the orientation of the text
 ```
@@ -985,32 +985,32 @@ mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0) #las assigns the 
 ##### Twilight
 ```{r}
 par (mfrow=c(1,3),oma=c(2,2,0,0))
-boxplot(compare.leaf.vs.flower_twilight.model1$dS~compare.leaf.vs.flower_twilight.model1$peak_wl.leaf.vs.flower, las=2,
-        main = "Leaf vs Flower",
-        names=c("Vis UML", "Vis USL", "Vis USM", "Vis USML"))
-boxplot(compare.leaf.vs.beetle_twilight.model1$dS~compare.leaf.vs.beetle_twilight.model1$peak_wl.leaf.vs.beetle, las=2,
-        main = "Leaf vs Beetle",
-        names=c("Vis UML", "Vis USL", "Vis USM", "Vis USML"))
-boxplot(compare.flower.vs.beetle_twilight.model1$dS~compare.flower.vs.beetle_twilight.model1$peak_wl.flower.vs.beetle, las=2,
+boxplot(compare.flower.vs.leaf_twilight.aim1$dS~compare.flower.vs.leaf_twilight.aim1$peak_wl.flower.vs.leaf, las=2,
+        main = "Flower vs Leaf",
+        names=c("UML", "USL", "USM", "USML"))
+boxplot(compare.beetle.vs.leaf_twilight.aim1$dS~compare.beetle.vs.leaf_twilight.aim1$peak_wl.beetle.vs.leaf, las=2,
+        main = "Beetle vs Leaf",
+        names=c("UML", "USL", "USM", "USML"))
+boxplot(compare.beetle.vs.flower_twilight.aim1$dS~compare.beetle.vs.flower_twilight.aim1$peak_wl.beetle.vs.flower, las=2,
         main = "Beetle vs Flower",
-        names=c("Vis UML", "Vis USL", "Vis USM", "Vis USML"))
+        names=c("UML", "USL", "USM", "USML"))
 mtext("Visual system",side=1,line=0,outer=TRUE,cex=1.3)
 mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0)
 ```
 
-#### Visual model 2 {.tabset .tabset-fade .tabset-pills}
+#### Aim 2 {.tabset .tabset-fade .tabset-pills}
 ##### D65
 ```{r}
 par (mfrow=c(1,3),oma=c(2,2,0,0))
-boxplot(compare.leaf.vs.flower.model2$dS~compare.leaf.vs.flower.model2$peak_wl.leaf.vs.flower, las=2,
-        main = "Leaf vs Flower",
-        names=c("Vis 580", "Vis 600", "Vis 620", "Vis 640", "Vis 660"))
-boxplot(compare.leaf.vs.beetle.model2$dS~compare.leaf.vs.beetle.model2$peak_wl.leaf.vs.beetle, las=2,
-        main = "Leaf vs Beetle",
-        names=c("Vis 580", "Vis 600", "Vis 620", "Vis 640", "Vis 660"))
-boxplot(compare.flower.vs.beetle.model2$dS~compare.flower.vs.beetle.model2$peak_wl.flower.vs.beetle, las=2,
+boxplot(compare.flower.vs.leaf.aim2$dS~compare.flower.vs.leaf.aim2$peak_wl.flower.vs.leaf, las=2,
+        main = "Flower vs Leaf",
+        names=c("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660"))
+boxplot(compare.beetle.vs.leaf.aim2$dS~compare.beetle.vs.leaf.aim2$peak_wl.beetle.vs.leaf, las=2,
+        main = "Beetle vs Leaf",
+        names=c("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660"))
+boxplot(compare.beetle.vs.flower.aim2$dS~compare.beetle.vs.flower.aim2$peak_wl.beetle.vs.flower, las=2,
         main = "Beetle vs Flower",
-        names=c("Vis 580", "Vis 600", "Vis 620", "Vis 640", "Vis 660"))
+        names=c("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660"))
 mtext("Visual system",side=1,line=0,outer=TRUE,cex=1.3)
 mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0)
 ```
@@ -1018,15 +1018,15 @@ mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0)
 ##### Twilight 
 ```{r}
 par (mfrow=c(1,3),oma=c(2,2,0,0))
-boxplot(compare.leaf.vs.flower_twilight.model2$dS~compare.leaf.vs.flower_twilight.model2$peak_wl.leaf.vs.flower, las=2,
-        main = "Leaf vs Flower",
-        names=c("Vis 580", "Vis 600", "Vis 620", "Vis 640", "Vis 660"))
-boxplot(compare.leaf.vs.beetle_twilight.model2$dS~compare.leaf.vs.beetle_twilight.model2$peak_wl.leaf.vs.beetle, las=2,
-        main = "Leaf vs Beetle",
-        names=c("Vis 580", "Vis 600", "Vis 620", "Vis 640", "Vis 660"))
-boxplot(compare.flower.vs.beetle_twilight.model2$dS~compare.flower.vs.beetle_twilight.model2$peak_wl.flower.vs.beetle, las=2,
+boxplot(compare.flower.vs.leaf_twilight.aim2$dS~compare.flower.vs.leaf_twilight.aim2$peak_wl.flower.vs.leaf, las=2,
+        main = "Flower vs Leaf",
+        names=c("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660"))
+boxplot(compare.beetle.vs.leaf_twilight.aim2$dS~compare.beetle.vs.leaf_twilight.aim2$peak_wl.beetle.vs.leaf, las=2,
+        main = "Beetle vs Leaf",
+        names=c("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660"))
+boxplot(compare.beetle.vs.flower_twilight.aim2$dS~compare.beetle.vs.flower_twilight.aim2$peak_wl.beetle.vs.flower, las=2,
         main = "Beetle vs Flower",
-        names=c("Vis 580", "Vis 600", "Vis 620", "Vis 640", "Vis 660"))
+        names=c("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660"))
 mtext("Visual system",side=1,line=0,outer=TRUE,cex=1.3)
 mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0)
 ```
@@ -1040,192 +1040,192 @@ mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0)
 </br>
 
 ```{r}
-#GLMM - D65 - visual model 1
-##Leaf vs Flower
-m.leaf.vs.flower_d65.model1 <- lmer(dS~peak_wl.leaf.vs.flower + (1|patch2) + (1|patch1), data = compare.leaf.vs.flower.model1,REML=F)
-sum.leaf.vs.flower_d65.model1<-summary(glht(m.leaf.vs.flower_d65.model1, linfct = mcp(peak_wl.leaf.vs.flower = "Tukey")), test = adjusted("bonferroni"))
+#GLMM - D65 - aim 1
+##Flower vs Leaf
+m.flower.vs.leaf_d65.aim1 <- lmer(dS~peak_wl.flower.vs.leaf + (1|patch2) + (1|patch1), data = compare.flower.vs.leaf.aim1,REML=F)
+sum.flower.vs.leaf_d65.aim1<-summary(glht(m.flower.vs.leaf_d65.aim1, linfct = mcp(peak_wl.flower.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
 #REML=F, in order to fit the model using the likelihood ratio test. Otherwise, the lmer default will fit the model using the REML (REstricted Maximum Likelihood) criterion.
 
-##Leaf vs Beetle
-m.leaf.vs.beetle_d65.model1 <- lmer(dS~peak_wl.leaf.vs.beetle + (1|patch2) + (1|patch1), data = compare.leaf.vs.beetle.model1,REML=F)
-sum.leaf.vs.beetle_d65.model1 <- summary(glht(m.leaf.vs.beetle_d65.model1, linfct = mcp(peak_wl.leaf.vs.beetle = "Tukey")), test = adjusted("bonferroni"))
+##Beetle vs Leaf
+m.beetle.vs.leaf_d65.aim1 <- lmer(dS~peak_wl.beetle.vs.leaf + (1|patch2) + (1|patch1), data = compare.beetle.vs.leaf.aim1,REML=F)
+sum.beetle.vs.leaf_d65.aim1 <- summary(glht(m.beetle.vs.leaf_d65.aim1, linfct = mcp(peak_wl.beetle.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
 
 ##Beetle vs Flower
-m.flower.vs.beetle_d65.model1 <- lmer(dS~peak_wl.flower.vs.beetle + (1|patch2) + (1|patch1), data = compare.flower.vs.beetle.model1,REML=F)
-sum.flower.vs.beetle_d65.model1 <-summary(glht(m.flower.vs.beetle_d65.model1, linfct = mcp(peak_wl.flower.vs.beetle = "Tukey")), test = adjusted("bonferroni"))
+m.beetle.vs.flower_d65.aim1 <- lmer(dS~peak_wl.beetle.vs.flower + (1|patch2) + (1|patch1), data = compare.beetle.vs.flower.aim1,REML=F)
+sum.beetle.vs.flower_d65.aim1 <-summary(glht(m.beetle.vs.flower_d65.aim1, linfct = mcp(peak_wl.beetle.vs.flower = "Tukey")), test = adjusted("bonferroni"))
 
 ###reshape data for heatmap
-p1_d65.model1<-sum.leaf.vs.flower_d65.model1[["test"]][["pvalues"]]
-p2_d65.model1<-sum.leaf.vs.beetle_d65.model1[["test"]][["pvalues"]]
-p3_d65.model1<-sum.flower.vs.beetle_d65.model1[["test"]][["pvalues"]]
+p1_d65.aim1<-sum.flower.vs.leaf_d65.aim1[["test"]][["pvalues"]]
+p2_d65.aim1<-sum.beetle.vs.leaf_d65.aim1[["test"]][["pvalues"]]
+p3_d65.aim1<-sum.beetle.vs.flower_d65.aim1[["test"]][["pvalues"]]
 
-VislistA_d65.model1<-c("Vis USL", "Vis USM","Vis USML","Vis USM","Vis USML","Vis USML")
-VislistB_d65.model1<-c("Vis UML", "Vis UML","Vis UML","Vis USL","Vis USL","Vis USM")
+VislistA_d65.aim1<-c("USL", "USM","USML","USM","USML","USML")
+VislistB_d65.aim1<-c("UML", "UML","UML","USL","USL","USM")
 
-heat_d65.model1<-data.frame(names(p1_d65.model1),as.numeric(str_extract(p1_d65.model1,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p2_d65.model1,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p3_d65.model1,"([0-9]+).*$"))) %>%
-  dplyr:: rename(orignial.list = 1, leaf.vs.flower = 2, leaf.vs.beetle = 3, flower.vs.beetle = 4) %>% 
-  cbind(VislistA_d65.model1) %>% 
-  cbind(VislistB_d65.model1) %>% 
+heat_d65.aim1<-data.frame(names(p1_d65.aim1),as.numeric(str_extract(p1_d65.aim1,"([0-9]+).*$"))) %>% 
+  cbind(as.numeric(str_extract(p2_d65.aim1,"([0-9]+).*$"))) %>% 
+  cbind(as.numeric(str_extract(p3_d65.aim1,"([0-9]+).*$"))) %>%
+  dplyr:: rename(orignial.list = 1, flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% 
+  cbind(VislistA_d65.aim1) %>% 
+  cbind(VislistB_d65.aim1) %>% 
   dplyr::select(-orignial.list)
 
 ##add asterisks for significant pairs
-heat_d65.model1$sig.leaf.vs.flower[heat_d65.model1$leaf.vs.flower > 0.05] <- ""
-heat_d65.model1$sig.leaf.vs.flower[heat_d65.model1$leaf.vs.flower < 0.05] <- "*"
-heat_d65.model1$sig.leaf.vs.flower[heat_d65.model1$leaf.vs.flower < 0.01] <- "**"
-heat_d65.model1$sig.leaf.vs.flower[heat_d65.model1$leaf.vs.flower < 0.0001] <- "***"
-heat_d65.model1$sig.leaf.vs.beetle[heat_d65.model1$leaf.vs.beetle > 0.05] <- ""
-heat_d65.model1$sig.leaf.vs.beetle[heat_d65.model1$leaf.vs.beetle < 0.05] <- "*"
-heat_d65.model1$sig.leaf.vs.beetle[heat_d65.model1$leaf.vs.beetle < 0.01] <- "**"
-heat_d65.model1$sig.leaf.vs.beetle[heat_d65.model1$leaf.vs.beetle < 0.0001] <- "***"
-heat_d65.model1$sig.flower.vs.beetle[heat_d65.model1$flower.vs.beetle > 0.05] <- ""
-heat_d65.model1$sig.flower.vs.beetle[heat_d65.model1$flower.vs.beetle < 0.05] <- "*"
-heat_d65.model1$sig.flower.vs.beetle[heat_d65.model1$flower.vs.beetle < 0.01] <- "**"
-heat_d65.model1$sig.flower.vs.beetle[heat_d65.model1$flower.vs.beetle < 0.0001] <- "***"
+heat_d65.aim1$sig.flower.vs.leaf[heat_d65.aim1$flower.vs.leaf > 0.05] <- ""
+heat_d65.aim1$sig.flower.vs.leaf[heat_d65.aim1$flower.vs.leaf < 0.05] <- "*"
+heat_d65.aim1$sig.flower.vs.leaf[heat_d65.aim1$flower.vs.leaf < 0.01] <- "**"
+heat_d65.aim1$sig.flower.vs.leaf[heat_d65.aim1$flower.vs.leaf < 0.0001] <- "***"
+heat_d65.aim1$sig.beetle.vs.leaf[heat_d65.aim1$beetle.vs.leaf > 0.05] <- ""
+heat_d65.aim1$sig.beetle.vs.leaf[heat_d65.aim1$beetle.vs.leaf < 0.05] <- "*"
+heat_d65.aim1$sig.beetle.vs.leaf[heat_d65.aim1$beetle.vs.leaf < 0.01] <- "**"
+heat_d65.aim1$sig.beetle.vs.leaf[heat_d65.aim1$beetle.vs.leaf < 0.0001] <- "***"
+heat_d65.aim1$sig.beetle.vs.flower[heat_d65.aim1$beetle.vs.flower > 0.05] <- ""
+heat_d65.aim1$sig.beetle.vs.flower[heat_d65.aim1$beetle.vs.flower < 0.05] <- "*"
+heat_d65.aim1$sig.beetle.vs.flower[heat_d65.aim1$beetle.vs.flower < 0.01] <- "**"
+heat_d65.aim1$sig.beetle.vs.flower[heat_d65.aim1$beetle.vs.flower < 0.0001] <- "***"
 
 
-#GLMM - D65 - visual model 2
-##Leaf vs Flower
-m.leaf.vs.flower_d65.model2 <- lmer(dS~peak_wl.leaf.vs.flower + (1|patch2) + (1|patch1), data = compare.leaf.vs.flower.model2,REML=F)
-sum.leaf.vs.flower_d65.model2 <- summary(glht(m.leaf.vs.flower_d65.model2, linfct = mcp(peak_wl.leaf.vs.flower = "Tukey")), test = adjusted("bonferroni"))
-##Leaf vs Beetle
-m.leaf.vs.beetle_d65.model2 <- lmer(dS~peak_wl.leaf.vs.beetle + (1|patch2) + (1|patch1), data = compare.leaf.vs.beetle.model2,REML=F)
-sum.leaf.vs.beetle_d65.model2 <- summary(glht(m.leaf.vs.beetle_d65.model2, linfct = mcp(peak_wl.leaf.vs.beetle = "Tukey")), test = adjusted("bonferroni"))
+#GLMM - D65 - Aim 2
+##Flower vs Leaf
+m.flower.vs.leaf_d65.aim2 <- lmer(dS~peak_wl.flower.vs.leaf + (1|patch2) + (1|patch1), data = compare.flower.vs.leaf.aim2,REML=F)
+sum.flower.vs.leaf_d65.aim2 <- summary(glht(m.flower.vs.leaf_d65.aim2, linfct = mcp(peak_wl.flower.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
+##Beetle vs Leaf
+m.beetle.vs.leaf_d65.aim2 <- lmer(dS~peak_wl.beetle.vs.leaf + (1|patch2) + (1|patch1), data = compare.beetle.vs.leaf.aim2,REML=F)
+sum.beetle.vs.leaf_d65.aim2 <- summary(glht(m.beetle.vs.leaf_d65.aim2, linfct = mcp(peak_wl.beetle.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
 ##Beetle vs Flower
-m.flower.vs.beetle_d65.model2 <- lmer(dS~peak_wl.flower.vs.beetle + (1|patch2) + (1|patch1), data = compare.flower.vs.beetle.model2,REML=F)
-sum.flower.vs.beetle_d65.model2 <- summary(glht(m.flower.vs.beetle_d65.model2, linfct = mcp(peak_wl.flower.vs.beetle = "Tukey")), test = adjusted("bonferroni"))
+m.beetle.vs.flower_d65.aim2 <- lmer(dS~peak_wl.beetle.vs.flower + (1|patch2) + (1|patch1), data = compare.beetle.vs.flower.aim2,REML=F)
+sum.beetle.vs.flower_d65.aim2 <- summary(glht(m.beetle.vs.flower_d65.aim2, linfct = mcp(peak_wl.beetle.vs.flower = "Tukey")), test = adjusted("bonferroni"))
 
 ###reshape data for heatmap
-p1_d65.model2<-sum.leaf.vs.flower_d65.model2[["test"]][["pvalues"]]
-p2_d65.model2<-sum.leaf.vs.beetle_d65.model2[["test"]][["pvalues"]]
-p3_d65.model2<-sum.flower.vs.beetle_d65.model2[["test"]][["pvalues"]]
+p1_d65.aim2<-sum.flower.vs.leaf_d65.aim2[["test"]][["pvalues"]]
+p2_d65.aim2<-sum.beetle.vs.leaf_d65.aim2[["test"]][["pvalues"]]
+p3_d65.aim2<-sum.beetle.vs.flower_d65.aim2[["test"]][["pvalues"]]
 
-VislistA_d65.model2<-c("Vis 600", "Vis 620","Vis 640","Vis 660","Vis 620","Vis 640","Vis 660","Vis 640","Vis 660","Vis 660")
-VislistB_d65.model2<-c("Vis 580","Vis 580","Vis 580","Vis 580","Vis 600","Vis 600","Vis 600","Vis 620","Vis 620","Vis 640")
+VislistA_d65.aim2<-c("VS 600", "VS 620","VS 640","Vis 660","VS 620","VS 640","Vis 660","VS 640","Vis 660","Vis 660")
+VislistB_d65.aim2<-c("VS 580","VS 580","VS 580","VS 580","VS 600","VS 600","VS 600","VS 620","VS 620","VS 640")
 
-heat_d65.model2<-data.frame(names(p1_d65.model2),as.numeric(str_extract(p1_d65.model2,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p2_d65.model2,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p3_d65.model2,"([0-9]+).*$"))) %>%
-  dplyr:: rename(orignial.list = 1, leaf.vs.flower = 2, leaf.vs.beetle = 3, flower.vs.beetle = 4) %>% 
-  cbind(VislistA_d65.model2) %>% 
-  cbind(VislistB_d65.model2) %>% 
+heat_d65.aim2<-data.frame(names(p1_d65.aim2),as.numeric(str_extract(p1_d65.aim2,"([0-9]+).*$"))) %>% 
+  cbind(as.numeric(str_extract(p2_d65.aim2,"([0-9]+).*$"))) %>% 
+  cbind(as.numeric(str_extract(p3_d65.aim2,"([0-9]+).*$"))) %>%
+  dplyr:: rename(orignial.list = 1, flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% 
+  cbind(VislistA_d65.aim2) %>% 
+  cbind(VislistB_d65.aim2) %>% 
   dplyr::select(-orignial.list)
 
 ##add asterisks for significant pairs
-heat_d65.model2$sig.leaf.vs.flower[heat_d65.model2$leaf.vs.flower > 0.05] <- ""
-heat_d65.model2$sig.leaf.vs.flower[heat_d65.model2$leaf.vs.flower < 0.05] <- "*"
-heat_d65.model2$sig.leaf.vs.flower[heat_d65.model2$leaf.vs.flower < 0.01] <- "**"
-heat_d65.model2$sig.leaf.vs.flower[heat_d65.model2$leaf.vs.flower < 0.0001] <- "***"
-heat_d65.model2$sig.leaf.vs.beetle[heat_d65.model2$leaf.vs.beetle > 0.05] <- ""
-heat_d65.model2$sig.leaf.vs.beetle[heat_d65.model2$leaf.vs.beetle < 0.05] <- "*"
-heat_d65.model2$sig.leaf.vs.beetle[heat_d65.model2$leaf.vs.beetle < 0.01] <- "**"
-heat_d65.model2$sig.leaf.vs.beetle[heat_d65.model2$leaf.vs.beetle < 0.0001] <- "***"
-heat_d65.model2$sig.flower.vs.beetle[heat_d65.model2$flower.vs.beetle > 0.05] <- ""
-heat_d65.model2$sig.flower.vs.beetle[heat_d65.model2$flower.vs.beetle < 0.05] <- "*"
-heat_d65.model2$sig.flower.vs.beetle[heat_d65.model2$flower.vs.beetle < 0.01] <- "**"
-heat_d65.model2$sig.flower.vs.beetle[heat_d65.model2$flower.vs.beetle < 0.0001] <- "***"
+heat_d65.aim2$sig.flower.vs.leaf[heat_d65.aim2$flower.vs.leaf > 0.05] <- ""
+heat_d65.aim2$sig.flower.vs.leaf[heat_d65.aim2$flower.vs.leaf < 0.05] <- "*"
+heat_d65.aim2$sig.flower.vs.leaf[heat_d65.aim2$flower.vs.leaf < 0.01] <- "**"
+heat_d65.aim2$sig.flower.vs.leaf[heat_d65.aim2$flower.vs.leaf < 0.0001] <- "***"
+heat_d65.aim2$sig.beetle.vs.leaf[heat_d65.aim2$beetle.vs.leaf > 0.05] <- ""
+heat_d65.aim2$sig.beetle.vs.leaf[heat_d65.aim2$beetle.vs.leaf < 0.05] <- "*"
+heat_d65.aim2$sig.beetle.vs.leaf[heat_d65.aim2$beetle.vs.leaf < 0.01] <- "**"
+heat_d65.aim2$sig.beetle.vs.leaf[heat_d65.aim2$beetle.vs.leaf < 0.0001] <- "***"
+heat_d65.aim2$sig.beetle.vs.flower[heat_d65.aim2$beetle.vs.flower > 0.05] <- ""
+heat_d65.aim2$sig.beetle.vs.flower[heat_d65.aim2$beetle.vs.flower < 0.05] <- "*"
+heat_d65.aim2$sig.beetle.vs.flower[heat_d65.aim2$beetle.vs.flower < 0.01] <- "**"
+heat_d65.aim2$sig.beetle.vs.flower[heat_d65.aim2$beetle.vs.flower < 0.0001] <- "***"
 
 
 
 
-#GLMM - Twilight - visual model 1
-##Leaf vs Flower
-m.leaf.vs.flower_twilight.model1 <- lmer(dS~peak_wl.leaf.vs.flower + (1|patch2) + (1|patch1), data = compare.leaf.vs.flower_twilight.model1,REML=F)
-sum.leaf.vs.flower_twilight.model1 <- summary(glht(m.leaf.vs.flower_twilight.model1, linfct = mcp(peak_wl.leaf.vs.flower = "Tukey")), test = adjusted("bonferroni"))
-##Leaf vs Beetle
-m.leaf.vs.beetle_twilight.model1 <- lmer(dS~peak_wl.leaf.vs.beetle + (1|patch2) + (1|patch1), data = compare.leaf.vs.beetle_twilight.model1,REML=F)
-sum.leaf.vs.beetle_twilight.model1<-summary(glht(m.leaf.vs.beetle_twilight.model1, linfct = mcp(peak_wl.leaf.vs.beetle = "Tukey")), test = adjusted("bonferroni"))
+#GLMM - Twilight - aim 1
+##Flower vs Leaf
+m.flower.vs.leaf_twilight.aim1 <- lmer(dS~peak_wl.flower.vs.leaf + (1|patch2) + (1|patch1), data = compare.flower.vs.leaf_twilight.aim1,REML=F)
+sum.flower.vs.leaf_twilight.aim1 <- summary(glht(m.flower.vs.leaf_twilight.aim1, linfct = mcp(peak_wl.flower.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
+##Beetle vs Leaf
+m.beetle.vs.leaf_twilight.aim1 <- lmer(dS~peak_wl.beetle.vs.leaf + (1|patch2) + (1|patch1), data = compare.beetle.vs.leaf_twilight.aim1,REML=F)
+sum.beetle.vs.leaf_twilight.aim1<-summary(glht(m.beetle.vs.leaf_twilight.aim1, linfct = mcp(peak_wl.beetle.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
 ##Beetle vs Flower
-m.flower.vs.beetle_twilight.model1 <- lmer(dS~peak_wl.flower.vs.beetle + (1|patch2) + (1|patch1), data = compare.flower.vs.beetle_twilight.model1,REML=F)
-sum.flower.vs.beetle_twilight.model1<-summary(glht(m.flower.vs.beetle_twilight.model1, linfct = mcp(peak_wl.flower.vs.beetle = "Tukey")), test = adjusted("bonferroni"))
+m.beetle.vs.flower_twilight.aim1 <- lmer(dS~peak_wl.beetle.vs.flower + (1|patch2) + (1|patch1), data = compare.beetle.vs.flower_twilight.aim1,REML=F)
+sum.beetle.vs.flower_twilight.aim1<-summary(glht(m.beetle.vs.flower_twilight.aim1, linfct = mcp(peak_wl.beetle.vs.flower = "Tukey")), test = adjusted("bonferroni"))
 ###reshape data for heatmap
-p1_twilight.model1<-sum.leaf.vs.flower_twilight.model1[["test"]][["pvalues"]]
-p2_twilight.model1<-sum.leaf.vs.beetle_twilight.model1[["test"]][["pvalues"]]
-p3_twilight.model1<-sum.flower.vs.beetle_twilight.model1[["test"]][["pvalues"]]
+p1_twilight.aim1<-sum.flower.vs.leaf_twilight.aim1[["test"]][["pvalues"]]
+p2_twilight.aim1<-sum.beetle.vs.leaf_twilight.aim1[["test"]][["pvalues"]]
+p3_twilight.aim1<-sum.beetle.vs.flower_twilight.aim1[["test"]][["pvalues"]]
 
-VislistA_twilight.model1<-c("Vis USL", "Vis USM","Vis USML","Vis USM","Vis USML","Vis USML")
-VislistB_twilight.model1<-c("Vis UML", "Vis UML","Vis UML","Vis USL","Vis USL","Vis USM")
+VislistA_twilight.aim1<-c("USL", "USM","USML","USM","USML","USML")
+VislistB_twilight.aim1<-c("UML", "UML","UML","USL","USL","USM")
 
-heat_twilight.model1<-data.frame(names(p1_twilight.model1),as.numeric(str_extract(p1_twilight.model1,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p2_twilight.model1,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p3_twilight.model1,"([0-9]+).*$"))) %>%
-  dplyr:: rename(orignial.list = 1, leaf.vs.flower = 2, leaf.vs.beetle = 3, flower.vs.beetle = 4) %>% 
-  cbind(VislistA_twilight.model1) %>% 
-  cbind(VislistB_twilight.model1) %>% 
+heat_twilight.aim1<-data.frame(names(p1_twilight.aim1),as.numeric(str_extract(p1_twilight.aim1,"([0-9]+).*$"))) %>% 
+  cbind(as.numeric(str_extract(p2_twilight.aim1,"([0-9]+).*$"))) %>% 
+  cbind(as.numeric(str_extract(p3_twilight.aim1,"([0-9]+).*$"))) %>%
+  dplyr:: rename(orignial.list = 1, flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% 
+  cbind(VislistA_twilight.aim1) %>% 
+  cbind(VislistB_twilight.aim1) %>% 
   dplyr::select(-orignial.list)
 
 ##add asterisks for significant pairs
-heat_twilight.model1$sig.leaf.vs.flower[heat_twilight.model1$leaf.vs.flower > 0.05] <- ""
-heat_twilight.model1$sig.leaf.vs.flower[heat_twilight.model1$leaf.vs.flower < 0.05] <- "*"
-heat_twilight.model1$sig.leaf.vs.flower[heat_twilight.model1$leaf.vs.flower < 0.01] <- "**"
-heat_twilight.model1$sig.leaf.vs.flower[heat_twilight.model1$leaf.vs.flower < 0.0001] <- "***"
-heat_twilight.model1$sig.leaf.vs.beetle[heat_twilight.model1$leaf.vs.beetle > 0.05] <- ""
-heat_twilight.model1$sig.leaf.vs.beetle[heat_twilight.model1$leaf.vs.beetle < 0.05] <- "*"
-heat_twilight.model1$sig.leaf.vs.beetle[heat_twilight.model1$leaf.vs.beetle < 0.01] <- "**"
-heat_twilight.model1$sig.leaf.vs.beetle[heat_twilight.model1$leaf.vs.beetle < 0.0001] <- "***"
-heat_twilight.model1$sig.flower.vs.beetle[heat_twilight.model1$flower.vs.beetle > 0.05] <- ""
-heat_twilight.model1$sig.flower.vs.beetle[heat_twilight.model1$flower.vs.beetle < 0.05] <- "*"
-heat_twilight.model1$sig.flower.vs.beetle[heat_twilight.model1$flower.vs.beetle < 0.01] <- "**"
-heat_twilight.model1$sig.flower.vs.beetle[heat_twilight.model1$flower.vs.beetle < 0.0001] <- "***"
+heat_twilight.aim1$sig.flower.vs.leaf[heat_twilight.aim1$flower.vs.leaf > 0.05] <- ""
+heat_twilight.aim1$sig.flower.vs.leaf[heat_twilight.aim1$flower.vs.leaf < 0.05] <- "*"
+heat_twilight.aim1$sig.flower.vs.leaf[heat_twilight.aim1$flower.vs.leaf < 0.01] <- "**"
+heat_twilight.aim1$sig.flower.vs.leaf[heat_twilight.aim1$flower.vs.leaf < 0.0001] <- "***"
+heat_twilight.aim1$sig.beetle.vs.leaf[heat_twilight.aim1$beetle.vs.leaf > 0.05] <- ""
+heat_twilight.aim1$sig.beetle.vs.leaf[heat_twilight.aim1$beetle.vs.leaf < 0.05] <- "*"
+heat_twilight.aim1$sig.beetle.vs.leaf[heat_twilight.aim1$beetle.vs.leaf < 0.01] <- "**"
+heat_twilight.aim1$sig.beetle.vs.leaf[heat_twilight.aim1$beetle.vs.leaf < 0.0001] <- "***"
+heat_twilight.aim1$sig.beetle.vs.flower[heat_twilight.aim1$beetle.vs.flower > 0.05] <- ""
+heat_twilight.aim1$sig.beetle.vs.flower[heat_twilight.aim1$beetle.vs.flower < 0.05] <- "*"
+heat_twilight.aim1$sig.beetle.vs.flower[heat_twilight.aim1$beetle.vs.flower < 0.01] <- "**"
+heat_twilight.aim1$sig.beetle.vs.flower[heat_twilight.aim1$beetle.vs.flower < 0.0001] <- "***"
 
 
 
 
-#GLMM - Twilight - visual model 2
-##Leaf vs Flower
-m.leaf.vs.flower_twilight.model2 <- lmer(dS~peak_wl.leaf.vs.flower + (1|patch2) + (1|patch1), data = compare.leaf.vs.flower_twilight.model2,REML=F)
-sum.leaf.vs.flower_twilight.model2 <- summary(glht(m.leaf.vs.flower_twilight.model2, linfct = mcp(peak_wl.leaf.vs.flower = "Tukey")), test = adjusted("bonferroni"))
-##Leaf vs Beetle
-m.leaf.vs.beetle_twilight.model2 <- lmer(dS~peak_wl.leaf.vs.beetle + (1|patch2) + (1|patch1), data = compare.leaf.vs.beetle_twilight.model2,REML=F)
-sum.leaf.vs.beetle_twilight.model2 <- summary(glht(m.leaf.vs.beetle_twilight.model2, linfct = mcp(peak_wl.leaf.vs.beetle = "Tukey")), test = adjusted("bonferroni"))
+#GLMM - Twilight - Aim 2
+##Flower vs Leaf
+m.flower.vs.leaf_twilight.aim2 <- lmer(dS~peak_wl.flower.vs.leaf + (1|patch2) + (1|patch1), data = compare.flower.vs.leaf_twilight.aim2,REML=F)
+sum.flower.vs.leaf_twilight.aim2 <- summary(glht(m.flower.vs.leaf_twilight.aim2, linfct = mcp(peak_wl.flower.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
+##Beetle vs Leaf
+m.beetle.vs.leaf_twilight.aim2 <- lmer(dS~peak_wl.beetle.vs.leaf + (1|patch2) + (1|patch1), data = compare.beetle.vs.leaf_twilight.aim2,REML=F)
+sum.beetle.vs.leaf_twilight.aim2 <- summary(glht(m.beetle.vs.leaf_twilight.aim2, linfct = mcp(peak_wl.beetle.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
 ##Beetle vs Flower
-m.flower.vs.beetle_twilight.model2 <- lmer(dS~peak_wl.flower.vs.beetle + (1|patch2) + (1|patch1), data = compare.flower.vs.beetle_twilight.model2,REML=F)
-sum.flower.vs.beetle_twilight.model2 <-summary(glht(m.flower.vs.beetle_twilight.model2, linfct = mcp(peak_wl.flower.vs.beetle = "Tukey")), test = adjusted("bonferroni"))
+m.beetle.vs.flower_twilight.aim2 <- lmer(dS~peak_wl.beetle.vs.flower + (1|patch2) + (1|patch1), data = compare.beetle.vs.flower_twilight.aim2,REML=F)
+sum.beetle.vs.flower_twilight.aim2 <-summary(glht(m.beetle.vs.flower_twilight.aim2, linfct = mcp(peak_wl.beetle.vs.flower = "Tukey")), test = adjusted("bonferroni"))
 ###reshape data for heatmap
-p1_twilight.model2<-sum.leaf.vs.flower_twilight.model2[["test"]][["pvalues"]]
-p2_twilight.model2<-sum.leaf.vs.beetle_twilight.model2[["test"]][["pvalues"]]
-p3_twilight.model2<-sum.flower.vs.beetle_twilight.model2[["test"]][["pvalues"]]
+p1_twilight.aim2<-sum.flower.vs.leaf_twilight.aim2[["test"]][["pvalues"]]
+p2_twilight.aim2<-sum.beetle.vs.leaf_twilight.aim2[["test"]][["pvalues"]]
+p3_twilight.aim2<-sum.beetle.vs.flower_twilight.aim2[["test"]][["pvalues"]]
 
-VislistA_twilight.model2<-c("Vis 600", "Vis 620","Vis 640","Vis 660","Vis 620","Vis 640","Vis 660","Vis 640","Vis 660","Vis 660")
-VislistB_twilight.model2<-c("Vis 580","Vis 580","Vis 580","Vis 580","Vis 600","Vis 600","Vis 600","Vis 620","Vis 620","Vis 640")
+VislistA_twilight.aim2<-c("VS 600", "VS 620","VS 640","Vis 660","VS 620","VS 640","Vis 660","VS 640","Vis 660","Vis 660")
+VislistB_twilight.aim2<-c("VS 580","VS 580","VS 580","VS 580","VS 600","VS 600","VS 600","VS 620","VS 620","VS 640")
 
-heat_twilight.model2<-data.frame(names(p1_twilight.model2),as.numeric(str_extract(p1_twilight.model2,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p2_twilight.model2,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p3_twilight.model2,"([0-9]+).*$"))) %>%
-  dplyr:: rename(orignial.list = 1, leaf.vs.flower = 2, leaf.vs.beetle = 3, flower.vs.beetle = 4) %>% 
-  cbind(VislistA_twilight.model2) %>% 
-  cbind(VislistB_twilight.model2) %>% 
+heat_twilight.aim2<-data.frame(names(p1_twilight.aim2),as.numeric(str_extract(p1_twilight.aim2,"([0-9]+).*$"))) %>% 
+  cbind(as.numeric(str_extract(p2_twilight.aim2,"([0-9]+).*$"))) %>% 
+  cbind(as.numeric(str_extract(p3_twilight.aim2,"([0-9]+).*$"))) %>%
+  dplyr:: rename(orignial.list = 1, flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% 
+  cbind(VislistA_twilight.aim2) %>% 
+  cbind(VislistB_twilight.aim2) %>% 
   dplyr::select(-orignial.list)
 
 ##add asterisks for significant pairs
-heat_twilight.model2$sig.leaf.vs.flower[heat_twilight.model2$leaf.vs.flower > 0.05] <- ""
-heat_twilight.model2$sig.leaf.vs.flower[heat_twilight.model2$leaf.vs.flower < 0.05] <- "*"
-heat_twilight.model2$sig.leaf.vs.flower[heat_twilight.model2$leaf.vs.flower < 0.01] <- "**"
-heat_twilight.model2$sig.leaf.vs.flower[heat_twilight.model2$leaf.vs.flower < 0.0001] <- "***"
-heat_twilight.model2$sig.leaf.vs.beetle[heat_twilight.model2$leaf.vs.beetle > 0.05] <- ""
-heat_twilight.model2$sig.leaf.vs.beetle[heat_twilight.model2$leaf.vs.beetle < 0.05] <- "*"
-heat_twilight.model2$sig.leaf.vs.beetle[heat_twilight.model2$leaf.vs.beetle < 0.01] <- "**"
-heat_twilight.model2$sig.leaf.vs.beetle[heat_twilight.model2$leaf.vs.beetle < 0.0001] <- "***"
-heat_twilight.model2$sig.flower.vs.beetle[heat_twilight.model2$flower.vs.beetle > 0.05] <- ""
-heat_twilight.model2$sig.flower.vs.beetle[heat_twilight.model2$flower.vs.beetle < 0.05] <- "*"
-heat_twilight.model2$sig.flower.vs.beetle[heat_twilight.model2$flower.vs.beetle < 0.01] <- "**"
-heat_twilight.model2$sig.flower.vs.beetle[heat_twilight.model2$flower.vs.beetle < 0.0001] <- "***"
+heat_twilight.aim2$sig.flower.vs.leaf[heat_twilight.aim2$flower.vs.leaf > 0.05] <- ""
+heat_twilight.aim2$sig.flower.vs.leaf[heat_twilight.aim2$flower.vs.leaf < 0.05] <- "*"
+heat_twilight.aim2$sig.flower.vs.leaf[heat_twilight.aim2$flower.vs.leaf < 0.01] <- "**"
+heat_twilight.aim2$sig.flower.vs.leaf[heat_twilight.aim2$flower.vs.leaf < 0.0001] <- "***"
+heat_twilight.aim2$sig.beetle.vs.leaf[heat_twilight.aim2$beetle.vs.leaf > 0.05] <- ""
+heat_twilight.aim2$sig.beetle.vs.leaf[heat_twilight.aim2$beetle.vs.leaf < 0.05] <- "*"
+heat_twilight.aim2$sig.beetle.vs.leaf[heat_twilight.aim2$beetle.vs.leaf < 0.01] <- "**"
+heat_twilight.aim2$sig.beetle.vs.leaf[heat_twilight.aim2$beetle.vs.leaf < 0.0001] <- "***"
+heat_twilight.aim2$sig.beetle.vs.flower[heat_twilight.aim2$beetle.vs.flower > 0.05] <- ""
+heat_twilight.aim2$sig.beetle.vs.flower[heat_twilight.aim2$beetle.vs.flower < 0.05] <- "*"
+heat_twilight.aim2$sig.beetle.vs.flower[heat_twilight.aim2$beetle.vs.flower < 0.01] <- "**"
+heat_twilight.aim2$sig.beetle.vs.flower[heat_twilight.aim2$beetle.vs.flower < 0.0001] <- "***"
 ```
 
-### Results of visual model 1: comparing visual systems with different photoreceptor combinations {.tabset .tabset-fade .tabset-pills}
+### Results of Aim 1: comparing visual systems with different photoreceptor combinations {.tabset .tabset-fade .tabset-pills}
 
 </br>
 
-Click the tabs to see the results for each comparison group ( __Leaf vs. Flower__ / __Leaf vs. Beetle__ / __Beetle vs. Flower__) and under different light conditions ( __Daylight__ / __Twilight__)
+Click the tabs to see the results for each comparison group ( __Flower vs. Leaf__ / __Beetle vs. Leaf__ / __Beetle vs. Flower__) and under different light conditions ( __Daylight__ / __Twilight__)
 
 </br>
 
-#### __Leaf vs Flower__ {.tabset .tabset-fade .tabset-pills}
+#### __Flower v.s Leaf__ {.tabset .tabset-fade .tabset-pills}
 #####Daylight{.tabset .tabset-fade .tabset-pills}
 
 ```{r}
-Anova(m.leaf.vs.flower_d65.model1) %>% pander()
+Anova(m.flower.vs.leaf_d65.aim1) %>% pander()
 ```
 
 </br>
@@ -1235,9 +1235,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat_d65.model1, aes(x=VislistA_d65.model1, y=VislistB_d65.model1, fill=leaf.vs.flower)) + 
+ggplot(data = heat_d65.aim1, aes(x=VislistA_d65.aim1, y=VislistB_d65.aim1, fill=flower.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_d65.model1, VislistB_d65.model1, label = paste(format(round(leaf.vs.flower, 2), nsmall = 2), sig.leaf.vs.flower)))+
+  geom_text(aes(VislistA_d65.aim1, VislistB_d65.aim1, label = paste(format(round(flower.vs.leaf, 2), nsmall = 2), sig.flower.vs.leaf)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1250,12 +1250,12 @@ ggplot(data = heat_d65.model1, aes(x=VislistA_d65.model1, y=VislistB_d65.model1,
 
 ######Original model output
 ```{r}
-sum.leaf.vs.flower_d65.model1
+sum.flower.vs.leaf_d65.aim1
 ```
 
 #####Twilight{.tabset .tabset-fade .tabset-pills}
 ```{r}
-Anova(m.leaf.vs.flower_twilight.model1) %>% pander()
+Anova(m.flower.vs.leaf_twilight.aim1) %>% pander()
 ```
 
 </br>
@@ -1265,9 +1265,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values
 ```{r}
-ggplot(data = heat_twilight.model1, aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=leaf.vs.flower)) + 
+ggplot(data = heat_twilight.aim1, aes(x=VislistA_twilight.aim1, y=VislistB_twilight.aim1, fill=flower.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = paste(format(round(leaf.vs.flower, 2), nsmall = 2), sig.leaf.vs.flower)))+
+  geom_text(aes(VislistA_twilight.aim1, VislistB_twilight.aim1, label = paste(format(round(flower.vs.leaf, 2), nsmall = 2), sig.flower.vs.leaf)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1280,13 +1280,13 @@ ggplot(data = heat_twilight.model1, aes(x=VislistA_twilight.model1, y=VislistB_t
 
 ######Original model output
 ```{r}
-sum.leaf.vs.flower_twilight.model1
+sum.flower.vs.leaf_twilight.aim1
 ```
 
-#### __Leaf vs Beetle__ {.tabset .tabset-fade .tabset-pills}
+#### __Beetle vs. Leaf__ {.tabset .tabset-fade .tabset-pills}
 #####Daylight{.tabset .tabset-fade .tabset-pills}
 ```{r}
-Anova(m.leaf.vs.beetle_d65.model1) %>% pander()
+Anova(m.beetle.vs.leaf_d65.aim1) %>% pander()
 ```
 
 </br>
@@ -1296,9 +1296,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat_d65.model1, aes(x=VislistA_d65.model1, y=VislistB_d65.model1, fill=leaf.vs.beetle)) + 
+ggplot(data = heat_d65.aim1, aes(x=VislistA_d65.aim1, y=VislistB_d65.aim1, fill=beetle.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_d65.model1, VislistB_d65.model1, label = paste(format(round(leaf.vs.beetle, 2), nsmall = 2), sig.leaf.vs.beetle))) +
+  geom_text(aes(VislistA_d65.aim1, VislistB_d65.aim1, label = paste(format(round(beetle.vs.leaf, 2), nsmall = 2), sig.beetle.vs.leaf))) +
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1311,12 +1311,12 @@ ggplot(data = heat_d65.model1, aes(x=VislistA_d65.model1, y=VislistB_d65.model1,
 
 ######Original model output
 ```{r}
-sum.leaf.vs.beetle_d65.model1
+sum.beetle.vs.leaf_d65.aim1
 ```
 
 #####Twilight{.tabset .tabset-fade .tabset-pills}
 ```{r}
-Anova(m.leaf.vs.beetle_twilight.model1) %>% pander()
+Anova(m.beetle.vs.leaf_twilight.aim1) %>% pander()
 ```
 
 </br>
@@ -1326,9 +1326,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values
 ```{r}
-ggplot(data = heat_twilight.model1, aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=leaf.vs.beetle)) + 
+ggplot(data = heat_twilight.aim1, aes(x=VislistA_twilight.aim1, y=VislistB_twilight.aim1, fill=beetle.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = paste(format(round(leaf.vs.beetle, 2), nsmall = 2), sig.leaf.vs.beetle))) +
+  geom_text(aes(VislistA_twilight.aim1, VislistB_twilight.aim1, label = paste(format(round(beetle.vs.leaf, 2), nsmall = 2), sig.beetle.vs.leaf))) +
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1341,13 +1341,13 @@ ggplot(data = heat_twilight.model1, aes(x=VislistA_twilight.model1, y=VislistB_t
 
 ######Original model output
 ```{r}
-sum.leaf.vs.beetle_twilight.model1
+sum.beetle.vs.leaf_twilight.aim1
 ```
 
-#### __Beetle vs Flower__ {.tabset .tabset-fade .tabset-pills}
+#### __Beetle vs. Flower__ {.tabset .tabset-fade .tabset-pills}
 #####Daylight{.tabset .tabset-fade .tabset-pills}
 ```{r}
-Anova(m.flower.vs.beetle_d65.model1) %>% pander()
+Anova(m.beetle.vs.flower_d65.aim1) %>% pander()
 ```
 
 </br>
@@ -1357,9 +1357,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat_d65.model1, aes(x=VislistA_d65.model1, y=VislistB_d65.model1, fill=flower.vs.beetle)) + 
+ggplot(data = heat_d65.aim1, aes(x=VislistA_d65.aim1, y=VislistB_d65.aim1, fill=beetle.vs.flower)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_d65.model1, VislistB_d65.model1, label = paste(format(round(flower.vs.beetle, 2), nsmall = 2), sig.flower.vs.beetle)))+
+  geom_text(aes(VislistA_d65.aim1, VislistB_d65.aim1, label = paste(format(round(beetle.vs.flower, 2), nsmall = 2), sig.beetle.vs.flower)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour 
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1372,12 +1372,12 @@ ggplot(data = heat_d65.model1, aes(x=VislistA_d65.model1, y=VislistB_d65.model1,
 
 ######Original model output
 ```{r}
-sum.flower.vs.beetle_d65.model1
+sum.beetle.vs.flower_d65.aim1
 ```
 
 #####Twilight{.tabset .tabset-fade .tabset-pills}
 ```{r}
-Anova(m.flower.vs.beetle_twilight.model1) %>% pander()
+Anova(m.beetle.vs.flower_twilight.aim1) %>% pander()
 ```
 
 </br>
@@ -1387,9 +1387,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values
 ```{r}
-ggplot(data = heat_twilight.model1, aes(x=VislistA_twilight.model1, y=VislistB_twilight.model1, fill=flower.vs.beetle)) + 
+ggplot(data = heat_twilight.aim1, aes(x=VislistA_twilight.aim1, y=VislistB_twilight.aim1, fill=beetle.vs.flower)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model1, VislistB_twilight.model1, label = paste(format(round(flower.vs.beetle, 2), nsmall = 2), sig.flower.vs.beetle)))+
+  geom_text(aes(VislistA_twilight.aim1, VislistB_twilight.aim1, label = paste(format(round(beetle.vs.flower, 2), nsmall = 2), sig.beetle.vs.flower)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1402,7 +1402,7 @@ ggplot(data = heat_twilight.model1, aes(x=VislistA_twilight.model1, y=VislistB_t
 
 ######Original model output
 ```{r}
-sum.leaf.vs.flower_twilight.model1
+sum.beetle.vs.flower_twilight.aim1
 ```
 
 
@@ -1410,20 +1410,20 @@ sum.leaf.vs.flower_twilight.model1
 </br>
 
 
-### Results of visual model 2: comparing visual systems with different LWS peak sensitivities {.tabset .tabset-fade .tabset-pills}
+### Results of Aim 2: comparing visual systems with different LWS peak sensitivities {.tabset .tabset-fade .tabset-pills}
 
 </br>
 
-Click the tabs to see the results for each comparison group ( __Leaf vs. Flower__ / __Leaf vs. Beetle__ / __Beetle vs. Flower__) and under different light conditions ( __Daylight__ / __Twilight__)
+Click the tabs to see the results for each comparison group ( __Flower vs. Leaf__ / __Beetle vs. Leaf__ / __Beetle vs. Flower__) and under different light conditions ( __Daylight__ / __Twilight__)
 
 </br>
 
-#### __Leaf vs Flower__ {.tabset .tabset-fade .tabset-pills}
+#### __Flower vs. Leaf__ {.tabset .tabset-fade .tabset-pills}
 
 #####Daylight{.tabset .tabset-fade .tabset-pills}
 
 ```{r}
-Anova(m.leaf.vs.flower_d65.model2) %>% pander()
+Anova(m.flower.vs.leaf_d65.aim2) %>% pander()
 ```
 
 </br>
@@ -1433,9 +1433,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat_d65.model2, aes(x=VislistA_d65.model2, y=VislistB_d65.model2, fill=leaf.vs.flower)) + 
+ggplot(data = heat_d65.aim2, aes(x=VislistA_d65.aim2, y=VislistB_d65.aim2, fill=flower.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_d65.model2, VislistB_d65.model2, label = paste(format(round(leaf.vs.flower, 2), nsmall = 2), sig.leaf.vs.flower)))+
+  geom_text(aes(VislistA_d65.aim2, VislistB_d65.aim2, label = paste(format(round(flower.vs.leaf, 2), nsmall = 2), sig.flower.vs.leaf)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1448,12 +1448,12 @@ ggplot(data = heat_d65.model2, aes(x=VislistA_d65.model2, y=VislistB_d65.model2,
 
 ######Original model output
 ```{r}
-sum.leaf.vs.flower_d65.model2
+sum.flower.vs.leaf_d65.aim2
 ```
 
 #####Twilight{.tabset .tabset-fade .tabset-pills}
 ```{r}
-Anova(m.leaf.vs.flower_twilight.model2) %>% pander()
+Anova(m.flower.vs.leaf_twilight.aim2) %>% pander()
 ```
 
 </br>
@@ -1463,9 +1463,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values
 ```{r}
-ggplot(data = heat_twilight.model2, aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=leaf.vs.flower)) + 
+ggplot(data = heat_twilight.aim2, aes(x=VislistA_twilight.aim2, y=VislistB_twilight.aim2, fill=flower.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = paste(format(round(leaf.vs.flower, 2), nsmall = 2), sig.leaf.vs.flower)))+
+  geom_text(aes(VislistA_twilight.aim2, VislistB_twilight.aim2, label = paste(format(round(flower.vs.leaf, 2), nsmall = 2), sig.flower.vs.leaf)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1478,13 +1478,13 @@ ggplot(data = heat_twilight.model2, aes(x=VislistA_twilight.model2, y=VislistB_t
 
 ######Original model output
 ```{r}
-sum.leaf.vs.flower_twilight.model2
+sum.flower.vs.leaf_twilight.aim2
 ```
 
-#### __Leaf vs Beetle__ {.tabset .tabset-fade .tabset-pills}
+#### __Beetle vs. Leaf__ {.tabset .tabset-fade .tabset-pills}
 #####Daylight{.tabset .tabset-fade .tabset-pills}
 ```{r}
-Anova(m.leaf.vs.beetle_d65.model2) %>% pander()
+Anova(m.beetle.vs.leaf_d65.aim2) %>% pander()
 ```
 
 </br>
@@ -1494,9 +1494,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat_d65.model2, aes(x=VislistA_d65.model2, y=VislistB_d65.model2, fill=leaf.vs.beetle)) + 
+ggplot(data = heat_d65.aim2, aes(x=VislistA_d65.aim2, y=VislistB_d65.aim2, fill=beetle.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_d65.model2, VislistB_d65.model2, label = paste(format(round(leaf.vs.beetle, 2), nsmall = 2), sig.leaf.vs.beetle))) +
+  geom_text(aes(VislistA_d65.aim2, VislistB_d65.aim2, label = paste(format(round(beetle.vs.leaf, 2), nsmall = 2), sig.beetle.vs.leaf))) +
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1509,12 +1509,12 @@ ggplot(data = heat_d65.model2, aes(x=VislistA_d65.model2, y=VislistB_d65.model2,
 
 ######Original model output
 ```{r}
-sum.leaf.vs.beetle_d65.model2
+sum.beetle.vs.leaf_d65.aim2
 ```
 
 #####Twilight{.tabset .tabset-fade .tabset-pills}
 ```{r}
-Anova(m.leaf.vs.beetle_twilight.model2) %>% pander()
+Anova(m.beetle.vs.leaf_twilight.aim2) %>% pander()
 ```
 
 </br>
@@ -1524,9 +1524,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values
 ```{r}
-ggplot(data = heat_twilight.model2, aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=leaf.vs.beetle)) + 
+ggplot(data = heat_twilight.aim2, aes(x=VislistA_twilight.aim2, y=VislistB_twilight.aim2, fill=beetle.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2, label = paste(format(round(leaf.vs.beetle, 2), nsmall = 2), sig.leaf.vs.beetle))) +
+  geom_text(aes(VislistA_twilight.aim2, VislistB_twilight.aim2, label = paste(format(round(beetle.vs.leaf, 2), nsmall = 2), sig.beetle.vs.leaf))) +
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1539,13 +1539,13 @@ ggplot(data = heat_twilight.model2, aes(x=VislistA_twilight.model2, y=VislistB_t
 
 ######Original model output
 ```{r}
-sum.leaf.vs.beetle_twilight.model2
+sum.beetle.vs.leaf_twilight.aim2
 ```
 
-#### __Beetle vs Flower__ {.tabset .tabset-fade .tabset-pills}
+#### __Beetle vs. Flower__ {.tabset .tabset-fade .tabset-pills}
 #####Daylight{.tabset .tabset-fade .tabset-pills}
 ```{r}
-Anova(m.flower.vs.beetle_d65.model2) %>% pander()
+Anova(m.beetle.vs.flower_d65.aim2) %>% pander()
 ```
 
 </br>
@@ -1555,9 +1555,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values 
 ```{r}
-ggplot(data = heat_d65.model2, aes(x=VislistA_d65.model2, y=VislistB_d65.model2, fill=flower.vs.beetle)) + 
+ggplot(data = heat_d65.aim2, aes(x=VislistA_d65.aim2, y=VislistB_d65.aim2, fill=beetle.vs.flower)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_d65.model2, VislistB_d65.model2, label = paste(format(round(flower.vs.beetle, 2), nsmall = 2), sig.flower.vs.beetle)))+
+  geom_text(aes(VislistA_d65.aim2, VislistB_d65.aim2, label = paste(format(round(beetle.vs.flower, 2), nsmall = 2), sig.beetle.vs.flower)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour 
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1570,12 +1570,12 @@ ggplot(data = heat_d65.model2, aes(x=VislistA_d65.model2, y=VislistB_d65.model2,
 
 ######Original model output
 ```{r}
-sum.flower.vs.beetle_d65.model2
+sum.beetle.vs.flower_d65.aim2
 ```
 
 #####Twilight{.tabset .tabset-fade .tabset-pills}
 ```{r}
-Anova(m.flower.vs.beetle_twilight.model2) %>% pander()
+Anova(m.beetle.vs.flower_twilight.aim2) %>% pander()
 ```
 
 </br>
@@ -1585,9 +1585,9 @@ Click the tabs to see posthoc results ( __p-value summary plot__ / __original mo
 
 ######Pair-wise p-values
 ```{r}
-ggplot(data = heat_twilight.model2, aes(x=VislistA_twilight.model2, y=VislistB_twilight.model2, fill=flower.vs.beetle)) + 
+ggplot(data = heat_twilight.aim2, aes(x=VislistA_twilight.aim2, y=VislistB_twilight.aim2, fill=beetle.vs.flower)) + 
   geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA_twilight.model2, VislistB_twilight.model2,  label = paste(format(round(flower.vs.beetle, 2), nsmall = 2), sig.flower.vs.beetle)))+
+  geom_text(aes(VislistA_twilight.aim2, VislistB_twilight.aim2,  label = paste(format(round(beetle.vs.flower, 2), nsmall = 2), sig.beetle.vs.flower)))+
   scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
   theme_bw()+
   theme(axis.title.x=element_blank(),
@@ -1600,7 +1600,7 @@ ggplot(data = heat_twilight.model2, aes(x=VislistA_twilight.model2, y=VislistB_t
 
 ######Original model output
 ```{r}
-sum.flower.vs.beetle_twilight.model2
+sum.beetle.vs.flower_twilight.aim2
 ```
 
 
@@ -1613,9 +1613,9 @@ sum.flower.vs.beetle_twilight.model2
 
 </br>
 
-##Visual model 1 {.tabset .tabset-fade .tabset-pills}
+##aim 1 {.tabset .tabset-fade .tabset-pills}
 ###Daylight
-```{r,fig.cap="Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
+```{r,fig.cap="Figure caption: Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
 #import the flower color code 
 color.code<-read.csv("data/color code list.csv",header=TRUE) 
 
@@ -1624,14 +1624,14 @@ name.list<-unique(dataset.transpose$species) %>%
   sort() %>% #order it alphebatically as well
   data.frame() %>% dplyr::rename(species = ".")#make it a data frame and name the column "species"
 
-#creat flower name list for visual model 1
-flower.colour.model1 <- name.list %>% filter(str_detect(species, "flower")) %>% #select flower names
+#creat flower name list for aim 1
+flower.colour.aim1 <- name.list %>% filter(str_detect(species, "flower")) %>% #select flower names
   cbind(color.code %>% filter(str_detect(type, "flower")) %>% arrange(name)) %>% #select flower color codes and order it alphebatically
   dplyr::select(-type) %>% #remove the redundant column
   mutate(count = 4) %>% uncount(count) #repeat each row for 4 times for 4 visual systems
 
-#creat beetle name list for visual model 1
-beetle.colour.model1 <- name.list %>% filter(str_detect(species, "beetle")) %>% #select flower names
+#creat beetle name list for aim 1
+beetle.colour.aim1 <- name.list %>% filter(str_detect(species, "beetle")) %>% #select flower names
   cbind(color.code %>% filter(str_detect(type, "beetle")) %>% arrange(name)) %>% #select flower color codes and order it alphebatically
   dplyr::select(-type) %>% #remove the redundant column
   mutate(count = 4) %>% uncount(count) #repeat each row for 4 times for 4 visual systems
@@ -1640,27 +1640,27 @@ beetle.colour.model1 <- name.list %>% filter(str_detect(species, "beetle")) %>% 
 
 #make flower vs leaf plot
 ##add the mean
-mean.lf_d65.model1<-allvis.lf_d65.model1 %>% mutate(patch3 = paste(allvis.lf_d65.model1$vissys,allvis.lf_d65.model1$patch1,sep=".")) %>% 
+mean.fl_d65.aim1<-allvis.fl_d65.aim1 %>% mutate(patch3 = paste(allvis.fl_d65.aim1$vissys,allvis.fl_d65.aim1$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
-  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.lf=mean(dS)) %>% 
+  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.fl=mean(dS)) %>% 
   #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
 ##plot the mean
-names(mean.lf_d65.model1)[names(mean.lf_d65.model1) == "patch1"] <- "flowerID" 
+names(mean.fl_d65.aim1)[names(mean.fl_d65.aim1) == "patch1"] <- "flowerID" 
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.lf_d65.model1<-mean.lf_d65.model1[order(mean.lf_d65.model1$flowerID),] 
+mean.fl_d65.aim1<-mean.fl_d65.aim1[order(mean.fl_d65.aim1$flowerID),] 
 #make the data frame order by flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
 ##combine the colour code list to the mean.bf for ploting
-mean.lf_d65.model1$match.name<-flower.colour.model1$species # this column is just for checking if match correctly
-mean.lf_d65.model1$colour<-flower.colour.model1$colour
+mean.fl_d65.aim1$match.name<-flower.colour.aim1$species # this column is just for checking if match correctly
+mean.fl_d65.aim1$colour<-flower.colour.aim1$colour
 
 
-lf_d65.model1<-ggplot(mean.lf_d65.model1, aes(x=vissys, y=mean.dS.lf,group=flowerID))+
-  geom_point(col=mean.lf_d65.model1$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.lf_d65.model1$colour, size = 1, alpha=0.7)+
+fl_d65.aim1<-ggplot(mean.fl_d65.aim1, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
+  geom_point(col=mean.fl_d65.aim1$colour,size=3, alpha=0.7) + 
+  geom_line(col=mean.fl_d65.aim1$colour, size = 1, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,15)+
@@ -1676,46 +1676,46 @@ lf_d65.model1<-ggplot(mean.lf_d65.model1, aes(x=vissys, y=mean.dS.lf,group=flowe
         legend.key = element_blank(),
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("Vis1.lf", "Vis2.lf", "Vis3.lf","Vis4.lf"),
-                   labels=c("Vis USM", "Vis UML", "Vis USL","Vis USML"))+
+  scale_x_discrete(limits = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl"),
+                   labels=c("USM", "UML", "USL","USML"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
-  geom_point(data = mean.lf_d65.model1, aes(x= "Vis1.lf", y= mean(Vis1.lf_d65.model1$dS)), 
+  geom_point(data = mean.fl_d65.aim1, aes(x= "VS1.fl", y= mean(VS1.fl_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_d65.model1, aes(x= "Vis2.lf", y= mean(Vis2.lf_d65.model1$dS)), 
+  geom_point(data = mean.fl_d65.aim1, aes(x= "VS2.fl", y= mean(VS2.fl_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_d65.model1, aes(x= "Vis3.lf", y= mean(Vis3.lf_d65.model1$dS)), 
+  geom_point(data = mean.fl_d65.aim1, aes(x= "VS3.fl", y= mean(VS3.fl_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_d65.model1, aes(x= "Vis4.lf", y= mean(Vis4.lf_d65.model1$dS)), 
+  geom_point(data = mean.fl_d65.aim1, aes(x= "VS4.fl", y= mean(VS4.fl_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
   #change the x labels
-  ggtitle("Leaf vs. Flower")+
-  annotate("text", x = c("Vis1.lf", "Vis2.lf", "Vis3.lf","Vis4.lf"), y = 15, label =c("a","a","b","c")) #add stitistical info
+  ggtitle("Flower vs. Leaf")+
+  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl"), y = 15, label =c("a","a","b","c")) #add stitistical info
 
 
 
 #make beetle vs leaf plot
 ##add the mean
-mean.lb_d65.model1<-allvis.lb_d65.model1 %>% mutate(patch3 = paste(allvis.lb_d65.model1$vissys,allvis.lb_d65.model1$patch2,sep=".")) %>% 
+mean.bl_d65.aim1<-allvis.bl_d65.aim1 %>% mutate(patch3 = paste(allvis.bl_d65.aim1$vissys,allvis.bl_d65.aim1$patch2,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch2(beetles) and vissys
-  group_by(patch3,vissys,patch2) %>% summarize(mean.dS.lb=mean(dS)) %>% 
+  group_by(patch3,vissys,patch2) %>% summarize(mean.dS.bl=mean(dS)) %>% 
   #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
 ##plot the mean
-names(mean.lb_d65.model1)[names(mean.lb_d65.model1) == "patch2"] <- "beetleID"
+names(mean.bl_d65.aim1)[names(mean.bl_d65.aim1) == "patch2"] <- "beetleID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.lb_d65.model1<-mean.lb_d65.model1[order(mean.lb_d65.model1$beetleID),]
+mean.bl_d65.aim1<-mean.bl_d65.aim1[order(mean.bl_d65.aim1$beetleID),]
 #make the data frame order bt beetleID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
 ##combine the colour code list to the mean.bf for ploting
-mean.lb_d65.model1$match.name<-beetle.colour.model1$species # this column is just for checking if match correctly
-mean.lb_d65.model1$colour<-beetle.colour.model1$colour
+mean.bl_d65.aim1$match.name<-beetle.colour.aim1$species # this column is just for checking if match correctly
+mean.bl_d65.aim1$colour<-beetle.colour.aim1$colour
 
 
-lb_d65.model1<-ggplot(mean.lb_d65.model1, aes(x=vissys, y=mean.dS.lb,group=beetleID))+
-  geom_point(col=mean.lb_d65.model1$colour, size=3,alpha=0.7) + 
-  geom_line(col=mean.lb_d65.model1$colour, size = 1, alpha=0.7)+
+bl_d65.aim1<-ggplot(mean.bl_d65.aim1, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
+  geom_point(col=mean.bl_d65.aim1$colour, size=3,alpha=0.7) + 
+  geom_line(col=mean.bl_d65.aim1$colour, size = 1, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,15)+
@@ -1730,24 +1730,24 @@ lb_d65.model1<-ggplot(mean.lb_d65.model1, aes(x=vissys, y=mean.dS.lb,group=beetl
         legend.key = element_blank(),
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("Vis1.lb", "Vis2.lb", "Vis3.lb","Vis4.lb"),
-                   labels=c("Vis USM", "Vis UML", "Vis USL","Vis USML"))+
+  scale_x_discrete(limits = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl"),
+                   labels=c("USM", "UML", "USL","USML"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
-  geom_point(data = mean.lb_d65.model1, aes(x= "Vis1.lb", y= mean(Vis1.lb_d65.model1$dS)), 
+  geom_point(data = mean.bl_d65.aim1, aes(x= "VS1.bl", y= mean(VS1.bl_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_d65.model1, aes(x= "Vis2.lb", y= mean(Vis2.lb_d65.model1$dS)), 
+  geom_point(data = mean.bl_d65.aim1, aes(x= "VS2.bl", y= mean(VS2.bl_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_d65.model1, aes(x= "Vis3.lb", y= mean(Vis3.lb_d65.model1$dS)), 
+  geom_point(data = mean.bl_d65.aim1, aes(x= "VS3.bl", y= mean(VS3.bl_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_d65.model1, aes(x= "Vis4.lb", y= mean(Vis4.lb_d65.model1$dS)), 
+  geom_point(data = mean.bl_d65.aim1, aes(x= "VS4.bl", y= mean(VS4.bl_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
   #change the x labels
-  ggtitle("Leaf vs. Beetle")+annotate("text", x = c("Vis1.lb", "Vis2.lb", "Vis3.lb","Vis4.lb"), y = 15, label =c("a","bc","b","c")) #add stitistical info
+  ggtitle("Beetle vs. Leaf")+annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl"), y = 15, label =c("a","bc","b","c")) #add stitistical info
 
 
 #make beetle vs flower plot
 ##add the mean
-mean.bf_d65.model1<-allvis.bf_d65.model1 %>% mutate(patch3 = paste(allvis.bf_d65.model1$vissys,allvis.bf_d65.model1$patch1,sep=".")) %>% 
+mean.bf_d65.aim1<-allvis.bf_d65.aim1 %>% mutate(patch3 = paste(allvis.bf_d65.aim1$vissys,allvis.bf_d65.aim1$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
   group_by(patch3,vissys,patch1) %>% summarize(mean.dS.bf=mean(dS)) %>% #patch1(flowers
   #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
@@ -1755,18 +1755,18 @@ mean.bf_d65.model1<-allvis.bf_d65.model1 %>% mutate(patch3 = paste(allvis.bf_d65
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
 ##plot the mean
-names(mean.bf_d65.model1)[names(mean.bf_d65.model1) == "patch1"] <- "flowerID"
+names(mean.bf_d65.aim1)[names(mean.bf_d65.aim1) == "patch1"] <- "flowerID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.bf_d65.model1<-mean.bf_d65.model1[order(mean.bf_d65.model1$flowerID),]
+mean.bf_d65.aim1<-mean.bf_d65.aim1[order(mean.bf_d65.aim1$flowerID),]
 #make the data frame order bt flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
 ##combine the colour code list to the mean.bf for ploting
-mean.bf_d65.model1$match.name<-flower.colour.model1$species # this column is just for checking if match correctly
-mean.bf_d65.model1$colour<-flower.colour.model1$colour
+mean.bf_d65.aim1$match.name<-flower.colour.aim1$species # this column is just for checking if match correctly
+mean.bf_d65.aim1$colour<-flower.colour.aim1$colour
 
-bf_d65.model1<-ggplot(mean.bf_d65.model1, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf_d65.model1$colour, size=3, alpha=0.7) + 
-  geom_line(col=mean.bf_d65.model1$colour, size = 1, alpha=0.7)+
+bf_d65.aim1<-ggplot(mean.bf_d65.aim1, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
+  geom_point(col=mean.bf_d65.aim1$colour, size=3, alpha=0.7) + 
+  geom_line(col=mean.bf_d65.aim1$colour, size = 1, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,15)+
@@ -1782,51 +1782,51 @@ bf_d65.model1<-ggplot(mean.bf_d65.model1, aes(x=vissys, y=mean.dS.bf,group=flowe
         legend.key = element_blank(),
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("Vis1.bf", "Vis2.bf", "Vis3.bf","Vis4.bf"),
-                   labels=c("Vis USM", "Vis UML", "Vis USL","Vis USML"))+
+  scale_x_discrete(limits = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf"),
+                   labels=c("USM", "UML", "USL","USML"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
-  geom_point(data = mean.bf_d65.model1, aes(x= "Vis1.bf", y= mean(Vis1.bf_d65.model1$dS)), 
+  geom_point(data = mean.bf_d65.aim1, aes(x= "VS1.bf", y= mean(VS1.bf_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_d65.model1, aes(x= "Vis2.bf", y= mean(Vis2.bf_d65.model1$dS)), 
+  geom_point(data = mean.bf_d65.aim1, aes(x= "VS2.bf", y= mean(VS2.bf_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_d65.model1, aes(x= "Vis3.bf", y= mean(Vis3.bf_d65.model1$dS)), 
+  geom_point(data = mean.bf_d65.aim1, aes(x= "VS3.bf", y= mean(VS3.bf_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_d65.model1, aes(x= "Vis4.bf", y= mean(Vis4.bf_d65.model1$dS)), 
+  geom_point(data = mean.bf_d65.aim1, aes(x= "VS4.bf", y= mean(VS4.bf_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("Vis1.bf", "Vis2.bf", "Vis3.bf","Vis4.bf"), y = 15, label =c("a","b","c","d")) #add stitistical info
+  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf"), y = 15, label =c("a","b","c","d")) #add stitistical info
 
 #plot the contrasts from the 3 comparison groups together
-figure_d65.model1 <- ggarrange(lf_d65.model1,lb_d65.model1,bf_d65.model1, ncol = 3, nrow = 1)
-figure_d65.model1
+figure_d65.aim1 <- ggarrange(fl_d65.aim1,bl_d65.aim1,bf_d65.aim1, ncol = 3, nrow = 1)
+figure_d65.aim1
 ```
 
 ###Twilight
-```{r,fig.cap="Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the mean of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
+```{r,fig.cap="Figure caption: Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the mean of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
 #make flower vs leaf plot
 ##add the mean
-mean.lf_twilight.model1<-allvis.lf_twilight.model1 %>% mutate(patch3 = paste(allvis.lf_twilight.model1$vissys,allvis.lf_twilight.model1$patch1,sep=".")) %>% 
+mean.fl_twilight.aim1<-allvis.fl_twilight.aim1 %>% mutate(patch3 = paste(allvis.fl_twilight.aim1$vissys,allvis.fl_twilight.aim1$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
-  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.lf=mean(dS)) %>% 
+  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.fl=mean(dS)) %>% 
   #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
 ##plot the mean
-names(mean.lf_twilight.model1)[names(mean.lf_twilight.model1) == "patch1"] <- "flowerID" 
+names(mean.fl_twilight.aim1)[names(mean.fl_twilight.aim1) == "patch1"] <- "flowerID" 
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.lf_twilight.model1<-mean.lf_twilight.model1[order(mean.lf_twilight.model1$flowerID),] 
+mean.fl_twilight.aim1<-mean.fl_twilight.aim1[order(mean.fl_twilight.aim1$flowerID),] 
 #make the data frame order by flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
 ##combine the colour code list to the mean.bf for ploting
-mean.lf_twilight.model1$match.name<-flower.colour.model1$species # this column is just for checking if match correctly
-mean.lf_twilight.model1$colour<-flower.colour.model1$colour
+mean.fl_twilight.aim1$match.name<-flower.colour.aim1$species # this column is just for checking if match correctly
+mean.fl_twilight.aim1$colour<-flower.colour.aim1$colour
 
 
-lf_twilight.model1<-ggplot(mean.lf_twilight.model1, aes(x=vissys, y=mean.dS.lf,group=flowerID))+
-  geom_point(col=mean.lf_twilight.model1$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.lf_twilight.model1$colour, size = 1, alpha=0.7)+
+fl_twilight.aim1<-ggplot(mean.fl_twilight.aim1, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
+  geom_point(col=mean.fl_twilight.aim1$colour,size=3, alpha=0.7) + 
+  geom_line(col=mean.fl_twilight.aim1$colour, size = 1, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,2)+
@@ -1842,45 +1842,45 @@ lf_twilight.model1<-ggplot(mean.lf_twilight.model1, aes(x=vissys, y=mean.dS.lf,g
         legend.key = element_blank(),
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("Vis1.lf", "Vis2.lf", "Vis3.lf","Vis4.lf"),
-                   labels=c("Vis USM", "Vis UML", "Vis USL","Vis USML"))+
+  scale_x_discrete(limits = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl"),
+                   labels=c("USM", "UML", "USL","USML"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
-  geom_point(data = mean.lf_twilight.model1, aes(x= "Vis1.lf", y= mean(Vis1.lf_twilight.model1$dS)), 
+  geom_point(data = mean.fl_twilight.aim1, aes(x= "VS1.fl", y= mean(VS1.fl_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_twilight.model1, aes(x= "Vis2.lf", y= mean(Vis2.lf_twilight.model1$dS)), 
+  geom_point(data = mean.fl_twilight.aim1, aes(x= "VS2.fl", y= mean(VS2.fl_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_twilight.model1, aes(x= "Vis3.lf", y= mean(Vis3.lf_twilight.model1$dS)), 
+  geom_point(data = mean.fl_twilight.aim1, aes(x= "VS3.fl", y= mean(VS3.fl_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_twilight.model1, aes(x= "Vis4.lf", y= mean(Vis4.lf_twilight.model1$dS)), 
+  geom_point(data = mean.fl_twilight.aim1, aes(x= "VS4.fl", y= mean(VS4.fl_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
   #change the x labels
-  ggtitle("Leaf vs. Flower")+
-  annotate("text", x = c("Vis1.lf", "Vis2.lf", "Vis3.lf","Vis4.lf"), y = 3, label =c("a","b","c","d")) #add stitistical info
+  ggtitle("Flower vs. Leaf")+
+  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl"), y = 3, label =c("a","b","c","d")) #add stitistical info
 
 
 #make beetle vs leaf plot
 ##add the mean
-mean.lb_twilight.model1<-allvis.lb_twilight.model1 %>% mutate(patch3 = paste(allvis.lb_twilight.model1$vissys,allvis.lb_twilight.model1$patch2,sep=".")) %>% 
+mean.bl_twilight.aim1<-allvis.bl_twilight.aim1 %>% mutate(patch3 = paste(allvis.bl_twilight.aim1$vissys,allvis.bl_twilight.aim1$patch2,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch2(beetles) and vissys
-  group_by(patch3,vissys,patch2) %>% summarize(mean.dS.lb=mean(dS)) %>% 
+  group_by(patch3,vissys,patch2) %>% summarize(mean.dS.bl=mean(dS)) %>% 
   #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
 ##plot the mean
-names(mean.lb_twilight.model1)[names(mean.lb_twilight.model1) == "patch2"] <- "beetleID"
+names(mean.bl_twilight.aim1)[names(mean.bl_twilight.aim1) == "patch2"] <- "beetleID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.lb_twilight.model1<-mean.lb_twilight.model1[order(mean.lb_twilight.model1$beetleID),]
+mean.bl_twilight.aim1<-mean.bl_twilight.aim1[order(mean.bl_twilight.aim1$beetleID),]
 #make the data frame order bt beetleID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
 ##combine the colour code list to the mean.bf for ploting
-mean.lb_twilight.model1$match.name<-beetle.colour.model1$species # this column is just for checking if match correctly
-mean.lb_twilight.model1$colour<-beetle.colour.model1$colour
+mean.bl_twilight.aim1$match.name<-beetle.colour.aim1$species # this column is just for checking if match correctly
+mean.bl_twilight.aim1$colour<-beetle.colour.aim1$colour
 
 
-lb_twilight.model1<-ggplot(mean.lb_twilight.model1, aes(x=vissys, y=mean.dS.lb,group=beetleID))+
-  geom_point(col=mean.lb_twilight.model1$colour, size=3,alpha=0.7) + 
-  geom_line(col=mean.lb_twilight.model1$colour, size = 1, alpha=0.7)+
+bl_twilight.aim1<-ggplot(mean.bl_twilight.aim1, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
+  geom_point(col=mean.bl_twilight.aim1$colour, size=3,alpha=0.7) + 
+  geom_line(col=mean.bl_twilight.aim1$colour, size = 1, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,2)+
@@ -1895,26 +1895,26 @@ lb_twilight.model1<-ggplot(mean.lb_twilight.model1, aes(x=vissys, y=mean.dS.lb,g
         legend.key = element_blank(),
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("Vis1.lb", "Vis2.lb", "Vis3.lb","Vis4.lb"),
-                   labels=c("Vis USM", "Vis UML", "Vis USL","Vis USML"))+
+  scale_x_discrete(limits = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl"),
+                   labels=c("USM", "UML", "USL","USML"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
-  geom_point(data = mean.lb_twilight.model1, aes(x= "Vis1.lb", y= mean(Vis1.lb_twilight.model1$dS)), 
+  geom_point(data = mean.bl_twilight.aim1, aes(x= "VS1.bl", y= mean(VS1.bl_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_twilight.model1, aes(x= "Vis2.lb", y= mean(Vis2.lb_twilight.model1$dS)), 
+  geom_point(data = mean.bl_twilight.aim1, aes(x= "VS2.bl", y= mean(VS2.bl_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_twilight.model1, aes(x= "Vis3.lb", y= mean(Vis3.lb_twilight.model1$dS)), 
+  geom_point(data = mean.bl_twilight.aim1, aes(x= "VS3.bl", y= mean(VS3.bl_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_twilight.model1, aes(x= "Vis4.lb", y= mean(Vis4.lb_twilight.model1$dS)), 
+  geom_point(data = mean.bl_twilight.aim1, aes(x= "VS4.bl", y= mean(VS4.bl_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
   #change the x labels
-  ggtitle("Leaf vs. Beetle")+
-  annotate("text", x = c("Vis1.lb", "Vis2.lb", "Vis3.lb","Vis4.lb"), y = 3, label =c("a","b","b","c")) #add stitistical info
+  ggtitle("Beetle vs. Leaf")+
+  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl"), y = 3, label =c("a","b","b","c")) #add stitistical info
 
 
 
 #make beetle vs flower plot
 ##add the mean
-mean.bf_twilight.model1<-allvis.bf_twilight.model1 %>% mutate(patch3 = paste(allvis.bf_twilight.model1$vissys,allvis.bf_twilight.model1$patch1,sep=".")) %>% 
+mean.bf_twilight.aim1<-allvis.bf_twilight.aim1 %>% mutate(patch3 = paste(allvis.bf_twilight.aim1$vissys,allvis.bf_twilight.aim1$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
   group_by(patch3,vissys,patch1) %>% summarize(mean.dS.bf=mean(dS)) %>% #patch1(flowers
   #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
@@ -1922,18 +1922,18 @@ mean.bf_twilight.model1<-allvis.bf_twilight.model1 %>% mutate(patch3 = paste(all
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
 ##plot the mean
-names(mean.bf_twilight.model1)[names(mean.bf_twilight.model1) == "patch1"] <- "flowerID"
+names(mean.bf_twilight.aim1)[names(mean.bf_twilight.aim1) == "patch1"] <- "flowerID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.bf_twilight.model1<-mean.bf_twilight.model1[order(mean.bf_twilight.model1$flowerID),]
+mean.bf_twilight.aim1<-mean.bf_twilight.aim1[order(mean.bf_twilight.aim1$flowerID),]
 #make the data frame order bt flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
 ##combine the colour code list to the mean.bf for ploting
-mean.bf_twilight.model1$match.name<-flower.colour.model1$species # this column is just for checking if match correctly
-mean.bf_twilight.model1$colour<-flower.colour.model1$colour
+mean.bf_twilight.aim1$match.name<-flower.colour.aim1$species # this column is just for checking if match correctly
+mean.bf_twilight.aim1$colour<-flower.colour.aim1$colour
 
-bf_twilight.model1<-ggplot(mean.bf_twilight.model1, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf_twilight.model1$colour, size=3, alpha=0.7) + 
-  geom_line(col=mean.bf_twilight.model1$colour, size = 1, alpha=0.7)+
+bf_twilight.aim1<-ggplot(mean.bf_twilight.aim1, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
+  geom_point(col=mean.bf_twilight.aim1$colour, size=3, alpha=0.7) + 
+  geom_line(col=mean.bf_twilight.aim1$colour, size = 1, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,2)+
@@ -1949,40 +1949,40 @@ bf_twilight.model1<-ggplot(mean.bf_twilight.model1, aes(x=vissys, y=mean.dS.bf,g
         legend.key = element_blank(),
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("Vis1.bf", "Vis2.bf", "Vis3.bf","Vis4.bf"),
-                   labels=c("Vis USM", "Vis UML", "Vis USL","Vis USML"))+
+  scale_x_discrete(limits = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf"),
+                   labels=c("USM", "UML", "USL","USML"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
-  geom_point(data = mean.bf_twilight.model1, aes(x= "Vis1.bf", y= mean(Vis1.bf_twilight.model1$dS)), 
+  geom_point(data = mean.bf_twilight.aim1, aes(x= "VS1.bf", y= mean(VS1.bf_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_twilight.model1, aes(x= "Vis2.bf", y= mean(Vis2.bf_twilight.model1$dS)), 
+  geom_point(data = mean.bf_twilight.aim1, aes(x= "VS2.bf", y= mean(VS2.bf_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_twilight.model1, aes(x= "Vis3.bf", y= mean(Vis3.bf_twilight.model1$dS)), 
+  geom_point(data = mean.bf_twilight.aim1, aes(x= "VS3.bf", y= mean(VS3.bf_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_twilight.model1, aes(x= "Vis4.bf", y= mean(Vis4.bf_twilight.model1$dS)), 
+  geom_point(data = mean.bf_twilight.aim1, aes(x= "VS4.bf", y= mean(VS4.bf_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("Vis1.bf", "Vis2.bf", "Vis3.bf","Vis4.bf"), y = 3, label =c("a","b","c","d")) #add stitistical info
+  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf"), y = 3, label =c("a","b","c","d")) #add stitistical info
 
 
 
 #plot the contrasts from the 3 comparison groups together
-figure_twilight.model1 <- ggarrange(lf_twilight.model1,lb_twilight.model1,bf_twilight.model1, ncol = 3, nrow = 1)
-figure_twilight.model1
+figure_twilight.aim1 <- ggarrange(fl_twilight.aim1,bl_twilight.aim1,bf_twilight.aim1, ncol = 3, nrow = 1)
+figure_twilight.aim1
 ```
 
 
-##Visual model 2 {.tabset .tabset-fade .tabset-pills}
+##Aim 2 {.tabset .tabset-fade .tabset-pills}
 ###Daylight
-```{r,fig.cap="Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the mean of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
-#creat flower name list for visual model 2
-flower.colour.model2 <- name.list %>% filter(str_detect(species, "flower")) %>% #select flower names
+```{r,fig.cap="Figure caption: Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the mean of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
+#creat flower name list for Aim 2
+flower.colour.aim2 <- name.list %>% filter(str_detect(species, "flower")) %>% #select flower names
   cbind(color.code %>% filter(str_detect(type, "flower")) %>% arrange(name)) %>% #select flower color codes and order it alphebatically
   dplyr::select(-type) %>% #remove the redundant column
   mutate(count = 5) %>% uncount(count) #repeat each row for 5 times for 5 visual systems
 
-#creat beetle name list for visual model 2
-beetle.colour.model2 <- name.list %>% filter(str_detect(species, "beetle")) %>% #select flower names
+#creat beetle name list for Aim 2
+beetle.colour.aim2 <- name.list %>% filter(str_detect(species, "beetle")) %>% #select flower names
   cbind(color.code %>% filter(str_detect(type, "beetle")) %>% arrange(name)) %>% #select flower color codes and order it alphebatically
   dplyr::select(-type) %>% #remove the redundant column
   mutate(count = 5) %>% uncount(count) #repeat each row for 5 times for 5 visual systems
@@ -1990,26 +1990,26 @@ beetle.colour.model2 <- name.list %>% filter(str_detect(species, "beetle")) %>% 
 
 #make flower vs leaf plot
 ##add the mean
-mean.lf_d65.model2<-allvis.lf_d65.model2 %>% mutate(patch3 = paste(allvis.lf_d65.model2$vissys,allvis.lf_d65.model2$patch1,sep=".")) %>% 
+mean.fl_d65.aim2<-allvis.fl_d65.aim2 %>% mutate(patch3 = paste(allvis.fl_d65.aim2$vissys,allvis.fl_d65.aim2$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
-  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.lf=mean(dS)) %>% 
+  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.fl=mean(dS)) %>% 
   #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
 ##plot the mean
-names(mean.lf_d65.model2)[names(mean.lf_d65.model2) == "patch1"] <- "flowerID" 
+names(mean.fl_d65.aim2)[names(mean.fl_d65.aim2) == "patch1"] <- "flowerID" 
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.lf_d65.model2<-mean.lf_d65.model2[order(mean.lf_d65.model2$flowerID),] 
+mean.fl_d65.aim2<-mean.fl_d65.aim2[order(mean.fl_d65.aim2$flowerID),] 
 #make the data frame order by flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
 ##combine the colour code list to the mean.bf for ploting
-mean.lf_d65.model2$match.name<-flower.colour.model2$species # this column is just for checking if match correctly
-mean.lf_d65.model2$colour<-flower.colour.model2$colour
+mean.fl_d65.aim2$match.name<-flower.colour.aim2$species # this column is just for checking if match correctly
+mean.fl_d65.aim2$colour<-flower.colour.aim2$colour
 
-lf_d65.model2<-ggplot(mean.lf_d65.model2, aes(x=vissys, y=mean.dS.lf,group=flowerID))+
-  geom_point(col=mean.lf_d65.model2$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.lf_d65.model2$colour, size = 1, alpha=0.7)+
+fl_d65.aim2<-ggplot(mean.fl_d65.aim2, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
+  geom_point(col=mean.fl_d65.aim2$colour,size=3, alpha=0.7) + 
+  geom_line(col=mean.fl_d65.aim2$colour, size = 1, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,15)+
@@ -2025,47 +2025,47 @@ lf_d65.model2<-ggplot(mean.lf_d65.model2, aes(x=vissys, y=mean.dS.lf,group=flowe
         legend.key = element_blank(),
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("Vis1.lf", "Vis2.lf", "Vis3.lf","Vis4.lf","Vis5.lf"),
-                   labels=c("Vis 580", "Vis 600","Vis 620","Vis 640","Vis 660"))+
+  scale_x_discrete(limits = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"),
+                   labels=c("VS 580", "VS 600","VS 620","VS 640","Vis 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
-  geom_point(data = mean.lf_d65.model2, aes(x= "Vis1.lf", y= mean(Vis1.lf_d65.model2$dS)), 
+  geom_point(data = mean.fl_d65.aim2, aes(x= "VS1.fl", y= mean(VS1.fl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_d65.model2, aes(x= "Vis2.lf", y= mean(Vis2.lf_d65.model2$dS)), 
+  geom_point(data = mean.fl_d65.aim2, aes(x= "VS2.fl", y= mean(VS2.fl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_d65.model2, aes(x= "Vis3.lf", y= mean(Vis3.lf_d65.model2$dS)), 
+  geom_point(data = mean.fl_d65.aim2, aes(x= "VS3.fl", y= mean(VS3.fl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_d65.model2, aes(x= "Vis4.lf", y= mean(Vis4.lf_d65.model2$dS)), 
+  geom_point(data = mean.fl_d65.aim2, aes(x= "VS4.fl", y= mean(VS4.fl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_d65.model2, aes(x= "Vis5.lf", y= mean(Vis5.lf_d65.model2$dS)), 
+  geom_point(data = mean.fl_d65.aim2, aes(x= "VS5.fl", y= mean(VS5.fl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
   #change the x labels
-  ggtitle("Leaf vs. Flower")+
-  annotate("text", x = c("Vis1.lf", "Vis2.lf", "Vis3.lf","Vis4.lf","Vis5.lf"), y = 15, label =c("a","b","c","d","d")) #add stitistical info
+  ggtitle("Flower vs. Leaf")+
+  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 15, label =c("a","b","c","d","d")) #add stitistical info
 
 
 #make beetle vs leaf plot
 ##add the mean
-mean.lb_d65.model2<-allvis.lb_d65.model2 %>% mutate(patch3 = paste(allvis.lb_d65.model2$vissys,allvis.lb_d65.model2$patch2,sep=".")) %>% 
+mean.bl_d65.aim2<-allvis.bl_d65.aim2 %>% mutate(patch3 = paste(allvis.bl_d65.aim2$vissys,allvis.bl_d65.aim2$patch2,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch2(beetles) and vissys
-  group_by(patch3,vissys,patch2) %>% summarize(mean.dS.lb=mean(dS)) %>% 
+  group_by(patch3,vissys,patch2) %>% summarize(mean.dS.bl=mean(dS)) %>% 
   #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
 ##plot the mean
-names(mean.lb_d65.model2)[names(mean.lb_d65.model2) == "patch2"] <- "beetleID"
+names(mean.bl_d65.aim2)[names(mean.bl_d65.aim2) == "patch2"] <- "beetleID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.lb_d65.model2<-mean.lb_d65.model2[order(mean.lb_d65.model2$beetleID),]
+mean.bl_d65.aim2<-mean.bl_d65.aim2[order(mean.bl_d65.aim2$beetleID),]
 #make the data frame order bt beetleID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
 ##combine the colour code list to the mean.bf for ploting
-mean.lb_d65.model2$match.name<-beetle.colour.model2$species # this column is just for checking if match correctly
-mean.lb_d65.model2$colour<-beetle.colour.model2$colour
+mean.bl_d65.aim2$match.name<-beetle.colour.aim2$species # this column is just for checking if match correctly
+mean.bl_d65.aim2$colour<-beetle.colour.aim2$colour
 
 
-lb_d65.model2<-ggplot(mean.lb_d65.model2, aes(x=vissys, y=mean.dS.lb,group=beetleID))+
-  geom_point(col=mean.lb_d65.model2$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.lb_d65.model2$colour, size = 1, alpha=0.7)+
+bl_d65.aim2<-ggplot(mean.bl_d65.aim2, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
+  geom_point(col=mean.bl_d65.aim2$colour,size=3, alpha=0.7) + 
+  geom_line(col=mean.bl_d65.aim2$colour, size = 1, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,15)+
@@ -2080,27 +2080,27 @@ lb_d65.model2<-ggplot(mean.lb_d65.model2, aes(x=vissys, y=mean.dS.lb,group=beetl
         legend.key = element_blank(),
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("Vis1.lb", "Vis2.lb", "Vis3.lb","Vis4.lb","Vis5.lb"),
-                   labels=c("Vis 580", "Vis 600","Vis 620","Vis 640","Vis 660"))+
+  scale_x_discrete(limits = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"),
+                   labels=c("VS 580", "VS 600","VS 620","VS 640","Vis 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
-  geom_point(data = mean.lb_d65.model2, aes(x= "Vis1.lb", y= mean(Vis1.lb_d65.model2$dS)), 
+  geom_point(data = mean.bl_d65.aim2, aes(x= "VS1.bl", y= mean(VS1.bl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_d65.model2, aes(x= "Vis2.lb", y= mean(Vis2.lb_d65.model2$dS)), 
+  geom_point(data = mean.bl_d65.aim2, aes(x= "VS2.bl", y= mean(VS2.bl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_d65.model2, aes(x= "Vis3.lb", y= mean(Vis3.lb_d65.model2$dS)), 
+  geom_point(data = mean.bl_d65.aim2, aes(x= "VS3.bl", y= mean(VS3.bl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_d65.model2, aes(x= "Vis4.lb", y= mean(Vis4.lb_d65.model2$dS)), 
+  geom_point(data = mean.bl_d65.aim2, aes(x= "VS4.bl", y= mean(VS4.bl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_d65.model2, aes(x= "Vis5.lb", y= mean(Vis5.lb_d65.model2$dS)), 
+  geom_point(data = mean.bl_d65.aim2, aes(x= "VS5.bl", y= mean(VS5.bl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
   #change the x labels
-  ggtitle("Leaf vs. Beetle")+
-  annotate("text", x = c("Vis1.lb", "Vis2.lb", "Vis3.lb","Vis4.lb","Vis5.lb"), y = 15, label =c("a","b","c","d","e")) #add stitistical info
+  ggtitle("Beetle vs. Leaf")+
+  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 15, label =c("a","b","c","d","e")) #add stitistical info
 
 
 #make beetle vs flower plot
 ##add the mean
-mean.bf_d65.model2<-allvis.bf_d65.model2 %>% mutate(patch3 = paste(allvis.bf_d65.model2$vissys,allvis.bf_d65.model2$patch1,sep=".")) %>% 
+mean.bf_d65.aim2<-allvis.bf_d65.aim2 %>% mutate(patch3 = paste(allvis.bf_d65.aim2$vissys,allvis.bf_d65.aim2$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
   group_by(patch3,vissys,patch1) %>% summarize(mean.dS.bf=mean(dS)) %>% #patch1(flowers
   #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
@@ -2109,18 +2109,18 @@ mean.bf_d65.model2<-allvis.bf_d65.model2 %>% mutate(patch3 = paste(allvis.bf_d65
 
 
 ##plot the mean dS
-names(mean.bf_d65.model2)[names(mean.bf_d65.model2) == "patch1"] <- "flowerID"
+names(mean.bf_d65.aim2)[names(mean.bf_d65.aim2) == "patch1"] <- "flowerID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.bf_d65.model2<-mean.bf_d65.model2[order(mean.bf_d65.model2$flowerID),]
+mean.bf_d65.aim2<-mean.bf_d65.aim2[order(mean.bf_d65.aim2$flowerID),]
 #make the data frame order bt flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
 ##combine the colour code list to the mean.bf for ploting
-mean.bf_d65.model2$match.name<-flower.colour.model2$species # this column is just for checking if match correctly
-mean.bf_d65.model2$colour<-flower.colour.model2$colour
+mean.bf_d65.aim2$match.name<-flower.colour.aim2$species # this column is just for checking if match correctly
+mean.bf_d65.aim2$colour<-flower.colour.aim2$colour
 
-bf_d65.model2<-ggplot(mean.bf_d65.model2, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf_d65.model2$colour, size=3,alpha=0.7) + 
-  geom_line(col=mean.bf_d65.model2$colour, size = 1, alpha=0.7)+
+bf_d65.aim2<-ggplot(mean.bf_d65.aim2, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
+  geom_point(col=mean.bf_d65.aim2$colour, size=3,alpha=0.7) + 
+  geom_line(col=mean.bf_d65.aim2$colour, size = 1, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,15)+
@@ -2136,51 +2136,51 @@ bf_d65.model2<-ggplot(mean.bf_d65.model2, aes(x=vissys, y=mean.dS.bf,group=flowe
         legend.key = element_blank(),
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("Vis1.bf", "Vis2.bf", "Vis3.bf","Vis4.bf","Vis5.bf"),
-                   labels=c("Vis 580", "Vis 600","Vis 620","Vis 640","Vis 660"))+
+  scale_x_discrete(limits = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"),
+                   labels=c("VS 580", "VS 600","VS 620","VS 640","Vis 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
-  geom_point(data = mean.bf_d65.model2, aes(x= "Vis1.bf", y= mean(Vis1.bf_d65.model2$dS)), 
+  geom_point(data = mean.bf_d65.aim2, aes(x= "VS1.bf", y= mean(VS1.bf_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_d65.model2, aes(x= "Vis2.bf", y= mean(Vis2.bf_d65.model2$dS)), 
+  geom_point(data = mean.bf_d65.aim2, aes(x= "VS2.bf", y= mean(VS2.bf_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_d65.model2, aes(x= "Vis3.bf", y= mean(Vis3.bf_d65.model2$dS)), 
+  geom_point(data = mean.bf_d65.aim2, aes(x= "VS3.bf", y= mean(VS3.bf_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_d65.model2, aes(x= "Vis4.bf", y= mean(Vis4.bf_d65.model2$dS)), 
+  geom_point(data = mean.bf_d65.aim2, aes(x= "VS4.bf", y= mean(VS4.bf_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_d65.model2, aes(x= "Vis5.bf", y= mean(Vis5.bf_d65.model2$dS)), 
+  geom_point(data = mean.bf_d65.aim2, aes(x= "VS5.bf", y= mean(VS5.bf_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("Vis1.bf", "Vis2.bf", "Vis3.bf","Vis4.bf","Vis5.bf"), y = 15, label =c("a","b","c","d","e")) #add stitistical info
+  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 15, label =c("a","b","c","d","e")) #add stitistical info
 
-figure_d65.model2 <- ggarrange(lf_d65.model2,lb_d65.model2,bf_d65.model2, ncol = 3, nrow = 1)
-figure_d65.model2
+figure_d65.aim2 <- ggarrange(fl_d65.aim2,bl_d65.aim2,bf_d65.aim2, ncol = 3, nrow = 1)
+figure_d65.aim2
 ```
 
 ###Twilight
-```{r,fig.cap="Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the mean of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
+```{r,fig.cap="Figure caption: Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the mean of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
 #make flower vs leaf plot
 ##add the mean
-mean.lf_twilight.model2<-allvis.lf_twilight.model2 %>% mutate(patch3 = paste(allvis.lf_twilight.model2$vissys,allvis.lf_twilight.model2$patch1,sep=".")) %>% 
+mean.fl_twilight.aim2<-allvis.fl_twilight.aim2 %>% mutate(patch3 = paste(allvis.fl_twilight.aim2$vissys,allvis.fl_twilight.aim2$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
-  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.lf=mean(dS)) %>% 
+  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.fl=mean(dS)) %>% 
   #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
 ##plot the mean
-names(mean.lf_twilight.model2)[names(mean.lf_twilight.model2) == "patch1"] <- "flowerID" 
+names(mean.fl_twilight.aim2)[names(mean.fl_twilight.aim2) == "patch1"] <- "flowerID" 
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.lf_twilight.model2<-mean.lf_twilight.model2[order(mean.lf_twilight.model2$flowerID),] 
+mean.fl_twilight.aim2<-mean.fl_twilight.aim2[order(mean.fl_twilight.aim2$flowerID),] 
 #make the data frame order by flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
 ##combine the colour code list to the mean.bf for ploting
-mean.lf_twilight.model2$match.name<-flower.colour.model2$species # this column is just for checking if match correctly
-mean.lf_twilight.model2$colour<-flower.colour.model2$colour
+mean.fl_twilight.aim2$match.name<-flower.colour.aim2$species # this column is just for checking if match correctly
+mean.fl_twilight.aim2$colour<-flower.colour.aim2$colour
 
-lf_twilight.model2<-ggplot(mean.lf_twilight.model2, aes(x=vissys, y=mean.dS.lf,group=flowerID))+
-  geom_point(col=mean.lf_twilight.model2$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.lf_twilight.model2$colour, size = 1, alpha=0.7)+
+fl_twilight.aim2<-ggplot(mean.fl_twilight.aim2, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
+  geom_point(col=mean.fl_twilight.aim2$colour,size=3, alpha=0.7) + 
+  geom_line(col=mean.fl_twilight.aim2$colour, size = 1, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,2)+
@@ -2196,47 +2196,47 @@ lf_twilight.model2<-ggplot(mean.lf_twilight.model2, aes(x=vissys, y=mean.dS.lf,g
         legend.key = element_blank(),
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("Vis1.lf", "Vis2.lf", "Vis3.lf","Vis4.lf","Vis5.lf"),
-                   labels=c("Vis 580", "Vis 600","Vis 620","Vis 640","Vis 660"))+
+  scale_x_discrete(limits = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"),
+                   labels=c("VS 580", "VS 600","VS 620","VS 640","Vis 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
-  geom_point(data = mean.lf_twilight.model2, aes(x= "Vis1.lf", y= mean(Vis1.lf_twilight.model2$dS)), 
+  geom_point(data = mean.fl_twilight.aim2, aes(x= "VS1.fl", y= mean(VS1.fl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_twilight.model2, aes(x= "Vis2.lf", y= mean(Vis2.lf_twilight.model2$dS)), 
+  geom_point(data = mean.fl_twilight.aim2, aes(x= "VS2.fl", y= mean(VS2.fl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_twilight.model2, aes(x= "Vis3.lf", y= mean(Vis3.lf_twilight.model2$dS)), 
+  geom_point(data = mean.fl_twilight.aim2, aes(x= "VS3.fl", y= mean(VS3.fl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_twilight.model2, aes(x= "Vis4.lf", y= mean(Vis4.lf_twilight.model2$dS)), 
+  geom_point(data = mean.fl_twilight.aim2, aes(x= "VS4.fl", y= mean(VS4.fl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lf_twilight.model2, aes(x= "Vis5.lf", y= mean(Vis5.lf_twilight.model2$dS)), 
+  geom_point(data = mean.fl_twilight.aim2, aes(x= "VS5.fl", y= mean(VS5.fl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
   #change the x labels
-  ggtitle("Leaf vs. Flower")+
-  annotate("text", x = c("Vis1.lf", "Vis2.lf", "Vis3.lf","Vis4.lf","Vis5.lf"), y = 3, label =c("a","b","c","d","e")) #add stitistical info
+  ggtitle("Flower vs. Leaf")+
+  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 3, label =c("a","b","c","d","e")) #add stitistical info
 
 
 #make beetle vs leaf plot
 ##add the mean
-mean.lb_twilight.model2<-allvis.lb_twilight.model2 %>% mutate(patch3 = paste(allvis.lb_twilight.model2$vissys,allvis.lb_twilight.model2$patch2,sep=".")) %>% 
+mean.bl_twilight.aim2<-allvis.bl_twilight.aim2 %>% mutate(patch3 = paste(allvis.bl_twilight.aim2$vissys,allvis.bl_twilight.aim2$patch2,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch2(beetles) and vissys
-  group_by(patch3,vissys,patch2) %>% summarize(mean.dS.lb=mean(dS)) %>% 
+  group_by(patch3,vissys,patch2) %>% summarize(mean.dS.bl=mean(dS)) %>% 
   #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
   ungroup() %>% 
   dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
 ##plot the mean
-names(mean.lb_twilight.model2)[names(mean.lb_twilight.model2) == "patch2"] <- "beetleID"
+names(mean.bl_twilight.aim2)[names(mean.bl_twilight.aim2) == "patch2"] <- "beetleID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.lb_twilight.model2<-mean.lb_twilight.model2[order(mean.lb_twilight.model2$beetleID),]
+mean.bl_twilight.aim2<-mean.bl_twilight.aim2[order(mean.bl_twilight.aim2$beetleID),]
 #make the data frame order bt beetleID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
 ##combine the colour code list to the mean.bf for ploting
-mean.lb_twilight.model2$match.name<-beetle.colour.model2$species # this column is just for checking if match correctly
-mean.lb_twilight.model2$colour<-beetle.colour.model2$colour
+mean.bl_twilight.aim2$match.name<-beetle.colour.aim2$species # this column is just for checking if match correctly
+mean.bl_twilight.aim2$colour<-beetle.colour.aim2$colour
 
 
-lb_twilight.model2<-ggplot(mean.lb_twilight.model2, aes(x=vissys, y=mean.dS.lb,group=beetleID))+
-  geom_point(col=mean.lb_twilight.model2$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.lb_twilight.model2$colour, size = 1, alpha=0.7)+
+bl_twilight.aim2<-ggplot(mean.bl_twilight.aim2, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
+  geom_point(col=mean.bl_twilight.aim2$colour,size=3, alpha=0.7) + 
+  geom_line(col=mean.bl_twilight.aim2$colour, size = 1, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,2)+
@@ -2251,27 +2251,27 @@ lb_twilight.model2<-ggplot(mean.lb_twilight.model2, aes(x=vissys, y=mean.dS.lb,g
         legend.key = element_blank(),
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("Vis1.lb", "Vis2.lb", "Vis3.lb","Vis4.lb","Vis5.lb"),
-                   labels=c("Vis 580", "Vis 600","Vis 620","Vis 640","Vis 660"))+
+  scale_x_discrete(limits = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"),
+                   labels=c("VS 580", "VS 600","VS 620","VS 640","Vis 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
-  geom_point(data = mean.lb_twilight.model2, aes(x= "Vis1.lb", y= mean(Vis1.lb_twilight.model2$dS)), 
+  geom_point(data = mean.bl_twilight.aim2, aes(x= "VS1.bl", y= mean(VS1.bl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_twilight.model2, aes(x= "Vis2.lb", y= mean(Vis2.lb_twilight.model2$dS)), 
+  geom_point(data = mean.bl_twilight.aim2, aes(x= "VS2.bl", y= mean(VS2.bl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_twilight.model2, aes(x= "Vis3.lb", y= mean(Vis3.lb_twilight.model2$dS)), 
+  geom_point(data = mean.bl_twilight.aim2, aes(x= "VS3.bl", y= mean(VS3.bl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_twilight.model2, aes(x= "Vis4.lb", y= mean(Vis4.lb_twilight.model2$dS)), 
+  geom_point(data = mean.bl_twilight.aim2, aes(x= "VS4.bl", y= mean(VS4.bl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.lb_twilight.model2, aes(x= "Vis5.lb", y= mean(Vis5.lb_twilight.model2$dS)), 
+  geom_point(data = mean.bl_twilight.aim2, aes(x= "VS5.bl", y= mean(VS5.bl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
   #change the x labels
-  ggtitle("Leaf vs. Beetle")+
-  annotate("text", x = c("Vis1.lb", "Vis2.lb", "Vis3.lb","Vis4.lb","Vis5.lb"), y = 3, label =c("a","b","c","d","d")) #add stitistical info
+  ggtitle("Beetle vs. Leaf")+
+  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 3, label =c("a","b","c","d","d")) #add stitistical info
 
 
 #make beetle vs flower plot
 ##add the mean
-mean.bf_twilight.model2<-allvis.bf_twilight.model2 %>% mutate(patch3 = paste(allvis.bf_twilight.model2$vissys,allvis.bf_twilight.model2$patch1,sep=".")) %>% 
+mean.bf_twilight.aim2<-allvis.bf_twilight.aim2 %>% mutate(patch3 = paste(allvis.bf_twilight.aim2$vissys,allvis.bf_twilight.aim2$patch1,sep=".")) %>% 
   #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
   group_by(patch3,vissys,patch1) %>% summarize(mean.dS.bf=mean(dS)) %>% #patch1(flowers
   #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
@@ -2280,18 +2280,18 @@ mean.bf_twilight.model2<-allvis.bf_twilight.model2 %>% mutate(patch3 = paste(all
 
 
 ##plot the mean dS
-names(mean.bf_twilight.model2)[names(mean.bf_twilight.model2) == "patch1"] <- "flowerID"
+names(mean.bf_twilight.aim2)[names(mean.bf_twilight.aim2) == "patch1"] <- "flowerID"
 #rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.bf_twilight.model2<-mean.bf_twilight.model2[order(mean.bf_twilight.model2$flowerID),]
+mean.bf_twilight.aim2<-mean.bf_twilight.aim2[order(mean.bf_twilight.aim2$flowerID),]
 #make the data frame order bt flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
 
 ##combine the colour code list to the mean.bf for ploting
-mean.bf_twilight.model2$match.name<-flower.colour.model2$species # this column is just for checking if match correctly
-mean.bf_twilight.model2$colour<-flower.colour.model2$colour
+mean.bf_twilight.aim2$match.name<-flower.colour.aim2$species # this column is just for checking if match correctly
+mean.bf_twilight.aim2$colour<-flower.colour.aim2$colour
 
-bf_twilight.model2<-ggplot(mean.bf_twilight.model2, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf_twilight.model2$colour, size=3,alpha=0.7) + 
-  geom_line(col=mean.bf_twilight.model2$colour, size = 1, alpha=0.7)+
+bf_twilight.aim2<-ggplot(mean.bf_twilight.aim2, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
+  geom_point(col=mean.bf_twilight.aim2$colour, size=3,alpha=0.7) + 
+  geom_line(col=mean.bf_twilight.aim2$colour, size = 1, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,2)+
@@ -2307,36 +2307,36 @@ bf_twilight.model2<-ggplot(mean.bf_twilight.model2, aes(x=vissys, y=mean.dS.bf,g
         legend.key = element_blank(),
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("Vis1.bf", "Vis2.bf", "Vis3.bf","Vis4.bf","Vis5.bf"),
-                   labels=c("Vis 580", "Vis 600","Vis 620","Vis 640","Vis 660"))+
+  scale_x_discrete(limits = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"),
+                   labels=c("VS 580", "VS 600","VS 620","VS 640","Vis 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
-  geom_point(data = mean.bf_twilight.model2, aes(x= "Vis1.bf", y= mean(Vis1.bf_twilight.model2$dS)), 
+  geom_point(data = mean.bf_twilight.aim2, aes(x= "VS1.bf", y= mean(VS1.bf_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_twilight.model2, aes(x= "Vis2.bf", y= mean(Vis2.bf_twilight.model2$dS)), 
+  geom_point(data = mean.bf_twilight.aim2, aes(x= "VS2.bf", y= mean(VS2.bf_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_twilight.model2, aes(x= "Vis3.bf", y= mean(Vis3.bf_twilight.model2$dS)), 
+  geom_point(data = mean.bf_twilight.aim2, aes(x= "VS3.bf", y= mean(VS3.bf_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_twilight.model2, aes(x= "Vis4.bf", y= mean(Vis4.bf_twilight.model2$dS)), 
+  geom_point(data = mean.bf_twilight.aim2, aes(x= "VS4.bf", y= mean(VS4.bf_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf_twilight.model2, aes(x= "Vis5.bf", y= mean(Vis5.bf_twilight.model2$dS)), 
+  geom_point(data = mean.bf_twilight.aim2, aes(x= "VS5.bf", y= mean(VS5.bf_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("Vis1.bf", "Vis2.bf", "Vis3.bf","Vis4.bf","Vis5.bf"), y = 3, label =c("a","b","c","d","e")) #add stitistical info
+  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 3, label =c("a","b","c","d","e")) #add stitistical info
 
-figure_twilight.model2 <- ggarrange(lf_twilight.model2,lb_twilight.model2,bf_twilight.model2, ncol = 3, nrow = 1)
-figure_twilight.model2
+figure_twilight.aim2 <- ggarrange(fl_twilight.aim2,bl_twilight.aim2,bf_twilight.aim2, ncol = 3, nrow = 1)
+figure_twilight.aim2
 ```
 
 #Summary
 
-* Visual models using hypothetical insect visual systems indicate that long wavelength sensitivity enhances the contrast of beetle colours against leaf backgrounds; whereas short wavelength sensitivity enhances the contrast of flowers with both leaves and beetles. 
+* Visual models using hypothetical insect visual systems indicate that having both SWS and LWS receptors enhances the contrast of beetles with flowers and flowers with leaves, and a LWS receptor enhances the contrast of beetles against leaves.
 </br>
 </br>
-* Tetrachromacy consistently increases contrast compared to trichromacy, with the largest increase of 1.4-fold observed in the comparison between beetles and leaves. 
+* The USL visual system (UVS, SWS and LWS) consistently provides the highest contrast compared to the other three visual systems, whereas the USM visual system (UVS, SWS and MWS) consistently provides the lowest or equal lowest contrast.
 </br>
 </br>
-* The optimal peak sensitivity of the LWS photoreceptor depends on what is being viewed. When comparing beetle colours with both leaves and flowers, contrast increases with increasing LWS peak sensitivity, whereas when comparing flowers with leaves, contrast is maximized with a LWS photoreceptor peak sensitivity of 640 nm.
+* The optimal peak sensitivity of the LWS photoreceptor depends on what is being viewed. When comparing beetle colours with both leaves and flowers, contrast increases with increasing LWS λmax; whereas when comparing flowers against leaves, contrast is maximized with a LWS photoreceptor peak sensitivity of 640 nm.
 </br>
 </br>
-* The contrasts in the corresponding comparisons were qualitatively similar in twilight models.
+* The contrasts of the models using civil twilight were substantially lower (often < 1 JND) than those using daylight. The contrasts in twilight showed different patterns from those using daylight in Aim 1 models, but were qualitatively similar in Aim 2 models.

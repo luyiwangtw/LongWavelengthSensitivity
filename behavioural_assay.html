@@ -9,7 +9,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content=" Lu-Yi Wang1, Devi Stuart-Fox1, Geoff Walker1, Nicholas W. Roberts2 and Amanda Franklin1   1School of Biosciences, The University of Melbourne, Australia   2School of Biological Sciences, University of Bristol, UK" />
 
 
 <title>Behavioural assay</title>
@@ -416,7 +415,10 @@ div.tocify {
   <a href="main_models.html">Main models</a>
 </li>
 <li>
-  <a href="even_space.html">Even space</a>
+  <a href="even_spacing.html">Even spacing</a>
+</li>
+<li>
+  <a href="opsin_shifed_models.html">Opsin-shifted visual systems</a>
 </li>
 <li>
   <a href="sensitivity_analysis.html">Sensitivity analysis</a>
@@ -446,14 +448,13 @@ div.tocify {
 
 <h1 class="title toc-ignore">Behavioural assay</h1>
 <h3 class="subtitle">Supplementary Information</h3>
-<h4 class="author"><br>Lu-Yi Wang<sup>1</sup>, Devi Stuart-Fox<sup>1</sup>, Geoff Walker<sup>1</sup>, Nicholas W. Roberts<sup>2</sup> and Amanda Franklin<sup>1</sup> <br></br> <sup>1</sup>School of Biosciences, The University of Melbourne, Australia <br></br> <sup>2</sup>School of Biological Sciences, University of Bristol, UK <br></br></h4>
 
 </div>
 
 
 <div id="the-aim" class="section level1">
 <h1>The aim</h1>
-<p>Both opsin expression and electroretinogram data indicate that jewel beetles have a LWS photoreceptor with sensitivity potentially extending into the far red. However, their visual sensitivities have not been confirmed with behavioural data. Here, we conducted a behavioral assay to confirm their long wavelength sensitivity in living jewel beetles.</p>
+<p>Intracellular recordings, opsin expression and electroretinogram data indicate that jewel beetles have a LWS photoreceptor with sensitivity potentially extending into the far red. However, their visual sensitivities have not been confirmed with behavioural data. Here, we conducted a behavioral assay to confirm their long wavelength sensitivity in living jewel beetles.</p>
 <p></br> </br></p>
 </div>
 <div id="materials-and-methods" class="section level1">
@@ -467,7 +468,7 @@ Figure caption: Y-maze setup.
 </p>
 </div>
 <p></br> </br></p>
-<p>Each trial lasted for 3 minutes and started when the beetle was introduced into the base of the Y-maze. We defined a valid choice as the beetle approaching closer than 5 cm to the diffuse paper at the end of the lit arm. If the beetle made a valid choice before 3 minutes, we stopped the trial and recorded the individual as attracted to that wavelength. Otherwise, the trial ended at 3 minutes and a second trial was performed 10 minutes later with same wavelength to ensure the consistency of its response. If the beetle made a valid choice in the second trial, we then recorded the individual as attracted to that wavelength despite its failure in the first trial. If the beetle still failed to make a valid choice in the second trial, we recorded the individual as not attracted to the wavelength (including in the base zone, dark arm, and in the lit arm but not &lt;5 cm to the end). In total, 28 individuals from 2 species (16 <em>Castiarina dimidiata</em> and 12 <em>C. flavopicta</em>) completed the 6-wavelength trial series. Every trial was video recorded using a camera with night mode. </br> </br> We used the beetles’ responses (attracted / not attracted) in the behavioural trials to obtain a response curve over 590-735 nm by fitting a logistic regression for the 2 species, separately. In the model, we set the response of the beetles as dependent variable, peak wavelength of the light source as a fixed factor, and individual ID as a random factor to account for repeated trials for each individual. </br> </br> For details of beetle collection, please see the main text.</p>
+<p>Each trial lasted for 3 minutes and started when the beetle was introduced into the base of the Y-maze. We defined a valid choice as the beetle approaching closer than 5 cm to the diffuse paper at the end of the lit arm. If the beetle made a valid choice before 3 minutes, we stopped the trial and recorded the individual as attracted to that wavelength. Otherwise, the trial ended at 3 minutes and a second trial was performed 10 minutes later with same wavelength to ensure the consistency of its response. If the beetle made a valid choice in the second trial, we then recorded the individual as attracted to that wavelength despite its failure in the first trial. If the beetle still failed to make a valid choice in the second trial, we recorded the individual as not attracted to the wavelength (including in the base zone, dark arm, and in the lit arm but not &lt;5 cm to the end). In total, 28 individuals from 2 species (16 <em>Castiarina dimidiata</em> and 12 <em>C. flavopicta</em>) completed the 6-wavelength trial series. Every trial was video recorded using a camera with night mode. </br> </br> We used the beetles’ responses (attracted / not attracted) in the behavioural trials to obtain a response curve over 590-735 nm by fitting a logistic regression for the 2 species, separately. In the model, we set the response of the beetles as dependent variable, peak wavelength of the light source as a fixed factor, and individual ID as a random factor to account for repeated trials for each individual. </br> </br> For details of beetle collection, please see the main text of the paper.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lme4)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(dplyr)
@@ -477,11 +478,11 @@ Figure caption: Y-maze setup.
 </div>
 <div id="behavioural-results" class="section level1">
 <h1>Behavioural results</h1>
-<p>Behavioural experiments confirmed far-red sensitivity in both species of jewel beetle. 96% of jewel beetles were attracted by light at 590 nm and c.a. 87% of them still responded to light at 645 nm (<em>C. dimidiata</em>: 100% and 96%; <em>C. flavopicta</em>, 93% and 78%; at 590 nm and 645 nm). The percentage of the respondents (i.e. those reached &lt;5 cm to the end the lit arm) decreased steadily after 590 nm in <em>C. flavopicta</em> down to 735 nm, whereas the decrease is more abrupt in <em>C. dimidiata</em> after 680 nm. At 700 nm, <em>C. dimidiata</em> and <em>C. flavopicta</em> had a response rate of 56% and 39%, respectively. The 50% response rate was at c.a. 704 nm for <em>C. dimidiata</em> and c.a. 685 nm for* C. flavopicta<em>. Only one </em>C. dimidiata* individual responded to light at 735 nm. </br> </br></p>
+<p>Behavioural experiments confirmed far-red sensitivity in both species of jewel beetle. 96% of jewel beetles were attracted by light at 590 nm and c.a. 87% of them still responded to light at 645 nm (<em>C. dimidiata</em>: 100% and 96%; <em>C. flavopicta</em>, 93% and 78%; at 590 nm and 645 nm). The percentage of the respondents (i.e. those reached &lt;5 cm to the end the lit arm) decreased steadily after 590 nm in <em>C. flavopicta</em> down to 735 nm, whereas the decrease is more abrupt in <em>C. dimidiata</em> after 680 nm. At 700 nm, <em>C. dimidiata</em> and <em>C. flavopicta</em> had a response rate of 56% and 39%, respectively. The 50% response rate was at c.a. 704 nm for <em>C. dimidiata</em> and c.a. 685 nm for <em>C. flavopicta</em>. Only one <em>C. dimidiata</em> individual responded to light at 735 nm. </br> </br></p>
 <div class="figure">
-<img src="behavioural_assay_files/figure-html/unnamed-chunk-4-1.png" alt="Figure caption: Results of the behavioural experiments on two jewel beetles. Green represents *Castiarina dimidiata* and blue represent *C. flavopicta*. Logistic regression lines show beetles&lt;U+2019&gt; high response rate at 700 nm. 95 % confidence intervals in shaded regions. Red rectangle highlighted the location of the &lt;U+2018&gt;red edge&lt;U+2019&gt;" width="672" />
+<img src="behavioural_assay_files/figure-html/unnamed-chunk-4-1.png" alt="Figure caption: Results of the behavioural experiments on two jewel beetles. Blue represents *Castiarina dimidiata* and yellow represent *C. flavopicta*. Logistic regression lines show beetles&lt;U+2019&gt; high response rate at 700 nm. 95 % confidence intervals in shaded regions. The green dashed line shows the mean leaf reflectance spectrum from our dataset." width="672" />
 <p class="caption">
-Figure caption: Results of the behavioural experiments on two jewel beetles. Green represents <em>Castiarina dimidiata</em> and blue represent <em>C. flavopicta</em>. Logistic regression lines show beetles<U+2019> high response rate at 700 nm. 95 % confidence intervals in shaded regions. Red rectangle highlighted the location of the <U+2018>red edge<U+2019>
+Figure caption: Results of the behavioural experiments on two jewel beetles. Blue represents <em>Castiarina dimidiata</em> and yellow represent <em>C. flavopicta</em>. Logistic regression lines show beetles<U+2019> high response rate at 700 nm. 95 % confidence intervals in shaded regions. The green dashed line shows the mean leaf reflectance spectrum from our dataset.
 </p>
 </div>
 <p></br> </br></p>

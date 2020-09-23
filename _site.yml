@@ -9,8 +9,10 @@ navbar:
       href: index.html
     - text: "Main models"
       href: main_models.html
-    - text: "Even space"
-      href: even_space.html
+    - text: "Even spacing"
+      href: even_spacing.html
+    - text: "Opsin-shifted visual systems"
+      href: opsin_shifed_models.html
     - text: "Sensitivity analysis"
       href: sensitivity_analysis.html
     - text: "Behavioural assay"
