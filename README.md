@@ -1,2 +1,2 @@
 # LongWavelengthSensitivity
- Supplementary materials of the visual modeling on far-red sensitivity
+ Supplementary materials of the visual modeling on long wavelength sensitivity
