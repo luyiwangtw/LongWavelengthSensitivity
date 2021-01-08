@@ -7,9 +7,9 @@ output:
     toc: true
     toc_depth: 2
 subtitle: Supplementary Information
-Date: August 31 2020
+Date: January 08 2021
 ---
-#The aim
+# The aim
 
 * To test whether the modelling results were sensitive to the photoreceptor ratios used, we repeated these analyses using published ratios that represent the known variation in insects. Specifically, we compared the changes in contrast when shifting the LWS peak from 580 nm to 660 nm between tetrachomat visual systems with different photoreceptor ratios.
 
@@ -90,13 +90,13 @@ dataset.plot.indivisually$category2<-factor(dataset.plot.indivisually$category, 
 wl<-specsensbuprest.model2[,1]
 peaks<-gather(specsensbuprest.model2[,2:9], peak, value) %>% cbind(wl)
 
-peak.order <- c("UVS.380.A1.", "SWS.460.A1.", "MWS.520.A1.", "LWS.570.A1..filter580.","LWS.570.A1..filter600.","LWS.570.A1..filter620.","LWS.570.A1..filter640.","LWS.570.A1..filter660.") #to order the peaks in the legend
+peak.order <- c("UVS.355.A1.", "SWS.445.A1.", "MWS.530.A1.", "LWS.570.A1..filter580.","LWS.570.A1..filter600.","LWS.570.A1..filter620.","LWS.570.A1..filter640.","LWS.570.A1..filter660.") #to order the peaks in the legend
 ggplot(peaks,aes(x=wl, y=value, col=peak))+
   geom_line()+
   guides(color=guide_legend(title="peak sensitivity"))+
   scale_color_manual(
     values = c("darkorchid4", "dodgerblue3", "olivedrab4", "orange1", "orange3","darkorange3", "orangered1", "red2"),
-    labels=c("380 nm", "460 nm","520 nm", "580 nm", "600 nm", "620 nm", "640 nm", "660 nm"),
+    labels=c("355 nm", "445 nm","530 nm", "580 nm", "600 nm", "620 nm", "640 nm", "660 nm"),
     breaks=peak.order)+
   xlab("Wavelength (nm)")+
   ylab("Relative spectral sensitivity")+
@@ -107,14 +107,14 @@ ggplot(peaks,aes(x=wl, y=value, col=peak))+
 </br>
 </br>
 
-#Data description
+# Data description
 
 We used the same spectral data and daylight illumination described in the [Main models](main_models.html) section.
 
 </br>
 </br>
 
-#Run the visual models
+# Run the visual models
 * We created 3 different visual systems using different receptor ratios from 3 insect species (UVS, SWS, MWS, LWS):
 
 + _Agrilus planipennis_: 1.14, 1, 1.26, 1.38
@@ -166,10 +166,10 @@ Cheliconius660 = coldist(buprest660, noise="neural", achro=FALSE, n = c(1, 1.44,
 
 </br>
 
-#Contrast tables {.tabset .tabset-fade .tabset-pills}
+# Compare contrast {.tabset .tabset-fade .tabset-pills}
 
 ```{r} 
-#creat different comparison groups for furthur GLMM analysis
+#create different comparison groups for furthur GLMM analysis
 #Organize data before GLMM
 
 #for Agrilus planipennis
@@ -879,7 +879,7 @@ sum.beetle.vs.flower.heli
 </br>
 
 
-#Plot the contrasts {.tabset .tabset-fade .tabset-pills}
+# Plot the contrasts {.tabset .tabset-fade .tabset-pills}
 * Colours approximate human perception of either flower (left and right) or beetle (centre) colouration.
 * Lines of the same colors connect the same sample
 ```{r}
@@ -1101,7 +1101,7 @@ beetle.colour<- name.list %>% filter(str_detect(species, "beetle")) %>% #select 
 ```
 
 ## _Agrilus planipennis_
-```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths in the jewel beetle, _Agrilus planipenni_. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
+```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths in the jewel beetle, _Agrilus planipenni_. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 12 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
 #make flower vs leaf plot
 ##add the mean
 mean.fl.bup<-allvis.fl.bup %>% mutate(patch3 = paste(allvis.fl.bup$vissys,allvis.fl.bup$patch1,sep=".")) %>% 
@@ -1122,11 +1122,11 @@ mean.fl.bup$match.name<-flower.colour$species # this column is just for checking
 mean.fl.bup$colour<-flower.colour$colour
 
 fl.bup<-ggplot(mean.fl.bup, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
-  geom_point(col=mean.fl.bup$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.fl.bup$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.fl.bup$colour,size= 1, alpha=0.7) + 
+  geom_line(col=mean.fl.bup$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
+  ylim(0,21)+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
         axis.title.x = element_text(size=12),  
@@ -1143,18 +1143,18 @@ fl.bup<-ggplot(mean.fl.bup, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.fl.bup, aes(x= "VS1.fl", y= mean(VS1.fl.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl.bup, aes(x= "VS2.fl", y= mean(VS2.fl.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl.bup, aes(x= "VS3.fl", y= mean(VS3.fl.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl.bup, aes(x= "VS4.fl", y= mean(VS4.fl.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl.bup, aes(x= "VS5.fl", y= mean(VS5.fl.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Flower vs. Leaf")+
-  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 15, label =c("a","b","c","d","d")) #add stitistical info
+  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 21, label =c("a","b","c","d","d")) #add statistical info
 
 
 #make beetle vs leaf plot
@@ -1178,11 +1178,11 @@ mean.bl.bup$colour<-beetle.colour$colour
 
 
 bl.bup<-ggplot(mean.bl.bup, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
-  geom_point(col=mean.bl.bup$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.bl.bup$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bl.bup$colour,size= 1, alpha=0.7) + 
+  geom_line(col=mean.bl.bup$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
+  ylim(0,21)+
   theme(panel.background = element_blank(),
         axis.title.x = element_text(size=12),  
         axis.text.x  = element_text(size=8, colour="black", angle =90),
@@ -1198,18 +1198,18 @@ bl.bup<-ggplot(mean.bl.bup, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bl.bup, aes(x= "VS1.bl", y= mean(VS1.bl.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl.bup, aes(x= "VS2.bl", y= mean(VS2.bl.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl.bup, aes(x= "VS3.bl", y= mean(VS3.bl.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl.bup, aes(x= "VS4.bl", y= mean(VS4.bl.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl.bup, aes(x= "VS5.bl", y= mean(VS5.bl.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Leaf")+
-  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 15, label =c("a","b","c","d","e")) #add stitistical info
+  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 21, label =c("a","b","c","d","e")) #add statistical info
 
 
 #make beetle vs flower plot
@@ -1233,11 +1233,11 @@ mean.bf.bup$match.name<-flower.colour$species # this column is just for checking
 mean.bf.bup$colour<-flower.colour$colour
 
 bf.bup<-ggplot(mean.bf.bup, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf.bup$colour, size=3,alpha=0.7) + 
-  geom_line(col=mean.bf.bup$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bf.bup$colour, size= 1,alpha=0.7) + 
+  geom_line(col=mean.bf.bup$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
+  ylim(0,21)+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
         axis.title.x = element_text(size=12),  
@@ -1254,18 +1254,18 @@ bf.bup<-ggplot(mean.bf.bup, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bf.bup, aes(x= "VS1.bf", y= mean(VS1.bf.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf.bup, aes(x= "VS2.bf", y= mean(VS2.bf.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf.bup, aes(x= "VS3.bf", y= mean(VS3.bf.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf.bup, aes(x= "VS4.bf", y= mean(VS4.bf.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf.bup, aes(x= "VS5.bf", y= mean(VS5.bf.bup$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 15, label =c("a","b","c","d","e")) #add stitistical info
+  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 21, label =c("a","b","c","d","e")) #add statistical info
 
 
 figure.bup <- ggarrange(fl.bup,bl.bup,bf.bup, ncol = 3, nrow = 1)
@@ -1275,7 +1275,7 @@ figure.bup
 </br>
 
 ## _Papilio xuthus_
-```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths in the butterfly, _Papilio xuthus_. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
+```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths in the butterfly, _Papilio xuthus_. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1."}
 #make flower vs leaf plot
 ##add the mean
 mean.fl.pap<-allvis.fl.pap %>% mutate(patch3 = paste(allvis.fl.pap$vissys,allvis.fl.pap$patch1,sep=".")) %>% 
@@ -1296,11 +1296,11 @@ mean.fl.pap$match.name<-flower.colour$species # this column is just for checking
 mean.fl.pap$colour<-flower.colour$colour
 
 fl.pap<-ggplot(mean.fl.pap, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
-  geom_point(col=mean.fl.pap$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.fl.pap$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.fl.pap$colour,size= 1, alpha=0.7) + 
+  geom_line(col=mean.fl.pap$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
+  ylim(0,21)+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
         axis.title.x = element_text(size=12),  
@@ -1317,18 +1317,18 @@ fl.pap<-ggplot(mean.fl.pap, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.fl.pap, aes(x= "VS1.fl", y= mean(VS1.fl.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl.pap, aes(x= "VS2.fl", y= mean(VS2.fl.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl.pap, aes(x= "VS3.fl", y= mean(VS3.fl.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl.pap, aes(x= "VS4.fl", y= mean(VS4.fl.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl.pap, aes(x= "VS5.fl", y= mean(VS5.fl.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Flower vs. Leaf")+
-  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 15, label =c("a","b","c","d","d")) #add stitistical info
+  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 21, label =c("a","b","c","d","d")) #add statistical info
 
 
 #make beetle vs leaf plot
@@ -1352,11 +1352,11 @@ mean.bl.pap$colour<-beetle.colour$colour
 
 
 bl.pap<-ggplot(mean.bl.pap, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
-  geom_point(col=mean.bl.pap$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.bl.pap$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bl.pap$colour,size= 1, alpha=0.7) + 
+  geom_line(col=mean.bl.pap$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
+  ylim(0,21)+
   theme(panel.background = element_blank(),
         axis.title.x = element_text(size=12),  
         axis.text.x  = element_text(size=8, colour="black", angle =90),
@@ -1372,18 +1372,18 @@ bl.pap<-ggplot(mean.bl.pap, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bl.pap, aes(x= "VS1.bl", y= mean(VS1.bl.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl.pap, aes(x= "VS2.bl", y= mean(VS2.bl.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl.pap, aes(x= "VS3.bl", y= mean(VS3.bl.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl.pap, aes(x= "VS4.bl", y= mean(VS4.bl.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl.pap, aes(x= "VS5.bl", y= mean(VS5.bl.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Leaf")+
-  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 15, label =c("a","b","c","d","e")) #add stitistical info
+  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 21, label =c("a","b","c","d","e")) #add statistical info
 
 
 #make beetle vs flower plot
@@ -1407,11 +1407,11 @@ mean.bf.pap$match.name<-flower.colour$species # this column is just for checking
 mean.bf.pap$colour<-flower.colour$colour
 
 bf.pap<-ggplot(mean.bf.pap, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf.pap$colour, size=3,alpha=0.7) + 
-  geom_line(col=mean.bf.pap$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bf.pap$colour, size= 1,alpha=0.7) + 
+  geom_line(col=mean.bf.pap$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
+  ylim(0,21)+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
         axis.title.x = element_text(size=12),  
@@ -1428,18 +1428,18 @@ bf.pap<-ggplot(mean.bf.pap, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bf.pap, aes(x= "VS1.bf", y= mean(VS1.bf.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf.pap, aes(x= "VS2.bf", y= mean(VS2.bf.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf.pap, aes(x= "VS3.bf", y= mean(VS3.bf.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf.pap, aes(x= "VS4.bf", y= mean(VS4.bf.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf.pap, aes(x= "VS5.bf", y= mean(VS5.bf.pap$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 15, label =c("a","b","c","d","e")) #add stitistical info
+  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 21, label =c("a","b","c","d","e")) #add statistical info
 
 
 figure.pap <- ggarrange(fl.pap,bl.pap,bf.pap, ncol = 3, nrow = 1)
@@ -1449,7 +1449,7 @@ figure.pap
 </br>
 
 ##  _Heliconius_ sp
-```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths in the butterfly, _Heliconius_ sp. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
+```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths in the butterfly, _Heliconius_ sp. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1."}
 #make flower vs leaf plot
 ##add the mean
 mean.fl.heli<-allvis.fl.heli %>% mutate(patch3 = paste(allvis.fl.heli$vissys,allvis.fl.heli$patch1,sep=".")) %>% 
@@ -1470,8 +1470,8 @@ mean.fl.heli$match.name<-flower.colour$species # this column is just for checkin
 mean.fl.heli$colour<-flower.colour$colour
 
 fl.heli<-ggplot(mean.fl.heli, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
-  geom_point(col=mean.fl.heli$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.fl.heli$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.fl.heli$colour,size= 1, alpha=0.7) + 
+  geom_line(col=mean.fl.heli$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,15)+
@@ -1491,18 +1491,18 @@ fl.heli<-ggplot(mean.fl.heli, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.fl.heli, aes(x= "VS1.fl", y= mean(VS1.fl.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl.heli, aes(x= "VS2.fl", y= mean(VS2.fl.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl.heli, aes(x= "VS3.fl", y= mean(VS3.fl.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl.heli, aes(x= "VS4.fl", y= mean(VS4.fl.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl.heli, aes(x= "VS5.fl", y= mean(VS5.fl.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Flower vs. Leaf")+
-  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 15, label =c("a","b","c","d","e")) #add stitistical info
+  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 15, label =c("a","b","c","d","e")) #add statistical info
 
 
 #make beetle vs leaf plot
@@ -1526,8 +1526,8 @@ mean.bl.heli$colour<-beetle.colour$colour
 
 
 bl.heli<-ggplot(mean.bl.heli, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
-  geom_point(col=mean.bl.heli$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.bl.heli$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bl.heli$colour,size= 1, alpha=0.7) + 
+  geom_line(col=mean.bl.heli$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,15)+
@@ -1546,18 +1546,18 @@ bl.heli<-ggplot(mean.bl.heli, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bl.heli, aes(x= "VS1.bl", y= mean(VS1.bl.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl.heli, aes(x= "VS2.bl", y= mean(VS2.bl.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl.heli, aes(x= "VS3.bl", y= mean(VS3.bl.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl.heli, aes(x= "VS4.bl", y= mean(VS4.bl.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl.heli, aes(x= "VS5.bl", y= mean(VS5.bl.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Leaf")+
-  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 15, label =c("a","b","c","d","e")) #add stitistical info
+  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 15, label =c("a","b","c","d","e")) #add statistical info
 
 
 #make beetle vs flower plot
@@ -1581,8 +1581,8 @@ mean.bf.heli$match.name<-flower.colour$species # this column is just for checkin
 mean.bf.heli$colour<-flower.colour$colour
 
 bf.heli<-ggplot(mean.bf.heli, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf.heli$colour, size=3,alpha=0.7) + 
-  geom_line(col=mean.bf.heli$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bf.heli$colour, size= 1,alpha=0.7) + 
+  geom_line(col=mean.bf.heli$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,15)+
@@ -1602,18 +1602,18 @@ bf.heli<-ggplot(mean.bf.heli, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bf.heli, aes(x= "VS1.bf", y= mean(VS1.bf.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf.heli, aes(x= "VS2.bf", y= mean(VS2.bf.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf.heli, aes(x= "VS3.bf", y= mean(VS3.bf.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf.heli, aes(x= "VS4.bf", y= mean(VS4.bf.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf.heli, aes(x= "VS5.bf", y= mean(VS5.bf.heli$dS)), 
-             col="black", size=3)+ #add the median point
+             col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 15, label =c("a","b","c","d","e")) #add stitistical info
+  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 15, label =c("a","b","c","d","e")) #add statistical info
 
 
 figure.heli <- ggarrange(fl.heli,bl.heli,bf.heli, ncol = 3, nrow = 1)
@@ -1623,5 +1623,5 @@ figure.heli
 </br>
 
 
-#Summary
-The results were qualitatively the same for different photoreceptor ratios among three comparison groups – contrast increased for LWS photoreceptors with peak sensitivity from 580 to at least 640 nm (20 nm increments). The contrasts continued increasing from VS 640 to VS 660 for the ‘beetle vs. leaf’ and ‘beetle vs. flower’ but decreased for the ‘flower vs. leaf’
+# Summary
+The results were qualitatively the same for different photoreceptor ratios among three comparison groups – contrast increased for LWS photoreceptors with peak sensitivity from 580 to at least 640 nm. This indicates that our results were not biased by photoreceptor ratios in our hypothetical visual systems.

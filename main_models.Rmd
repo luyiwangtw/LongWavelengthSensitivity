@@ -5,16 +5,16 @@ author: <br>Lu-Yi Wang^1^, Devi Stuart-Fox^1^, Geoff Walker^1^, Nicholas W. Robe
   Australia <br></br> ^2^School of Biological Sciences, University of Bristol, UK
   <br></br>
 output:
-  pdf_document: default
   html_document:
     theme: flatly
     toc: true
     toc_depth: 2
+  pdf_document: default
 subtitle: Supplementary Information
-Date: August 31 2020
+Date: January 08 2021
 ---
 
-#The aims
+# The aims
   
 * We used visual modelling to investigate the potential benefit of long wavelength sensitivity for insects.
 
@@ -27,7 +27,7 @@ Date: August 31 2020
 </br>
 </br>
 
-#Load R libraries 
+# Load R libraries 
 ```{r, warning=FALSE, message=FALSE, results='hide'}
 library(pavo)
 library(dplyr)
@@ -51,11 +51,12 @@ knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time wh
 </br>
 </br>
 
-#Data description
+# Data description
 
 </br>
 
-##Import and process the data
+## Import and process the data
+
 * The wavelength range for all data used in the models was 300-800 nm.
 
 ```{r import data,message=FALSE}
@@ -71,9 +72,10 @@ irradiance.d65 <- read.csv("data/d65.csv",header=TRUE) %>%
 irradiance.twilight <- read.csv("data/civil twilight.csv",header=TRUE) %>% 
   as.rspec(lim=c(300,800)) %>% 
   procspec(opt = c("min", "max")) %>% 
-  rename( twilight = Irradiance) 
+  rename( twilight = Irradiance) %>% 
+  irrad2flux() #convert the irradiance (μ Watt.cm^{-2}) to photon flux (μ mol.s^{-1}.m^{-2}) to derive correct quantum catch.
 
-#import backgound - average leaf
+#import background - average leaf
 aveleaf <- read.csv("data/aveleaf.csv",header=TRUE) %>% as.rspec()
 
 #import and combind beetle, flower, leaf together
@@ -84,18 +86,19 @@ dataset<- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measureme
 
 </br>
 
-##Spectral reflectance of the targets
+## Spectral reflectance of the targets
+
 * Jewel beetles and their host plants (leaves and flowers)
     + Leaves: 
         + sample source: mainly from Melton Gardens and Maranoa Gardens (4 from Meblourne roadsides).
         + colour (to human vision): green
         + total number: 46 (all are from the host plant genus of Australian jewel beetles)
-  
+
     + Flowers: 
         + sample source: mainly from Melton Gardens and Maranoa Gardens (4 from Meblourne roadsides).
         + colour (to human vision): white (10), pink (11), red (10), yellow (9), orange (3), and purple (4)
         + total number: 47 (from 46 species, the same species for leaf reflectance)
-  
+
     + Beetles:
         + sample source: Australian jewel beetles from, ANIC (29) and our own collection
         + colour (to human vision): red, pink, yellow/orange, green, blue, velvet, black
@@ -104,7 +107,7 @@ dataset<- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measureme
 * We averaged of 3 measurements to generate a representative spectrum for each colour
 * The spectral data were smoothed with the span = 0.1, and those < 0 were lifted to 0
 ```{r, fig.cap="Figure caption: Reflectance spectra of the targets"}
-#assign categoryies to each spectrum
+#assign categories to each spectrum
 category.list <- c("flower","leaf","beetle")
 category <- rep(category.list , c(47*501,46*501,37*501))
 wavelength<-rep(dataset[,1])
@@ -138,11 +141,12 @@ ggplot(dataset.plot.indivisually,aes(x=wavelength,y=reflectance, colour=category
 </br>
 </br>
 
-##Visual sensitivities and visual systems
-* We created nine sensitivity curves peaking at 380, 460, 520, 580, 600, 620, 640, 660 nm and classified them into 4 photoreceptor types based on their peaks: 
-    + Ultraviolet sensitive (UVS): 380 nm
-    + Short-wavelength sensitive (SWS): 460 nm
-    + Medium-wavelength sensitive (MWS): 520 nm
+## Visual sensitivities and visual systems
+
+* We created nine sensitivity curves peaking at 355, 445, 530, 580, 600, 620, 640, 660 nm and classified them into 4 photoreceptor types based on their peaks: 
+    + Ultraviolet sensitive (UVS): 355 nm
+    + Short-wavelength sensitive (SWS): 445 nm
+    + Medium-wavelength sensitive (MWS): 530 nm
     + Long-wavelength sensitive (LWS): 580, 600, 620, 640, 660 nm
 
 * For the LWS, we applied a cut-off filter on the A1opsin sensitivity template peaking at 570 nm to shift the peak sensitivty to longer wavelengths.
@@ -154,32 +158,32 @@ ggplot(dataset.plot.indivisually,aes(x=wavelength,y=reflectance, colour=category
 ***
 * For the first question we compared the contrast between 3 trichromatic visual system with varied photoreceptor combination. We also tested whether an extra receptor enhanced chromatic contrast by comparing the trichromatic visual systems with a tetrachromatic visual system.
     + Visual systems used: 
-        1. Visual system USM (USM): 380 nm, 460 nm, 520 nm (UVS,SWS,MWS)
-        2. Visual system UML (UML): 380 nm, 520 nm, 580 nm (UVS,MWS,LWS)
-        3. Visual system USL (USL): 380 nm, 460 nm, 580 nm (UVS,SWS,LWS)
-        4. Visual system USML (USML): 380 nm, 460 nm, 520 nm, 580 nm (UVS,SWS,MWS,LWS)
+        1. Visual system USM (USM): 355 nm, 445 nm, 530 nm (UVS,SWS,MWS)
+        2. Visual system UML (UML): 355 nm, 530 nm, 600 nm (UVS,MWS,LWS)
+        3. Visual system USL (USL): 355 nm, 445 nm, 600 nm (UVS,SWS,LWS)
+        4. Visual system USML (USML): 355 nm, 445 nm, 530 nm, 600 nm (UVS,SWS,MWS,LWS)
 
 ***
 * For the second question, we tested how the contrast changed as peak sensitivity increased by systematically increasing the peak sensitivity of the LWS photoreceptor from 580-660 nm.
     + Visual systems used:
-        1. Visual system 580 (VS 580): 380 nm, 460 nm, 520 nm, 580 nm
-        2. Visual system 600 (VS 600): 380 nm, 460 nm, 520 nm, 600 nm
-        3. Visual system 620 (VS 620): 380 nm, 460 nm, 520 nm, 620 nm
-        4. Visual system 640 (VS 640): 380 nm, 460 nm, 520 nm, 640 nm
-        5. Visual system 660 (VS 660): 380 nm, 460 nm, 520 nm, 660 nm
+        1. Visual system 580 (VS 580): 355 nm, 445 nm, 530 nm, 580 nm
+        2. Visual system 600 (VS 600): 355 nm, 445 nm, 530 nm, 600 nm
+        3. Visual system 620 (VS 620): 355 nm, 445 nm, 530 nm, 620 nm
+        4. Visual system 640 (VS 640): 355 nm, 445 nm, 530 nm, 640 nm
+        5. Visual system 660 (VS 660): 355 nm, 445 nm, 530 nm, 660 nm
 
 
 ```{r, fig.cap="Figure caption: Sensitivity curves of the photoreceptors with different peak wavelengths."}
 wl<-specsensbuprest.aim2[,1]
 peaks<-gather(specsensbuprest.aim2[,2:9], peak, value) %>% cbind(wl)
 
-peak.order <- c("UVS.380.A1.", "SWS.460.A1.", "MWS.520.A1.", "LWS.570.A1..filter580.", "LWS.570.A1..filter600.", "LWS.570.A1..filter620.", "LWS.570.A1..filter640.", "LWS.570.A1..filter660.") #to order the peaks in the legend
+peak.order <- c("UVS.355.A1.", "SWS.445.A1.", "MWS.530.A1.", "LWS.570.A1..filter580.", "LWS.570.A1..filter600.", "LWS.570.A1..filter620.", "LWS.570.A1..filter640.", "LWS.570.A1..filter660.") #to order the peaks in the legend
 ggplot(peaks,aes(x=wl, y=value, col=peak))+
   geom_line()+
   guides(color=guide_legend(title="peak sensitivity"))+
   scale_color_manual(
     values = c("darkorchid4", "dodgerblue3", "olivedrab4", "orange1", "orange3","darkorange3", "orangered1", "red2"),
-    labels=c("380 nm", "460 nm","520 nm", "580 nm", "600 nm", "620 nm", "640 nm", "660 nm" ),
+    labels=c("355 nm", "445 nm","530 nm", "580 nm", "600 nm", "620 nm", "640 nm", "660 nm" ),
     breaks=peak.order)+
   xlab("Wavelength (nm)")+ 
   ylab("Relative spectral sensitivity")+
@@ -190,31 +194,71 @@ ggplot(peaks,aes(x=wl, y=value, col=peak))+
 </br>
 </br>
 
-##Illuminations
+## Illuminations
+
 * Two light environments: daylight and twilight (to represent red-shifted illumination).
   
     + Daylight: __D65__ (standard daylight) from Commission internationale de l'eclairage CIE
     + Twilight: measured at the Pinnacles Lookout in Alpine National Park, VIC, Australia at 18:15 on September 14th 2019.
 
-```{r, fig.cap="Figure caption: Relative irradiance of standard daylight and twilight"}
-illum <- merge(irradiance.d65, irradiance.twilight) %>% gather(light, illuminace, -wl) 
+```{r, fig.cap="Figure caption: Relative irradiance of the standard daylight used for daylight models"}
 
-ggplot(illum, aes(x=wl, y=illuminace, color=light))+
-geom_line()+
-xlab("Wavelength (nm)")+
-ylab("Relative irradiance")+
-theme_classic()
+ggplot(irradiance.d65, aes(x=wl, y=D65))+
+  geom_line()+
+  xlab("Wavelength (nm)")+
+  scale_y_continuous(name = "Relative irradiance")+
+  theme_classic()
+
+##for plotting two relative irradiance together.
+# irradiance.twilight.plot <- read.csv("data/civil twilight.csv",header=TRUE) %>% 
+#   as.rspec(lim=c(300,800)) %>% 
+#   procspec(opt = c("min", "max")) %>% 
+#   rename( twilight = Irradiance) #absolute irradiance; this is just for plotting purpose
+# 
+# illum <- merge(irradiance.d65, irradiance.twilight.plot) %>% gather(light, illuminace, -wl) 
+# 
+# ggplot(illum, aes(x=wl, y=illuminace, color=light))+
+#   geom_line()+
+#   xlab("Wavelength (nm)")+
+#   scale_y_continuous(name = "Relative irradiance")+
+#   theme_classic()
+
+
+#Plot D65 irradiance together with twilight irradiant
+#Problem: when convert Watt to photon, the shape changes over wavlengths because photon=watt*lambda*5.05*10^15
+#Not comparable to plot the two together
+# mag.twilight <- 1/0.04340328
+# irra.twilight.plot <- irradiance.twilight["wl"] %>% cbind(irradiance.twilight["twilight"]*mag.twilight) %>% as.rspec()
+# illum <- merge(irradiance.d65, irra.twilight.plot) %>% gather(light, illuminace, -wl)
+# 
+# ggplot(illum, aes(x=wl, y=illuminace, color=light))+
+#   geom_line()+
+#   xlab("Wavelength (nm)")+
+#   scale_y_continuous(
+#     name = "Relative irradiance",
+#     # Add a second axis and specify its features
+#     sec.axis = sec_axis( trans=~.*(1/mag.twilight), name="Photon flux of twilight")) +
+#   theme_classic()
 ```
 
+```{r, fig.cap="Figure caption: Photon flux of the twilight used for twilight models"}
+
+ggplot(irradiance.twilight, aes(x=wl, y=twilight))+
+  geom_line()+
+  xlab("Wavelength (nm)")+
+  scale_y_continuous(name = "Photon flux (umol/s/m^2)")+
+  theme_classic()
+```
 </br>
 </br>
 
-#Run the visual models
+# Run the visual models
 
 </br>
 </br>
 
-##First: Quantum catch calculation
+## First: Quantum catch calculation
+
 * We used the `vismodel` function in the package pavo to calculate quantum catch.
 * For each visual system, quantum catch was calculated based on Fechner's law (the signal of the receptor channel is proportional to the logarithm of the quantum catch).
 * The average of all leaf spectra was used as the background adapting light.
@@ -253,7 +297,8 @@ buprest660_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.aim2[, c(
 </br>
 </br>
 
-##Second: Contrast calculation {.tabset .tabset-fade .tabset-pills}
+## Second: Contrast calculation {.tabset .tabset-fade .tabset-pills}
+
 * To calculate chromatic contrast we used the `coldist` function in pavo.
 * We used a neural noise-limited model where the noise is proportional to the Weber fraction and is independent of the intensity of the signal received.
 * Photoreceptor density of the tetrachromat was based on the opsin gene expression of Emerald ash borer, _Agrilus planipennis_: 1.14, 1, 1.26, 1.38. For the trichromates, we redistributed the lost cone number proportionally to the remaining three cones. (USM: 1.6027, 1.4059, 1.771; UML: 1.4416, 1.5933, 1.7451; USL:1.5481, 1.3580, 1.8740)
@@ -453,7 +498,7 @@ VS5.bf_d65.aim2$vissys<-strrep("VS5.bf",1)
 allvis.bf_d65.aim2<-VS1.bf_d65.aim2 %>% rbind(VS2.bf_d65.aim2) %>% rbind(VS3.bf_d65.aim2) %>%
   rbind(VS4.bf_d65.aim2) %>%rbind(VS5.bf_d65.aim2) 
 
-##Twiligth - aim 2
+##Twilight - aim 2
 ##flower vs leaf
 VS1.fl_twilight.aim2<- Cbuprest580_twilight %>% filter(str_detect(patch1,"flower")) %>% 
   filter(str_detect(patch2,"leaves"))
@@ -513,58 +558,58 @@ VS5.bf_twilight.aim2$vissys<-strrep("VS5.bf",1)
 allvis.bf_twilight.aim2<-VS1.bf_twilight.aim2 %>% rbind(VS2.bf_twilight.aim2) %>% rbind(VS3.bf_twilight.aim2) %>% rbind(VS4.bf_twilight.aim2) %>%rbind(VS5.bf_twilight.aim2)
 ```
 
-###Aim 1 {.tabset .tabset-fade .tabset-pills}
-The table shows the median contrast in each comparison group
+### Aim 1 {.tabset .tabset-fade .tabset-pills}
+The table shows the mean contrast in each comparison group
 ```{r}
 #Aim 1
 system.list.aim1<- rbind.data.frame("USM", "UML", "USL",  "USML") %>% rename(system = 1) # make a list of system names
 ```
 
-####Daylight
+#### Daylight
 ```{r}
 #Daylight
 ##list contrast from each comparison group
-fl.contrast_d65.aim1 <- rbind.data.frame(median(VS1.fl_d65.aim1$dS), median(VS2.fl_d65.aim1$dS),median(VS3.fl_d65.aim1$dS),median(VS4.fl_d65.aim1$dS))
-bl.contrast_d65.aim1 <-rbind.data.frame(median(VS1.bl_d65.aim1$dS),median(VS2.bl_d65.aim1$dS),median(VS3.bl_d65.aim1$dS),median(VS4.bl_d65.aim1$dS))
-bf.contrast_d65.aim1 <-rbind.data.frame(median(VS1.bf_d65.aim1$dS), median(VS2.bf_d65.aim1$dS),median(VS3.bf_d65.aim1$dS),median(VS4.bf_d65.aim1$dS))
+fl.contrast_d65.aim1 <- rbind.data.frame(mean(VS1.fl_d65.aim1$dS),mean(VS2.fl_d65.aim1$dS),mean(VS3.fl_d65.aim1$dS),mean(VS4.fl_d65.aim1$dS))
+bl.contrast_d65.aim1 <-rbind.data.frame(mean(VS1.bl_d65.aim1$dS),mean(VS2.bl_d65.aim1$dS),mean(VS3.bl_d65.aim1$dS),mean(VS4.bl_d65.aim1$dS))
+bf.contrast_d65.aim1 <-rbind.data.frame(mean(VS1.bf_d65.aim1$dS), mean(VS2.bf_d65.aim1$dS),mean(VS3.bf_d65.aim1$dS),mean(VS4.bf_d65.aim1$dS))
 #combind comparison groups together in a table
 contrast.list_d65.aim1<- system.list.aim1 %>%  cbind(fl.contrast_d65.aim1) %>% cbind(bl.contrast_d65.aim1) %>% cbind(bf.contrast_d65.aim1) %>% dplyr:: rename(flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% pander() 
 contrast.list_d65.aim1
 ```
-####Twilight
+#### Twilight
 ```{r}
 #Twilight
 ##list contrast from each comparison group
-fl.contrast_twilight.aim1 <- rbind.data.frame(median(VS1.fl_twilight.aim1$dS), median(VS2.fl_twilight.aim1$dS),median(VS3.fl_twilight.aim1$dS),median(VS4.fl_twilight.aim1$dS))
-bl.contrast_twilight.aim1 <-rbind.data.frame(median(VS1.bl_twilight.aim1$dS),median(VS2.bl_twilight.aim1$dS),median(VS3.bl_twilight.aim1$dS),median(VS4.bl_twilight.aim1$dS))
-bf.contrast_twilight.aim1 <-rbind.data.frame(median(VS1.bf_twilight.aim1$dS), median(VS2.bf_twilight.aim1$dS),median(VS3.bf_twilight.aim1$dS),median(VS4.bf_twilight.aim1$dS))
+fl.contrast_twilight.aim1 <- rbind.data.frame(mean(VS1.fl_twilight.aim1$dS), mean(VS2.fl_twilight.aim1$dS),mean(VS3.fl_twilight.aim1$dS),mean(VS4.fl_twilight.aim1$dS))
+bl.contrast_twilight.aim1 <-rbind.data.frame(mean(VS1.bl_twilight.aim1$dS),mean(VS2.bl_twilight.aim1$dS),mean(VS3.bl_twilight.aim1$dS),mean(VS4.bl_twilight.aim1$dS))
+bf.contrast_twilight.aim1 <-rbind.data.frame(mean(VS1.bf_twilight.aim1$dS), mean(VS2.bf_twilight.aim1$dS),mean(VS3.bf_twilight.aim1$dS),mean(VS4.bf_twilight.aim1$dS))
 #combind comparison groups together in a table
 contrast.list_twilight.aim1<- system.list.aim1 %>%  cbind(fl.contrast_twilight.aim1) %>% cbind(bl.contrast_twilight.aim1) %>% cbind(bf.contrast_twilight.aim1) %>% dplyr:: rename(flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% pander()
 contrast.list_twilight.aim1
 ```
-###Aim 2 {.tabset .tabset-fade .tabset-pills}
-The table shows the median contrast in each comparison group
+### Aim 2 {.tabset .tabset-fade .tabset-pills}
+The table shows the mean contrast in each comparison group
 ```{r}
-system.list.aim2<- rbind.data.frame("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660") %>% rename(system = 1) # make a list of system names
+system.list.aim2<- rbind.data.frame("VS 580", "VS 600", "VS 620", "VS 640", "VS 660") %>% rename(system = 1) # make a list of system names
 ```
-####Daylight
+#### Daylight
 ```{r}
 #Daylight
 ##list contrast from each comparison group
-fl.contrast_d65.aim2 <- rbind.data.frame(median(VS1.fl_d65.aim2$dS), median(VS2.fl_d65.aim2$dS),median(VS3.fl_d65.aim2$dS),median(VS4.fl_d65.aim2$dS),median(VS5.fl_d65.aim2$dS))
-bl.contrast_d65.aim2 <-rbind.data.frame(median(VS1.bl_d65.aim2$dS),median(VS2.bl_d65.aim2$dS),median(VS3.bl_d65.aim2$dS),median(VS4.bl_d65.aim2$dS),median(VS5.bl_d65.aim2$dS))
-bf.contrast_d65.aim2 <-rbind.data.frame(median(VS1.bf_d65.aim2$dS), median(VS2.bf_d65.aim2$dS),median(VS3.bf_d65.aim2$dS),median(VS4.bf_d65.aim2$dS),median(VS5.bf_d65.aim2$dS))
+fl.contrast_d65.aim2 <- rbind.data.frame(mean(VS1.fl_d65.aim2$dS),mean(VS2.fl_d65.aim2$dS),mean(VS3.fl_d65.aim2$dS),mean(VS4.fl_d65.aim2$dS),mean(VS5.fl_d65.aim2$dS))
+bl.contrast_d65.aim2 <-rbind.data.frame(mean(VS1.bl_d65.aim2$dS),mean(VS2.bl_d65.aim2$dS),mean(VS3.bl_d65.aim2$dS),mean(VS4.bl_d65.aim2$dS),mean(VS5.bl_d65.aim2$dS))
+bf.contrast_d65.aim2 <-rbind.data.frame(mean(VS1.bf_d65.aim2$dS), mean(VS2.bf_d65.aim2$dS),mean(VS3.bf_d65.aim2$dS),mean(VS4.bf_d65.aim2$dS),mean(VS5.bf_d65.aim2$dS))
 #combind comparison groups together in a table
 contrast.list_d65.aim2<- system.list.aim2 %>%  cbind(fl.contrast_d65.aim2) %>% cbind(bl.contrast_d65.aim2) %>% cbind(bf.contrast_d65.aim2) %>% dplyr:: rename(flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% pander() 
 contrast.list_d65.aim2
 ```
-####Twilight
+#### Twilight
 ```{r}
 #Twilight
 ##list contrast from each comparison group
-fl.contrast_twilight.aim2 <- rbind.data.frame(median(VS1.fl_twilight.aim2$dS), median(VS2.fl_twilight.aim2$dS),median(VS3.fl_twilight.aim2$dS),median(VS4.fl_twilight.aim2$dS),median(VS5.fl_twilight.aim2$dS))
-bl.contrast_twilight.aim2 <-rbind.data.frame(median(VS1.bl_twilight.aim2$dS),median(VS2.bl_twilight.aim2$dS),median(VS3.bl_twilight.aim2$dS),median(VS4.bl_twilight.aim2$dS),median(VS5.bl_twilight.aim2$dS))
-bf.contrast_twilight.aim2 <-rbind.data.frame(median(VS1.bf_twilight.aim2$dS), median(VS2.bf_twilight.aim2$dS),median(VS3.bf_twilight.aim2$dS),median(VS4.bf_twilight.aim2$dS),median(VS5.bf_twilight.aim2$dS))
+fl.contrast_twilight.aim2 <- rbind.data.frame(mean(VS1.fl_twilight.aim2$dS), mean(VS2.fl_twilight.aim2$dS),mean(VS3.fl_twilight.aim2$dS),mean(VS4.fl_twilight.aim2$dS),mean(VS5.fl_twilight.aim2$dS))
+bl.contrast_twilight.aim2 <-rbind.data.frame(mean(VS1.bl_twilight.aim2$dS),mean(VS2.bl_twilight.aim2$dS),mean(VS3.bl_twilight.aim2$dS),mean(VS4.bl_twilight.aim2$dS),mean(VS5.bl_twilight.aim2$dS))
+bf.contrast_twilight.aim2 <-rbind.data.frame(mean(VS1.bf_twilight.aim2$dS), mean(VS2.bf_twilight.aim2$dS),mean(VS3.bf_twilight.aim2$dS),mean(VS4.bf_twilight.aim2$dS),mean(VS5.bf_twilight.aim2$dS))
 #combind comparison groups together in a table
 contrast.list_twilight.aim2<- system.list.aim2 %>%  cbind(fl.contrast_twilight.aim2) %>% cbind(bl.contrast_twilight.aim2) %>% cbind(bf.contrast_twilight.aim2) %>% dplyr:: rename(flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% pander() 
 contrast.list_twilight.aim2
@@ -572,7 +617,8 @@ contrast.list_twilight.aim2
 </br>
 </br>
 
-#Compare contrasts
+# Compare contrasts
+
 * To compare contrasts between visual systems, We conducted Wald chi-square tests on generalised linear mixed models (GLMM) followed by posthoc tests.
 
 * In the models, we assigned
@@ -582,7 +628,7 @@ contrast.list_twilight.aim2
         + Random factor: __sample ID__ of both targets in the comparison
 
 ```{r} 
-#creat different comparison groups for furthur GLMM analysis
+#create different comparison groups for furthur GLMM analysis
 #Organize data before GLMM
 
 #D65 - aim 1
@@ -893,7 +939,7 @@ compare.beetle.vs.flower_twilight.aim2 <- com.bupcontrast.beetle.vs.flower_twili
 
 ```
 
-##Check assumptions {.tabset .tabset-fade .tabset-pills}
+## Check assumptions {.tabset .tabset-fade .tabset-pills}
 
 * Before running the GLMMs, we first check if the data follows the assumption of normality and homogeneity of variance
 
@@ -968,7 +1014,7 @@ qqnorm(res.beetle.vs.flower_twilight.aim2$residuals, main = "Beetle vs Flower")
 
 ##### D65
 ```{r}
-par (mfrow=c(1,3),oma=c(2,2,0,0)) #oma=c() to creat space for common lables
+par (mfrow=c(1,3),oma=c(2,2,0,0)) #oma=c() to create space for common labels
 boxplot(compare.flower.vs.leaf.aim1$dS~compare.flower.vs.leaf.aim1$peak_wl.flower.vs.leaf, las=2,
         main = "Flower vs Leaf",
         names=c("UML", "USL", "USM", "USML"))
@@ -1004,13 +1050,13 @@ mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0)
 par (mfrow=c(1,3),oma=c(2,2,0,0))
 boxplot(compare.flower.vs.leaf.aim2$dS~compare.flower.vs.leaf.aim2$peak_wl.flower.vs.leaf, las=2,
         main = "Flower vs Leaf",
-        names=c("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660"))
+        names=c("VS 580", "VS 600", "VS 620", "VS 640", "VS 660"))
 boxplot(compare.beetle.vs.leaf.aim2$dS~compare.beetle.vs.leaf.aim2$peak_wl.beetle.vs.leaf, las=2,
         main = "Beetle vs Leaf",
-        names=c("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660"))
+        names=c("VS 580", "VS 600", "VS 620", "VS 640", "VS 660"))
 boxplot(compare.beetle.vs.flower.aim2$dS~compare.beetle.vs.flower.aim2$peak_wl.beetle.vs.flower, las=2,
         main = "Beetle vs Flower",
-        names=c("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660"))
+        names=c("VS 580", "VS 600", "VS 620", "VS 640", "VS 660"))
 mtext("Visual system",side=1,line=0,outer=TRUE,cex=1.3)
 mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0)
 ```
@@ -1020,13 +1066,13 @@ mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0)
 par (mfrow=c(1,3),oma=c(2,2,0,0))
 boxplot(compare.flower.vs.leaf_twilight.aim2$dS~compare.flower.vs.leaf_twilight.aim2$peak_wl.flower.vs.leaf, las=2,
         main = "Flower vs Leaf",
-        names=c("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660"))
+        names=c("VS 580", "VS 600", "VS 620", "VS 640", "VS 660"))
 boxplot(compare.beetle.vs.leaf_twilight.aim2$dS~compare.beetle.vs.leaf_twilight.aim2$peak_wl.beetle.vs.leaf, las=2,
         main = "Beetle vs Leaf",
-        names=c("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660"))
+        names=c("VS 580", "VS 600", "VS 620", "VS 640", "VS 660"))
 boxplot(compare.beetle.vs.flower_twilight.aim2$dS~compare.beetle.vs.flower_twilight.aim2$peak_wl.beetle.vs.flower, las=2,
         main = "Beetle vs Flower",
-        names=c("VS 580", "VS 600", "VS 620", "VS 640", "Vis 660"))
+        names=c("VS 580", "VS 600", "VS 620", "VS 640", "VS 660"))
 mtext("Visual system",side=1,line=0,outer=TRUE,cex=1.3)
 mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0)
 ```
@@ -1035,7 +1081,7 @@ mtext("Contrast (JND)",side=2,line=0,outer=TRUE,cex=1.3,las=0)
 </br>
 </br>
 
-##GLMM results
+## GLMM results
 
 </br>
 
@@ -1101,7 +1147,7 @@ p1_d65.aim2<-sum.flower.vs.leaf_d65.aim2[["test"]][["pvalues"]]
 p2_d65.aim2<-sum.beetle.vs.leaf_d65.aim2[["test"]][["pvalues"]]
 p3_d65.aim2<-sum.beetle.vs.flower_d65.aim2[["test"]][["pvalues"]]
 
-VislistA_d65.aim2<-c("VS 600", "VS 620","VS 640","Vis 660","VS 620","VS 640","Vis 660","VS 640","Vis 660","Vis 660")
+VislistA_d65.aim2<-c("VS 600", "VS 620","VS 640","VS 660","VS 620","VS 640","VS 660","VS 640","VS 660","VS 660")
 VislistB_d65.aim2<-c("VS 580","VS 580","VS 580","VS 580","VS 600","VS 600","VS 600","VS 620","VS 620","VS 640")
 
 heat_d65.aim2<-data.frame(names(p1_d65.aim2),as.numeric(str_extract(p1_d65.aim2,"([0-9]+).*$"))) %>% 
@@ -1187,7 +1233,7 @@ p1_twilight.aim2<-sum.flower.vs.leaf_twilight.aim2[["test"]][["pvalues"]]
 p2_twilight.aim2<-sum.beetle.vs.leaf_twilight.aim2[["test"]][["pvalues"]]
 p3_twilight.aim2<-sum.beetle.vs.flower_twilight.aim2[["test"]][["pvalues"]]
 
-VislistA_twilight.aim2<-c("VS 600", "VS 620","VS 640","Vis 660","VS 620","VS 640","Vis 660","VS 640","Vis 660","Vis 660")
+VislistA_twilight.aim2<-c("VS 600", "VS 620","VS 640","VS 660","VS 620","VS 640","VS 660","VS 640","VS 660","VS 660")
 VislistB_twilight.aim2<-c("VS 580","VS 580","VS 580","VS 580","VS 600","VS 600","VS 600","VS 620","VS 620","VS 640")
 
 heat_twilight.aim2<-data.frame(names(p1_twilight.aim2),as.numeric(str_extract(p1_twilight.aim2,"([0-9]+).*$"))) %>% 
@@ -1222,7 +1268,7 @@ Click the tabs to see the results for each comparison group ( __Flower vs. Leaf_
 </br>
 
 #### __Flower v.s Leaf__ {.tabset .tabset-fade .tabset-pills}
-#####Daylight{.tabset .tabset-fade .tabset-pills}
+##### Daylight{.tabset .tabset-fade .tabset-pills}
 
 ```{r}
 Anova(m.flower.vs.leaf_d65.aim1) %>% pander()
@@ -1233,7 +1279,7 @@ Anova(m.flower.vs.leaf_d65.aim1) %>% pander()
 
 Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
-######Pair-wise p-values 
+###### Pair-wise p-values 
 ```{r}
 ggplot(data = heat_d65.aim1, aes(x=VislistA_d65.aim1, y=VislistB_d65.aim1, fill=flower.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
@@ -1248,12 +1294,12 @@ ggplot(data = heat_d65.aim1, aes(x=VislistA_d65.aim1, y=VislistB_d65.aim1, fill=
    labs(fill = "p vaalue")
 ```
 
-######Original model output
+###### Original model output
 ```{r}
 sum.flower.vs.leaf_d65.aim1
 ```
 
-#####Twilight{.tabset .tabset-fade .tabset-pills}
+##### Twilight{.tabset .tabset-fade .tabset-pills}
 ```{r}
 Anova(m.flower.vs.leaf_twilight.aim1) %>% pander()
 ```
@@ -1263,7 +1309,7 @@ Anova(m.flower.vs.leaf_twilight.aim1) %>% pander()
 
 Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
-######Pair-wise p-values
+###### Pair-wise p-values
 ```{r}
 ggplot(data = heat_twilight.aim1, aes(x=VislistA_twilight.aim1, y=VislistB_twilight.aim1, fill=flower.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
@@ -1278,13 +1324,13 @@ ggplot(data = heat_twilight.aim1, aes(x=VislistA_twilight.aim1, y=VislistB_twili
    labs(fill = "p vaalue")
 ```
 
-######Original model output
+###### Original model output
 ```{r}
 sum.flower.vs.leaf_twilight.aim1
 ```
 
 #### __Beetle vs. Leaf__ {.tabset .tabset-fade .tabset-pills}
-#####Daylight{.tabset .tabset-fade .tabset-pills}
+##### Daylight{.tabset .tabset-fade .tabset-pills}
 ```{r}
 Anova(m.beetle.vs.leaf_d65.aim1) %>% pander()
 ```
@@ -1294,7 +1340,7 @@ Anova(m.beetle.vs.leaf_d65.aim1) %>% pander()
 
 Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
-######Pair-wise p-values 
+###### Pair-wise p-values 
 ```{r}
 ggplot(data = heat_d65.aim1, aes(x=VislistA_d65.aim1, y=VislistB_d65.aim1, fill=beetle.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
@@ -1309,12 +1355,12 @@ ggplot(data = heat_d65.aim1, aes(x=VislistA_d65.aim1, y=VislistB_d65.aim1, fill=
    labs(fill = "p vaalue")
 ```
 
-######Original model output
+###### Original model output
 ```{r}
 sum.beetle.vs.leaf_d65.aim1
 ```
 
-#####Twilight{.tabset .tabset-fade .tabset-pills}
+##### Twilight{.tabset .tabset-fade .tabset-pills}
 ```{r}
 Anova(m.beetle.vs.leaf_twilight.aim1) %>% pander()
 ```
@@ -1324,7 +1370,7 @@ Anova(m.beetle.vs.leaf_twilight.aim1) %>% pander()
 
 Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
-######Pair-wise p-values
+###### Pair-wise p-values
 ```{r}
 ggplot(data = heat_twilight.aim1, aes(x=VislistA_twilight.aim1, y=VislistB_twilight.aim1, fill=beetle.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
@@ -1339,13 +1385,13 @@ ggplot(data = heat_twilight.aim1, aes(x=VislistA_twilight.aim1, y=VislistB_twili
    labs(fill = "p vaalue")
 ```
 
-######Original model output
+###### Original model output
 ```{r}
 sum.beetle.vs.leaf_twilight.aim1
 ```
 
 #### __Beetle vs. Flower__ {.tabset .tabset-fade .tabset-pills}
-#####Daylight{.tabset .tabset-fade .tabset-pills}
+##### Daylight{.tabset .tabset-fade .tabset-pills}
 ```{r}
 Anova(m.beetle.vs.flower_d65.aim1) %>% pander()
 ```
@@ -1355,7 +1401,7 @@ Anova(m.beetle.vs.flower_d65.aim1) %>% pander()
 
 Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
-######Pair-wise p-values 
+###### Pair-wise p-values 
 ```{r}
 ggplot(data = heat_d65.aim1, aes(x=VislistA_d65.aim1, y=VislistB_d65.aim1, fill=beetle.vs.flower)) + 
   geom_tile(colour="white", size = 4)+
@@ -1370,12 +1416,12 @@ ggplot(data = heat_d65.aim1, aes(x=VislistA_d65.aim1, y=VislistB_d65.aim1, fill=
    labs(fill = "p vaalue")
 ```
 
-######Original model output
+###### Original model output
 ```{r}
 sum.beetle.vs.flower_d65.aim1
 ```
 
-#####Twilight{.tabset .tabset-fade .tabset-pills}
+##### Twilight{.tabset .tabset-fade .tabset-pills}
 ```{r}
 Anova(m.beetle.vs.flower_twilight.aim1) %>% pander()
 ```
@@ -1385,7 +1431,7 @@ Anova(m.beetle.vs.flower_twilight.aim1) %>% pander()
 
 Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
-######Pair-wise p-values
+###### Pair-wise p-values
 ```{r}
 ggplot(data = heat_twilight.aim1, aes(x=VislistA_twilight.aim1, y=VislistB_twilight.aim1, fill=beetle.vs.flower)) + 
   geom_tile(colour="white", size = 4)+
@@ -1400,7 +1446,7 @@ ggplot(data = heat_twilight.aim1, aes(x=VislistA_twilight.aim1, y=VislistB_twili
    labs(fill = "p vaalue")
 ```
 
-######Original model output
+###### Original model output
 ```{r}
 sum.beetle.vs.flower_twilight.aim1
 ```
@@ -1418,9 +1464,8 @@ Click the tabs to see the results for each comparison group ( __Flower vs. Leaf_
 
 </br>
 
-#### __Flower vs. Leaf__ {.tabset .tabset-fade .tabset-pills}
-
-#####Daylight{.tabset .tabset-fade .tabset-pills}
+#### __Flower v.s Leaf__ {.tabset .tabset-fade .tabset-pills}
+##### Daylight {.tabset .tabset-fade .tabset-pills}
 
 ```{r}
 Anova(m.flower.vs.leaf_d65.aim2) %>% pander()
@@ -1431,7 +1476,7 @@ Anova(m.flower.vs.leaf_d65.aim2) %>% pander()
 
 Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
-######Pair-wise p-values 
+###### Pair-wise p-values 
 ```{r}
 ggplot(data = heat_d65.aim2, aes(x=VislistA_d65.aim2, y=VislistB_d65.aim2, fill=flower.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
@@ -1446,12 +1491,12 @@ ggplot(data = heat_d65.aim2, aes(x=VislistA_d65.aim2, y=VislistB_d65.aim2, fill=
    labs(fill = "p vaalue")
 ```
 
-######Original model output
+###### Original model output
 ```{r}
 sum.flower.vs.leaf_d65.aim2
 ```
 
-#####Twilight{.tabset .tabset-fade .tabset-pills}
+##### Twilight {.tabset .tabset-fade .tabset-pills}
 ```{r}
 Anova(m.flower.vs.leaf_twilight.aim2) %>% pander()
 ```
@@ -1461,7 +1506,7 @@ Anova(m.flower.vs.leaf_twilight.aim2) %>% pander()
 
 Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
-######Pair-wise p-values
+###### Pair-wise p-values
 ```{r}
 ggplot(data = heat_twilight.aim2, aes(x=VislistA_twilight.aim2, y=VislistB_twilight.aim2, fill=flower.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
@@ -1476,13 +1521,13 @@ ggplot(data = heat_twilight.aim2, aes(x=VislistA_twilight.aim2, y=VislistB_twili
    labs(fill = "p vaalue")
 ```
 
-######Original model output
+###### Original model output
 ```{r}
 sum.flower.vs.leaf_twilight.aim2
 ```
 
 #### __Beetle vs. Leaf__ {.tabset .tabset-fade .tabset-pills}
-#####Daylight{.tabset .tabset-fade .tabset-pills}
+##### Daylight{.tabset .tabset-fade .tabset-pills}
 ```{r}
 Anova(m.beetle.vs.leaf_d65.aim2) %>% pander()
 ```
@@ -1492,7 +1537,7 @@ Anova(m.beetle.vs.leaf_d65.aim2) %>% pander()
 
 Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
-######Pair-wise p-values 
+###### Pair-wise p-values 
 ```{r}
 ggplot(data = heat_d65.aim2, aes(x=VislistA_d65.aim2, y=VislistB_d65.aim2, fill=beetle.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
@@ -1507,12 +1552,12 @@ ggplot(data = heat_d65.aim2, aes(x=VislistA_d65.aim2, y=VislistB_d65.aim2, fill=
    labs(fill = "p vaalue")
 ```
 
-######Original model output
+###### Original model output
 ```{r}
 sum.beetle.vs.leaf_d65.aim2
 ```
 
-#####Twilight{.tabset .tabset-fade .tabset-pills}
+##### Twilight{.tabset .tabset-fade .tabset-pills}
 ```{r}
 Anova(m.beetle.vs.leaf_twilight.aim2) %>% pander()
 ```
@@ -1522,7 +1567,7 @@ Anova(m.beetle.vs.leaf_twilight.aim2) %>% pander()
 
 Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
-######Pair-wise p-values
+###### Pair-wise p-values
 ```{r}
 ggplot(data = heat_twilight.aim2, aes(x=VislistA_twilight.aim2, y=VislistB_twilight.aim2, fill=beetle.vs.leaf)) + 
   geom_tile(colour="white", size = 4)+
@@ -1537,13 +1582,13 @@ ggplot(data = heat_twilight.aim2, aes(x=VislistA_twilight.aim2, y=VislistB_twili
    labs(fill = "p vaalue")
 ```
 
-######Original model output
+###### Original model output
 ```{r}
 sum.beetle.vs.leaf_twilight.aim2
 ```
 
 #### __Beetle vs. Flower__ {.tabset .tabset-fade .tabset-pills}
-#####Daylight{.tabset .tabset-fade .tabset-pills}
+##### Daylight{.tabset .tabset-fade .tabset-pills}
 ```{r}
 Anova(m.beetle.vs.flower_d65.aim2) %>% pander()
 ```
@@ -1553,7 +1598,7 @@ Anova(m.beetle.vs.flower_d65.aim2) %>% pander()
 
 Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
-######Pair-wise p-values 
+###### Pair-wise p-values 
 ```{r}
 ggplot(data = heat_d65.aim2, aes(x=VislistA_d65.aim2, y=VislistB_d65.aim2, fill=beetle.vs.flower)) + 
   geom_tile(colour="white", size = 4)+
@@ -1568,12 +1613,12 @@ ggplot(data = heat_d65.aim2, aes(x=VislistA_d65.aim2, y=VislistB_d65.aim2, fill=
    labs(fill = "p vaalue")
 ```
 
-######Original model output
+###### Original model output
 ```{r}
 sum.beetle.vs.flower_d65.aim2
 ```
 
-#####Twilight{.tabset .tabset-fade .tabset-pills}
+##### Twilight{.tabset .tabset-fade .tabset-pills}
 ```{r}
 Anova(m.beetle.vs.flower_twilight.aim2) %>% pander()
 ```
@@ -1583,7 +1628,7 @@ Anova(m.beetle.vs.flower_twilight.aim2) %>% pander()
 
 Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
 
-######Pair-wise p-values
+###### Pair-wise p-values
 ```{r}
 ggplot(data = heat_twilight.aim2, aes(x=VislistA_twilight.aim2, y=VislistB_twilight.aim2, fill=beetle.vs.flower)) + 
   geom_tile(colour="white", size = 4)+
@@ -1598,7 +1643,7 @@ ggplot(data = heat_twilight.aim2, aes(x=VislistA_twilight.aim2, y=VislistB_twili
    labs(fill = "p vaalue")
 ```
 
-######Original model output
+###### Original model output
 ```{r}
 sum.beetle.vs.flower_twilight.aim2
 ```
@@ -1607,15 +1652,15 @@ sum.beetle.vs.flower_twilight.aim2
 </br>
 </br>
 
-#Plot the contrasts {.tabset .tabset-fade .tabset-pills}
+# Plot the contrasts {.tabset .tabset-fade .tabset-pills}
 * Colours approximate human perception of either flower (left and right) or beetle (centre) colouration.
 * Lines of the same colors connect the same sample
 
 </br>
 
-##aim 1 {.tabset .tabset-fade .tabset-pills}
-###Daylight
-```{r,fig.cap="Figure caption: Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the median of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
+## aim 1 {.tabset .tabset-fade .tabset-pills}
+### Daylight
+```{r,fig.cap="Figure caption: Comparison of chromatic contrast for visual systems with different photoreceptor combinations. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts > 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
 #import the flower color code 
 color.code<-read.csv("data/color code list.csv",header=TRUE) 
 
@@ -1659,11 +1704,11 @@ mean.fl_d65.aim1$colour<-flower.colour.aim1$colour
 
 
 fl_d65.aim1<-ggplot(mean.fl_d65.aim1, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
-  geom_point(col=mean.fl_d65.aim1$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.fl_d65.aim1$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.fl_d65.aim1$colour,size=1, alpha=0.7) + 
+  geom_line(col=mean.fl_d65.aim1$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
+  ylim(0,21)+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
         axis.title.x = element_text(size=12),  
@@ -1689,7 +1734,7 @@ fl_d65.aim1<-ggplot(mean.fl_d65.aim1, aes(x=vissys, y=mean.dS.fl,group=flowerID)
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Flower vs. Leaf")+
-  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl"), y = 15, label =c("a","a","b","c")) #add stitistical info
+  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl"), y = 21, label =c("a","a","b","b")) #add statistical info
 
 
 
@@ -1714,11 +1759,11 @@ mean.bl_d65.aim1$colour<-beetle.colour.aim1$colour
 
 
 bl_d65.aim1<-ggplot(mean.bl_d65.aim1, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
-  geom_point(col=mean.bl_d65.aim1$colour, size=3,alpha=0.7) + 
-  geom_line(col=mean.bl_d65.aim1$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bl_d65.aim1$colour, size=1,alpha=0.7) + 
+  geom_line(col=mean.bl_d65.aim1$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
+  ylim(0,21)+
   theme(panel.background = element_blank(), 
         axis.title.x = element_text(size=12),  
         axis.text.x  = element_text(size=8, colour="black", angle=90),
@@ -1742,7 +1787,7 @@ bl_d65.aim1<-ggplot(mean.bl_d65.aim1, aes(x=vissys, y=mean.dS.bl,group=beetleID)
   geom_point(data = mean.bl_d65.aim1, aes(x= "VS4.bl", y= mean(VS4.bl_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
   #change the x labels
-  ggtitle("Beetle vs. Leaf")+annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl"), y = 15, label =c("a","bc","b","c")) #add stitistical info
+  ggtitle("Beetle vs. Leaf")+annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl"), y = 21, label =c("a","b","b","b")) #add statistical info
 
 
 #make beetle vs flower plot
@@ -1765,11 +1810,11 @@ mean.bf_d65.aim1$match.name<-flower.colour.aim1$species # this column is just fo
 mean.bf_d65.aim1$colour<-flower.colour.aim1$colour
 
 bf_d65.aim1<-ggplot(mean.bf_d65.aim1, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf_d65.aim1$colour, size=3, alpha=0.7) + 
-  geom_line(col=mean.bf_d65.aim1$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bf_d65.aim1$colour, size=1, alpha=0.7) + 
+  geom_line(col=mean.bf_d65.aim1$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
+  ylim(0,21)+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_rect(fill = "grey80",size = NA),#make the backfround empty: panel.background = element_blank()
         axis.title.x = element_text(size=12),  
@@ -1795,15 +1840,15 @@ bf_d65.aim1<-ggplot(mean.bf_d65.aim1, aes(x=vissys, y=mean.dS.bf,group=flowerID)
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf"), y = 15, label =c("a","b","c","d")) #add stitistical info
+  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf"), y = 21, label =c("a","a","b","b")) #add statistical info
 
 #plot the contrasts from the 3 comparison groups together
 figure_d65.aim1 <- ggarrange(fl_d65.aim1,bl_d65.aim1,bf_d65.aim1, ncol = 3, nrow = 1)
 figure_d65.aim1
 ```
 
-###Twilight
-```{r,fig.cap="Figure caption: Contrast comparison between visual systems with different photoreceptor combinations. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflcet the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the mean of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
+### Twilight
+```{r,fig.cap="Figure caption: Comparison of chromatic contrast for visual systems with different photoreceptor combinations under civil twilight illumination. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1."}
 #make flower vs leaf plot
 ##add the mean
 mean.fl_twilight.aim1<-allvis.fl_twilight.aim1 %>% mutate(patch3 = paste(allvis.fl_twilight.aim1$vissys,allvis.fl_twilight.aim1$patch1,sep=".")) %>% 
@@ -1825,8 +1870,8 @@ mean.fl_twilight.aim1$colour<-flower.colour.aim1$colour
 
 
 fl_twilight.aim1<-ggplot(mean.fl_twilight.aim1, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
-  geom_point(col=mean.fl_twilight.aim1$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.fl_twilight.aim1$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.fl_twilight.aim1$colour,size=1, alpha=0.7) + 
+  geom_line(col=mean.fl_twilight.aim1$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,2)+
@@ -1855,7 +1900,7 @@ fl_twilight.aim1<-ggplot(mean.fl_twilight.aim1, aes(x=vissys, y=mean.dS.fl,group
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Flower vs. Leaf")+
-  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl"), y = 3, label =c("a","b","c","d")) #add stitistical info
+  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl"), y = 2, label =c("a","b","c","d")) #add statistical info
 
 
 #make beetle vs leaf plot
@@ -1879,8 +1924,8 @@ mean.bl_twilight.aim1$colour<-beetle.colour.aim1$colour
 
 
 bl_twilight.aim1<-ggplot(mean.bl_twilight.aim1, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
-  geom_point(col=mean.bl_twilight.aim1$colour, size=3,alpha=0.7) + 
-  geom_line(col=mean.bl_twilight.aim1$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bl_twilight.aim1$colour, size=1,alpha=0.7) + 
+  geom_line(col=mean.bl_twilight.aim1$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,2)+
@@ -1908,7 +1953,7 @@ bl_twilight.aim1<-ggplot(mean.bl_twilight.aim1, aes(x=vissys, y=mean.dS.bl,group
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Leaf")+
-  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl"), y = 3, label =c("a","b","b","c")) #add stitistical info
+  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl"), y = 2, label =c("a","b","b","c")) #add statistical info
 
 
 
@@ -1932,8 +1977,8 @@ mean.bf_twilight.aim1$match.name<-flower.colour.aim1$species # this column is ju
 mean.bf_twilight.aim1$colour<-flower.colour.aim1$colour
 
 bf_twilight.aim1<-ggplot(mean.bf_twilight.aim1, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf_twilight.aim1$colour, size=3, alpha=0.7) + 
-  geom_line(col=mean.bf_twilight.aim1$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bf_twilight.aim1$colour, size= 1, alpha=0.7) + 
+  geom_line(col=mean.bf_twilight.aim1$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,2)+
@@ -1962,7 +2007,7 @@ bf_twilight.aim1<-ggplot(mean.bf_twilight.aim1, aes(x=vissys, y=mean.dS.bf,group
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf"), y = 3, label =c("a","b","c","d")) #add stitistical info
+  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf"), y = 2, label =c("a","b","c","d")) #add statistical info
 
 
 
@@ -1972,9 +2017,9 @@ figure_twilight.aim1
 ```
 
 
-##Aim 2 {.tabset .tabset-fade .tabset-pills}
-###Daylight
-```{r,fig.cap="Figure caption: Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the mean of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
+## Aim 2 {.tabset .tabset-fade .tabset-pills}
+### Daylight
+```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts > 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
 #creat flower name list for Aim 2
 flower.colour.aim2 <- name.list %>% filter(str_detect(species, "flower")) %>% #select flower names
   cbind(color.code %>% filter(str_detect(type, "flower")) %>% arrange(name)) %>% #select flower color codes and order it alphebatically
@@ -2008,11 +2053,11 @@ mean.fl_d65.aim2$match.name<-flower.colour.aim2$species # this column is just fo
 mean.fl_d65.aim2$colour<-flower.colour.aim2$colour
 
 fl_d65.aim2<-ggplot(mean.fl_d65.aim2, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
-  geom_point(col=mean.fl_d65.aim2$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.fl_d65.aim2$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.fl_d65.aim2$colour,size= 1, alpha=0.7) + 
+  geom_line(col=mean.fl_d65.aim2$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
+  ylim(0,20)+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
         axis.title.x = element_text(size=12),  
@@ -2026,7 +2071,7 @@ fl_d65.aim2<-ggplot(mean.fl_d65.aim2, aes(x=vissys, y=mean.dS.fl,group=flowerID)
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","Vis 660"))+
+                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.fl_d65.aim2, aes(x= "VS1.fl", y= mean(VS1.fl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
@@ -2040,7 +2085,7 @@ fl_d65.aim2<-ggplot(mean.fl_d65.aim2, aes(x=vissys, y=mean.dS.fl,group=flowerID)
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Flower vs. Leaf")+
-  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 15, label =c("a","b","c","d","d")) #add stitistical info
+  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 20, label =c("a","b","c","d","d")) #add statistical info
 
 
 #make beetle vs leaf plot
@@ -2064,11 +2109,11 @@ mean.bl_d65.aim2$colour<-beetle.colour.aim2$colour
 
 
 bl_d65.aim2<-ggplot(mean.bl_d65.aim2, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
-  geom_point(col=mean.bl_d65.aim2$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.bl_d65.aim2$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bl_d65.aim2$colour,size= 1, alpha=0.7) + 
+  geom_line(col=mean.bl_d65.aim2$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
+  ylim(0,20)+
   theme(panel.background = element_blank(),
         axis.title.x = element_text(size=12),  
         axis.text.x  = element_text(size=8, colour="black", angle =90),
@@ -2081,7 +2126,7 @@ bl_d65.aim2<-ggplot(mean.bl_d65.aim2, aes(x=vissys, y=mean.dS.bl,group=beetleID)
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","Vis 660"))+
+                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bl_d65.aim2, aes(x= "VS1.bl", y= mean(VS1.bl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
@@ -2095,7 +2140,7 @@ bl_d65.aim2<-ggplot(mean.bl_d65.aim2, aes(x=vissys, y=mean.dS.bl,group=beetleID)
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Leaf")+
-  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 15, label =c("a","b","c","d","e")) #add stitistical info
+  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 20, label =c("a","b","c","d","e")) #add statistical info
 
 
 #make beetle vs flower plot
@@ -2119,11 +2164,11 @@ mean.bf_d65.aim2$match.name<-flower.colour.aim2$species # this column is just fo
 mean.bf_d65.aim2$colour<-flower.colour.aim2$colour
 
 bf_d65.aim2<-ggplot(mean.bf_d65.aim2, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf_d65.aim2$colour, size=3,alpha=0.7) + 
-  geom_line(col=mean.bf_d65.aim2$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bf_d65.aim2$colour, size= 1,alpha=0.7) + 
+  geom_line(col=mean.bf_d65.aim2$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
+  ylim(0,20)+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
         axis.title.x = element_text(size=12),  
@@ -2137,7 +2182,7 @@ bf_d65.aim2<-ggplot(mean.bf_d65.aim2, aes(x=vissys, y=mean.dS.bf,group=flowerID)
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","Vis 660"))+
+                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bf_d65.aim2, aes(x= "VS1.bf", y= mean(VS1.bf_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
@@ -2151,14 +2196,14 @@ bf_d65.aim2<-ggplot(mean.bf_d65.aim2, aes(x=vissys, y=mean.dS.bf,group=flowerID)
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 15, label =c("a","b","c","d","e")) #add stitistical info
+  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 20, label =c("a","b","c","d","e")) #add statistical info
 
 figure_d65.aim2 <- ggarrange(fl_d65.aim2,bl_d65.aim2,bf_d65.aim2, ncol = 3, nrow = 1)
 figure_d65.aim2
 ```
 
-###Twilight
-```{r,fig.cap="Figure caption: Contrast comparison between visual systems with the LWS photoreceptor peaking at different wavelengths. A dot in each visual system shows a representative contrast of a flower pattern (beetle pattern in the middle panel), which is the average of its contrast to all leaves (all beetle patterns on the right panel). Colours of the dots reflect the visible colour of the flower (beetle patterns in the middle panel) with the lines of the same colour connecting the results between different visual systems. Black dots show the mean of the representative contrast in a visual system. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 10 JND are from flowers that have very low UV reflectance."}
+### Twilight
+```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths under civil twilight illumination. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1."}
 #make flower vs leaf plot
 ##add the mean
 mean.fl_twilight.aim2<-allvis.fl_twilight.aim2 %>% mutate(patch3 = paste(allvis.fl_twilight.aim2$vissys,allvis.fl_twilight.aim2$patch1,sep=".")) %>% 
@@ -2179,13 +2224,13 @@ mean.fl_twilight.aim2$match.name<-flower.colour.aim2$species # this column is ju
 mean.fl_twilight.aim2$colour<-flower.colour.aim2$colour
 
 fl_twilight.aim2<-ggplot(mean.fl_twilight.aim2, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
-  geom_point(col=mean.fl_twilight.aim2$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.fl_twilight.aim2$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.fl_twilight.aim2$colour,size= 1, alpha=0.7) + 
+  geom_line(col=mean.fl_twilight.aim2$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,2)+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
+        panel.background = element_rect(fill = "grey80",size = NA), #make the background empty: panel.background = element_blank()
         axis.title.x = element_text(size=12),  
         axis.text.x  = element_text(size=8, colour="black", angle =90),
         axis.title.y = element_text(size =12, vjust = 1),
@@ -2197,7 +2242,7 @@ fl_twilight.aim2<-ggplot(mean.fl_twilight.aim2, aes(x=vissys, y=mean.dS.fl,group
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","Vis 660"))+
+                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.fl_twilight.aim2, aes(x= "VS1.fl", y= mean(VS1.fl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
@@ -2211,7 +2256,7 @@ fl_twilight.aim2<-ggplot(mean.fl_twilight.aim2, aes(x=vissys, y=mean.dS.fl,group
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Flower vs. Leaf")+
-  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 3, label =c("a","b","c","d","e")) #add stitistical info
+  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 2, label =c("a","b","c","d","e")) #add statistical info
 
 
 #make beetle vs leaf plot
@@ -2235,8 +2280,8 @@ mean.bl_twilight.aim2$colour<-beetle.colour.aim2$colour
 
 
 bl_twilight.aim2<-ggplot(mean.bl_twilight.aim2, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
-  geom_point(col=mean.bl_twilight.aim2$colour,size=3, alpha=0.7) + 
-  geom_line(col=mean.bl_twilight.aim2$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bl_twilight.aim2$colour,size= 1, alpha=0.7) + 
+  geom_line(col=mean.bl_twilight.aim2$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,2)+
@@ -2252,7 +2297,7 @@ bl_twilight.aim2<-ggplot(mean.bl_twilight.aim2, aes(x=vissys, y=mean.dS.bl,group
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","Vis 660"))+
+                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bl_twilight.aim2, aes(x= "VS1.bl", y= mean(VS1.bl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
@@ -2266,7 +2311,7 @@ bl_twilight.aim2<-ggplot(mean.bl_twilight.aim2, aes(x=vissys, y=mean.dS.bl,group
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Leaf")+
-  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 3, label =c("a","b","c","d","d")) #add stitistical info
+  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 2, label =c("a","b","c","d","d")) #add statistical info
 
 
 #make beetle vs flower plot
@@ -2290,8 +2335,8 @@ mean.bf_twilight.aim2$match.name<-flower.colour.aim2$species # this column is ju
 mean.bf_twilight.aim2$colour<-flower.colour.aim2$colour
 
 bf_twilight.aim2<-ggplot(mean.bf_twilight.aim2, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf_twilight.aim2$colour, size=3,alpha=0.7) + 
-  geom_line(col=mean.bf_twilight.aim2$colour, size = 1, alpha=0.7)+
+  geom_point(col=mean.bf_twilight.aim2$colour, size= 1,alpha=0.7) + 
+  geom_line(col=mean.bf_twilight.aim2$colour, size = 0.5, alpha=0.7)+
   xlab("Visual system") +     
   ylab("Chromatic contrast (JND)") +
   ylim(0,2)+
@@ -2308,7 +2353,7 @@ bf_twilight.aim2<-ggplot(mean.bf_twilight.aim2, aes(x=vissys, y=mean.dS.bf,group
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","Vis 660"))+
+                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
   geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bf_twilight.aim2, aes(x= "VS1.bf", y= mean(VS1.bf_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
@@ -2322,21 +2367,18 @@ bf_twilight.aim2<-ggplot(mean.bf_twilight.aim2, aes(x=vissys, y=mean.dS.bf,group
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 3, label =c("a","b","c","d","e")) #add stitistical info
+  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 2, label =c("a","b","c","d","e")) #add statistical info
 
 figure_twilight.aim2 <- ggarrange(fl_twilight.aim2,bl_twilight.aim2,bf_twilight.aim2, ncol = 3, nrow = 1)
 figure_twilight.aim2
 ```
 
-#Summary
+# Summary
 
 * Visual models using hypothetical insect visual systems indicate that having both SWS and LWS receptors enhances the contrast of beetles with flowers and flowers with leaves, and a LWS receptor enhances the contrast of beetles against leaves.
 </br>
 </br>
-* The USL visual system (UVS, SWS and LWS) consistently provides the highest contrast compared to the other three visual systems, whereas the USM visual system (UVS, SWS and MWS) consistently provides the lowest or equal lowest contrast.
-</br>
-</br>
-* The optimal peak sensitivity of the LWS photoreceptor depends on what is being viewed. When comparing beetle colours with both leaves and flowers, contrast increases with increasing LWS λmax; whereas when comparing flowers against leaves, contrast is maximized with a LWS photoreceptor peak sensitivity of 640 nm.
+* The optimal peak sensitivity of the LWS photoreceptor depends on what is being viewed. When comparing beetle colours with both leaves and flowers, contrast increases with increasing LWS λmax up to 660 nm; whereas when comparing flowers against leaves, contrast stops increasing beyond 640 nm.
 </br>
 </br>
 * The contrasts of the models using civil twilight were substantially lower (often < 1 JND) than those using daylight. The contrasts in twilight showed different patterns from those using daylight in Aim 1 models, but were qualitatively similar in Aim 2 models.

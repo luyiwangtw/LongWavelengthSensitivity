@@ -7,13 +7,13 @@ output:
     toc: true
     toc_depth: 2
 subtitle: Supplementary Information
-Date: August 31 2020
+Date: January 08 2021
 ---
-#The aim
+# The aim
 
 * Here, we tested the effect of even spacing of sensitivities on colour discrimination in a tetrachromatic visual system. Specifically, we ran visual models with __an evenly spaced visual system__ and __an unevenly spaced visual system__, then compared spectral contrast in all three comparison groups (‘leaf vs. flower’, ‘leaf vs. beetle’, ‘beetle vs. flower’). 
 
-* These two visual systems have the same upper and lower sensitivities with varying distribution of the two middle sensitivities. The evenly spaced visual system has peak sensitivities at 380 nm, 473 nm, 567 nm, and 660 nm, while VS 660 from the [Main models](main_models.html) section is used to represent the unevenly spaced visual system, with peak sensitivities at 380 nm, 460 nm, 520 nm, and 660 nm. 
+* These two visual systems have the same upper and lower sensitivities with varying distribution of the two middle sensitivities. The evenly spaced visual system has peak sensitivities at 355 nm, 455 nm, 530 nm, and 660 nm, while VS 660 from the [Main models](main_models.html) section is used to represent the unevenly spaced visual system, with peak sensitivities at 355 nm, 445 nm, 530 nm, and 660 nm. 
 
 * The model parameters and the statistical methods remain the same as described in the main text.
 
@@ -52,7 +52,9 @@ irradiance.d65 <- read.csv("data/d65.csv",header=TRUE) %>%
 irradiance.twilight <- read.csv("data/civil twilight.csv",header=TRUE) %>% 
   as.rspec(lim=c(300,800)) %>% 
   procspec(opt = c("min", "max")) %>% 
-  rename( twilight = Irradiance) 
+  rename( twilight = Irradiance) %>% 
+  irrad2flux() #convert the irradiance (μ Watt.cm^{-2}) to photon flux (μ mol.s^{-1}.m^{-2}) to derive correct quantum catch.
+
 
 #import backgound - average leaf
 aveleaf <- read.csv("data/aveleaf.csv",header=TRUE) %>% as.rspec()
@@ -95,17 +97,6 @@ ggplot(dataset.plot.indivisually,aes(x=wavelength,y=reflectance, colour=category
   guides(colour=FALSE) # remove the legend
 ```
 
-```{r, fig.cap="Relative irradiance of the standard daylight and twilight",echo=FALSE,message=FALSE, warning=FALSE,fig.show='hide'}
-#import illumination
-illum <- merge(irradiance.d65, irradiance.twilight) %>% gather(light, illuminace, -wl) 
-
-ggplot(illum, aes(x=wl, y=illuminace, color=light))+
-geom_line()+
-xlab("Wavelength (nm)")+
-ylab("Relative irradiance")+
-theme_classic()
-```
-
 ```{r, fig.cap="Figure caption: ensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (VS 660; dotted lines).",echo=FALSE,message=FALSE, warning=FALSE}
 #plot the visual systems
 system.list <- c("even space","uneven space")
@@ -131,14 +122,14 @@ ggplot(combine.curves,aes(x=wl, y=value, linetype=system.type, color=peak))+
 </br>
 </br>
 
-#Data description
+# Data description
 
 * We used the same spectral data collected from beetles and plants as described in the [Main models](main_models.html) section.
 
 </br>
 </br>
 
-#Run the visual models
+# Run the visual models
 * We ran the visual models with the same parameter settings and steps as in the main models.
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 
@@ -222,18 +213,18 @@ Vis5.bf_twilight.model2$vissys<-strrep("Vis5.bf",1)
 </br>
 </br>
 
-##Contrast tables{.tabset .tabset-fade .tabset-pills}
+## Contrast tables{.tabset .tabset-fade .tabset-pills}
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 system.list.even.space<- rbind.data.frame("even space", "VS 660") %>% rename(system = 1) # make a list of system names
 ```
 
-###Daylight
+### Daylight
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 #Daylight
 ##list contrast from each comparison group
-lf.contrast_d65.even.space <-rbind.data.frame(median(VS.fl_d65.even.space$dS),median(Vis5.lf_d65.model2$dS))
-lb.contrast_d65.even.space <-rbind.data.frame(median(VS.bl_d65.even.space$dS),median(Vis5.lb_d65.model2$dS))
-bf.contrast_d65.even.space <-rbind.data.frame(median(VS.bf_d65.even.space$dS),median(Vis5.bf_d65.model2$dS))
+lf.contrast_d65.even.space <-rbind.data.frame(mean(VS.fl_d65.even.space$dS),mean(Vis5.lf_d65.model2$dS))
+lb.contrast_d65.even.space <-rbind.data.frame(mean(VS.bl_d65.even.space$dS),mean(Vis5.lb_d65.model2$dS))
+bf.contrast_d65.even.space <-rbind.data.frame(mean(VS.bf_d65.even.space$dS),mean(Vis5.bf_d65.model2$dS))
 
 
 #combind comparison groups together in a table
@@ -255,13 +246,13 @@ contrast.list_d65.even.space
 </br>
 </br>
 
-###Twilight
+### Twilight
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 #Twilight
 ##list contrast from each comparison group
-lf.contrast_twilight.even.space <- rbind.data.frame(median(VS.fl_twilight.even.space$dS),median(Vis5.lf_twilight.model2$dS))
-lb.contrast_twilight.even.space <- rbind.data.frame(median(VS.bl_twilight.even.space$dS),median(Vis5.lb_twilight.model2$dS))
-bf.contrast_twilight.even.space <- rbind.data.frame(median(VS.bf_twilight.even.space$dS),median(Vis5.bf_twilight.model2$dS))
+lf.contrast_twilight.even.space <- rbind.data.frame(mean(VS.fl_twilight.even.space$dS),mean(Vis5.lf_twilight.model2$dS))
+lb.contrast_twilight.even.space <- rbind.data.frame(mean(VS.bl_twilight.even.space$dS),mean(Vis5.lb_twilight.model2$dS))
+bf.contrast_twilight.even.space <- rbind.data.frame(mean(VS.bf_twilight.even.space$dS),mean(Vis5.bf_twilight.model2$dS))
 
 #combind comparison groups together in a table
 contrast.list_twilight.even.space <- system.list.even.space %>% cbind(lf.contrast_twilight.even.space) %>% cbind(lb.contrast_twilight.even.space) %>% cbind(bf.contrast_twilight.even.space) %>% dplyr:: rename(flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% pander() 
@@ -271,7 +262,7 @@ contrast.list_twilight.even.space
 </br>
 </br>
 
-#Compare contrasts {.tabset .tabset-fade .tabset-pills}
+# Compare contrasts {.tabset .tabset-fade .tabset-pills}
 * To compare contrasts between visual systems, We conducted Wald chi-square tests on generalised linear mixed models (GLMM) followed by posthoc tests.
 
 * In the models, we assigned
@@ -416,7 +407,7 @@ sum.beetle.vs.flower_twilight.even.space  <-summary(glht(m.beetle.vs.flower_twil
 ```
 
 ## __Flower vs. Leaf__ {.tabset .tabset-fade .tabset-pills}
-###Daylight
+### Daylight
 
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 Anova(m.flower.vs.leaf_d65.even.space) %>% pander()
@@ -426,7 +417,7 @@ Anova(m.flower.vs.leaf_d65.even.space) %>% pander()
 </br>
 
 
-###Twilight
+### Twilight
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 Anova(m.flower.vs.leaf_twilight.even.space) %>% pander()
 ```
@@ -436,7 +427,7 @@ Anova(m.flower.vs.leaf_twilight.even.space) %>% pander()
 
 
 ## __Beetle vs. Leaf__ {.tabset .tabset-fade .tabset-pills}
-###Daylight
+### Daylight
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 Anova(m.beetle.vs.leaf_d65.even.space) %>% pander()
 ```
@@ -445,7 +436,7 @@ Anova(m.beetle.vs.leaf_d65.even.space) %>% pander()
 </br>
 
 
-###Twilight
+### Twilight
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 Anova(m.beetle.vs.leaf_twilight.even.space) %>% pander()
 ```
@@ -455,7 +446,7 @@ Anova(m.beetle.vs.leaf_twilight.even.space) %>% pander()
 
 
 ## __Beetle vs. Flower__ {.tabset .tabset-fade .tabset-pills}
-###Daylight
+### Daylight
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 Anova(m.beetle.vs.flower_d65.even.space) %>% pander()
 ```
@@ -463,7 +454,7 @@ Anova(m.beetle.vs.flower_d65.even.space) %>% pander()
 </br>
 </br>
 
-###Twilight
+### Twilight
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 Anova(m.beetle.vs.flower_twilight.even.space) %>% pander()
 ```
@@ -472,5 +463,5 @@ Anova(m.beetle.vs.flower_twilight.even.space) %>% pander()
 </br>
 
 
-#Summary
-For all three comparison groups, VS 660 (unevenly spaced visual system) has significantly higher contrast than the evenly spaced visual system. This indicates that the minimal improvement or lack of improvement in contrast beyond 640 nm shown in the main text is not the result of uneven spacing between photoreceptors. 
+# Summary
+For all three comparison groups, VS 660 (unevenly spaced visual system) has significantly higher contrast than the evenly spaced visual system. This indicates that our results were not biased by uneven spacing of spectral sensitivities in our hypothetical visual systems.

@@ -9,14 +9,14 @@ output:
 subtitle: Supplementary Information
 Date: August 31 2020
 ---
-#The aim
+# The aim
 
 Intracellular recordings, opsin expression and electroretinogram data indicate that jewel beetles have a LWS photoreceptor with sensitivity potentially extending into the far red. However, their visual sensitivities have not been confirmed with behavioural data. Here, we conducted a behavioral assay to confirm their long wavelength sensitivity in living jewel beetles.
 
 </br>
 </br>
 
-#Materials and methods
+# Materials and methods
 
 To test the behavioural response of jewel beetles to long wavelengths, we conducted bi-choice behavioural experiments based on their positive phototaxis. We used a neutral-grey Y-maze as an arena (10 cm high; two 15 cm wide x 20 cm long arms with a 20 cm wide x 15 cm long base) with a light stimulus at the end of one arm and no stimulus at the end of the other. The lit arm was shifted between trials to prevent bias in arm preference. To create the light stimulus, we used a light panel with 6 LED diodes of the same peak wavelength with a piece of diffuse paper placed 1 cm in front. The peak wavelengths of the diodes used in this experiment ranged from 590 to 735 nm and were performed in the order of: 590, 680, 700, 720, 735, 645 nm. The shorter wavelength in the last trial was to ensure that there was no significant fatigue in beetles after all trials and the responses were reliable. Each beetle was exposed to all light stimuli and received at least 10-minute break between trials. All trials were conducted in a dark room with an indirect dim light.
 
@@ -105,7 +105,7 @@ newdat1.Cf$attracted<-plogis(newdat1.Cf$attracted) ##can track the corresponding
 </br>
 </br>
 
-#Behavioural results
+# Behavioural results
 
 Behavioural experiments confirmed far-red sensitivity in both species of jewel beetle. 96% of jewel beetles were attracted by light at 590 nm and c.a. 87% of them still responded to light at 645 nm (*C. dimidiata*: 100% and 96%; *C. flavopicta*, 93% and 78%; at 590 nm and 645 nm). The percentage of the respondents (i.e. those reached <5 cm to the end the lit arm) decreased steadily after 590 nm in *C. flavopicta* down to 735 nm, whereas the decrease is more abrupt in *C. dimidiata* after 680 nm. At 700 nm, *C. dimidiata* and *C. flavopicta* had a response rate of 56% and 39%, respectively. The 50% response rate was at c.a. 704 nm for *C. dimidiata* and c.a. 685 nm for *C. flavopicta*. Only one *C. dimidiata* individual responded to light at 735 nm.
 </br>
@@ -152,16 +152,16 @@ ggplot(datacombined, aes(x=wavelength, y=attracted))+
 </br>
 </br>
 
-#Summary
+# Summary
 The behavioural experiment suggests that jewel beetles have long wavelength sensitivity spanning the ‘red edge’.
 </br>
 </br>
 
-#Supplementary images{.tabset .tabset-fade .tabset-pills}
+# Supplementary images{.tabset .tabset-fade .tabset-pills}
 </br>
 </br>
 
-##LED peaks
+## LED peaks
 
 </br>
 </br>
@@ -170,7 +170,7 @@ The behavioural experiment suggests that jewel beetles have long wavelength sens
 knitr::include_graphics("image/led_peaks.png")
 ```
 
-##Dim light
+## Dim light
 
 </br>
 </br>

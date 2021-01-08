@@ -382,11 +382,11 @@ div.tocify {
 <h1>The aim</h1>
 <ul>
 <li><p>Here, we tested the effect of even spacing of sensitivities on colour discrimination in a tetrachromatic visual system. Specifically, we ran visual models with <strong>an evenly spaced visual system</strong> and <strong>an unevenly spaced visual system</strong>, then compared spectral contrast in all three comparison groups (‘leaf vs. flower’, ‘leaf vs. beetle’, ‘beetle vs. flower’).</p></li>
-<li><p>These two visual systems have the same upper and lower sensitivities with varying distribution of the two middle sensitivities. The evenly spaced visual system has peak sensitivities at 380 nm, 473 nm, 567 nm, and 660 nm, while VS 660 from the <a href="main_models.html">Main models</a> section is used to represent the unevenly spaced visual system, with peak sensitivities at 380 nm, 460 nm, 520 nm, and 660 nm.</p></li>
+<li><p>These two visual systems have the same upper and lower sensitivities with varying distribution of the two middle sensitivities. The evenly spaced visual system has peak sensitivities at 355 nm, 455 nm, 530 nm, and 660 nm, while VS 660 from the <a href="main_models.html">Main models</a> section is used to represent the unevenly spaced visual system, with peak sensitivities at 355 nm, 445 nm, 530 nm, and 660 nm.</p></li>
 <li><p>The model parameters and the statistical methods remain the same as described in the main text.</p></li>
 </ul>
 <div class="figure">
-<img src="even_spacing_files/figure-html/unnamed-chunk-4-1.png" alt="Figure caption: ensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (VS 660; dotted lines)." width="672" />
+<img src="even_spacing_files/figure-html/unnamed-chunk-3-1.png" alt="Figure caption: ensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (VS 660; dotted lines)." width="672" />
 <p class="caption">
 Figure caption: ensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (VS 660; dotted lines).
 </p>
@@ -410,12 +410,12 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 <h2>Contrast tables</h2>
 <div id="daylight" class="section level3">
 <h3>Daylight</h3>
-<table style="width:90%;">
+<table style="width:92%;">
 <colgroup>
 <col width="18%" />
 <col width="23%" />
 <col width="23%" />
-<col width="25%" />
+<col width="26%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -428,15 +428,15 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 <tbody>
 <tr class="odd">
 <td align="center">even space</td>
-<td align="center">7.598</td>
-<td align="center">7.203</td>
-<td align="center">7.748</td>
+<td align="center">8.927</td>
+<td align="center">7.424</td>
+<td align="center">9.221</td>
 </tr>
 <tr class="even">
 <td align="center">VS 660</td>
-<td align="center">7.703</td>
-<td align="center">7.421</td>
-<td align="center">7.846</td>
+<td align="center">9.063</td>
+<td align="center">7.616</td>
+<td align="center">9.378</td>
 </tr>
 </tbody>
 </table>
@@ -444,12 +444,12 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 </div>
 <div id="twilight" class="section level3">
 <h3>Twilight</h3>
-<table style="width:90%;">
+<table style="width:92%;">
 <colgroup>
 <col width="18%" />
 <col width="23%" />
 <col width="23%" />
-<col width="25%" />
+<col width="26%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -462,15 +462,15 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 <tbody>
 <tr class="odd">
 <td align="center">even space</td>
-<td align="center">0.9564</td>
-<td align="center">0.7175</td>
-<td align="center">1.044</td>
+<td align="center">1.117</td>
+<td align="center">0.7577</td>
+<td align="center">1.205</td>
 </tr>
 <tr class="even">
 <td align="center">VS 660</td>
-<td align="center">0.9717</td>
-<td align="center">0.7268</td>
-<td align="center">1.063</td>
+<td align="center">1.134</td>
+<td align="center">0.7758</td>
+<td align="center">1.223</td>
 </tr>
 </tbody>
 </table>
@@ -482,7 +482,7 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 <h1>Compare contrasts</h1>
 <ul>
 <li><p>To compare contrasts between visual systems, We conducted Wald chi-square tests on generalised linear mixed models (GLMM) followed by posthoc tests.</p></li>
-<li>In the models, we assigned
+<li><p>In the models, we assigned</p>
 <ul>
 <li>Independent variable: <strong>contrast</strong></li>
 <li>Dependent variable:
@@ -493,17 +493,17 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 </ul></li>
 </ul>
 <p></br></p>
-<div id="flower-vs.leaf" class="section level2 tabset tabset-fade tabset-pills">
+<div id="flower-vs.-leaf" class="section level2 tabset tabset-fade tabset-pills">
 <h2><strong>Flower vs. Leaf</strong></h2>
 <div id="daylight-1" class="section level3">
 <h3>Daylight</h3>
-<table style="width:75%;">
+<table style="width:76%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
 <col width="40%" />
 <col width="11%" />
 <col width="6%" />
-<col width="16%" />
+<col width="18%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -516,9 +516,9 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.flower.vs.leaf</strong></td>
-<td align="center">55.03</td>
+<td align="center">19.8</td>
 <td align="center">1</td>
-<td align="center">1.186e-13</td>
+<td align="center">8.578e-06</td>
 </tr>
 </tbody>
 </table>
@@ -526,13 +526,13 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 </div>
 <div id="twilight-1" class="section level3">
 <h3>Twilight</h3>
-<table style="width:75%;">
+<table style="width:76%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
 <col width="40%" />
 <col width="11%" />
 <col width="6%" />
-<col width="16%" />
+<col width="18%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -545,26 +545,26 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.flower.vs.leaf</strong></td>
-<td align="center">40.47</td>
+<td align="center">18.43</td>
 <td align="center">1</td>
-<td align="center">1.998e-10</td>
+<td align="center">1.762e-05</td>
 </tr>
 </tbody>
 </table>
 <p></br> </br></p>
 </div>
 </div>
-<div id="beetle-vs.leaf" class="section level2 tabset tabset-fade tabset-pills">
+<div id="beetle-vs.-leaf" class="section level2 tabset tabset-fade tabset-pills">
 <h2><strong>Beetle vs. Leaf</strong></h2>
 <div id="daylight-2" class="section level3">
 <h3>Daylight</h3>
-<table style="width:75%;">
+<table style="width:76%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
 <col width="40%" />
 <col width="11%" />
 <col width="6%" />
-<col width="16%" />
+<col width="18%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -577,9 +577,9 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.beetle.vs.leaf</strong></td>
-<td align="center">58.22</td>
+<td align="center">34.17</td>
 <td align="center">1</td>
-<td align="center">2.341e-14</td>
+<td align="center">5.039e-09</td>
 </tr>
 </tbody>
 </table>
@@ -587,13 +587,13 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 </div>
 <div id="twilight-2" class="section level3">
 <h3>Twilight</h3>
-<table style="width:75%;">
+<table style="width:76%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
 <col width="40%" />
 <col width="11%" />
 <col width="6%" />
-<col width="16%" />
+<col width="18%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -606,26 +606,26 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.beetle.vs.leaf</strong></td>
-<td align="center">43.04</td>
+<td align="center">29.19</td>
 <td align="center">1</td>
-<td align="center">5.357e-11</td>
+<td align="center">6.577e-08</td>
 </tr>
 </tbody>
 </table>
 <p></br> </br></p>
 </div>
 </div>
-<div id="beetle-vs.flower" class="section level2 tabset tabset-fade tabset-pills">
+<div id="beetle-vs.-flower" class="section level2 tabset tabset-fade tabset-pills">
 <h2><strong>Beetle vs. Flower</strong></h2>
 <div id="daylight-3" class="section level3">
 <h3>Daylight</h3>
-<table style="width:78%;">
+<table style="width:79%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
 <col width="43%" />
 <col width="11%" />
 <col width="6%" />
-<col width="16%" />
+<col width="18%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -638,9 +638,9 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.beetle.vs.flower</strong></td>
-<td align="center">15.53</td>
+<td align="center">10.21</td>
 <td align="center">1</td>
-<td align="center">8.108e-05</td>
+<td align="center">0.001395</td>
 </tr>
 </tbody>
 </table>
@@ -648,13 +648,13 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 </div>
 <div id="twilight-3" class="section level3">
 <h3>Twilight</h3>
-<table style="width:78%;">
+<table style="width:79%;">
 <caption>Analysis of Deviance Table (Type II Wald chisquare tests)</caption>
 <colgroup>
 <col width="43%" />
 <col width="11%" />
 <col width="6%" />
-<col width="16%" />
+<col width="18%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -667,9 +667,9 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.beetle.vs.flower</strong></td>
-<td align="center">11.32</td>
+<td align="center">6.739</td>
 <td align="center">1</td>
-<td align="center">0.0007652</td>
+<td align="center">0.009431</td>
 </tr>
 </tbody>
 </table>
@@ -679,7 +679,7 @@ Figure caption: ensitivity curves of the evenly spaced visual system (solid line
 </div>
 <div id="summary" class="section level1">
 <h1>Summary</h1>
-<p>For all three comparison groups, VS 660 (unevenly spaced visual system) has significantly higher contrast than the evenly spaced visual system. This indicates that the minimal improvement or lack of improvement in contrast beyond 640 nm shown in the main text is not the result of uneven spacing between photoreceptors.</p>
+<p>For all three comparison groups, VS 660 (unevenly spaced visual system) has significantly higher contrast than the evenly spaced visual system. This indicates that our results were not biased by uneven spacing of spectral sensitivities in our hypothetical visual systems.</p>
 </div>
 
 
