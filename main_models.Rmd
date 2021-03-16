@@ -78,7 +78,7 @@ irradiance.twilight <- read.csv("data/civil twilight.csv",header=TRUE) %>%
 #import background - average leaf
 aveleaf <- read.csv("data/aveleaf.csv",header=TRUE) %>% as.rspec()
 
-#import and combind beetle, flower, leaf together
+#import and combine beetle, flower, leaf together
 raw.dataset<-read.csv("data/refelectance spectra.csv",header=TRUE) %>% as.rspec()
 dataset<- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measurements to a representative one
   procspec(opt = "smooth", span = 0.1, fixneg = "zero") #smooth the spectra and lift <0 to 0
