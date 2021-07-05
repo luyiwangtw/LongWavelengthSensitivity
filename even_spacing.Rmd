@@ -146,14 +146,14 @@ buprest660_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, 
 
 
 #Contrast calculation- D65 
-Cbuprest.even.space.d65 = coldist(buprest.even.space.d65, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
+Cbuprest.even.space.d65 = coldist(buprest.even.space.d65, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
 
 #Contrast calculation- twilight
-Cbuprest.even.space.twilight = coldist(buprest.even.space.twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
+Cbuprest.even.space.twilight = coldist(buprest.even.space.twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
 
 #VS660
-Cbuprest660 = coldist(buprest660, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
-Cbuprest660_twilight = coldist(buprest660_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
+Cbuprest660 = coldist(buprest660, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
+Cbuprest660_twilight = coldist(buprest660_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
 
 #combine all contrast value in each comparison group
 
@@ -232,12 +232,12 @@ contrast.list_d65.even.space <- system.list.even.space %>% cbind(lf.contrast_d65
 contrast.list_d65.even.space
 
 #to generate max and min medians from each comparison group
-##for even space sivual system
+##for even space visual system
 # list( max(VS.fl_d65.even.space$dS), min(VS.fl_d65.even.space$dS))
 # list( max(VS.bl_d65.even.space$dS), min(VS.bl_d65.even.space$dS))
 # list( max(VS.bf_d65.even.space$dS), min(VS.bf_d65.even.space$dS))
 # 
-# ##for VS660 sivual system
+# ##for VS660 visual system
 # list( max(Vis5.lf_d65.model2$dS), min(Vis5.lf_d65.model2$dS))
 # list( max(Vis5.lb_d65.model2$dS), min(Vis5.lb_d65.model2$dS))
 # list( max(Vis5.bf_d65.model2$dS), min(Vis5.bf_d65.model2$dS))

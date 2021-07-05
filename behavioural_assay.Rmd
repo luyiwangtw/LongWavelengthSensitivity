@@ -44,6 +44,7 @@ library(ggplot2)
 library(dplyr)
 library(pavo)
 library(ggpubr)
+library(tidyr)
 ```
 
 ```{r setup, include=FALSE}
@@ -52,14 +53,14 @@ knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time wh
 ```
 
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
-ymaze<- read.csv("data/behavioura result.csv")
+ymaze <- read.csv("data/behavioura result.csv")
 ```
 
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
-#Castiarina dimidiata (n=16)
-#filter the data for this species
+# Castiarina dimidiata (n=16)
+# filter the data for this species
 ymaze.Cdimidiata<-subset(filter(ymaze, species == "Castiarina_dimidiata" ))
-#creat the logistic model
+# creat the logistic model
 ymodel.Cdimidiata<-glmer(attracted ~ wavelength + (1|individual), 
                              family=binomial(link="logit"), data= ymaze.Cdimidiata)
 
@@ -112,41 +113,19 @@ Behavioural experiments confirmed far-red sensitivity in both species of jewel b
 </br>
 
 ```{r, fig.cap="Figure caption: Results of the behavioural experiments on two jewel beetles. Blue represents *Castiarina dimidiata* and yellow represent *C. flavopicta*. Logistic regression lines show beetles’ high response rate at 700 nm. 95 % confidence intervals in shaded regions. The green dashed line shows the mean leaf reflectance spectrum from our dataset.", echo=FALSE}
-#re-scale the average leaf reflectacne
-aveleaf <- read.csv("data/aveleaf.csv")
-aveleaf$attracted <- (aveleaf$aveleaf)/60
-aveleaf <- aveleaf %>% 
-  rename(
-    wavelength = wl
-    )
-aveleaf <- aveleaf[59:93,]
+
 datacombined<- ymaze.Cdimidiata %>% rbind(ymaze.Cflavopicta)
 ggplot(datacombined, aes(x=wavelength, y=attracted))+
-  geom_jitter(data=ymaze.Cflavopicta,height=0.01,width=5, alpha=0.5, size= 3, color="#FC6A03")+
-  geom_jitter(data=ymaze.Cdimidiata,height=0.01,width=5, alpha=0.5, size= 3, color="#153E7E")+
-  geom_ribbon(data=newdat1.Cf, alpha=0.3,fill="#FC6A03", aes(ymax=phi.Cf, ymin=plo.Cf))+
-  geom_ribbon(data=newdat1.Cd, alpha=0.3, fill="#153E7E", aes(ymax=phi.Cd, ymin=plo.Cd))+ 
-  geom_line(data=newdat1.Cf, aes(x=wavelength, y=attracted), color="#FC6A03")+
-  geom_line(data=newdat1.Cd, aes(x=wavelength, y=attracted), color="#153E7E")+ 
+  geom_jitter(data=ymaze.Cflavopicta,height=0.01,width=5, alpha=0.5, size= 3, color="#FFB32E")+
+  geom_jitter(data=ymaze.Cdimidiata,height=0.01,width=5, alpha=0.5, size= 3, color="#3062C6")+
+  geom_ribbon(data=newdat1.Cf, alpha=0.3,fill="#FFB32E", aes(ymax=phi.Cf, ymin=plo.Cf))+
+  geom_ribbon(data=newdat1.Cd, alpha=0.3, fill="#3062C6", aes(ymax=phi.Cd, ymin=plo.Cd))+ 
+  geom_line(data=newdat1.Cf, aes(x=wavelength, y=attracted), color="#FFB32E")+
+  geom_line(data=newdat1.Cd, aes(x=wavelength, y=attracted), color="#3062C6")+ 
   geom_hline(yintercept=0.50, color="grey60")+
-  geom_line(data=aveleaf, color="#008000", linetype = "dashed")+
   scale_x_continuous(breaks = seq(580, 780, by = 20))+
   scale_y_continuous(sec.axis = sec_axis(~.*(6/10), name = "Reflectance"))+
   theme_classic()
-# ggplot(datacombined, aes(x=wavelength, y=attracted))+
-#   annotate("rect", xmin=695, xmax=705, ymin=0, ymax=Inf, alpha=0.2, fill="red")+
-#   geom_jitter(data=ymaze.Cflavopicta,height=0.01,width=5, alpha=0.5, size= 3, color="#153E7E")+
-#   geom_jitter(data=ymaze.Cdimidiata,height=0.01,width=5, alpha=0.5, size= 3, color="#008000")+
-#   geom_ribbon(data=newdat1.Cd, alpha=0.3, fill="#008000", aes(ymax=phi.Cd, ymin=plo.Cd))+
-#   geom_ribbon(data=newdat1.Cf, alpha=0.3,fill="#153E7E", aes(ymax=phi.Cf, ymin=plo.Cf))+
-#   geom_line(data=newdat1.Cd, aes(x=wavelength, y=attracted), color="#008000")+  
-#   geom_line(data=newdat1.Cf, aes(x=wavelength, y=attracted), color="#153E7E")+
-#   geom_hline(yintercept=0.50, color="grey60",linetype="dashed")+
-#   scale_x_continuous(breaks = seq(600, 740, by = 20))+
-#   xlab("Wavelength (nm)")+
-#   ylab("Attraction rate (%)")+
-#   theme(legend.position="right")+
-#   theme_classic()
 ```
  
 </br>
@@ -167,7 +146,21 @@ The behavioural experiment suggests that jewel beetles have long wavelength sens
 </br>
 
 ```{r, echo=FALSE, fig.cap="Figure caption: Relative irradiance of the LED lights used in behavioural trials.", out.width = '70%'}
-knitr::include_graphics("image/led_peaks.png")
+
+led.spec <- read.csv("data/LED irradiation.csv",header=TRUE) %>%
+  as.rspec(lim = c(300, 800)) %>% 
+  procspec(opt = "smooth", # smooth the spec
+           span = 0.05) %>% 
+  procspec(opt = "max") %>%  # normalized the spec
+  gather(peak,irradiance, -wl)
+
+ggplot(led.spec, aes(x=wl, y=irradiance))+
+  geom_line()+
+  facet_wrap(.~peak, ncol=3)+
+  scale_colour_discrete(labels = c("590 nm", "645 nm", "680 nm", "700 nm", "720 nm", "735 nm", "755 nm"))+ 
+  xlab("Wavelength (nm)")+
+  ylab( "Relative irradiance")+
+  theme_classic()
 ```
 
 ## Dim light
@@ -176,5 +169,26 @@ knitr::include_graphics("image/led_peaks.png")
 </br>
 
 ```{r, echo=FALSE, fig.cap="Figure caption: The dim light in the environment.", out.width = '70%'}
-knitr::include_graphics("image/dim_light.png")
+dim.spec <- read.csv("data/dim spec.csv",header=TRUE) %>%
+  as.rspec() %>% 
+  procspec(opt = "smooth", # smooth the spec
+           span = 0.1, # smoothing level
+           fixneg = "zero") # lift the negative values to zero. Likely just noise.
+
+
+ggplot(dim.spec, aes(x = wl, y = Irradiance)) + 
+  ylab( "Absolute irradiance (uW.cm-2.nm-1)")+ 
+  xlab("Wavelength (nm)")+
+  geom_line() + 
+  ylim(NA,0.01) + 
+  theme(plot.subtitle = element_text(vjust = 1),
+        plot.caption = element_text(vjust = 1),
+        plot.title = element_text(face="bold")) + 
+  theme(axis.line = element_line(size = 0.5, 
+                                 linetype = "solid"), 
+        panel.grid.major = element_line(linetype = "blank"), 
+        panel.grid.minor = element_line(linetype = "blank"), 
+        panel.background = element_rect(fill = NA),
+        plot.title = element_text(hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
 ```

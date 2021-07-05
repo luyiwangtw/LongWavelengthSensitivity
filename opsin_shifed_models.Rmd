@@ -160,30 +160,30 @@ buprest660_twilight=vismodel(dataset[1:501,], visual = specsensbuprest.aim2[, c(
 
 #contrast calculation
 #Contrast calculation- D65 - Aim 1
-CvmUSM = coldist(vmUSM, noise="neural", achro=FALSE, n = c(1.6027, 1.4059, 1.7714), weber = 0.0883, weber.ref = 3) 
-CvmUML = coldist(vmUML, noise="neural", achro=FALSE, n = c(1.4416, 1.5933, 1.7451), weber = 0.0889, weber.ref = 3)
-CvmUSL = coldist(vmUSL, noise="neural", achro=FALSE, n = c(1.5481, 1.3580, 1.8740), weber = 0.0858, weber.ref = 3)
-CvmUSML = coldist(vmUSML, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
+CvmUSM = coldist(vmUSM, noise="neural", achro=FALSE, n = c(1.6027, 1.4059, 1.7714), weber = 0.1059, weber.ref = 3) 
+CvmUML = coldist(vmUML, noise="neural", achro=FALSE, n = c(1.4416, 1.5933, 1.7451), weber = 0.1067, weber.ref = 3)
+CvmUSL = coldist(vmUSL, noise="neural", achro=FALSE, n = c(1.5481, 1.3580, 1.8740), weber = 0.1030, weber.ref = 3)
+CvmUSML = coldist(vmUSML, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
 
 #Contrast calculation- D65 - Aim 2
-Cbuprest580 = coldist(buprest580, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
-Cbuprest600 = coldist(buprest600, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
-Cbuprest620 = coldist(buprest620, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
-Cbuprest640 = coldist(buprest640, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
-Cbuprest660 = coldist(buprest660, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
+Cbuprest580 = coldist(buprest580, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
+Cbuprest600 = coldist(buprest600, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
+Cbuprest620 = coldist(buprest620, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
+Cbuprest640 = coldist(buprest640, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
+Cbuprest660 = coldist(buprest660, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
 
 #Contrast calculation- twilight - Aim 1
-CvmUSM_twilight = coldist(vmUSM_twilight, noise="quantum", achro=FALSE, n = c(1.6027, 1.4059, 1.7714), weber = 0.0883, weber.ref = 3)  
-CvmUML_twilight = coldist(vmUML_twilight, noise="quantum", achro=FALSE, n = c(1.4416, 1.5933, 1.7451), weber = 0.0889, weber.ref = 3)
-CvmUSL_twilight = coldist(vmUSL_twilight, noise="quantum", achro=FALSE, n = c(1.5481, 1.3580, 1.8740), weber = 0.0858, weber.ref = 3)
-CvmUSML_twilight = coldist(vmUSML_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1,  weber.ref = 4)
+CvmUSM_twilight = coldist(vmUSM_twilight, noise="quantum", achro=FALSE, n = c(1.6027, 1.4059, 1.7714), weber = 0.1059, weber.ref = 3)  
+CvmUML_twilight = coldist(vmUML_twilight, noise="quantum", achro=FALSE, n = c(1.4416, 1.5933, 1.7451), weber = 0.1067, weber.ref = 3)
+CvmUSL_twilight = coldist(vmUSL_twilight, noise="quantum", achro=FALSE, n = c(1.5481, 1.3580, 1.8740), weber = 0.1030, weber.ref = 3)
+CvmUSML_twilight = coldist(vmUSML_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12,  weber.ref = 4)
 
 #Contrast calculation- twilight - Aim 2
-Cbuprest580_twilight = coldist(buprest580_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
-Cbuprest600_twilight = coldist(buprest600_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
-Cbuprest620_twilight = coldist(buprest620_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
-Cbuprest640_twilight = coldist(buprest640_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
-Cbuprest660_twilight = coldist(buprest660_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.1, weber.ref = 4)
+Cbuprest580_twilight = coldist(buprest580_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
+Cbuprest600_twilight = coldist(buprest600_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
+Cbuprest620_twilight = coldist(buprest620_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
+Cbuprest640_twilight = coldist(buprest640_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
+Cbuprest660_twilight = coldist(buprest660_twilight, noise="quantum", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
 
 
 
@@ -1512,7 +1512,7 @@ sum.beetle.vs.flower_twilight.aim2
 
 ## Aim 1 {.tabset .tabset-fade .tabset-pills}
 ### Daylight
-```{r,fig.cap="Figure caption: Comparison of chromatic contrast for visual systems with different photoreceptor combinations and the opsin-shifted LWS photoreceptor. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts > 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
+```{r,fig.cap="Figure caption: Comparison of chromatic contrast for visual systems with different photoreceptor combinations and the opsin-shifted LWS photoreceptor. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts > 10 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
 #import the flower color code 
 color.code<-read.csv("data/color code list.csv",header=TRUE) 
 
@@ -1575,7 +1575,6 @@ fl_d65.aim1<-ggplot(mean.fl_d65.aim1, aes(x=vissys, y=mean.dS.fl,group=flowerID)
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl"),
                    labels=c("USM", "UML", "USL","USML"))+
-  geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.fl_d65.aim1, aes(x= "VS1.fl", y= mean(VS1.fl_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl_d65.aim1, aes(x= "VS2.fl", y= mean(VS2.fl_d65.aim1$dS)), 
@@ -1629,7 +1628,6 @@ bl_d65.aim1<-ggplot(mean.bl_d65.aim1, aes(x=vissys, y=mean.dS.bl,group=beetleID)
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl"),
                    labels=c("USM", "UML", "USL","USML"))+
-  geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bl_d65.aim1, aes(x= "VS1.bl", y= mean(VS1.bl_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl_d65.aim1, aes(x= "VS2.bl", y= mean(VS2.bl_d65.aim1$dS)), 
@@ -1681,7 +1679,6 @@ bf_d65.aim1<-ggplot(mean.bf_d65.aim1, aes(x=vissys, y=mean.dS.bf,group=flowerID)
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf"),
                    labels=c("USM", "UML", "USL","USML"))+
-  geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bf_d65.aim1, aes(x= "VS1.bf", y= mean(VS1.bf_d65.aim1$dS)), 
              col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf_d65.aim1, aes(x= "VS2.bf", y= mean(VS2.bf_d65.aim1$dS)), 
@@ -1743,7 +1740,6 @@ fl_twilight.aim1<-ggplot(mean.fl_twilight.aim1, aes(x=vissys, y=mean.dS.fl,group
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl"),
                    labels=c("USM", "UML", "USL","USML"))+
-  geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.fl_twilight.aim1, aes(x= "VS1.fl", y= mean(VS1.fl_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl_twilight.aim1, aes(x= "VS2.fl", y= mean(VS2.fl_twilight.aim1$dS)), 
@@ -1796,7 +1792,6 @@ bl_twilight.aim1<-ggplot(mean.bl_twilight.aim1, aes(x=vissys, y=mean.dS.bl,group
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl"),
                    labels=c("USM", "UML", "USL","USML"))+
-  geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bl_twilight.aim1, aes(x= "VS1.bl", y= mean(VS1.bl_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl_twilight.aim1, aes(x= "VS2.bl", y= mean(VS2.bl_twilight.aim1$dS)), 
@@ -1807,7 +1802,7 @@ bl_twilight.aim1<-ggplot(mean.bl_twilight.aim1, aes(x=vissys, y=mean.dS.bl,group
              col="black", size=3)+ #add the mean point
   #change the x labels
   ggtitle("Beetle vs. Leaf")+
-  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl"), y = 2, label =c("a","b","a","c")) #add statistical info
+  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl"), y = 2, label =c("a","b","b","c")) #add statistical info
 
 
 
@@ -1850,7 +1845,6 @@ bf_twilight.aim1<-ggplot(mean.bf_twilight.aim1, aes(x=vissys, y=mean.dS.bf,group
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf"),
                    labels=c("USM", "UML", "USL","USML"))+
-  geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bf_twilight.aim1, aes(x= "VS1.bf", y= mean(VS1.bf_twilight.aim1$dS)), 
              col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf_twilight.aim1, aes(x= "VS2.bf", y= mean(VS2.bf_twilight.aim1$dS)), 
@@ -1874,7 +1868,7 @@ figure_twilight.aim1
 
 ## Aim 2 {.tabset .tabset-fade .tabset-pills}
 ### Daylight
-```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the opsin-shifted LWS photoreceptor peaking at different wavelengths. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts > 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
+```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the opsin-shifted LWS photoreceptor peaking at different wavelengths. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts > 10 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
 #create flower name list for Aim 2
 flower.colour.aim2 <- name.list %>% filter(str_detect(species, "flower")) %>% #select flower names
   cbind(color.code %>% filter(str_detect(type, "flower")) %>% arrange(name)) %>% #select flower color codes and order it alphebatically
@@ -1927,7 +1921,6 @@ fl_d65.aim2<-ggplot(mean.fl_d65.aim2, aes(x=vissys, y=mean.dS.fl,group=flowerID)
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"),
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.fl_d65.aim2, aes(x= "VS1.fl", y= mean(VS1.fl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl_d65.aim2, aes(x= "VS2.fl", y= mean(VS2.fl_d65.aim2$dS)), 
@@ -1982,7 +1975,6 @@ bl_d65.aim2<-ggplot(mean.bl_d65.aim2, aes(x=vissys, y=mean.dS.bl,group=beetleID)
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"),
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bl_d65.aim2, aes(x= "VS1.bl", y= mean(VS1.bl_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl_d65.aim2, aes(x= "VS2.bl", y= mean(VS2.bl_d65.aim2$dS)), 
@@ -2038,7 +2030,6 @@ bf_d65.aim2<-ggplot(mean.bf_d65.aim2, aes(x=vissys, y=mean.dS.bf,group=flowerID)
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"),
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bf_d65.aim2, aes(x= "VS1.bf", y= mean(VS1.bf_d65.aim2$dS)), 
              col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf_d65.aim2, aes(x= "VS2.bf", y= mean(VS2.bf_d65.aim2$dS)), 
@@ -2060,7 +2051,7 @@ figure_d65.aim2
 </br>
 
 ### Twilight
-```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the opsin-shifted LWS photoreceptor peaking at different wavelengths under twilight illumination. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts > 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
+```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the opsin-shifted LWS photoreceptor peaking at different wavelengths under twilight illumination. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1."}
 #make flower vs leaf plot
 ##add the mean
 mean.fl_twilight.aim2<-allvis.fl_twilight.aim2 %>% mutate(patch3 = paste(allvis.fl_twilight.aim2$vissys,allvis.fl_twilight.aim2$patch1,sep=".")) %>% 
@@ -2100,7 +2091,6 @@ fl_twilight.aim2<-ggplot(mean.fl_twilight.aim2, aes(x=vissys, y=mean.dS.fl,group
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"),
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.fl_twilight.aim2, aes(x= "VS1.fl", y= mean(VS1.fl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
   geom_point(data = mean.fl_twilight.aim2, aes(x= "VS2.fl", y= mean(VS2.fl_twilight.aim2$dS)), 
@@ -2155,7 +2145,6 @@ bl_twilight.aim2<-ggplot(mean.bl_twilight.aim2, aes(x=vissys, y=mean.dS.bl,group
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"),
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bl_twilight.aim2, aes(x= "VS1.bl", y= mean(VS1.bl_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
   geom_point(data = mean.bl_twilight.aim2, aes(x= "VS2.bl", y= mean(VS2.bl_twilight.aim2$dS)), 
@@ -2211,7 +2200,6 @@ bf_twilight.aim2<-ggplot(mean.bf_twilight.aim2, aes(x=vissys, y=mean.dS.bf,group
         legend.text = element_text(size = 9))+
   scale_x_discrete(limits = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"),
                    labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_hline(yintercept = 1,linetype="dotted")+ ##add a JND=1 line
   geom_point(data = mean.bf_twilight.aim2, aes(x= "VS1.bf", y= mean(VS1.bf_twilight.aim2$dS)), 
              col="black", size=3)+ #add the mean point
   geom_point(data = mean.bf_twilight.aim2, aes(x= "VS2.bf", y= mean(VS2.bf_twilight.aim2$dS)), 

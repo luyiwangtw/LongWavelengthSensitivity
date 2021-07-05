@@ -13,4 +13,4 @@ RnwWeave: Sweave
 LaTeX: pdfLaTeX
 
 BuildType: Website
-WebsitePath: ~/Documents/GitHub/Far-redSensitivity
+WebsitePath: ~/Documents/Documents/GitHub/Far-redSensitivity

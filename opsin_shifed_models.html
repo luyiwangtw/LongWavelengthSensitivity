@@ -617,30 +617,30 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <span id="cb4-31"><a href="#cb4-31"></a></span>
 <span id="cb4-32"><a href="#cb4-32"></a><span class="co">#contrast calculation</span></span>
 <span id="cb4-33"><a href="#cb4-33"></a><span class="co">#Contrast calculation- D65 - Aim 1</span></span>
-<span id="cb4-34"><a href="#cb4-34"></a>CvmUSM =<span class="st"> </span><span class="kw">coldist</span>(vmUSM, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.6027</span>, <span class="fl">1.4059</span>, <span class="fl">1.7714</span>), <span class="dt">weber =</span> <span class="fl">0.0883</span>, <span class="dt">weber.ref =</span> <span class="dv">3</span>) </span>
-<span id="cb4-35"><a href="#cb4-35"></a>CvmUML =<span class="st"> </span><span class="kw">coldist</span>(vmUML, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.4416</span>, <span class="fl">1.5933</span>, <span class="fl">1.7451</span>), <span class="dt">weber =</span> <span class="fl">0.0889</span>, <span class="dt">weber.ref =</span> <span class="dv">3</span>)</span>
-<span id="cb4-36"><a href="#cb4-36"></a>CvmUSL =<span class="st"> </span><span class="kw">coldist</span>(vmUSL, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.5481</span>, <span class="fl">1.3580</span>, <span class="fl">1.8740</span>), <span class="dt">weber =</span> <span class="fl">0.0858</span>, <span class="dt">weber.ref =</span> <span class="dv">3</span>)</span>
-<span id="cb4-37"><a href="#cb4-37"></a>CvmUSML =<span class="st"> </span><span class="kw">coldist</span>(vmUSML, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
+<span id="cb4-34"><a href="#cb4-34"></a>CvmUSM =<span class="st"> </span><span class="kw">coldist</span>(vmUSM, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.6027</span>, <span class="fl">1.4059</span>, <span class="fl">1.7714</span>), <span class="dt">weber =</span> <span class="fl">0.1059</span>, <span class="dt">weber.ref =</span> <span class="dv">3</span>) </span>
+<span id="cb4-35"><a href="#cb4-35"></a>CvmUML =<span class="st"> </span><span class="kw">coldist</span>(vmUML, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.4416</span>, <span class="fl">1.5933</span>, <span class="fl">1.7451</span>), <span class="dt">weber =</span> <span class="fl">0.1067</span>, <span class="dt">weber.ref =</span> <span class="dv">3</span>)</span>
+<span id="cb4-36"><a href="#cb4-36"></a>CvmUSL =<span class="st"> </span><span class="kw">coldist</span>(vmUSL, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.5481</span>, <span class="fl">1.3580</span>, <span class="fl">1.8740</span>), <span class="dt">weber =</span> <span class="fl">0.1030</span>, <span class="dt">weber.ref =</span> <span class="dv">3</span>)</span>
+<span id="cb4-37"><a href="#cb4-37"></a>CvmUSML =<span class="st"> </span><span class="kw">coldist</span>(vmUSML, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.12</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
 <span id="cb4-38"><a href="#cb4-38"></a></span>
 <span id="cb4-39"><a href="#cb4-39"></a><span class="co">#Contrast calculation- D65 - Aim 2</span></span>
-<span id="cb4-40"><a href="#cb4-40"></a>Cbuprest580 =<span class="st"> </span><span class="kw">coldist</span>(buprest580, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
-<span id="cb4-41"><a href="#cb4-41"></a>Cbuprest600 =<span class="st"> </span><span class="kw">coldist</span>(buprest600, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
-<span id="cb4-42"><a href="#cb4-42"></a>Cbuprest620 =<span class="st"> </span><span class="kw">coldist</span>(buprest620, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
-<span id="cb4-43"><a href="#cb4-43"></a>Cbuprest640 =<span class="st"> </span><span class="kw">coldist</span>(buprest640, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
-<span id="cb4-44"><a href="#cb4-44"></a>Cbuprest660 =<span class="st"> </span><span class="kw">coldist</span>(buprest660, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
+<span id="cb4-40"><a href="#cb4-40"></a>Cbuprest580 =<span class="st"> </span><span class="kw">coldist</span>(buprest580, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.12</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
+<span id="cb4-41"><a href="#cb4-41"></a>Cbuprest600 =<span class="st"> </span><span class="kw">coldist</span>(buprest600, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.12</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
+<span id="cb4-42"><a href="#cb4-42"></a>Cbuprest620 =<span class="st"> </span><span class="kw">coldist</span>(buprest620, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.12</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
+<span id="cb4-43"><a href="#cb4-43"></a>Cbuprest640 =<span class="st"> </span><span class="kw">coldist</span>(buprest640, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.12</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
+<span id="cb4-44"><a href="#cb4-44"></a>Cbuprest660 =<span class="st"> </span><span class="kw">coldist</span>(buprest660, <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.12</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
 <span id="cb4-45"><a href="#cb4-45"></a></span>
 <span id="cb4-46"><a href="#cb4-46"></a><span class="co">#Contrast calculation- twilight - Aim 1</span></span>
-<span id="cb4-47"><a href="#cb4-47"></a>CvmUSM_twilight =<span class="st"> </span><span class="kw">coldist</span>(vmUSM_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.6027</span>, <span class="fl">1.4059</span>, <span class="fl">1.7714</span>), <span class="dt">weber =</span> <span class="fl">0.0883</span>, <span class="dt">weber.ref =</span> <span class="dv">3</span>)  </span>
-<span id="cb4-48"><a href="#cb4-48"></a>CvmUML_twilight =<span class="st"> </span><span class="kw">coldist</span>(vmUML_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.4416</span>, <span class="fl">1.5933</span>, <span class="fl">1.7451</span>), <span class="dt">weber =</span> <span class="fl">0.0889</span>, <span class="dt">weber.ref =</span> <span class="dv">3</span>)</span>
-<span id="cb4-49"><a href="#cb4-49"></a>CvmUSL_twilight =<span class="st"> </span><span class="kw">coldist</span>(vmUSL_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.5481</span>, <span class="fl">1.3580</span>, <span class="fl">1.8740</span>), <span class="dt">weber =</span> <span class="fl">0.0858</span>, <span class="dt">weber.ref =</span> <span class="dv">3</span>)</span>
-<span id="cb4-50"><a href="#cb4-50"></a>CvmUSML_twilight =<span class="st"> </span><span class="kw">coldist</span>(vmUSML_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>,  <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
+<span id="cb4-47"><a href="#cb4-47"></a>CvmUSM_twilight =<span class="st"> </span><span class="kw">coldist</span>(vmUSM_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.6027</span>, <span class="fl">1.4059</span>, <span class="fl">1.7714</span>), <span class="dt">weber =</span> <span class="fl">0.1059</span>, <span class="dt">weber.ref =</span> <span class="dv">3</span>)  </span>
+<span id="cb4-48"><a href="#cb4-48"></a>CvmUML_twilight =<span class="st"> </span><span class="kw">coldist</span>(vmUML_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.4416</span>, <span class="fl">1.5933</span>, <span class="fl">1.7451</span>), <span class="dt">weber =</span> <span class="fl">0.1067</span>, <span class="dt">weber.ref =</span> <span class="dv">3</span>)</span>
+<span id="cb4-49"><a href="#cb4-49"></a>CvmUSL_twilight =<span class="st"> </span><span class="kw">coldist</span>(vmUSL_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.5481</span>, <span class="fl">1.3580</span>, <span class="fl">1.8740</span>), <span class="dt">weber =</span> <span class="fl">0.1030</span>, <span class="dt">weber.ref =</span> <span class="dv">3</span>)</span>
+<span id="cb4-50"><a href="#cb4-50"></a>CvmUSML_twilight =<span class="st"> </span><span class="kw">coldist</span>(vmUSML_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.12</span>,  <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
 <span id="cb4-51"><a href="#cb4-51"></a></span>
 <span id="cb4-52"><a href="#cb4-52"></a><span class="co">#Contrast calculation- twilight - Aim 2</span></span>
-<span id="cb4-53"><a href="#cb4-53"></a>Cbuprest580_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest580_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
-<span id="cb4-54"><a href="#cb4-54"></a>Cbuprest600_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest600_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
-<span id="cb4-55"><a href="#cb4-55"></a>Cbuprest620_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest620_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
-<span id="cb4-56"><a href="#cb4-56"></a>Cbuprest640_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest640_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
-<span id="cb4-57"><a href="#cb4-57"></a>Cbuprest660_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest660_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.1</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
+<span id="cb4-53"><a href="#cb4-53"></a>Cbuprest580_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest580_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.12</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
+<span id="cb4-54"><a href="#cb4-54"></a>Cbuprest600_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest600_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.12</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
+<span id="cb4-55"><a href="#cb4-55"></a>Cbuprest620_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest620_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.12</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
+<span id="cb4-56"><a href="#cb4-56"></a>Cbuprest640_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest640_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.12</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
+<span id="cb4-57"><a href="#cb4-57"></a>Cbuprest660_twilight =<span class="st"> </span><span class="kw">coldist</span>(buprest660_twilight, <span class="dt">noise=</span><span class="st">&quot;quantum&quot;</span>, <span class="dt">achro=</span><span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>), <span class="dt">weber =</span> <span class="fl">0.12</span>, <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
 <span id="cb4-58"><a href="#cb4-58"></a></span>
 <span id="cb4-59"><a href="#cb4-59"></a></span>
 <span id="cb4-60"><a href="#cb4-60"></a></span>
@@ -901,27 +901,27 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <tbody>
 <tr class="odd">
 <td align="center">USM</td>
-<td align="center">7.036</td>
-<td align="center">4.641</td>
-<td align="center">7.439</td>
+<td align="center">5.866</td>
+<td align="center">3.87</td>
+<td align="center">6.203</td>
 </tr>
 <tr class="even">
 <td align="center">UML</td>
-<td align="center">6.629</td>
-<td align="center">5.233</td>
-<td align="center">6.687</td>
+<td align="center">5.523</td>
+<td align="center">4.36</td>
+<td align="center">5.571</td>
 </tr>
 <tr class="odd">
 <td align="center">USL</td>
-<td align="center">7.024</td>
-<td align="center">5.218</td>
-<td align="center">7.446</td>
+<td align="center">5.851</td>
+<td align="center">4.347</td>
+<td align="center">6.202</td>
 </tr>
 <tr class="even">
 <td align="center">USML</td>
-<td align="center">6.944</td>
-<td align="center">5.249</td>
-<td align="center">7.346</td>
+<td align="center">5.786</td>
+<td align="center">4.374</td>
+<td align="center">6.122</td>
 </tr>
 </tbody>
 </table>
@@ -954,27 +954,27 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <tbody>
 <tr class="odd">
 <td align="center">USM</td>
-<td align="center">0.7413</td>
-<td align="center">0.3663</td>
-<td align="center">0.7521</td>
+<td align="center">0.7393</td>
+<td align="center">0.3657</td>
+<td align="center">0.7503</td>
 </tr>
 <tr class="even">
 <td align="center">UML</td>
-<td align="center">0.7521</td>
-<td align="center">0.4686</td>
-<td align="center">0.7268</td>
+<td align="center">0.75</td>
+<td align="center">0.4677</td>
+<td align="center">0.7249</td>
 </tr>
 <tr class="odd">
 <td align="center">USL</td>
-<td align="center">0.7832</td>
-<td align="center">0.4567</td>
-<td align="center">0.801</td>
+<td align="center">0.781</td>
+<td align="center">0.4559</td>
+<td align="center">0.7988</td>
 </tr>
 <tr class="even">
 <td align="center">USML</td>
-<td align="center">0.881</td>
-<td align="center">0.5309</td>
-<td align="center">0.9097</td>
+<td align="center">0.8777</td>
+<td align="center">0.5296</td>
+<td align="center">0.9063</td>
 </tr>
 </tbody>
 </table>
@@ -1012,33 +1012,33 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <tbody>
 <tr class="odd">
 <td align="center">VS 580</td>
-<td align="center">6.684</td>
-<td align="center">4.906</td>
-<td align="center">7.153</td>
+<td align="center">5.57</td>
+<td align="center">4.089</td>
+<td align="center">5.96</td>
 </tr>
 <tr class="even">
 <td align="center">VS 600</td>
-<td align="center">6.944</td>
-<td align="center">5.249</td>
-<td align="center">7.346</td>
+<td align="center">5.786</td>
+<td align="center">4.374</td>
+<td align="center">6.122</td>
 </tr>
 <tr class="odd">
 <td align="center">VS 620</td>
-<td align="center">7.241</td>
-<td align="center">5.599</td>
-<td align="center">7.602</td>
+<td align="center">6.034</td>
+<td align="center">4.666</td>
+<td align="center">6.335</td>
 </tr>
 <tr class="even">
 <td align="center">VS 640</td>
-<td align="center">7.342</td>
-<td align="center">5.858</td>
-<td align="center">7.879</td>
+<td align="center">6.119</td>
+<td align="center">4.882</td>
+<td align="center">6.566</td>
 </tr>
 <tr class="odd">
 <td align="center">VS 660</td>
-<td align="center">7.162</td>
-<td align="center">6.036</td>
-<td align="center">8.134</td>
+<td align="center">5.968</td>
+<td align="center">5.03</td>
+<td align="center">6.778</td>
 </tr>
 </tbody>
 </table>
@@ -1071,33 +1071,33 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <tbody>
 <tr class="odd">
 <td align="center">VS 580</td>
-<td align="center">0.831</td>
-<td align="center">0.4755</td>
-<td align="center">0.8621</td>
+<td align="center">0.8279</td>
+<td align="center">0.4744</td>
+<td align="center">0.859</td>
 </tr>
 <tr class="even">
 <td align="center">VS 600</td>
-<td align="center">0.881</td>
-<td align="center">0.5309</td>
-<td align="center">0.9097</td>
+<td align="center">0.8777</td>
+<td align="center">0.5296</td>
+<td align="center">0.9063</td>
 </tr>
 <tr class="odd">
 <td align="center">VS 620</td>
-<td align="center">0.9251</td>
-<td align="center">0.5814</td>
-<td align="center">0.9684</td>
+<td align="center">0.9217</td>
+<td align="center">0.5801</td>
+<td align="center">0.9647</td>
 </tr>
 <tr class="even">
 <td align="center">VS 640</td>
-<td align="center">0.919</td>
-<td align="center">0.6072</td>
-<td align="center">1.016</td>
+<td align="center">0.9157</td>
+<td align="center">0.6058</td>
+<td align="center">1.012</td>
 </tr>
 <tr class="odd">
 <td align="center">VS 660</td>
-<td align="center">0.8834</td>
-<td align="center">0.6165</td>
-<td align="center">1.041</td>
+<td align="center">0.8801</td>
+<td align="center">0.6151</td>
+<td align="center">1.037</td>
 </tr>
 </tbody>
 </table>
@@ -1766,9 +1766,9 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.flower.vs.leaf</strong></td>
-<td align="center">46</td>
+<td align="center">46.46</td>
 <td align="center">3</td>
-<td align="center">5.679e-10</td>
+<td align="center">4.524e-10</td>
 </tr>
 </tbody>
 </table>
@@ -1803,33 +1803,33 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ## 
 ## Linear Hypotheses:
 ##                                                                          Estimate
-## contrast.UVSW..LW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0  0.39579
-## contrast.UVSWMW...flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0  0.40699
-## contrast.UVSWMWLW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0  0.31494
-## contrast.UVSWMW...flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0  0.01119
-## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0 -0.08085
-## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSWMW...flower.vs.leaf == 0 -0.09205
+## contrast.UVSW..LW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0  0.32859
+## contrast.UVSWMW...flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0  0.34351
+## contrast.UVSWMWLW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0  0.26348
+## contrast.UVSWMW...flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0  0.01492
+## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0 -0.06510
+## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSWMW...flower.vs.leaf == 0 -0.08003
 ##                                                                          Std. Error
-## contrast.UVSW..LW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0    0.06889
-## contrast.UVSWMW...flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0    0.06889
-## contrast.UVSWMWLW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0    0.06889
-## contrast.UVSWMW...flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0    0.06889
-## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0    0.06889
-## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSWMW...flower.vs.leaf == 0    0.06889
+## contrast.UVSW..LW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0    0.05741
+## contrast.UVSWMW...flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0    0.05741
+## contrast.UVSWMWLW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0    0.05741
+## contrast.UVSWMW...flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0    0.05741
+## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0    0.05741
+## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSWMW...flower.vs.leaf == 0    0.05741
 ##                                                                          z value
-## contrast.UVSW..LW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0   5.745
-## contrast.UVSWMW...flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0   5.908
-## contrast.UVSWMWLW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0   4.572
-## contrast.UVSWMW...flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0   0.163
-## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0  -1.174
-## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSWMW...flower.vs.leaf == 0  -1.336
+## contrast.UVSW..LW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0   5.724
+## contrast.UVSWMW...flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0   5.984
+## contrast.UVSWMWLW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0   4.590
+## contrast.UVSWMW...flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0   0.260
+## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0  -1.134
+## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSWMW...flower.vs.leaf == 0  -1.394
 ##                                                                          Pr(&gt;|z|)
-## contrast.UVSW..LW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0 5.51e-08
-## contrast.UVSWMW...flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0 2.08e-08
-## contrast.UVSWMWLW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0 2.91e-05
-## contrast.UVSWMW...flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0        1
-## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0        1
-## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSWMW...flower.vs.leaf == 0        1
+## contrast.UVSW..LW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0 6.26e-08
+## contrast.UVSWMW...flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0 1.31e-08
+## contrast.UVSWMWLW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0 2.67e-05
+## contrast.UVSWMW...flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0     1.00
+## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSW..LW.flower.vs.leaf == 0     1.00
+## contrast.UVSWMWLW.flower.vs.leaf - contrast.UVSWMW...flower.vs.leaf == 0     0.98
 ##                                                                             
 ## contrast.UVSW..LW.flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0 ***
 ## contrast.UVSWMW...flower.vs.leaf - contrast.UV..MWLW.flower.vs.leaf == 0 ***
@@ -1864,9 +1864,9 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.flower.vs.leaf</strong></td>
-<td align="center">411.8</td>
+<td align="center">406.9</td>
 <td align="center">3</td>
-<td align="center">6.294e-89</td>
+<td align="center">6.953e-88</td>
 </tr>
 </tbody>
 </table>
@@ -1901,31 +1901,31 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ## 
 ## Linear Hypotheses:
 ##                                                                                             Estimate
-## contrast.UVSW..LW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0  0.031157
-## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0 -0.010750
-## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0  0.128932
-## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0 -0.041907
-## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0  0.097776
-## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSWMW...flower.vs.leaf_twilight == 0  0.139682
+## contrast.UVSW..LW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0  0.031042
+## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0 -0.010646
+## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0  0.127785
+## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0 -0.041688
+## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0  0.096743
+## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSWMW...flower.vs.leaf_twilight == 0  0.138430
 ##                                                                                            Std. Error
-## contrast.UVSW..LW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0   0.007677
-## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0   0.007677
-## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0   0.007677
-## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0   0.007677
-## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0   0.007677
-## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSWMW...flower.vs.leaf_twilight == 0   0.007677
+## contrast.UVSW..LW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0   0.007653
+## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0   0.007653
+## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0   0.007653
+## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0   0.007653
+## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0   0.007653
+## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSWMW...flower.vs.leaf_twilight == 0   0.007653
 ##                                                                                            z value
-## contrast.UVSW..LW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0   4.058
-## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0  -1.400
-## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0  16.794
-## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0  -5.459
-## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0  12.736
-## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSWMW...flower.vs.leaf_twilight == 0  18.194
+## contrast.UVSW..LW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0   4.056
+## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0  -1.391
+## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0  16.698
+## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0  -5.447
+## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0  12.641
+## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSWMW...flower.vs.leaf_twilight == 0  18.089
 ##                                                                                            Pr(&gt;|z|)
-## contrast.UVSW..LW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0 0.000297
-## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0 0.968653
+## contrast.UVSW..LW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0 0.000299
+## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0 0.985258
 ## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UV..MWLW.flower.vs.leaf_twilight == 0  &lt; 2e-16
-## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0 2.88e-07
+## contrast.UVSWMW...flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0 3.07e-07
 ## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSW..LW.flower.vs.leaf_twilight == 0  &lt; 2e-16
 ## contrast.UVSWMWLW.flower.vs.leaf_twilight - contrast.UVSWMW...flower.vs.leaf_twilight == 0  &lt; 2e-16
 ##                                                                                               
@@ -1965,9 +1965,9 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.beetle.vs.leaf</strong></td>
-<td align="center">149.2</td>
+<td align="center">147.4</td>
 <td align="center">3</td>
-<td align="center">3.97e-32</td>
+<td align="center">9.691e-32</td>
 </tr>
 </tbody>
 </table>
@@ -2002,26 +2002,26 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ## 
 ## Linear Hypotheses:
 ##                                                                          Estimate
-## contrast.UVSW..LW.beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0 -0.01499
-## contrast.UVSWMW...beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0 -0.59140
-## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0  0.01609
-## contrast.UVSWMW...beetle.vs.leaf - contrast.UVSW..LW.beetle.vs.leaf == 0 -0.57641
-## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UVSW..LW.beetle.vs.leaf == 0  0.03108
-## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UVSWMW...beetle.vs.leaf == 0  0.60749
+## contrast.UVSW..LW.beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0 -0.01336
+## contrast.UVSWMW...beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0 -0.48983
+## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0  0.01423
+## contrast.UVSWMW...beetle.vs.leaf - contrast.UVSW..LW.beetle.vs.leaf == 0 -0.47646
+## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UVSW..LW.beetle.vs.leaf == 0  0.02759
+## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UVSWMW...beetle.vs.leaf == 0  0.50405
 ##                                                                          Std. Error
-## contrast.UVSW..LW.beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0    0.05939
-## contrast.UVSWMW...beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0    0.05939
-## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0    0.05939
-## contrast.UVSWMW...beetle.vs.leaf - contrast.UVSW..LW.beetle.vs.leaf == 0    0.05939
-## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UVSW..LW.beetle.vs.leaf == 0    0.05939
-## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UVSWMW...beetle.vs.leaf == 0    0.05939
+## contrast.UVSW..LW.beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0    0.04950
+## contrast.UVSWMW...beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0    0.04950
+## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0    0.04950
+## contrast.UVSWMW...beetle.vs.leaf - contrast.UVSW..LW.beetle.vs.leaf == 0    0.04950
+## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UVSW..LW.beetle.vs.leaf == 0    0.04950
+## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UVSWMW...beetle.vs.leaf == 0    0.04950
 ##                                                                          z value
-## contrast.UVSW..LW.beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0  -0.252
-## contrast.UVSWMW...beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0  -9.957
-## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0   0.271
-## contrast.UVSWMW...beetle.vs.leaf - contrast.UVSW..LW.beetle.vs.leaf == 0  -9.705
-## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UVSW..LW.beetle.vs.leaf == 0   0.523
-## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UVSWMW...beetle.vs.leaf == 0  10.228
+## contrast.UVSW..LW.beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0  -0.270
+## contrast.UVSWMW...beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0  -9.896
+## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0   0.287
+## contrast.UVSWMW...beetle.vs.leaf - contrast.UVSW..LW.beetle.vs.leaf == 0  -9.626
+## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UVSW..LW.beetle.vs.leaf == 0   0.557
+## contrast.UVSWMWLW.beetle.vs.leaf - contrast.UVSWMW...beetle.vs.leaf == 0  10.183
 ##                                                                          Pr(&gt;|z|)
 ## contrast.UVSW..LW.beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0        1
 ## contrast.UVSWMW...beetle.vs.leaf - contrast.UV..MWLW.beetle.vs.leaf == 0   &lt;2e-16
@@ -2063,9 +2063,9 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.beetle.vs.leaf</strong></td>
-<td align="center">1031</td>
+<td align="center">1027</td>
 <td align="center">3</td>
-<td align="center">4.073e-223</td>
+<td align="center">2.524e-222</td>
 </tr>
 </tbody>
 </table>
@@ -2100,28 +2100,28 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ## 
 ## Linear Hypotheses:
 ##                                                                                             Estimate
-## contrast.UVSW..LW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0 -0.011813
-## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0 -0.102300
-## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0  0.062305
-## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UVSW..LW.beetle.vs.leaf_twilight == 0 -0.090487
-## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UVSW..LW.beetle.vs.leaf_twilight == 0  0.074119
-## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UVSWMW...beetle.vs.leaf_twilight == 0  0.164605
+## contrast.UVSW..LW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0 -0.011781
+## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0 -0.102044
+## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0  0.061908
+## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UVSW..LW.beetle.vs.leaf_twilight == 0 -0.090262
+## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UVSW..LW.beetle.vs.leaf_twilight == 0  0.073689
+## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UVSWMW...beetle.vs.leaf_twilight == 0  0.163952
 ##                                                                                            Std. Error
-## contrast.UVSW..LW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0   0.005178
-## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0   0.005178
-## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0   0.005178
-## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UVSW..LW.beetle.vs.leaf_twilight == 0   0.005178
-## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UVSW..LW.beetle.vs.leaf_twilight == 0   0.005178
-## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UVSWMW...beetle.vs.leaf_twilight == 0   0.005178
+## contrast.UVSW..LW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0   0.005167
+## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0   0.005167
+## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0   0.005167
+## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UVSW..LW.beetle.vs.leaf_twilight == 0   0.005167
+## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UVSW..LW.beetle.vs.leaf_twilight == 0   0.005167
+## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UVSWMW...beetle.vs.leaf_twilight == 0   0.005167
 ##                                                                                            z value
-## contrast.UVSW..LW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0  -2.281
-## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0 -19.757
-## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0  12.033
-## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UVSW..LW.beetle.vs.leaf_twilight == 0 -17.476
-## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UVSW..LW.beetle.vs.leaf_twilight == 0  14.314
-## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UVSWMW...beetle.vs.leaf_twilight == 0  31.790
+## contrast.UVSW..LW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0   -2.28
+## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0  -19.75
+## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0   11.98
+## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UVSW..LW.beetle.vs.leaf_twilight == 0  -17.47
+## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UVSW..LW.beetle.vs.leaf_twilight == 0   14.26
+## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UVSWMW...beetle.vs.leaf_twilight == 0   31.73
 ##                                                                                            Pr(&gt;|z|)
-## contrast.UVSW..LW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0    0.135
+## contrast.UVSW..LW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0    0.136
 ## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0   &lt;2e-16
 ## contrast.UVSWMWLW.beetle.vs.leaf_twilight - contrast.UV..MWLW.beetle.vs.leaf_twilight == 0   &lt;2e-16
 ## contrast.UVSWMW...beetle.vs.leaf_twilight - contrast.UVSW..LW.beetle.vs.leaf_twilight == 0   &lt;2e-16
@@ -2164,9 +2164,9 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.beetle.vs.flower</strong></td>
-<td align="center">111.2</td>
+<td align="center">111.8</td>
 <td align="center">3</td>
-<td align="center">5.982e-24</td>
+<td align="center">4.609e-24</td>
 </tr>
 </tbody>
 </table>
@@ -2200,31 +2200,31 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ##     (1 | patch1), data = compare.beetle.vs.flower.aim1, REML = F)
 ## 
 ## Linear Hypotheses:
-##                                                                               Estimate
-## contrast.UVSW..LW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0  0.758878
-## contrast.UVSWMW...beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0  0.752399
-## contrast.UVSWMWLW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0  0.659001
-## contrast.UVSWMW...beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0 -0.006479
-## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0 -0.099877
-## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSWMW...beetle.vs.flower == 0 -0.093398
+##                                                                                Estimate
+## contrast.UVSW..LW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0  0.6310334
+## contrast.UVSWMW...beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0  0.6315562
+## contrast.UVSWMWLW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0  0.5502121
+## contrast.UVSWMW...beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0  0.0005227
+## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0 -0.0808214
+## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSWMW...beetle.vs.flower == 0 -0.0813441
 ##                                                                              Std. Error
-## contrast.UVSW..LW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0   0.084678
-## contrast.UVSWMW...beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0   0.084678
-## contrast.UVSWMWLW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0   0.084678
-## contrast.UVSWMW...beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0   0.084678
-## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0   0.084678
-## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSWMW...beetle.vs.flower == 0   0.084678
+## contrast.UVSW..LW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0  0.0705664
+## contrast.UVSWMW...beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0  0.0705664
+## contrast.UVSWMWLW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0  0.0705664
+## contrast.UVSWMW...beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0  0.0705664
+## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0  0.0705664
+## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSWMW...beetle.vs.flower == 0  0.0705664
 ##                                                                              z value
-## contrast.UVSW..LW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0   8.962
-## contrast.UVSWMW...beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0   8.885
-## contrast.UVSWMWLW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0   7.782
-## contrast.UVSWMW...beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0  -0.077
-## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0  -1.179
-## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSWMW...beetle.vs.flower == 0  -1.103
+## contrast.UVSW..LW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0   8.942
+## contrast.UVSWMW...beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0   8.950
+## contrast.UVSWMWLW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0   7.797
+## contrast.UVSWMW...beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0   0.007
+## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0  -1.145
+## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSWMW...beetle.vs.flower == 0  -1.153
 ##                                                                              Pr(&gt;|z|)
 ## contrast.UVSW..LW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0  &lt; 2e-16
 ## contrast.UVSWMW...beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0  &lt; 2e-16
-## contrast.UVSWMWLW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0 4.26e-14
+## contrast.UVSWMWLW.beetle.vs.flower - contrast.UV..MWLW.beetle.vs.flower == 0 3.86e-14
 ## contrast.UVSWMW...beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0        1
 ## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSW..LW.beetle.vs.flower == 0        1
 ## contrast.UVSWMWLW.beetle.vs.flower - contrast.UVSWMW...beetle.vs.flower == 0        1
@@ -2262,9 +2262,9 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.beetle.vs.flower</strong></td>
-<td align="center">449.6</td>
+<td align="center">445.1</td>
 <td align="center">3</td>
-<td align="center">3.96e-97</td>
+<td align="center">3.831e-96</td>
 </tr>
 </tbody>
 </table>
@@ -2299,32 +2299,32 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ##     REML = F)
 ## 
 ## Linear Hypotheses:
-##                                                                                                 Estimate
-## contrast.UVSW..LW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0  0.074180
-## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0  0.025313
-## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0  0.182856
-## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0 -0.048867
-## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0  0.108676
-## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSWMW...beetle.vs.flower_twilight == 0  0.157543
+##                                                                                                Estimate
+## contrast.UVSW..LW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0  0.07388
+## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0  0.02540
+## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0  0.18147
+## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0 -0.04848
+## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0  0.10759
+## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSWMW...beetle.vs.flower_twilight == 0  0.15607
 ##                                                                                                Std. Error
-## contrast.UVSW..LW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0   0.009349
-## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0   0.009349
-## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0   0.009349
-## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0   0.009349
-## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0   0.009349
-## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSWMW...beetle.vs.flower_twilight == 0   0.009349
+## contrast.UVSW..LW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0    0.00932
+## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0    0.00932
+## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0    0.00932
+## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0    0.00932
+## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0    0.00932
+## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSWMW...beetle.vs.flower_twilight == 0    0.00932
 ##                                                                                                z value
-## contrast.UVSW..LW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0   7.934
-## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0   2.707
-## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0  19.559
-## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0  -5.227
-## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0  11.624
-## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSWMW...beetle.vs.flower_twilight == 0  16.851
+## contrast.UVSW..LW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0   7.927
+## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0   2.726
+## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0  19.471
+## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0  -5.202
+## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0  11.544
+## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSWMW...beetle.vs.flower_twilight == 0  16.745
 ##                                                                                                Pr(&gt;|z|)
 ## contrast.UVSW..LW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0 1.33e-14
-## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0   0.0407
+## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0   0.0385
 ## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UV..MWLW.beetle.vs.flower_twilight == 0  &lt; 2e-16
-## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0 1.03e-06
+## contrast.UVSWMW...beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0 1.18e-06
 ## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSW..LW.beetle.vs.flower_twilight == 0  &lt; 2e-16
 ## contrast.UVSWMWLW.beetle.vs.flower_twilight - contrast.UVSWMW...beetle.vs.flower_twilight == 0  &lt; 2e-16
 ##                                                                                                   
@@ -2408,16 +2408,16 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ## 
 ## Linear Hypotheses:
 ##                                                    Estimate Std. Error z value
-## bup600.flower.vs.leaf - bup580.flower.vs.leaf == 0  0.25999    0.02465  10.546
-## bup620.flower.vs.leaf - bup580.flower.vs.leaf == 0  0.55752    0.02465  22.616
-## bup640.flower.vs.leaf - bup580.flower.vs.leaf == 0  0.65876    0.02465  26.723
-## bup660.flower.vs.leaf - bup580.flower.vs.leaf == 0  0.47815    0.02465  19.397
-## bup620.flower.vs.leaf - bup600.flower.vs.leaf == 0  0.29753    0.02465  12.070
-## bup640.flower.vs.leaf - bup600.flower.vs.leaf == 0  0.39877    0.02465  16.176
-## bup660.flower.vs.leaf - bup600.flower.vs.leaf == 0  0.21817    0.02465   8.850
-## bup640.flower.vs.leaf - bup620.flower.vs.leaf == 0  0.10124    0.02465   4.107
-## bup660.flower.vs.leaf - bup620.flower.vs.leaf == 0 -0.07937    0.02465  -3.220
-## bup660.flower.vs.leaf - bup640.flower.vs.leaf == 0 -0.18060    0.02465  -7.326
+## bup600.flower.vs.leaf - bup580.flower.vs.leaf == 0  0.21665    0.02054  10.546
+## bup620.flower.vs.leaf - bup580.flower.vs.leaf == 0  0.46460    0.02054  22.616
+## bup640.flower.vs.leaf - bup580.flower.vs.leaf == 0  0.54896    0.02054  26.723
+## bup660.flower.vs.leaf - bup580.flower.vs.leaf == 0  0.39846    0.02054  19.397
+## bup620.flower.vs.leaf - bup600.flower.vs.leaf == 0  0.24794    0.02054  12.070
+## bup640.flower.vs.leaf - bup600.flower.vs.leaf == 0  0.33231    0.02054  16.176
+## bup660.flower.vs.leaf - bup600.flower.vs.leaf == 0  0.18181    0.02054   8.850
+## bup640.flower.vs.leaf - bup620.flower.vs.leaf == 0  0.08437    0.02054   4.107
+## bup660.flower.vs.leaf - bup620.flower.vs.leaf == 0 -0.06614    0.02054  -3.220
+## bup660.flower.vs.leaf - bup640.flower.vs.leaf == 0 -0.15050    0.02054  -7.326
 ##                                                    Pr(&gt;|z|)    
 ## bup600.flower.vs.leaf - bup580.flower.vs.leaf == 0  &lt; 2e-16 ***
 ## bup620.flower.vs.leaf - bup580.flower.vs.leaf == 0  &lt; 2e-16 ***
@@ -2456,9 +2456,9 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.flower.vs.leaf</strong></td>
-<td align="center">1170</td>
+<td align="center">1171</td>
 <td align="center">4</td>
-<td align="center">4.786e-252</td>
+<td align="center">2.64e-252</td>
 </tr>
 </tbody>
 </table>
@@ -2493,38 +2493,38 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ## 
 ## Linear Hypotheses:
 ##                                                                       Estimate
-## bup600.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  0.049995
-## bup620.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  0.094068
-## bup640.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  0.088046
-## bup660.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  0.052420
-## bup620.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0  0.044073
-## bup640.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0  0.038051
-## bup660.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0  0.002425
-## bup640.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0 -0.006022
-## bup660.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0 -0.041647
-## bup660.flower.vs.leaf_twilight - bup640.flower.vs.leaf_twilight == 0 -0.035626
+## bup600.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  0.049834
+## bup620.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  0.093746
+## bup640.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  0.087751
+## bup660.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  0.052236
+## bup620.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0  0.043911
+## bup640.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0  0.037917
+## bup660.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0  0.002402
+## bup640.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0 -0.005995
+## bup660.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0 -0.041509
+## bup660.flower.vs.leaf_twilight - bup640.flower.vs.leaf_twilight == 0 -0.035515
 ##                                                                      Std. Error
-## bup600.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0   0.003109
-## bup620.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0   0.003109
-## bup640.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0   0.003109
-## bup660.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0   0.003109
-## bup620.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0   0.003109
-## bup640.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0   0.003109
-## bup660.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0   0.003109
-## bup640.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0   0.003109
-## bup660.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0   0.003109
-## bup660.flower.vs.leaf_twilight - bup640.flower.vs.leaf_twilight == 0   0.003109
+## bup600.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0   0.003097
+## bup620.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0   0.003097
+## bup640.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0   0.003097
+## bup660.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0   0.003097
+## bup620.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0   0.003097
+## bup640.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0   0.003097
+## bup660.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0   0.003097
+## bup640.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0   0.003097
+## bup660.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0   0.003097
+## bup660.flower.vs.leaf_twilight - bup640.flower.vs.leaf_twilight == 0   0.003097
 ##                                                                      z value
-## bup600.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  16.078
-## bup620.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  30.252
-## bup640.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  28.315
-## bup660.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  16.858
-## bup620.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0  14.174
-## bup640.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0  12.237
-## bup660.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0   0.780
-## bup640.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0  -1.937
-## bup660.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0 -13.394
-## bup660.flower.vs.leaf_twilight - bup640.flower.vs.leaf_twilight == 0 -11.457
+## bup600.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  16.089
+## bup620.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  30.266
+## bup640.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  28.331
+## bup660.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0  16.865
+## bup620.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0  14.177
+## bup640.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0  12.242
+## bup660.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0   0.775
+## bup640.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0  -1.935
+## bup660.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0 -13.402
+## bup660.flower.vs.leaf_twilight - bup640.flower.vs.leaf_twilight == 0 -11.466
 ##                                                                      Pr(&gt;|z|)
 ## bup600.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0   &lt;2e-16
 ## bup620.flower.vs.leaf_twilight - bup580.flower.vs.leaf_twilight == 0   &lt;2e-16
@@ -2533,7 +2533,7 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ## bup620.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0   &lt;2e-16
 ## bup640.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0   &lt;2e-16
 ## bup660.flower.vs.leaf_twilight - bup600.flower.vs.leaf_twilight == 0    1.000
-## bup640.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0    0.528
+## bup640.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0    0.529
 ## bup660.flower.vs.leaf_twilight - bup620.flower.vs.leaf_twilight == 0   &lt;2e-16
 ## bup660.flower.vs.leaf_twilight - bup640.flower.vs.leaf_twilight == 0   &lt;2e-16
 ##                                                                         
@@ -2614,16 +2614,16 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ## 
 ## Linear Hypotheses:
 ##                                                    Estimate Std. Error z value
-## bup600.beetle.vs.leaf - bup580.beetle.vs.leaf == 0  0.34258    0.02286  14.985
-## bup620.beetle.vs.leaf - bup580.beetle.vs.leaf == 0  0.69236    0.02286  30.285
-## bup640.beetle.vs.leaf - bup580.beetle.vs.leaf == 0  0.95168    0.02286  41.628
-## bup660.beetle.vs.leaf - bup580.beetle.vs.leaf == 0  1.12926    0.02286  49.396
-## bup620.beetle.vs.leaf - bup600.beetle.vs.leaf == 0  0.34978    0.02286  15.300
-## bup640.beetle.vs.leaf - bup600.beetle.vs.leaf == 0  0.60910    0.02286  26.643
-## bup660.beetle.vs.leaf - bup600.beetle.vs.leaf == 0  0.78668    0.02286  34.411
-## bup640.beetle.vs.leaf - bup620.beetle.vs.leaf == 0  0.25932    0.02286  11.343
-## bup660.beetle.vs.leaf - bup620.beetle.vs.leaf == 0  0.43690    0.02286  19.111
-## bup660.beetle.vs.leaf - bup640.beetle.vs.leaf == 0  0.17758    0.02286   7.768
+## bup600.beetle.vs.leaf - bup580.beetle.vs.leaf == 0  0.28548    0.01905  14.985
+## bup620.beetle.vs.leaf - bup580.beetle.vs.leaf == 0  0.57696    0.01905  30.285
+## bup640.beetle.vs.leaf - bup580.beetle.vs.leaf == 0  0.79306    0.01905  41.628
+## bup660.beetle.vs.leaf - bup580.beetle.vs.leaf == 0  0.94105    0.01905  49.396
+## bup620.beetle.vs.leaf - bup600.beetle.vs.leaf == 0  0.29148    0.01905  15.300
+## bup640.beetle.vs.leaf - bup600.beetle.vs.leaf == 0  0.50758    0.01905  26.643
+## bup660.beetle.vs.leaf - bup600.beetle.vs.leaf == 0  0.65557    0.01905  34.411
+## bup640.beetle.vs.leaf - bup620.beetle.vs.leaf == 0  0.21610    0.01905  11.343
+## bup660.beetle.vs.leaf - bup620.beetle.vs.leaf == 0  0.36409    0.01905  19.111
+## bup660.beetle.vs.leaf - bup640.beetle.vs.leaf == 0  0.14799    0.01905   7.768
 ##                                                    Pr(&gt;|z|)    
 ## bup600.beetle.vs.leaf - bup580.beetle.vs.leaf == 0  &lt; 2e-16 ***
 ## bup620.beetle.vs.leaf - bup580.beetle.vs.leaf == 0  &lt; 2e-16 ***
@@ -2662,7 +2662,7 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.beetle.vs.leaf</strong></td>
-<td align="center">5237</td>
+<td align="center">5239</td>
 <td align="center">4</td>
 <td align="center">0</td>
 </tr>
@@ -2699,38 +2699,38 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ## 
 ## Linear Hypotheses:
 ##                                                                      Estimate
-## bup600.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0 0.055394
-## bup620.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0 0.105974
-## bup640.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0 0.131761
-## bup660.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0 0.141035
-## bup620.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0 0.050580
-## bup640.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0 0.076367
-## bup660.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0 0.085641
-## bup640.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0 0.025787
-## bup660.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0 0.035061
-## bup660.beetle.vs.leaf_twilight - bup640.beetle.vs.leaf_twilight == 0 0.009274
+## bup600.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0 0.055243
+## bup620.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0 0.105686
+## bup640.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0 0.131434
+## bup660.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0 0.140754
+## bup620.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0 0.050443
+## bup640.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0 0.076191
+## bup660.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0 0.085511
+## bup640.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0 0.025748
+## bup660.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0 0.035068
+## bup660.beetle.vs.leaf_twilight - bup640.beetle.vs.leaf_twilight == 0 0.009319
 ##                                                                      Std. Error
-## bup600.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0   0.002300
-## bup620.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0   0.002300
-## bup640.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0   0.002300
-## bup660.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0   0.002300
-## bup620.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0   0.002300
-## bup640.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0   0.002300
-## bup660.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0   0.002300
-## bup640.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0   0.002300
-## bup660.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0   0.002300
-## bup660.beetle.vs.leaf_twilight - bup640.beetle.vs.leaf_twilight == 0   0.002300
+## bup600.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0   0.002294
+## bup620.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0   0.002294
+## bup640.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0   0.002294
+## bup660.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0   0.002294
+## bup620.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0   0.002294
+## bup640.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0   0.002294
+## bup660.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0   0.002294
+## bup640.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0   0.002294
+## bup660.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0   0.002294
+## bup660.beetle.vs.leaf_twilight - bup640.beetle.vs.leaf_twilight == 0   0.002294
 ##                                                                      z value
-## bup600.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0  24.086
-## bup620.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0  46.078
-## bup640.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0  57.290
-## bup660.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0  61.322
-## bup620.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0  21.992
-## bup640.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0  33.205
-## bup660.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0  37.237
-## bup640.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0  11.212
-## bup660.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0  15.245
-## bup660.beetle.vs.leaf_twilight - bup640.beetle.vs.leaf_twilight == 0   4.032
+## bup600.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0  24.078
+## bup620.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0  46.064
+## bup640.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0  57.286
+## bup660.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0  61.348
+## bup620.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0  21.986
+## bup640.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0  33.208
+## bup660.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0  37.270
+## bup640.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0  11.223
+## bup660.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0  15.284
+## bup660.beetle.vs.leaf_twilight - bup640.beetle.vs.leaf_twilight == 0   4.062
 ##                                                                      Pr(&gt;|z|)
 ## bup600.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0  &lt; 2e-16
 ## bup620.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0  &lt; 2e-16
@@ -2741,7 +2741,7 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ## bup660.beetle.vs.leaf_twilight - bup600.beetle.vs.leaf_twilight == 0  &lt; 2e-16
 ## bup640.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0  &lt; 2e-16
 ## bup660.beetle.vs.leaf_twilight - bup620.beetle.vs.leaf_twilight == 0  &lt; 2e-16
-## bup660.beetle.vs.leaf_twilight - bup640.beetle.vs.leaf_twilight == 0 0.000552
+## bup660.beetle.vs.leaf_twilight - bup640.beetle.vs.leaf_twilight == 0 0.000487
 ##                                                                         
 ## bup600.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0 ***
 ## bup620.beetle.vs.leaf_twilight - bup580.beetle.vs.leaf_twilight == 0 ***
@@ -2820,16 +2820,16 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ## 
 ## Linear Hypotheses:
 ##                                                        Estimate Std. Error
-## bup600.beetle.vs.flower - bup580.beetle.vs.flower == 0  0.19342    0.03283
-## bup620.beetle.vs.flower - bup580.beetle.vs.flower == 0  0.44984    0.03283
-## bup640.beetle.vs.flower - bup580.beetle.vs.flower == 0  0.72670    0.03283
-## bup660.beetle.vs.flower - bup580.beetle.vs.flower == 0  0.98135    0.03283
-## bup620.beetle.vs.flower - bup600.beetle.vs.flower == 0  0.25643    0.03283
-## bup640.beetle.vs.flower - bup600.beetle.vs.flower == 0  0.53328    0.03283
-## bup660.beetle.vs.flower - bup600.beetle.vs.flower == 0  0.78793    0.03283
-## bup640.beetle.vs.flower - bup620.beetle.vs.flower == 0  0.27685    0.03283
-## bup660.beetle.vs.flower - bup620.beetle.vs.flower == 0  0.53150    0.03283
-## bup660.beetle.vs.flower - bup640.beetle.vs.flower == 0  0.25465    0.03283
+## bup600.beetle.vs.flower - bup580.beetle.vs.flower == 0  0.16118    0.02736
+## bup620.beetle.vs.flower - bup580.beetle.vs.flower == 0  0.37487    0.02736
+## bup640.beetle.vs.flower - bup580.beetle.vs.flower == 0  0.60558    0.02736
+## bup660.beetle.vs.flower - bup580.beetle.vs.flower == 0  0.81779    0.02736
+## bup620.beetle.vs.flower - bup600.beetle.vs.flower == 0  0.21369    0.02736
+## bup640.beetle.vs.flower - bup600.beetle.vs.flower == 0  0.44440    0.02736
+## bup660.beetle.vs.flower - bup600.beetle.vs.flower == 0  0.65661    0.02736
+## bup640.beetle.vs.flower - bup620.beetle.vs.flower == 0  0.23071    0.02736
+## bup660.beetle.vs.flower - bup620.beetle.vs.flower == 0  0.44292    0.02736
+## bup660.beetle.vs.flower - bup640.beetle.vs.flower == 0  0.21221    0.02736
 ##                                                        z value Pr(&gt;|z|)    
 ## bup600.beetle.vs.flower - bup580.beetle.vs.flower == 0   5.891 3.83e-08 ***
 ## bup620.beetle.vs.flower - bup580.beetle.vs.flower == 0  13.702  &lt; 2e-16 ***
@@ -2868,7 +2868,7 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <tbody>
 <tr class="odd">
 <td align="center"><strong>peak_wl.beetle.vs.flower</strong></td>
-<td align="center">2416</td>
+<td align="center">2417</td>
 <td align="center">4</td>
 <td align="center">0</td>
 </tr>
@@ -2906,38 +2906,38 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ## 
 ## Linear Hypotheses:
 ##                                                                          Estimate
-## bup600.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0 0.047547
-## bup620.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0 0.106232
-## bup640.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0 0.154117
-## bup660.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0 0.178727
-## bup620.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0 0.058684
-## bup640.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0 0.106569
-## bup660.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0 0.131179
-## bup640.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0 0.047885
-## bup660.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0 0.072495
-## bup660.beetle.vs.flower_twilight - bup640.beetle.vs.flower_twilight == 0 0.024610
+## bup600.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0 0.047302
+## bup620.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0 0.105705
+## bup640.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0 0.153429
+## bup660.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0 0.178072
+## bup620.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0 0.058403
+## bup640.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0 0.106127
+## bup660.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0 0.130770
+## bup640.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0 0.047724
+## bup660.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0 0.072367
+## bup660.beetle.vs.flower_twilight - bup640.beetle.vs.flower_twilight == 0 0.024643
 ##                                                                          Std. Error
-## bup600.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0   0.004256
-## bup620.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0   0.004256
-## bup640.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0   0.004256
-## bup660.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0   0.004256
-## bup620.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0   0.004256
-## bup640.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0   0.004256
-## bup660.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0   0.004256
-## bup640.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0   0.004256
-## bup660.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0   0.004256
-## bup660.beetle.vs.flower_twilight - bup640.beetle.vs.flower_twilight == 0   0.004256
+## bup600.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0   0.004239
+## bup620.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0   0.004239
+## bup640.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0   0.004239
+## bup660.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0   0.004239
+## bup620.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0   0.004239
+## bup640.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0   0.004239
+## bup660.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0   0.004239
+## bup640.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0   0.004239
+## bup660.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0   0.004239
+## bup660.beetle.vs.flower_twilight - bup640.beetle.vs.flower_twilight == 0   0.004239
 ##                                                                          z value
-## bup600.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0  11.173
-## bup620.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0  24.962
-## bup640.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0  36.214
-## bup660.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0  41.997
-## bup620.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0  13.790
-## bup640.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0  25.042
-## bup660.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0  30.825
-## bup640.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0  11.252
-## bup660.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0  17.035
-## bup660.beetle.vs.flower_twilight - bup640.beetle.vs.flower_twilight == 0   5.783
+## bup600.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0  11.159
+## bup620.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0  24.937
+## bup640.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0  36.196
+## bup660.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0  42.009
+## bup620.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0  13.778
+## bup640.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0  25.036
+## bup660.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0  30.850
+## bup640.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0  11.259
+## bup660.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0  17.072
+## bup660.beetle.vs.flower_twilight - bup640.beetle.vs.flower_twilight == 0   5.814
 ##                                                                          Pr(&gt;|z|)
 ## bup600.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0  &lt; 2e-16
 ## bup620.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0  &lt; 2e-16
@@ -2948,7 +2948,7 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 ## bup660.beetle.vs.flower_twilight - bup600.beetle.vs.flower_twilight == 0  &lt; 2e-16
 ## bup640.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0  &lt; 2e-16
 ## bup660.beetle.vs.flower_twilight - bup620.beetle.vs.flower_twilight == 0  &lt; 2e-16
-## bup660.beetle.vs.flower_twilight - bup640.beetle.vs.flower_twilight == 0 7.34e-08
+## bup660.beetle.vs.flower_twilight - bup640.beetle.vs.flower_twilight == 0 6.12e-08
 ##                                                                             
 ## bup600.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0 ***
 ## bup620.beetle.vs.flower_twilight - bup580.beetle.vs.flower_twilight == 0 ***
@@ -3166,9 +3166,9 @@ Figure caption: Sensitivity curves of the photoreceptors with different peak wav
 <span id="cb70-183"><a href="#cb70-183"></a>figure_d65.aim1 &lt;-<span class="st"> </span><span class="kw">ggarrange</span>(fl_d65.aim1,bl_d65.aim1,bf_d65.aim1, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">1</span>)</span>
 <span id="cb70-184"><a href="#cb70-184"></a>figure_d65.aim1</span></code></pre></div>
 <div class="figure">
-<img src="opsin_shifed_models_files/figure-html/unnamed-chunk-57-1.png" alt="Figure caption: Comparison of chromatic contrast for visual systems with different photoreceptor combinations and the opsin-shifted LWS photoreceptor. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts &gt; 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves." width="672" />
+<img src="opsin_shifed_models_files/figure-html/unnamed-chunk-57-1.png" alt="Figure caption: Comparison of chromatic contrast for visual systems with different photoreceptor combinations and the opsin-shifted LWS photoreceptor. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts &gt; 10 JND are from flowers that have high UV - blue chroma compared to beetles and leaves." width="672" />
 <p class="caption">
-Figure caption: Comparison of chromatic contrast for visual systems with different photoreceptor combinations and the opsin-shifted LWS photoreceptor. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts &gt; 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves.
+Figure caption: Comparison of chromatic contrast for visual systems with different photoreceptor combinations and the opsin-shifted LWS photoreceptor. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts &gt; 10 JND are from flowers that have high UV - blue chroma compared to beetles and leaves.
 </p>
 </div>
 <p></br> </br></p>
@@ -3279,7 +3279,7 @@ Figure caption: Comparison of chromatic contrast for visual systems with differe
 <span id="cb71-102"><a href="#cb71-102"></a>             <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">size=</span><span class="dv">3</span>)<span class="op">+</span><span class="st"> </span><span class="co">#add the mean point</span></span>
 <span id="cb71-103"><a href="#cb71-103"></a><span class="st">  </span><span class="co">#change the x labels</span></span>
 <span id="cb71-104"><a href="#cb71-104"></a><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Beetle vs. Leaf&quot;</span>)<span class="op">+</span></span>
-<span id="cb71-105"><a href="#cb71-105"></a><span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="kw">c</span>(<span class="st">&quot;VS1.bl&quot;</span>, <span class="st">&quot;VS2.bl&quot;</span>, <span class="st">&quot;VS3.bl&quot;</span>,<span class="st">&quot;VS4.bl&quot;</span>), <span class="dt">y =</span> <span class="dv">2</span>, <span class="dt">label =</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;a&quot;</span>,<span class="st">&quot;c&quot;</span>)) <span class="co">#add statistical info</span></span>
+<span id="cb71-105"><a href="#cb71-105"></a><span class="st">  </span><span class="kw">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="dt">x =</span> <span class="kw">c</span>(<span class="st">&quot;VS1.bl&quot;</span>, <span class="st">&quot;VS2.bl&quot;</span>, <span class="st">&quot;VS3.bl&quot;</span>,<span class="st">&quot;VS4.bl&quot;</span>), <span class="dt">y =</span> <span class="dv">2</span>, <span class="dt">label =</span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;b&quot;</span>,<span class="st">&quot;c&quot;</span>)) <span class="co">#add statistical info</span></span>
 <span id="cb71-106"><a href="#cb71-106"></a></span>
 <span id="cb71-107"><a href="#cb71-107"></a></span>
 <span id="cb71-108"><a href="#cb71-108"></a></span>
@@ -3534,9 +3534,9 @@ Figure caption: Comparison of chromatic contrast for visual systems with differe
 <span id="cb72-179"><a href="#cb72-179"></a>figure_d65.aim2 &lt;-<span class="st"> </span><span class="kw">ggarrange</span>(fl_d65.aim2,bl_d65.aim2,bf_d65.aim2, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">1</span>)</span>
 <span id="cb72-180"><a href="#cb72-180"></a>figure_d65.aim2</span></code></pre></div>
 <div class="figure">
-<img src="opsin_shifed_models_files/figure-html/unnamed-chunk-59-1.png" alt="Figure caption: Comparison of chromatic contrast between visual systems with the opsin-shifted LWS photoreceptor peaking at different wavelengths. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts &gt; 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves." width="672" />
+<img src="opsin_shifed_models_files/figure-html/unnamed-chunk-59-1.png" alt="Figure caption: Comparison of chromatic contrast between visual systems with the opsin-shifted LWS photoreceptor peaking at different wavelengths. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts &gt; 10 JND are from flowers that have high UV - blue chroma compared to beetles and leaves." width="672" />
 <p class="caption">
-Figure caption: Comparison of chromatic contrast between visual systems with the opsin-shifted LWS photoreceptor peaking at different wavelengths. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts &gt; 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves.
+Figure caption: Comparison of chromatic contrast between visual systems with the opsin-shifted LWS photoreceptor peaking at different wavelengths. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts &gt; 10 JND are from flowers that have high UV - blue chroma compared to beetles and leaves.
 </p>
 </div>
 <p></br> </br></p>
@@ -3711,9 +3711,9 @@ Figure caption: Comparison of chromatic contrast between visual systems with the
 <span id="cb73-166"><a href="#cb73-166"></a>figure_twilight.aim2 &lt;-<span class="st"> </span><span class="kw">ggarrange</span>(fl_twilight.aim2,bl_twilight.aim2,bf_twilight.aim2, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">nrow =</span> <span class="dv">1</span>)</span>
 <span id="cb73-167"><a href="#cb73-167"></a>figure_twilight.aim2</span></code></pre></div>
 <div class="figure">
-<img src="opsin_shifed_models_files/figure-html/unnamed-chunk-60-1.png" alt="Figure caption: Comparison of chromatic contrast between visual systems with the opsin-shifted LWS photoreceptor peaking at different wavelengths under twilight illumination. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts &gt; 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves." width="672" />
+<img src="opsin_shifed_models_files/figure-html/unnamed-chunk-60-1.png" alt="Figure caption: Comparison of chromatic contrast between visual systems with the opsin-shifted LWS photoreceptor peaking at different wavelengths under twilight illumination. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1." width="672" />
 <p class="caption">
-Figure caption: Comparison of chromatic contrast between visual systems with the opsin-shifted LWS photoreceptor peaking at different wavelengths under twilight illumination. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts &gt; 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves.
+Figure caption: Comparison of chromatic contrast between visual systems with the opsin-shifted LWS photoreceptor peaking at different wavelengths under twilight illumination. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1.
 </p>
 </div>
 <p></br> </br></p>
