@@ -7,7 +7,7 @@ output:
     toc: true
     toc_depth: 2
 subtitle: Supplementary Information
-Date: August 31 2020
+Date: August 31 2021
 ---
 # The aim
 
@@ -116,15 +116,17 @@ Behavioural experiments confirmed far-red sensitivity in both species of jewel b
 
 datacombined<- ymaze.Cdimidiata %>% rbind(ymaze.Cflavopicta)
 ggplot(datacombined, aes(x=wavelength, y=attracted))+
-  geom_jitter(data=ymaze.Cflavopicta,height=0.01,width=5, alpha=0.5, size= 3, color="#FFB32E")+
-  geom_jitter(data=ymaze.Cdimidiata,height=0.01,width=5, alpha=0.5, size= 3, color="#3062C6")+
-  geom_ribbon(data=newdat1.Cf, alpha=0.3,fill="#FFB32E", aes(ymax=phi.Cf, ymin=plo.Cf))+
-  geom_ribbon(data=newdat1.Cd, alpha=0.3, fill="#3062C6", aes(ymax=phi.Cd, ymin=plo.Cd))+ 
-  geom_line(data=newdat1.Cf, aes(x=wavelength, y=attracted), color="#FFB32E")+
-  geom_line(data=newdat1.Cd, aes(x=wavelength, y=attracted), color="#3062C6")+ 
-  geom_hline(yintercept=0.50, color="grey60")+
+  geom_jitter(data=ymaze.Cflavopicta,height=0.01, width=5, alpha=0.5, size= 3, color="#ffb700ff")+
+  geom_jitter(data=ymaze.Cdimidiata,height=0.01, width=5, alpha=0.5, size= 3, color="#1c5ab7ff")+
+  geom_ribbon(data=newdat1.Cf, fill="#FDF0AD", aes(ymax=phi.Cf, ymin=plo.Cf))+
+  geom_ribbon(data=newdat1.Cd, fill="#b6d1ff", aes(ymax=phi.Cd, ymin=plo.Cd))+ 
+  geom_line(data=newdat1.Cf, aes(x=wavelength, y=attracted), color="#ffb700ff")+
+  geom_line(data=newdat1.Cd, aes(x=wavelength, y=attracted), color="#1c5ab7ff")+ 
+  geom_hline(yintercept=0.50, linetype = "dotted")+
   scale_x_continuous(breaks = seq(580, 780, by = 20))+
-  scale_y_continuous(sec.axis = sec_axis(~.*(6/10), name = "Reflectance"))+
+  scale_y_continuous(name = "Attracted rate (%)",
+                     sec.axis = sec_axis(~.*(6/10), name = "Reflectance"))+
+  xlab("Wavelength (nm)")+
   theme_classic()
 ```
  
@@ -162,25 +164,18 @@ ggplot(led.spec, aes(x=wl, y=irradiance))+
   ylab( "Relative irradiance")+
   theme_classic()
 ```
-
-## Dim light
-
-</br>
-</br>
-
+## Ambient dim light
 ```{r, echo=FALSE, fig.cap="Figure caption: The dim light in the environment.", out.width = '70%'}
 dim.spec <- read.csv("data/dim spec.csv",header=TRUE) %>%
-  as.rspec() %>% 
   procspec(opt = "smooth", # smooth the spec
            span = 0.1, # smoothing level
-           fixneg = "zero") # lift the negative values to zero. Likely just noise.
-
+           fixneg = "zero")# lift the negative values to zero. Likely just noise.
 
 ggplot(dim.spec, aes(x = wl, y = Irradiance)) + 
   ylab( "Absolute irradiance (uW.cm-2.nm-1)")+ 
   xlab("Wavelength (nm)")+
   geom_line() + 
-  ylim(NA,0.01) + 
+  ylim(NA, 0.01)+
   theme(plot.subtitle = element_text(vjust = 1),
         plot.caption = element_text(vjust = 1),
         plot.title = element_text(face="bold")) + 
