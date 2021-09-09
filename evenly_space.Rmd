@@ -1,0 +1,378 @@
+---
+title: "The effect of evenly spaced photoreceptors on chromatic contrast"
+output:
+  pdf_document: default
+  html_document:
+    theme: flatly
+    toc: true
+    toc_depth: 2
+subtitle: Supplementary Information
+Date: January 08 2021
+---
+# The aim
+
+* Here, we tested the effect of even spacing of sensitivities on colour discrimination in a tetrachromatic visual system. Specifically, we ran visual models with __an evenly spaced visual system__ and __an unevenly spaced visual system__, then compared spectral contrast in all three comparison groups (‘leaf vs. flower’, ‘leaf vs. beetle’, ‘beetle vs. flower’). 
+
+* These two visual systems have the same upper and lower sensitivities with varying distribution of the two middle sensitivities. The evenly spaced visual system has peak sensitivities at 355 nm, 455 nm, 560 nm, and 660 nm, while VS 660 from the [Main models](main_models.html) section is used to represent the unevenly spaced visual system, with peak sensitivities at 355 nm, 445 nm, 530 nm, and 660 nm. 
+
+* The model parameters and the statistical methods remain the same as described in the main text.
+
+```{r, warning=FALSE,echo=FALSE,message=FALSE, results='hide'}
+library(pavo)
+library(dplyr)
+library(stringr)
+library(tidyr) #for gather() function
+library(ggplot2)
+library(lme4)
+library(car)
+library(multcomp)
+library(boot) #for mean() function
+library(pander) #for creating tidy tables
+library(ggpubr) #for ggarrange() function
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE) # Suppress warnings in the HTML output
+knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time when re-building the html document
+```
+
+```{r Import data, echo=FALSE,message=FALSE, warning=FALSE}
+# import sensitivity curves
+even.space <- read.csv("data/peak sensitivity_evenly space.csv", header = TRUE) %>%
+  as.rspec()
+
+specsensbuprest.model2 <- read.csv("data/peak sensitivity_filter shift_aim2.csv",header = TRUE) %>%
+  as.rspec()
+
+# import irradiance
+irradiance.d65 <- read.csv("data/d65.csv", header = TRUE) %>% 
+  as.rspec(lim = c(300,800)) %>%  #set import range
+  procspec(opt = c("min", "max")) #standardize the illumination spectrum
+irradiance.twilight <- read.csv("data/civil twilight.csv", header = TRUE) %>% 
+  as.rspec(lim = c(300,800)) %>% 
+  rename( twilight = Irradiance) %>% 
+  irrad2flux() #convert the irradiance (μ Watt.cm^{-2}) to photon flux (μ mol.s^{-1}.m^{-2}) to derive correct quantum catch.
+
+#import background - average leaf
+aveleaf <- read.csv("data/aveleaf.csv", header = TRUE) %>% 
+  as.rspec()
+
+#import and combine beetle, flower, leaf together
+raw.dataset <- read.csv("data/refelectance spectra.csv", header = TRUE) %>% 
+  as.rspec()
+dataset <- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measurements to a representative one
+  procspec(opt = "smooth", span = 0.1, fixneg = "zero") #smooth the spectra and lift <0 to 0
+```
+
+```{r, fig.cap="Figure caption: ensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (VS 660; dotted lines).",echo = FALSE, message = FALSE, warning = FALSE}
+#plot the visual systems
+system.list <- c("evenly space","unevenly space")
+system.type <- rep(system.list , c(1*501, 1*501))
+
+visevencurve <- even.space %>%
+  rename( UVS = 2, SWS = 3, MWS = 4, LWS = 5)
+VS660curve <- specsensbuprest.model2[,c(1,2,3,4,9)] %>%  
+  rename( UVS = 2, SWS = 3, MWS = 4, LWS = 5)
+combine.curves <- visevencurve %>%  
+  rbind(VS660curve) %>% 
+  cbind(system.type) %>%
+  gather(peak, value, -wl, -system.type) 
+
+ggplot(combine.curves,
+       aes(x = wl, y = value, 
+           linetype = system.type, color = peak))+
+  geom_line()+
+  guides(color = guide_legend(title = "peak sensitivity", reverse = TRUE),
+         linetype = guide_legend(title = "system type"))+
+  scale_color_manual(
+    values = c("red4","olivedrab4", "dodgerblue3", "darkorchid4"),
+    labels = c("LWS", "MWS", "SWS", "UVS"))+
+  xlab("Wavelength (nm)")+ 
+  ylab("Relative spectral sensitivity")+
+  theme_classic()
+```
+
+
+</br>
+</br>
+
+# Data description
+
+* We used the same spectral data collected from beetles and plants as described in the [Main models](main_models.html) section.
+
+</br>
+</br>
+
+# Run the visual models
+* We ran the visual models with the same parameter settings and steps as in the main models.
+
+```{r Set up functions for quantum catch calculation, message=FALSE}
+## D65
+get.d65.vismodel <- function(i){
+  
+  vs.i <- vismodel(dataset[1:501,], 
+                   visual = i, #this need to change according to the visual system
+                   bkg = aveleaf$aveleaf, 
+                   illum = irradiance.d65[1:501,2], 
+                   qcatch = 'fi', 
+                   relative = FALSE,
+                   vonkries = TRUE)
+  return(vs.i)
+}
+```
+
+```{r Calculate quatumn catch, echo=FALSE,message=FALSE, warning=FALSE}
+
+# Quantum catch - D65
+## Evenly space
+buprest.even.space.d65 <- get.d65.vismodel(even.space)
+
+## VS660
+buprest660 <- get.d65.vismodel(specsensbuprest.model2[, c(1,2,3,4,9)])
+```
+
+
+```{r Calculate contrasts}
+get.evenspace.coldist <- function(i){
+  
+  con <- coldist(modeldata = i, # put output of vismodel()
+                   noise="neural", 
+                   achro=FALSE, 
+                   n = c(1.14,1,1.26,1.38),
+                   weber = 0.12,
+                   weber.ref = 4)
+  
+  return(con)
+}
+
+#Contrast calculation
+Cbuprest.even.space.d65  <-  get.evenspace.coldist(buprest.even.space.d65)
+
+#VS660
+Cbuprest660 <- get.evenspace.coldist(buprest660)
+
+#combine all contrast value in each comparison group
+
+even.vissys_d65 <- list(Cbuprest.even.space.d65, Cbuprest660)
+even.fl.vissys <- list("even.fl", "Vis5.fl") 
+even.bl.vissys <- list("even.bl", "Vis5.bl")
+even.bf.vissys <- list("even.bf", "Vis5.bf") 
+
+### flower vs leaf
+allvis.fl_d65.even <- data_frame()
+for (i in 1:length(even.vissys_d65)) {
+  
+  temp.i <- even.vissys_d65[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"leaves"))
+  
+  temp.i$vissys <- strrep(even.fl.vissys[[i]],1)
+  
+  allvis.fl_d65.even <- temp.i %>% rbind(allvis.fl_d65.even)  
+}
+
+### beetle vs leaf
+allvis.bl_d65.even <- data_frame()
+for (i in 1:length(even.vissys_d65)) {
+  
+  temp.i <- even.vissys_d65[[i]] %>% 
+    filter(str_detect(patch2,"beetle")) %>% 
+    filter(str_detect(patch1,"leaves"))
+  
+  temp.i$vissys <- strrep(even.bl.vissys[[i]],1)
+  
+  allvis.bl_d65.even <- temp.i %>% rbind(allvis.bl_d65.even)  
+}
+
+### beetle vs flower
+allvis.bf_d65.even <- data_frame()
+for (i in 1:length(even.vissys_d65)) {
+  
+  temp.i <- even.vissys_d65[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"beetle"))
+  
+  temp.i$vissys <- strrep(even.bf.vissys[[i]],1)
+  
+  allvis.bf_d65.even <- temp.i %>% rbind(allvis.bf_d65.even)  
+}
+
+
+```
+</br>
+</br>
+
+## Contrast tables
+
+```{r Print contrast table, echo=FALSE,message=FALSE, warning=FALSE}
+allvis.even_d65.list <- list(allvis.fl_d65.even, allvis.bl_d65.even, allvis.bf_d65.even)
+
+## create a data frame to hold the loop output
+contrast.list_d65.even <- data_frame(system = c("evenspace", "VS 660"),
+                                     flower.vs.leaf = NA, 
+                                     beetle.vs.leaf = NA, 
+                                     beetle.vs.flower = NA)
+## loop
+for (i in 1:length(allvis.even_d65.list)) {
+  
+   meantable.i <- aggregate(allvis.even_d65.list[[i]][,"dS"], 
+                            by = list(allvis.even_d65.list[[i]]$vissys), 
+                            mean) 
+   mean.i <- meantable.i[, 2] 
+   contrast.list_d65.even[,i+1] <- mean.i # here same at column i+1 because the 1st column is the visual system names
+}
+
+## print out the table 
+contrast.list_d65.even %>% pander() 
+```
+
+</br>
+</br>
+
+
+# Compare contrasts {.tabset .tabset-fade .tabset-pills}
+* To compare contrasts between visual systems, We conducted Wald chi-square tests on generalised linear mixed models (GLMM) followed by posthoc tests.
+
+* In the models, we assigned
+    + Independent variable: __contrast__
+    + Dependent variable: 
+        + Fixed factor: __visual system__
+        + Random factor: __sample ID__ of both targets in the comparison
+
+```{r Set up list and function for GLMM, echo=FALSE,message=FALSE, warning=FALSE} 
+# Organize data before GLMM
+
+## D65 - Aim 2
+### flower vs leaf
+vislist.fl_d65.even <- list("even.flower.vs.leaf",
+                            "bup660.flower.vs.leaf")
+compare.flower.vs.leaf.even <- data_frame()
+for (i in 1:length(even.vissys_d65)) {
+
+temp.i <-  even.vissys_d65[[i]] %>% 
+  filter(str_detect(patch1, "flower")) %>% 
+  filter(str_detect(patch2, "leaves")) %>% 
+  dplyr::select(1:3)
+
+temp.i$vissys <- strrep(vislist.fl_d65.even[[i]],1)
+
+compare.flower.vs.leaf.even <- compare.flower.vs.leaf.even %>% rbind(temp.i)
+}
+
+### beetle vs leaf
+vislist.bl_d65.even <- list("even.beetle.vs.leaf",
+                            "bup660.beetle.vs.leaf")
+compare.beetle.vs.leaf.even <- data_frame()
+for (i in 1:length(even.vissys_d65)) {
+
+temp.i <-  even.vissys_d65[[i]] %>% 
+  filter(str_detect(patch1, "leaves")) %>% 
+  filter(str_detect(patch2, "beetle")) %>% 
+  dplyr::select(1:3)
+
+temp.i$vissys <- strrep(vislist.bl_d65.even[[i]],1)
+
+compare.beetle.vs.leaf.even <- compare.beetle.vs.leaf.even %>% rbind(temp.i)
+}
+
+
+### beetle vs flower
+vislist.bf_d65.even <- list("even.beetle.vs.flower",
+                            "bup660.beetle.vs.flower")
+compare.beetle.vs.flower.even <- data_frame()
+for (i in 1:length(even.vissys_d65)) {
+
+temp.i <-  even.vissys_d65[[i]] %>% 
+  filter(str_detect(patch1, "flower")) %>% 
+  filter(str_detect(patch2, "beetle")) %>% 
+  dplyr::select(1:3)
+
+temp.i$vissys <- strrep(vislist.bf_d65.even[[i]],1)
+
+compare.beetle.vs.flower.even <- compare.beetle.vs.flower.even %>% rbind(temp.i)
+}
+
+```
+
+</br>
+
+```{r Set up functions for GLMM}
+get.lmer <- function(datlist, compnnumber){
+  
+  lmer(dS ~ vissys + (1|patch2) + (1|patch1), 
+       data = datlist[[compnnumber]], REML = F)
+  #REML=F, in order to fit the model using the likelihood ratio test. Otherwise, the lmer default will fit the model using the REML (REstricted Maximum Likelihood) criterion.
+}
+
+get.posthocsum <- function(modelx){
+  
+  summary(glht(modelx, 
+               linfct = mcp(vissys = "Tukey")), 
+          test = adjusted("bonferroni"))
+}
+```
+
+```{r Run GLMM models, echo=FALSE,message=FALSE, warning=FALSE}
+# set up list
+input.list.regres_d65.even <- list(compare.flower.vs.leaf.even,
+                                compare.beetle.vs.leaf.even,
+                                compare.beetle.vs.flower.even)
+
+# Evenly space
+##Flower vs Leaf
+m.flower.vs.leaf_d65.even <- get.lmer(input.list.regres_d65.even, 1)
+sum.flower.vs.leaf_d65.even <- get.posthocsum(m.flower.vs.leaf_d65.even)
+
+##Beetle vs Leaf
+m.beetle.vs.leaf_d65.even <- get.lmer(input.list.regres_d65.even, 2)
+sum.beetle.vs.leaf_d65.even <- get.posthocsum(m.beetle.vs.leaf_d65.even)
+
+##Beetle vs Flower
+m.beetle.vs.flower_d65.even <- get.lmer(input.list.regres_d65.even, 3)
+sum.beetle.vs.flower_d65.even <- get.posthocsum(m.beetle.vs.flower_d65.even)
+
+# Evenly space
+##Flower vs Leaf
+m.flower.vs.leaf_d65.even <- get.lmer(input.list.regres_d65.even, 1)
+sum.flower.vs.leaf_d65.even <- get.posthocsum(m.flower.vs.leaf_d65.even)
+
+##Beetle vs Leaf
+m.beetle.vs.leaf_d65.even <- get.lmer(input.list.regres_d65.even, 2)
+sum.beetle.vs.leaf_d65.even <- get.posthocsum(m.beetle.vs.leaf_d65.even)
+
+##Beetle vs Flower
+m.beetle.vs.flower_d65.even <- get.lmer(input.list.regres_d65.even, 3)
+sum.beetle.vs.flower_d65.even <- get.posthocsum(m.beetle.vs.flower_d65.even)
+```
+
+## __Flower vs. Leaf__ 
+
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+Anova(m.flower.vs.leaf_d65.even) %>% pander()
+```
+
+
+</br>
+</br>
+
+
+## __Beetle vs. Leaf__
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+Anova(m.beetle.vs.leaf_d65.even) %>% pander()
+```
+
+</br>
+</br>
+
+
+## __Beetle vs. Flower__ 
+```{r,echo=FALSE,message=FALSE, warning=FALSE}
+Anova(m.beetle.vs.flower_d65.even) %>% pander()
+```
+
+</br>
+</br>
+
+
+# Summary
+For all three comparison groups, VS 660 (unevenly spaced visual system) has significantly higher contrast than the evenly spaced visual system. This indicates that our results were not biased by uneven spacing of spectral sensitivities in our hypothetical visual systems.

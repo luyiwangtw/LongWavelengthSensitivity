@@ -13,7 +13,7 @@ Date: January 08 2021
 
 * To test whether the modelling results were sensitive to the photoreceptor ratios used, we repeated these analyses using published ratios that represent the known variation in insects. Specifically, we compared the changes in contrast when shifting the LWS peak from 580 nm to 660 nm between tetrachomat visual systems with different photoreceptor ratios.
 
-* We applied the same modelling method described in the [Main models](main_models.html) but using ratios of different insects, including the jewel beetle, *Agrilus planipennis* (same as the ratio used in the main text; 1.14: 1: 1.26: 1.38; UVS: SWS: MWS: LWS), and two butterflies, *Papilio Xuthus* (1: 1: 4.08: 2.92) and *Heliconius* sp. type III (1.00: 1.44: 2.22: 11.11).
+* We applied the same modelling method described in the [Main models](main_models.html) but using ratios of different insects, including the jewel beetle, *Agrilus planipennis* (same as the ratio used in the main text; 1.14: 1: 1.26: 1.38; UVS: SWS: MWS: LWS), and two butterflies, *Papilio Xuthus* (1: 1: 4.08: 2.92) and *Heliconius sp.* type III (1.00: 1.44: 2.22: 11.11).
 
 * The model parameters and the statistical methods remain the same as described in main text of the paper.
 
@@ -36,74 +36,53 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE) # Suppress warnings in the H
 knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time when re-building the html document
 ```
 
-```{r ,echo=FALSE,message=FALSE, warning=FALSE}
+```{r Import data, echo=FALSE,message=FALSE, warning=FALSE}
 #import sensitivity curves
-specsensbuprest.model2 <- read.csv("data/peak sensitivity_filter shift_aim2.csv",header=TRUE) %>% as.rspec()
-#import irradiance
+specsensbuprest.model2 <- read.csv("data/peak sensitivity_filter shift_aim2.csv",header = TRUE) %>% 
+  as.rspec()
+
+# import irradiance
 irradiance.d65 <- read.csv("data/d65.csv",header=TRUE) %>% 
-  as.rspec(lim=c(300,800)) %>%  #set import range
+  as.rspec(lim = c(300,800)) %>%  #set import range
   procspec(opt = c("min", "max")) #standardize the illumination spectrum
+irradiance.twilight <- read.csv("data/civil twilight.csv",header=TRUE) %>% 
+  as.rspec(lim = c(300,800)) %>% 
+  rename( twilight = Irradiance) %>% 
+  irrad2flux() #convert the irradiance (μ Watt.cm^{-2}) to photon flux (μ mol.s^{-1}.m^{-2}) to derive correct quantum catch.
 
-#import backgound - average leaf
-aveleaf <- read.csv("data/aveleaf.csv",header=TRUE) %>% as.rspec()
+#import background - average leaf
+aveleaf <- read.csv("data/aveleaf.csv",header=TRUE) %>% 
+  as.rspec()
 
-#import and combind beetle, flower, leaf together
-raw.dataset<-read.csv("data/refelectance spectra.csv",header=TRUE) %>% as.rspec()
-dataset<- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measurements to a representative one
+#import and combine beetle, flower, leaf together
+raw.dataset <- read.csv("data/refelectance spectra.csv",header=TRUE) %>% 
+  as.rspec()
+dataset <- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measurements to a representative one
   procspec(opt = "smooth", span = 0.1, fixneg = "zero") #smooth the spectra and lift <0 to 0
 ```
 
-```{r,echo=FALSE,message=FALSE, warning=FALSE}
-#import spectral data
-#assign categoryies to each spectrum
-category.list <- c("flower","leaf","beetle")
-category <- rep(category.list , c(47*501,46*501,37*501))
-wavelength<-rep(dataset[,1])
+```{r, fig.cap="Figure caption: Sensitivity curves of the photoreceptors with different peak wavelengths."}
+wl <- specsensbuprest.model2[,1]
+peaks <- gather(specsensbuprest.model2[,2:9], peak, value) %>% 
+  cbind(wl)
 
-#transform the data for ploting purpose
-dataset.transpose<-gather(dataset[,2:131], key = "species", value = "reflectance", na.rm = FALSE,
-       convert = FALSE, factor_key = FALSE)
-dataset.plot.indivisually<-cbind(dataset.transpose, wavelength,category)
+#order the peaks in the legend
+peak.order <- c("UVS.355.A1.", "SWS.445.A1.", "MWS.530.A1.", "LWS.570.A1..filter580.", "LWS.570.A1..filter600.", "LWS.570.A1..filter620.", "LWS.570.A1..filter640.", "LWS.570.A1..filter660.") 
 
-#split data by categories for future use
-flower.spec<-dataset.plot.indivisually[1:23547,]
-leaf.spec<-dataset.plot.indivisually[23548:46593,]
-beetle.spec<-dataset.plot.indivisually[46594:65130,]
-
-#merge the spectra before plot here
-dataset.plot.indivisually$category2<-factor(dataset.plot.indivisually$category, levels=c("leaf","flower","beetle"))
-
-#plot the spectra of the targets used in this model
-# ggplot(dataset.plot.indivisually,aes(x=wavelength,y=reflectance, colour=category2, group=species))+
-#   geom_point(size=.05)+
-#   geom_line(size=.05)+
-#   scale_color_manual( values = c( "forestgreen", "palevioletred1","cornflowerblue"))+
-#   facet_grid(category2 ~ .)+
-#   xlab("Wavelength (nm)")+ylab("Reflectance (%)")+
-#   scale_fill_discrete(name="sample type")+
-#   theme(legend.position = "none")+
-#   theme_classic()
-```
-
-```{r, fig.cap="Figure caption: VS 580 to VS 660 were used for the sensitivity analysis" ,echo=FALSE,message=FALSE, warning=FALSE}
-#plot the visual sensitivity curves
-wl<-specsensbuprest.model2[,1]
-peaks<-gather(specsensbuprest.model2[,2:9], peak, value) %>% cbind(wl)
-
-peak.order <- c("UVS.355.A1.", "SWS.445.A1.", "MWS.530.A1.", "LWS.570.A1..filter580.","LWS.570.A1..filter600.","LWS.570.A1..filter620.","LWS.570.A1..filter640.","LWS.570.A1..filter660.") #to order the peaks in the legend
-ggplot(peaks,aes(x=wl, y=value, col=peak))+
+ggplot(peaks,
+       aes(x = wl, 
+                 y = value, 
+                 col = peak))+
   geom_line()+
-  guides(color=guide_legend(title="peak sensitivity"))+
+  guides(color = guide_legend(title = "peak sensitivity"))+
   scale_color_manual(
     values = c("darkorchid4", "dodgerblue3", "olivedrab4", "orange1", "orange3","darkorange3", "orangered1", "red2"),
-    labels=c("355 nm", "445 nm","530 nm", "580 nm", "600 nm", "620 nm", "640 nm", "660 nm"),
-    breaks=peak.order)+
-  xlab("Wavelength (nm)")+
+    labels = c("355 nm", "445 nm","530 nm", "580 nm", "600 nm", "620 nm", "640 nm", "660 nm" ),
+    breaks = peak.order)+
+  xlab("Wavelength (nm)")+ 
   ylab("Relative spectral sensitivity")+
   theme_classic()
-
 ```
-
 </br>
 </br>
 
@@ -126,429 +105,422 @@ We used the same spectral data and daylight illumination described in the [Main 
 * We ran the visual models with the same parameter settings and steps as in the [Main models](main_models.html).
 
 * We first calculated the quantum catches, then calculated the contrasts.
-
-```{r,message=FALSE}
-#Quantum catch calculation
-#Quantum catch - D65 - Visual model 2
-#shared between 3 species
-buprest580=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, 1:5], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-buprest600=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,6)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-buprest620=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,7)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-buprest640=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,8)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-buprest660=vismodel(dataset[1:501,], visual = specsensbuprest.model2[, c(1,2,3,4,9)], bkg=aveleaf$aveleaf, illum = irradiance.d65[1:501,2], qcatch = 'fi', relative=FALSE, vonkries=TRUE)
-
-
-
-
-##Second: Contrast calculation
-#Contrast calculation- D65 - Visual model 2
-#for Agrilus planipennis
-Cbuprest580 = coldist(buprest580, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
-Cbuprest600 = coldist(buprest600, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
-Cbuprest620 = coldist(buprest620, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
-Cbuprest640 = coldist(buprest640, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
-Cbuprest660 = coldist(buprest660, noise="neural", achro=FALSE, n = c(1.14,1,1.26,1.38), weber = 0.12, weber.ref = 4)
-
-#for Papilio xuthus
-Cpapilio580 = coldist(buprest580, noise="neural", achro=FALSE, n = c(1, 1, 4.08, 2.92), weber = 0.12, weber.ref = 4)
-Cpapilio600 = coldist(buprest600, noise="neural", achro=FALSE, n = c(1, 1, 4.08, 2.92), weber = 0.12, weber.ref = 4)
-Cpapilio620 = coldist(buprest620, noise="neural", achro=FALSE, n = c(1, 1, 4.08, 2.92), weber = 0.12, weber.ref = 4)
-Cpapilio640 = coldist(buprest640, noise="neural", achro=FALSE, n = c(1, 1, 4.08, 2.92), weber = 0.12, weber.ref = 4)
-Cpapilio660 = coldist(buprest660, noise="neural", achro=FALSE, n = c(1, 1, 4.08, 2.92), weber = 0.12, weber.ref = 4)
-
-#for Heliconius sp
-Cheliconius580 = coldist(buprest580, noise="neural", achro=FALSE, n = c(1, 1.44, 2.22, 11.11), weber = 0.12, weber.ref = 4)
-Cheliconius600 = coldist(buprest600, noise="neural", achro=FALSE, n = c(1, 1.44, 2.22, 11.11), weber = 0.12, weber.ref = 4)
-Cheliconius620 = coldist(buprest620, noise="neural", achro=FALSE, n = c(1, 1.44, 2.22, 11.11), weber = 0.12, weber.ref = 4)
-Cheliconius640 = coldist(buprest640, noise="neural", achro=FALSE, n = c(1, 1.44, 2.22, 11.11), weber = 0.12, weber.ref = 4)
-Cheliconius660 = coldist(buprest660, noise="neural", achro=FALSE, n = c(1, 1.44, 2.22, 11.11), weber = 0.12, weber.ref = 4)
+```{r Set up functions for quantum catch calculation, message=FALSE}
+get.d65.vismodel <- function(i){
+  
+  vs.i <- vismodel(dataset[1:501,], 
+                   visual = i, #this need to change according to the visual system
+                   bkg = aveleaf$aveleaf, 
+                   illum = irradiance.d65[1:501,2], 
+                   qcatch = 'fi', 
+                   relative = FALSE,
+                   vonkries = TRUE)
+  return(vs.i)
+}
 ```
 
+```{r Quantum catch calculation, message=FALSE}
+#shared between 3 species
+sens.list <- list(VS580 <- specsensbuprest.model2[, 1:5],
+                  VS600 <- specsensbuprest.model2[, c(1,2,3,4,6)],
+                  VS620 <- specsensbuprest.model2[, c(1,2,3,4,7)],
+                  VS640 <- specsensbuprest.model2[, c(1,2,3,4,8)],
+                  VS660 <- specsensbuprest.model2[, c(1,2,3,4,9)])
+d65.vismodel.output <- list(VS580 = NA, VS600 = NA, VS620 = NA, VS640 = NA, VS660 = NA)
+
+# Set a loop for calculating quantum catch for each visual system
+for (i in 1:length(sens.list)){
+  
+  vs.result.d65 <- get.d65.vismodel(sens.list[[i]]) # for D65
+  d65.vismodel.output[[i]] <- vs.result.d65
+}
+
+buprest580 <- d65.vismodel.output$VS580
+buprest600 <- d65.vismodel.output$VS600
+buprest620 <- d65.vismodel.output$VS620
+buprest640 <- d65.vismodel.output$VS640
+buprest660 <- d65.vismodel.output$VS660
+```
+
+```{r Contrast calculation, message=FALSE}
+recep.density.list <- list(Agrilus <- c(1.14, 1, 1.26, 1.38),
+                                Papilio <- c(1, 1, 4.08, 2.92),
+                                Heliconius <- c(1, 1.44, 2.22, 11.11))
+
+get.sens.coldist <- function(i, sp){
+  
+  con <- coldist(modeldata = i, # put output of vismodel()
+                   noise = "neural", 
+                   achro = FALSE, 
+                   n = recep.density.list[[sp]],
+                   weber = 0.12,
+                   weber.ref = 4)
+  
+  return(con)
+}
+
+vismodel.list <- list(buprest580, 
+                      buprest600, 
+                      buprest620, 
+                      buprest640, 
+                      buprest660)
+#for Agrilus planipennis
+Agrilus.contrast.output <- list(VS580 = NA, VS600 = NA, VS620 = NA, VS640 = NA, VS660 = NA)
+
+for (i in 1:length(vismodel.list)) {
+  
+  contrast.result.i <- get.sens.coldist(vismodel.list[[i]], 1)
+  Agrilus.contrast.output[[i]] <- contrast.result.i
+}
+
+Cbuprest580 <- Agrilus.contrast.output$VS580
+Cbuprest600 <- Agrilus.contrast.output$VS600
+Cbuprest620 <- Agrilus.contrast.output$VS620
+Cbuprest640 <- Agrilus.contrast.output$VS640
+Cbuprest660 <- Agrilus.contrast.output$VS660
+
+
+#for Papilio xuthus
+Papilio.contrast.output <- list(VS580 = NA, VS600 = NA, VS620 = NA, VS640 = NA, VS660 = NA)
+
+for (i in 1:length(vismodel.list)) {
+  
+  contrast.result.i <- get.sens.coldist(vismodel.list[[i]], 2)
+  Papilio.contrast.output[[i]] <- contrast.result.i
+}
+
+Cpapilio580 <- Papilio.contrast.output$VS580
+Cpapilio600 <- Papilio.contrast.output$VS600
+Cpapilio620 <- Papilio.contrast.output$VS620
+Cpapilio640 <- Papilio.contrast.output$VS640
+Cpapilio660 <- Papilio.contrast.output$VS660
+
+#for Heliconius sp
+Heliconius.contrast.output <- list(VS580 = NA, VS600 = NA, VS620 = NA, VS640 = NA, VS660 = NA)
+
+for (i in 1:length(vismodel.list)) {
+  
+  contrast.result.i <- get.sens.coldist(vismodel.list[[i]], 3)
+  Heliconius.contrast.output[[i]] <- contrast.result.i
+}
+
+Cheliconius580 <- Heliconius.contrast.output$VS580
+Cheliconius600 <- Heliconius.contrast.output$VS600
+Cheliconius620 <- Heliconius.contrast.output$VS620
+Cheliconius640 <- Heliconius.contrast.output$VS640
+Cheliconius660 <- Heliconius.contrast.output$VS660
+```
+
+```{r Combine all contrast value in each comparison group} 
+#Organize data before GLMM
+fl.vissys <- list("VS580.fl", "VS600.fl", "VS620.fl", "VS640.fl", "VS660.fl") 
+bl.vissys <- list("VS580.bl", "VS600.bl", "VS620.bl", "VS640.bl", "VS660.bl")
+bf.vissys <- list("VS580.bf", "VS600.bf", "VS620.bf", "VS640.bf", "VS660.bf") 
+
+
+# for Agrilus planipennis
+Agrilus.vissys <- list(Cbuprest580,
+                       Cbuprest600, 
+                       Cbuprest620, 
+                       Cbuprest640, 
+                       Cbuprest660)
+##flower vs leaf
+allvis.fl.Agrilus <- data_frame()
+for (i in 1:length(Agrilus.vissys)) {
+  
+  temp.i <- Agrilus.vissys[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"leaves")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(fl.vissys[[i]],1)
+  
+  allvis.fl.Agrilus <- temp.i %>% rbind(allvis.fl.Agrilus)  
+}
+
+### beetle vs leaf
+allvis.bl.Agrilus <- data_frame()
+for (i in 1:length(Agrilus.vissys)) {
+  
+  temp.i <- Agrilus.vissys[[i]] %>% 
+    filter(str_detect(patch1,"leaves")) %>% 
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(bl.vissys[[i]],1)
+  
+  allvis.bl.Agrilus <- temp.i %>% rbind(allvis.bl.Agrilus)  
+}
+
+##beetle vs flower
+allvis.bf.Agrilus <- data_frame()
+for (i in 1:length(Agrilus.vissys)) {
+  
+  temp.i <- Agrilus.vissys[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(bf.vissys[[i]],1)
+  
+  allvis.bf.Agrilus <- temp.i %>% rbind(allvis.bf.Agrilus)  
+}
+
+#for Papilio xuthus
+Papilio.vissys <- list(Cpapilio580,
+                       Cpapilio600, 
+                       Cpapilio620, 
+                       Cpapilio640, 
+                       Cpapilio660)
+##flower vs leaf
+allvis.fl.Papilio <- data_frame()
+for (i in 1:length(Papilio.vissys)) {
+  
+  temp.i <- Papilio.vissys[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"leaves")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(fl.vissys[[i]],1)
+  
+  allvis.fl.Papilio <- temp.i %>% rbind(allvis.fl.Papilio)  
+}
+
+##beetle vs leaf
+allvis.bl.Papilio <- data_frame()
+for (i in 1:length(Papilio.vissys)) {
+  
+  temp.i <- Papilio.vissys[[i]] %>% 
+    filter(str_detect(patch1,"leaves")) %>% 
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(bl.vissys[[i]],1)
+  
+  allvis.bl.Papilio <- temp.i %>% rbind(allvis.bl.Papilio)  
+}
+
+##beetle vs flower
+allvis.bf.Papilio <- data_frame()
+for (i in 1:length(Papilio.vissys)) {
+  
+  temp.i <- Papilio.vissys[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(bf.vissys[[i]],1)
+  
+  allvis.bf.Papilio <- temp.i %>% rbind(allvis.bf.Papilio)  
+}
+
+#for Heliconius sp
+Heliconius.vissys <- list(Cheliconius580,
+                       Cheliconius600, 
+                       Cheliconius620, 
+                       Cheliconius640, 
+                       Cheliconius660)
+##flower vs leaf
+allvis.fl.Heliconius <- data_frame()
+for (i in 1:length(Heliconius.vissys)) {
+  
+  temp.i <- Heliconius.vissys[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"leaves")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(fl.vissys[[i]],1)
+  
+  allvis.fl.Heliconius <- temp.i %>% rbind(allvis.fl.Heliconius)  
+}
+
+##beetle vs leaf
+allvis.bl.Heliconius <- data_frame()
+for (i in 1:length(Heliconius.vissys)) {
+  
+  temp.i <- Heliconius.vissys[[i]] %>% 
+    filter(str_detect(patch1,"leaves")) %>% 
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(bl.vissys[[i]],1)
+  
+  allvis.bl.Heliconius <- temp.i %>% rbind(allvis.bl.Heliconius)  
+}
+
+##beetle vs flower
+allvis.bf.Heliconius <- data_frame()
+for (i in 1:length(Heliconius.vissys)) {
+  
+  temp.i <- Heliconius.vissys[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(bf.vissys[[i]],1)
+  
+  allvis.bf.Heliconius <- temp.i %>% rbind(allvis.bf.Heliconius)  
+}
+```
 </br>
 
 # Compare contrast {.tabset .tabset-fade .tabset-pills}
 
-```{r} 
-#create different comparison groups for furthur GLMM analysis
-#Organize data before GLMM
-
-#for Agrilus planipennis
-##flower vs leaf
-Cbuprest580.flower.vs.leaf=
-  Cbuprest580 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest600.flower.vs.leaf=
-  Cbuprest600 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest620.flower.vs.leaf=
-  Cbuprest620 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest640.flower.vs.leaf=
-  Cbuprest640 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cbuprest660.flower.vs.leaf=
-  Cbuprest660 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-
-Cbuprest.flower.vs.leaf=
-  Cbuprest580.flower.vs.leaf %>% rbind(Cbuprest600.flower.vs.leaf) %>%
-  rbind(Cbuprest620.flower.vs.leaf)%>% rbind(Cbuprest640.flower.vs.leaf) %>% rbind(Cbuprest660.flower.vs.leaf) 
-
-bup580.flower.vs.leaf<-Cbuprest580.flower.vs.leaf[,3]
-bup600.flower.vs.leaf<-Cbuprest600.flower.vs.leaf[,3]
-bup620.flower.vs.leaf<-Cbuprest620.flower.vs.leaf[,3]
-bup640.flower.vs.leaf<-Cbuprest640.flower.vs.leaf[,3]
-bup660.flower.vs.leaf<-Cbuprest660.flower.vs.leaf[,3]
-
-com.bupcontrast.flower.vs.leaf<-cbind(Cbuprest.flower.vs.leaf[,1:2],bup580.flower.vs.leaf,bup600.flower.vs.leaf,bup620.flower.vs.leaf,bup640.flower.vs.leaf,bup660.flower.vs.leaf)
-compare.flower.vs.leaf.bup <- com.bupcontrast.flower.vs.leaf %>%
-  gather(key = "peak_wl.flower.vs.leaf", value = "dS", 3:7)
-
-##beetle vs leaf
-Cbuprest580.beetle.vs.leaf=
-  Cbuprest580 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest600.beetle.vs.leaf=
-  Cbuprest600 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest620.beetle.vs.leaf=
-  Cbuprest620 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest640.beetle.vs.leaf=
-  Cbuprest640 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest660.beetle.vs.leaf=
-  Cbuprest660 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-
-Cbuprest.beetle.vs.leaf=
-  Cbuprest580.beetle.vs.leaf  %>% rbind(Cbuprest600.beetle.vs.leaf)%>%
-  rbind(Cbuprest620.beetle.vs.leaf)%>% rbind(Cbuprest640.beetle.vs.leaf) %>% rbind(Cbuprest660.beetle.vs.leaf) 
-
-bup580.beetle.vs.leaf<-Cbuprest580.beetle.vs.leaf[,3]
-bup600.beetle.vs.leaf<-Cbuprest600.beetle.vs.leaf[,3]
-bup620.beetle.vs.leaf<-Cbuprest620.beetle.vs.leaf[,3]
-bup640.beetle.vs.leaf<-Cbuprest640.beetle.vs.leaf[,3]
-bup660.beetle.vs.leaf<-Cbuprest660.beetle.vs.leaf[,3]
-
-com.bupcontrast.beetle.vs.leaf<-cbind(Cbuprest.beetle.vs.leaf[,1:2],bup580.beetle.vs.leaf,bup600.beetle.vs.leaf,bup620.beetle.vs.leaf,bup640.beetle.vs.leaf,bup660.beetle.vs.leaf)
-compare.beetle.vs.leaf.bup <- com.bupcontrast.beetle.vs.leaf %>%
-  gather(key = "peak_wl.beetle.vs.leaf", value = "dS", 3:7)
-
-##beetle vs flower
-Cbuprest580.beetle.vs.flower=
-  Cbuprest580 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest600.beetle.vs.flower=
-  Cbuprest600 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest620.beetle.vs.flower=
-  Cbuprest620 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest640.beetle.vs.flower=
-  Cbuprest640 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cbuprest660.beetle.vs.flower=
-  Cbuprest660 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-
-Cbuprest.beetle.vs.flower=
-  Cbuprest580.beetle.vs.flower %>% rbind(Cbuprest600.beetle.vs.flower) %>% 
-  rbind(Cbuprest620.beetle.vs.flower)%>% rbind(Cbuprest640.beetle.vs.flower) %>% 
-  rbind(Cbuprest660.beetle.vs.flower)
-
-bup580.beetle.vs.flower<-Cbuprest580.beetle.vs.flower[,3]
-bup600.beetle.vs.flower<-Cbuprest600.beetle.vs.flower[,3]
-bup620.beetle.vs.flower<-Cbuprest620.beetle.vs.flower[,3]
-bup640.beetle.vs.flower<-Cbuprest640.beetle.vs.flower[,3]
-bup660.beetle.vs.flower<-Cbuprest660.beetle.vs.flower[,3]
-
-com.bupcontrast.beetle.vs.flower<-cbind(Cbuprest.beetle.vs.flower[,1:2],bup580.beetle.vs.flower,bup600.beetle.vs.flower,bup620.beetle.vs.flower,bup640.beetle.vs.flower,bup660.beetle.vs.flower)
-compare.beetle.vs.flower.bup <- com.bupcontrast.beetle.vs.flower %>%
-  gather(key = "peak_wl.beetle.vs.flower", value = "dS", 3:7)
-
-
-
-
-#for Papilio xuthus
-##flower vs leaf
-Cpapilio580.flower.vs.leaf=
-  Cpapilio580 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cpapilio600.flower.vs.leaf=
-  Cpapilio600 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cpapilio620.flower.vs.leaf=
-  Cpapilio620 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cpapilio640.flower.vs.leaf=
-  Cpapilio640 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cpapilio660.flower.vs.leaf=
-  Cpapilio660 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-
-Cpapilio.flower.vs.leaf=
-  Cpapilio580.flower.vs.leaf %>% rbind(Cpapilio600.flower.vs.leaf) %>%
-  rbind(Cpapilio620.flower.vs.leaf)%>% rbind(Cpapilio640.flower.vs.leaf) %>% rbind(Cpapilio660.flower.vs.leaf) 
-
-pap580.flower.vs.leaf<-Cpapilio580.flower.vs.leaf[,3]
-pap600.flower.vs.leaf<-Cpapilio600.flower.vs.leaf[,3]
-pap620.flower.vs.leaf<-Cpapilio620.flower.vs.leaf[,3]
-pap640.flower.vs.leaf<-Cpapilio640.flower.vs.leaf[,3]
-pap660.flower.vs.leaf<-Cpapilio660.flower.vs.leaf[,3]
-
-com.papcontrast.flower.vs.leaf<-cbind(Cpapilio.flower.vs.leaf[,1:2],pap580.flower.vs.leaf,pap600.flower.vs.leaf,pap620.flower.vs.leaf,pap640.flower.vs.leaf,pap660.flower.vs.leaf)
-compare.flower.vs.leaf.pap <- com.papcontrast.flower.vs.leaf %>%
-  gather(key = "peak_wl.flower.vs.leaf", value = "dS", 3:7)
-
-##beetle vs leaf
-Cpapilio580.beetle.vs.leaf=
-  Cpapilio580 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cpapilio600.beetle.vs.leaf=
-  Cpapilio600 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cpapilio620.beetle.vs.leaf=
-  Cpapilio620 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cpapilio640.beetle.vs.leaf=
-  Cpapilio640 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cpapilio660.beetle.vs.leaf=
-  Cpapilio660 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-
-Cpapilio.beetle.vs.leaf=
-  Cpapilio580.beetle.vs.leaf  %>% rbind(Cpapilio600.beetle.vs.leaf)%>%
-  rbind(Cpapilio620.beetle.vs.leaf)%>% rbind(Cpapilio640.beetle.vs.leaf) %>% rbind(Cpapilio660.beetle.vs.leaf) 
-
-pap580.beetle.vs.leaf<-Cpapilio580.beetle.vs.leaf[,3]
-pap600.beetle.vs.leaf<-Cpapilio600.beetle.vs.leaf[,3]
-pap620.beetle.vs.leaf<-Cpapilio620.beetle.vs.leaf[,3]
-pap640.beetle.vs.leaf<-Cpapilio640.beetle.vs.leaf[,3]
-pap660.beetle.vs.leaf<-Cpapilio660.beetle.vs.leaf[,3]
-
-com.papcontrast.beetle.vs.leaf<-cbind(Cpapilio.beetle.vs.leaf[,1:2],pap580.beetle.vs.leaf,pap600.beetle.vs.leaf,pap620.beetle.vs.leaf,pap640.beetle.vs.leaf,pap660.beetle.vs.leaf)
-compare.beetle.vs.leaf.pap <- com.papcontrast.beetle.vs.leaf %>%
-  gather(key = "peak_wl.beetle.vs.leaf", value = "dS", 3:7)
-
-##beetle vs flower
-Cpapilio580.beetle.vs.flower=
-  Cpapilio580 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cpapilio600.beetle.vs.flower=
-  Cpapilio600 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cpapilio620.beetle.vs.flower=
-  Cpapilio620 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cpapilio640.beetle.vs.flower=
-  Cpapilio640 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cpapilio660.beetle.vs.flower=
-  Cpapilio660 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-
-Cpapilio.beetle.vs.flower=
-  Cpapilio580.beetle.vs.flower %>% rbind(Cpapilio600.beetle.vs.flower) %>% 
-  rbind(Cpapilio620.beetle.vs.flower)%>% rbind(Cpapilio640.beetle.vs.flower) %>% 
-  rbind(Cpapilio660.beetle.vs.flower)
-
-pap580.beetle.vs.flower<-Cpapilio580.beetle.vs.flower[,3]
-pap600.beetle.vs.flower<-Cpapilio600.beetle.vs.flower[,3]
-pap620.beetle.vs.flower<-Cpapilio620.beetle.vs.flower[,3]
-pap640.beetle.vs.flower<-Cpapilio640.beetle.vs.flower[,3]
-pap660.beetle.vs.flower<-Cpapilio660.beetle.vs.flower[,3]
-
-com.papcontrast.beetle.vs.flower<-cbind(Cpapilio.beetle.vs.flower[,1:2],pap580.beetle.vs.flower,pap600.beetle.vs.flower,pap620.beetle.vs.flower,pap640.beetle.vs.flower,pap660.beetle.vs.flower)
-compare.beetle.vs.flower.pap <- com.papcontrast.beetle.vs.flower %>%
-  gather(key = "peak_wl.beetle.vs.flower", value = "dS", 3:7)
-
-
-
-#for Heliconius sp
-##flower vs leaf
-Cheliconius580.flower.vs.leaf=
-  Cheliconius580 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cheliconius600.flower.vs.leaf=
-  Cheliconius600 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cheliconius620.flower.vs.leaf=
-  Cheliconius620 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cheliconius640.flower.vs.leaf=
-  Cheliconius640 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-Cheliconius660.flower.vs.leaf=
-  Cheliconius660 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "leaves"))
-
-Cheliconius.flower.vs.leaf=
-  Cheliconius580.flower.vs.leaf %>% rbind(Cheliconius600.flower.vs.leaf) %>%
-  rbind(Cheliconius620.flower.vs.leaf)%>% rbind(Cheliconius640.flower.vs.leaf) %>% rbind(Cheliconius660.flower.vs.leaf) 
-
-heli580.flower.vs.leaf<-Cheliconius580.flower.vs.leaf[,3]
-heli600.flower.vs.leaf<-Cheliconius600.flower.vs.leaf[,3]
-heli620.flower.vs.leaf<-Cheliconius620.flower.vs.leaf[,3]
-heli640.flower.vs.leaf<-Cheliconius640.flower.vs.leaf[,3]
-heli660.flower.vs.leaf<-Cheliconius660.flower.vs.leaf[,3]
-
-com.helicontrast.flower.vs.leaf<-cbind(Cheliconius.flower.vs.leaf[,1:2],heli580.flower.vs.leaf,heli600.flower.vs.leaf,heli620.flower.vs.leaf,heli640.flower.vs.leaf,heli660.flower.vs.leaf)
-compare.flower.vs.leaf.heli <- com.helicontrast.flower.vs.leaf %>%
-  gather(key = "peak_wl.flower.vs.leaf", value = "dS", 3:7)
-
-##beetle vs leaf
-Cheliconius580.beetle.vs.leaf=
-  Cheliconius580 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cheliconius600.beetle.vs.leaf=
-  Cheliconius600 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cheliconius620.beetle.vs.leaf=
-  Cheliconius620 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cheliconius640.beetle.vs.leaf=
-  Cheliconius640 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-Cheliconius660.beetle.vs.leaf=
-  Cheliconius660 %>%filter(str_detect(patch1, "leaves")) %>% filter(str_detect(patch2, "beetle"))
-
-Cheliconius.beetle.vs.leaf=
-  Cheliconius580.beetle.vs.leaf  %>% rbind(Cheliconius600.beetle.vs.leaf)%>%
-  rbind(Cheliconius620.beetle.vs.leaf)%>% rbind(Cheliconius640.beetle.vs.leaf) %>% rbind(Cheliconius660.beetle.vs.leaf) 
-
-heli580.beetle.vs.leaf<-Cheliconius580.beetle.vs.leaf[,3]
-heli600.beetle.vs.leaf<-Cheliconius600.beetle.vs.leaf[,3]
-heli620.beetle.vs.leaf<-Cheliconius620.beetle.vs.leaf[,3]
-heli640.beetle.vs.leaf<-Cheliconius640.beetle.vs.leaf[,3]
-heli660.beetle.vs.leaf<-Cheliconius660.beetle.vs.leaf[,3]
-
-com.helicontrast.beetle.vs.leaf<-cbind(Cheliconius.beetle.vs.leaf[,1:2],heli580.beetle.vs.leaf,heli600.beetle.vs.leaf,heli620.beetle.vs.leaf,heli640.beetle.vs.leaf,heli660.beetle.vs.leaf)
-compare.beetle.vs.leaf.heli <- com.helicontrast.beetle.vs.leaf %>%
-  gather(key = "peak_wl.beetle.vs.leaf", value = "dS", 3:7)
-
-##beetle vs flower
-Cheliconius580.beetle.vs.flower=
-  Cheliconius580 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cheliconius600.beetle.vs.flower=
-  Cheliconius600 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cheliconius620.beetle.vs.flower=
-  Cheliconius620 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cheliconius640.beetle.vs.flower=
-  Cheliconius640 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-Cheliconius660.beetle.vs.flower=
-  Cheliconius660 %>%filter(str_detect(patch1, "flower")) %>% filter(str_detect(patch2, "beetle"))
-
-Cheliconius.beetle.vs.flower=
-  Cheliconius580.beetle.vs.flower %>% rbind(Cheliconius600.beetle.vs.flower) %>% 
-  rbind(Cheliconius620.beetle.vs.flower)%>% rbind(Cheliconius640.beetle.vs.flower) %>% 
-  rbind(Cheliconius660.beetle.vs.flower)
-
-heli580.beetle.vs.flower<-Cheliconius580.beetle.vs.flower[,3]
-heli600.beetle.vs.flower<-Cheliconius600.beetle.vs.flower[,3]
-heli620.beetle.vs.flower<-Cheliconius620.beetle.vs.flower[,3]
-heli640.beetle.vs.flower<-Cheliconius640.beetle.vs.flower[,3]
-heli660.beetle.vs.flower<-Cheliconius660.beetle.vs.flower[,3]
-
-com.helicontrast.beetle.vs.flower<-cbind(Cheliconius.beetle.vs.flower[,1:2],heli580.beetle.vs.flower,heli600.beetle.vs.flower,heli620.beetle.vs.flower,heli640.beetle.vs.flower,heli660.beetle.vs.flower)
-compare.beetle.vs.flower.heli <- com.helicontrast.beetle.vs.flower%>%
-  gather(key = "peak_wl.beetle.vs.flower", value = "dS", 3:7)
-```
 </br>
 </br>
 
 Click the tabs to see the results for each comparison group ( __Flower vs. Leaf__ / __Beetle vs. Leaf__ / __Beetle vs. Flower__) in 3 different speceis (_Agrilus planipennis_ / _Papilio xuthus_ / _Heliconius_ sp).
 
-```{r}
-#for Agrilus planipennis
-##Flower vs Leaf
-m.flower.vs.leaf.bup <- lmer(dS~peak_wl.flower.vs.leaf + (1|patch2) + (1|patch1), data = compare.flower.vs.leaf.bup,REML=F)
-sum.flower.vs.leaf.bup <- summary(glht(m.flower.vs.leaf.bup, linfct = mcp(peak_wl.flower.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
+```{r Set up functions for GLMM}
+get.lmer.sens <- function(inputdat){
+  
+  lmer(dS ~ vissys + (1|patch2) + (1|patch1), 
+       data = inputdat, REML = F)
+  #REML=F, in order to fit the model using the likelihood ratio test. Otherwise, the lmer default will fit the model using the REML (REstricted Maximum Likelihood) criterion.
+}
+
+get.posthocsum <- function(modelx){
+  
+  summary(glht(modelx, 
+               linfct = mcp(vissys = "Tukey")), 
+          test = adjusted("bonferroni"))
+}
+```
+
+```{r Run GLMM models}
+# for Agrilus planipennis
+## Flower vs Leaf
+m.flower.vs.leaf.bup <- get.lmer.sens(allvis.fl.Agrilus)
+sum.flower.vs.leaf.bup <- get.posthocsum(m.flower.vs.leaf.bup)
+
 ##Beetle vs Leaf
-m.beetle.vs.leaf.bup <- lmer(dS~peak_wl.beetle.vs.leaf + (1|patch2) + (1|patch1), data = compare.beetle.vs.leaf.bup,REML=F)
-sum.beetle.vs.leaf.bup <- summary(glht(m.beetle.vs.leaf.bup, linfct = mcp(peak_wl.beetle.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
+m.beetle.vs.leaf.bup <- get.lmer.sens(allvis.bl.Agrilus)
+sum.beetle.vs.leaf.bup <- get.posthocsum(m.beetle.vs.leaf.bup)
+
 ##Beetle vs Flower
-m.beetle.vs.flower.bup <- lmer(dS~peak_wl.beetle.vs.flower + (1|patch2) + (1|patch1), data = compare.beetle.vs.flower.bup,REML=F)
-sum.beetle.vs.flower.bup <- summary(glht(m.beetle.vs.flower.bup, linfct = mcp(peak_wl.beetle.vs.flower = "Tukey")), test = adjusted("bonferroni"))
-
-###reshape data for heatmap
-p1.bup<-sum.flower.vs.leaf.bup[["test"]][["pvalues"]]
-p2.bup<-sum.beetle.vs.leaf.bup[["test"]][["pvalues"]]
-p3.bup<-sum.beetle.vs.flower.bup[["test"]][["pvalues"]]
-
-VislistA.bup<-c("VS 600","VS 620","VS 640","VS 660","VS 620","VS 640","VS 660","VS 640","VS 660","VS 660")
-VislistB.bup<-c("VS 580","VS 580","VS 580","VS 580","VS 600","VS 600","VS 600","VS 620","VS 620","VS 640")
-
-heat.bup<-data.frame(names(p1.bup),as.numeric(str_extract(p1.bup,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p2.bup,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p3.bup,"([0-9]+).*$"))) %>%
-  dplyr:: rename(orignial.list = 1, flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% 
-  cbind(VislistA.bup) %>% 
-  cbind(VislistB.bup) %>% 
-  dplyr::select(-orignial.list)
-
-##add asterisks for significant pairs
-heat.bup$sig.flower.vs.leaf[heat.bup$flower.vs.leaf > 0.05] <- ""
-heat.bup$sig.flower.vs.leaf[heat.bup$flower.vs.leaf < 0.05] <- "*"
-heat.bup$sig.flower.vs.leaf[heat.bup$flower.vs.leaf < 0.01] <- "**"
-heat.bup$sig.flower.vs.leaf[heat.bup$flower.vs.leaf < 0.0001] <- "***"
-heat.bup$sig.beetle.vs.leaf[heat.bup$beetle.vs.leaf > 0.05] <- ""
-heat.bup$sig.beetle.vs.leaf[heat.bup$beetle.vs.leaf < 0.05] <- "*"
-heat.bup$sig.beetle.vs.leaf[heat.bup$beetle.vs.leaf < 0.01] <- "**"
-heat.bup$sig.beetle.vs.leaf[heat.bup$beetle.vs.leaf < 0.0001] <- "***"
-heat.bup$sig.beetle.vs.flower[heat.bup$beetle.vs.flower > 0.05] <- ""
-heat.bup$sig.beetle.vs.flower[heat.bup$beetle.vs.flower < 0.05] <- "*"
-heat.bup$sig.beetle.vs.flower[heat.bup$beetle.vs.flower < 0.01] <- "**"
-heat.bup$sig.beetle.vs.flower[heat.bup$beetle.vs.flower < 0.0001] <- "***"
-
-
+m.beetle.vs.flower.bup <- get.lmer.sens(allvis.bf.Agrilus)
+sum.beetle.vs.flower.bup <- get.posthocsum(m.beetle.vs.flower.bup)
 
 #for Papilio xuthus
 ##Flower vs Leaf
-m.flower.vs.leaf.pap <- lmer(dS~peak_wl.flower.vs.leaf + (1|patch2) + (1|patch1), data = compare.flower.vs.leaf.pap,REML=F)
-sum.flower.vs.leaf.pap <- summary(glht(m.flower.vs.leaf.pap, linfct = mcp(peak_wl.flower.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
+m.flower.vs.leaf.pap <- get.lmer.sens(allvis.fl.Papilio)
+sum.flower.vs.leaf.pap <- get.posthocsum(m.flower.vs.leaf.pap)
+
 ##Beetle vs Leaf
-m.beetle.vs.leaf.pap <- lmer(dS~peak_wl.beetle.vs.leaf + (1|patch2) + (1|patch1), data = compare.beetle.vs.leaf.pap,REML=F)
-sum.beetle.vs.leaf.pap <- summary(glht(m.beetle.vs.leaf.pap, linfct = mcp(peak_wl.beetle.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
+m.beetle.vs.leaf.pap <- get.lmer.sens(allvis.bl.Papilio)
+sum.beetle.vs.leaf.pap <- get.posthocsum(m.beetle.vs.leaf.pap)
+
 ##Beetle vs Flower
-m.beetle.vs.flower.pap <- lmer(dS~peak_wl.beetle.vs.flower + (1|patch2) + (1|patch1), data = compare.beetle.vs.flower.pap,REML=F)
-sum.beetle.vs.flower.pap <- summary(glht(m.beetle.vs.flower.pap, linfct = mcp(peak_wl.beetle.vs.flower = "Tukey")), test = adjusted("bonferroni"))
-
-###reshape data for heatmap
-p1.pap<-sum.flower.vs.leaf.pap[["test"]][["pvalues"]]
-p2.pap<-sum.beetle.vs.leaf.pap[["test"]][["pvalues"]]
-p3.pap<-sum.beetle.vs.flower.pap[["test"]][["pvalues"]]
-
-VislistA.pap<-c("VS 600","VS 620","VS 640","VS 660","VS 620","VS 640","VS 660","VS 640","VS 660","VS 660")
-VislistB.pap<-c("VS 580","VS 580","VS 580","VS 580","VS 600","VS 600","VS 600","VS 620","VS 620","VS 640")
-
-heat.pap<-data.frame(names(p1.pap),as.numeric(str_extract(p1.pap,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p2.pap,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p3.pap,"([0-9]+).*$"))) %>%
-  dplyr:: rename(orignial.list = 1, flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% 
-  cbind(VislistA.pap) %>% 
-  cbind(VislistB.pap) %>% 
-  dplyr::select(-orignial.list)
-
-##add asterisks for significant pairs
-heat.pap$sig.flower.vs.leaf[heat.pap$flower.vs.leaf > 0.05] <- ""
-heat.pap$sig.flower.vs.leaf[heat.pap$flower.vs.leaf < 0.05] <- "*"
-heat.pap$sig.flower.vs.leaf[heat.pap$flower.vs.leaf < 0.01] <- "**"
-heat.pap$sig.flower.vs.leaf[heat.pap$flower.vs.leaf < 0.0001] <- "***"
-heat.pap$sig.beetle.vs.leaf[heat.pap$beetle.vs.leaf > 0.05] <- ""
-heat.pap$sig.beetle.vs.leaf[heat.pap$beetle.vs.leaf < 0.05] <- "*"
-heat.pap$sig.beetle.vs.leaf[heat.pap$beetle.vs.leaf < 0.01] <- "**"
-heat.pap$sig.beetle.vs.leaf[heat.pap$beetle.vs.leaf < 0.0001] <- "***"
-heat.pap$sig.beetle.vs.flower[heat.pap$beetle.vs.flower > 0.05] <- ""
-heat.pap$sig.beetle.vs.flower[heat.pap$beetle.vs.flower < 0.05] <- "*"
-heat.pap$sig.beetle.vs.flower[heat.pap$beetle.vs.flower < 0.01] <- "**"
-heat.pap$sig.beetle.vs.flower[heat.pap$beetle.vs.flower < 0.0001] <- "***"
-
-
+m.beetle.vs.flower.pap <- get.lmer.sens(allvis.bf.Papilio)
+sum.beetle.vs.flower.pap <- get.posthocsum(m.beetle.vs.flower.pap)
 
 #for Heliconius sp
 ##Flower vs Leaf
-m.flower.vs.leaf.heli <- lmer(dS~peak_wl.flower.vs.leaf + (1|patch2) + (1|patch1), data = compare.flower.vs.leaf.heli,REML=F)
-sum.flower.vs.leaf.heli <- summary(glht(m.flower.vs.leaf.heli, linfct = mcp(peak_wl.flower.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
+m.flower.vs.leaf.heli <- get.lmer.sens(allvis.fl.Heliconius)
+sum.flower.vs.leaf.heli <- get.posthocsum(m.flower.vs.leaf.heli)
+
 ##Beetle vs Leaf
-m.beetle.vs.leaf.heli <- lmer(dS~peak_wl.beetle.vs.leaf + (1|patch2) + (1|patch1), data = compare.beetle.vs.leaf.heli,REML=F)
-sum.beetle.vs.leaf.heli <- summary(glht(m.beetle.vs.leaf.heli, linfct = mcp(peak_wl.beetle.vs.leaf = "Tukey")), test = adjusted("bonferroni"))
+m.beetle.vs.leaf.heli <- get.lmer.sens(allvis.bl.Heliconius)
+sum.beetle.vs.leaf.heli <- get.posthocsum(m.beetle.vs.leaf.heli)
+
 ##Beetle vs Flower
-m.beetle.vs.flower.heli <- lmer(dS~peak_wl.beetle.vs.flower + (1|patch2) + (1|patch1), data = compare.beetle.vs.flower.heli,REML=F)
-sum.beetle.vs.flower.heli <- summary(glht(m.beetle.vs.flower.heli, linfct = mcp(peak_wl.beetle.vs.flower = "Tukey")), test = adjusted("bonferroni"))
+m.beetle.vs.flower.heli <- get.lmer.sens(allvis.bf.Heliconius)
+sum.beetle.vs.flower.heli <- get.posthocsum(m.beetle.vs.flower.heli)
+```
 
-###reshape data for heatmap
-p1.heli<-sum.flower.vs.leaf.heli[["test"]][["pvalues"]]
-p2.heli<-sum.beetle.vs.leaf.heli[["test"]][["pvalues"]]
-p3.heli<-sum.beetle.vs.flower.heli[["test"]][["pvalues"]]
+```{r Set up lists and function for heap maps}
+vislist.heatmap <- list(
+  c("VS 600", "VS 620","VS 640","VS 660","VS 620","VS 640","VS 660","VS 640","VS 660","VS 660"),
+  c("VS 580","VS 580","VS 580","VS 580","VS 600","VS 600","VS 600","VS 620","VS 620","VS 640"))
 
-VislistA.heli<-c("VS 600","VS 620","VS 640","VS 660","VS 620","VS 640","VS 660","VS 640","VS 660","VS 660")
-VislistB.heli<-c("VS 580","VS 580","VS 580","VS 580","VS 600","VS 600","VS 600","VS 620","VS 620","VS 640")
+# Set up the function
+get.heatmap.datframe <- function(i,z){
+  
+  heatmapdat.i <- data.frame(as.numeric(str_extract(i[[1]],"([0-9]+).*$"))) %>%
+    cbind(as.numeric(str_extract(i[[2]],"([0-9]+).*$"))) %>% 
+    cbind(as.numeric(str_extract(i[[3]],"([0-9]+).*$"))) %>%
+    dplyr::rename(flower.vs.leaf = 1, beetle.vs.leaf = 2, beetle.vs.flower = 3) %>% 
+    cbind(z[[1]]) %>% 
+    cbind(z[[2]]) 
+  
+  colnames(heatmapdat.i)[4:5] <- c("VislistA", "VislistB")
+  
+  return(heatmapdat.i)
+}
+```
 
-heat.heli<-data.frame(names(p1.heli),as.numeric(str_extract(p1.heli,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p2.heli,"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(p3.heli,"([0-9]+).*$"))) %>%
-  dplyr:: rename(orignial.list = 1, flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% 
-  cbind(VislistA.heli) %>% 
-  cbind(VislistB.heli) %>% 
-  dplyr::select(-orignial.list)
+```{r Create p-value heat map}
+# Create pvalue dataset
+## for Agrilus planipennis
+pdata.Agrilus <- list(sum.flower.vs.leaf.bup[["test"]][["pvalues"]],
+                      sum.beetle.vs.leaf.bup[["test"]][["pvalues"]],
+                      sum.beetle.vs.flower.bup[["test"]][["pvalues"]])
 
-##add asterisks for significant pairs
-heat.heli$sig.flower.vs.leaf[heat.heli$flower.vs.leaf > 0.05] <- ""
-heat.heli$sig.flower.vs.leaf[heat.heli$flower.vs.leaf < 0.05] <- "*"
-heat.heli$sig.flower.vs.leaf[heat.heli$flower.vs.leaf < 0.01] <- "**"
-heat.heli$sig.flower.vs.leaf[heat.heli$flower.vs.leaf < 0.0001] <- "***"
-heat.heli$sig.beetle.vs.leaf[heat.heli$beetle.vs.leaf > 0.05] <- ""
-heat.heli$sig.beetle.vs.leaf[heat.heli$beetle.vs.leaf < 0.05] <- "*"
-heat.heli$sig.beetle.vs.leaf[heat.heli$beetle.vs.leaf < 0.01] <- "**"
-heat.heli$sig.beetle.vs.leaf[heat.heli$beetle.vs.leaf < 0.0001] <- "***"
-heat.heli$sig.beetle.vs.flower[heat.heli$beetle.vs.flower > 0.05] <- ""
-heat.heli$sig.beetle.vs.flower[heat.heli$beetle.vs.flower < 0.05] <- "*"
-heat.heli$sig.beetle.vs.flower[heat.heli$beetle.vs.flower < 0.01] <- "**"
-heat.heli$sig.beetle.vs.flower[heat.heli$beetle.vs.flower < 0.0001] <- "***"
+heat.Agrilus <- get.heatmap.datframe(pdata.Agrilus, vislist.heatmap)
+
+## for Papilio xuthus
+pdata.Papilio <- list(sum.flower.vs.leaf.pap[["test"]][["pvalues"]],
+                      sum.beetle.vs.leaf.pap[["test"]][["pvalues"]],
+                      sum.beetle.vs.flower.pap[["test"]][["pvalues"]])
+
+heat.Papilio <- get.heatmap.datframe(pdata.Papilio, vislist.heatmap)
+
+## for Heliconius sp
+pdata.Heliconius <- list(sum.flower.vs.leaf.heli[["test"]][["pvalues"]],
+                      sum.beetle.vs.leaf.heli[["test"]][["pvalues"]],
+                      sum.beetle.vs.flower.heli[["test"]][["pvalues"]])
+
+heat.Heliconius <- get.heatmap.datframe(pdata.Heliconius, vislist.heatmap)
+
+
+# Assign asterisk signs
+pdatalist <- list(heat.Agrilus, heat.Papilio, heat.Heliconius)
+
+for (i in 1:length(pdatalist)) {
+  
+  pdatalist[[i]]$sig.flower.vs.leaf[pdatalist[[i]]$flower.vs.leaf > 0.05] <- ""
+  pdatalist[[i]]$sig.flower.vs.leaf[pdatalist[[i]]$flower.vs.leaf < 0.05] <- "*"
+  pdatalist[[i]]$sig.flower.vs.leaf[pdatalist[[i]]$flower.vs.leaf < 0.01] <- "**"
+  pdatalist[[i]]$sig.flower.vs.leaf[pdatalist[[i]]$flower.vs.leaf < 0.0001] <- "***"
+  pdatalist[[i]]$sig.beetle.vs.leaf[pdatalist[[i]]$beetle.vs.leaf > 0.05] <- ""
+  pdatalist[[i]]$sig.beetle.vs.leaf[pdatalist[[i]]$beetle.vs.leaf < 0.05] <- "*"
+  pdatalist[[i]]$sig.beetle.vs.leaf[pdatalist[[i]]$beetle.vs.leaf < 0.01] <- "**"
+  pdatalist[[i]]$sig.beetle.vs.leaf[pdatalist[[i]]$beetle.vs.leaf < 0.0001] <- "***"
+  pdatalist[[i]]$sig.beetle.vs.flower[pdatalist[[i]]$beetle.vs.flower > 0.05] <- ""
+  pdatalist[[i]]$sig.beetle.vs.flower[pdatalist[[i]]$beetle.vs.flower < 0.05] <- "*"
+  pdatalist[[i]]$sig.beetle.vs.flower[pdatalist[[i]]$beetle.vs.flower < 0.01] <- "**"
+  pdatalist[[i]]$sig.beetle.vs.flower[pdatalist[[i]]$beetle.vs.flower < 0.0001] <- "***"
+  
+}
+
+# Because we did the assignment on a data list, now we need to link the loop output back to the data respectively
+heat.Agrilus <- pdatalist[[1]] 
+heat.Papilio <- pdatalist[[2]]
+heat.Heliconius <- pdatalist[[3]]
+```
+
+```{r Function for p-value heat maps}
+# a = data
+# b = 1/2/3; 1 for flower.vs.leaf, 2 for beetle.vs.leaf, 3 for beetle.vs.flower
+get.pheatmap <- function(a, b){ggplot(data = a, 
+                                        aes(x = VislistA, 
+                                            y = VislistB, 
+                                            fill = a[,b])) + 
+    geom_tile(colour = "white", size = 4)+
+    geom_text(aes(VislistA, 
+                  VislistB, 
+                  label = paste(format(round(a[,b], 2), nsmall = 2), 
+                                a[, b+5])))+
+    scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit = c(0,1))+ #delete if want to reverse the colour
+    theme_bw()+
+    theme(axis.title.x = element_blank(),
+          axis.title.y = element_blank(),
+          panel.grid = element_blank(), 
+          panel.border = element_blank(), 
+          axis.ticks = element_blank() )+
+    labs(fill = "p vaalue")
+  
+}
 ```
 
 ## __Flower vs Leaf__ {.tabset .tabset-fade .tabset-pills}
@@ -565,17 +537,7 @@ Click the tabs to see the __p-value summary plot__ or the __original model outpu
 
 #### Pair-wise p-values 
 ```{r}
-ggplot(data = heat.bup, aes(x=VislistA.bup, y=VislistB.bup, fill=flower.vs.leaf)) + 
-  geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA.bup, VislistB.bup, label = paste(format(round(flower.vs.leaf, 2), nsmall = 2), sig.flower.vs.leaf)))+
-  scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_bw()+
-  theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        panel.grid = element_blank(), 
-                     panel.border = element_blank(), 
-                     axis.ticks = element_blank() )+
-   labs(fill = "p vaalue")
+get.pheatmap(heat.Agrilus, 1)
 ```
 
 </br>
@@ -601,17 +563,7 @@ Click the tabs to see the __p-value summary plot__ or the __original model outpu
 
 #### Pair-wise p-values 
 ```{r}
-ggplot(data = heat.pap, aes(x=VislistA.pap, y=VislistB.pap, fill=flower.vs.leaf)) + 
-  geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA.pap, VislistB.pap, label = paste(format(round(flower.vs.leaf, 2), nsmall = 2), sig.flower.vs.leaf)))+
-  scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_bw()+
-  theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        panel.grid = element_blank(), 
-                     panel.border = element_blank(), 
-                     axis.ticks = element_blank() )+
-   labs(fill = "p vaalue")
+get.pheatmap(heat.Papilio, 1)
 ```
 
 </br>
@@ -637,17 +589,7 @@ Click the tabs to see the __p-value summary plot__ or the __original model outpu
 
 #### Pair-wise p-values 
 ```{r}
-ggplot(data = heat.heli, aes(x=VislistA.heli, y=VislistB.heli, fill=flower.vs.leaf)) + 
-  geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA.heli, VislistB.heli, label = paste(format(round(flower.vs.leaf, 2), nsmall = 2), sig.flower.vs.leaf)))+
-  scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_bw()+
-  theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        panel.grid = element_blank(), 
-                     panel.border = element_blank(), 
-                     axis.ticks = element_blank() )+
-   labs(fill = "p vaalue")
+get.pheatmap(heat.Heliconius, 1)
 ```
 
 </br>
@@ -674,17 +616,7 @@ Click the tabs to see the __p-value summary plot__ or the __original model outpu
 
 #### Pair-wise p-values 
 ```{r}
-ggplot(data = heat.bup, aes(x=VislistA.bup, y=VislistB.bup, fill=beetle.vs.leaf)) + 
-  geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA.bup, VislistB.bup, label = paste(format(round(beetle.vs.leaf, 2), nsmall = 2), sig.beetle.vs.leaf))) +
-  scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_bw()+
-  theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        panel.grid = element_blank(), 
-                     panel.border = element_blank(), 
-                     axis.ticks = element_blank() )+
-   labs(fill = "p vaalue")
+get.pheatmap(heat.Agrilus, 2)
 ```
 
 </br>
@@ -710,17 +642,7 @@ Click the tabs to see the __p-value summary plot__ or the __original model outpu
 
 #### Pair-wise p-values 
 ```{r}
-ggplot(data = heat.pap, aes(x=VislistA.pap, y=VislistB.pap, fill=beetle.vs.leaf)) + 
-  geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA.pap, VislistB.pap, label = paste(format(round(beetle.vs.leaf, 2), nsmall = 2), sig.beetle.vs.leaf))) +
-  scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_bw()+
-  theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        panel.grid = element_blank(), 
-                     panel.border = element_blank(), 
-                     axis.ticks = element_blank() )+
-   labs(fill = "p vaalue")
+get.pheatmap(heat.Papilio, 2)
 ```
 
 </br>
@@ -747,17 +669,7 @@ Click the tabs to see the __p-value summary plot__ or the __original model outpu
 
 #### Pair-wise p-values 
 ```{r}
-ggplot(data = heat.heli, aes(x=VislistA.heli, y=VislistB.heli, fill=beetle.vs.leaf)) + 
-  geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA.heli, VislistB.heli, label = paste(format(round(beetle.vs.leaf, 2), nsmall = 2), sig.beetle.vs.leaf))) +
-  scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour
-  theme_bw()+
-  theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        panel.grid = element_blank(), 
-                     panel.border = element_blank(), 
-                     axis.ticks = element_blank() )+
-   labs(fill = "p vaalue")
+get.pheatmap(heat.Heliconius, 2)
 ```
 
 </br>
@@ -784,17 +696,7 @@ Click the tabs to see the __p-value summary plot__ or the __original model outpu
 
 #### Pair-wise p-values 
 ```{r}
-ggplot(data = heat.bup, aes(x=VislistA.bup, y=VislistB.bup, fill=beetle.vs.flower)) + 
-  geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA.bup, VislistB.bup, label = paste(format(round(beetle.vs.flower, 2), nsmall = 2), sig.beetle.vs.flower)))+
-  scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour 
-  theme_bw()+
-  theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        panel.grid = element_blank(), 
-                     panel.border = element_blank(), 
-                     axis.ticks = element_blank() )+
-   labs(fill = "p vaalue")
+get.pheatmap(heat.Agrilus, 3)
 ```
 </br>
 </br>
@@ -818,17 +720,7 @@ Click the tabs to see the __p-value summary plot__ or the __original model outpu
 
 #### Pair-wise p-values 
 ```{r}
-ggplot(data = heat.pap, aes(x=VislistA.pap, y=VislistB.pap, fill=beetle.vs.flower)) + 
-  geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA.pap, VislistB.pap, label = paste(format(round(beetle.vs.flower, 2), nsmall = 2), sig.beetle.vs.flower)))+
-  scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour 
-  theme_bw()+
-  theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        panel.grid = element_blank(), 
-                     panel.border = element_blank(), 
-                     axis.ticks = element_blank() )+
-   labs(fill = "p vaalue")
+get.pheatmap(heat.Papilio, 3)
 ```
 
 </br>
@@ -854,17 +746,7 @@ Click the tabs to see the __p-value summary plot__ or the __original model outpu
 
 #### Pair-wise p-values 
 ```{r}
-ggplot(data = heat.heli, aes(x=VislistA.heli, y=VislistB.heli, fill=beetle.vs.flower)) + 
-  geom_tile(colour="white", size = 4)+
-  geom_text(aes(VislistA.heli, VislistB.heli, label = paste(format(round(beetle.vs.flower, 2), nsmall = 2), sig.beetle.vs.flower)))+
-  scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit=c(0,1))+ #delete if want to reverse the colour 
-  theme_bw()+
-  theme(axis.title.x=element_blank(),
-        axis.title.y=element_blank(),
-        panel.grid = element_blank(), 
-                     panel.border = element_blank(), 
-                     axis.ticks = element_blank() )+
-   labs(fill = "p vaalue")
+get.pheatmap(heat.Heliconius, 3)
 ```
 
 </br>
@@ -882,390 +764,204 @@ sum.beetle.vs.flower.heli
 # Plot the contrasts {.tabset .tabset-fade .tabset-pills}
 * Colours approximate human perception of either flower (left and right) or beetle (centre) colouration.
 * Lines of the same colors connect the same sample
-```{r}
-#combine all contrast value in each comparison group
-##for Agrilus planipennis
-###flower vs leaf
-VS1.fl.bup<- Cbuprest580%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS1.fl.bup$vissys<-strrep("VS1.fl",1)
-VS2.fl.bup<-Cbuprest600%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS2.fl.bup$vissys<-strrep("VS2.fl",1)
-VS3.fl.bup<-Cbuprest620%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS3.fl.bup$vissys<-strrep("VS3.fl",1)
-VS4.fl.bup<-Cbuprest640%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS4.fl.bup$vissys<-strrep("VS4.fl",1)
-VS5.fl.bup<-Cbuprest660%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS5.fl.bup$vissys<-strrep("VS5.fl",1)
 
-allvis.fl.bup<-VS1.fl.bup %>% rbind(VS2.fl.bup) %>% rbind(VS3.fl.bup) %>%
-  rbind(VS4.fl.bup) %>%rbind(VS5.fl.bup) 
+```{r Import color code and setup functions}
+#import the sample color code 
+color.code <- read.csv("data/color code list.csv", header=TRUE) 
 
-###beetle vs leaf
-VS1.bl.bup<- Cbuprest580%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS1.bl.bup$vissys<-strrep("VS1.bl",1)
-VS2.bl.bup<-Cbuprest600%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS2.bl.bup$vissys<-strrep("VS2.bl",1)
-VS3.bl.bup<-Cbuprest620%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS3.bl.bup$vissys<-strrep("VS3.bl",1)
-VS4.bl.bup<-Cbuprest640%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS4.bl.bup$vissys<-strrep("VS4.bl",1)
-VS5.bl.bup<-Cbuprest660%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS5.bl.bup$vissys<-strrep("VS5.bl",1)
+# Set up a function to calculate means for the plot
+get.plotmeans <- function(a, b, c){
+  if (a == "aim1"){
+    if(b == "bl"){
+      plotmean.i <- c %>% 
+        group_by(patch2, vissys) %>%
+        summarize(mean.dS.sub = mean(dS)) %>% 
+        ungroup() %>% 
+        rename(beetleID = patch2) %>% 
+        merge(beetle.colour.aim1[,c("species", "colour")], by.x = c("beetleID"), by.y = c("species")) %>% 
+        distinct()
+      return(plotmean.i)
+    } else {
+      plotmean.i <- c %>% 
+        group_by(patch1, vissys) %>%
+        summarize(mean.dS.sub = mean(dS)) %>% 
+        ungroup() %>% 
+        rename(flowerID = patch1) %>% 
+        merge(flower.colour.aim1[,c("species", "colour")], by.x = c("flowerID"), by.y = c("species")) %>% 
+        distinct()
+      return(plotmean.i)
+    }
+  } else if (a == "aim2"){
+    if (b == "bl"){
+      plotmean.i <- c %>% 
+        group_by(patch2, vissys) %>%
+        summarize(mean.dS.sub = mean(dS)) %>% 
+        ungroup() %>% 
+        rename(beetleID = patch2) %>% 
+        merge(beetle.colour.aim2[,c("species", "colour")], by.x = c("beetleID"), by.y = c("species")) %>% 
+        distinct()
+      return(plotmean.i)
+    } else {
+      plotmean.i <- c %>% 
+        group_by(patch1, vissys) %>%
+        summarize(mean.dS.sub = mean(dS)) %>% 
+        ungroup() %>% 
+        rename(flowerID = patch1) %>% 
+        merge(flower.colour.aim2[,c("species", "colour")], by.x = c("flowerID"), by.y = c("species")) %>% 
+        distinct()
+      return(plotmean.i)
+    }
+  }
+}
 
-allvis.bl.bup<-VS1.bl.bup %>% rbind(VS2.bl.bup) %>% rbind(VS3.bl.bup) %>%
-  rbind(VS4.bl.bup) %>%rbind(VS5.bl.bup)
-
-###beetle vs flower
-VS1.bf.bup<- Cbuprest580%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS1.bf.bup$vissys<-strrep("VS1.bf",1)
-VS2.bf.bup<-Cbuprest600%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS2.bf.bup$vissys<-strrep("VS2.bf",1)
-VS3.bf.bup<-Cbuprest620%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS3.bf.bup$vissys<-strrep("VS3.bf",1)
-VS4.bf.bup<-Cbuprest640%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS4.bf.bup$vissys<-strrep("VS4.bf",1)
-VS5.bf.bup<-Cbuprest660%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS5.bf.bup$vissys<-strrep("VS5.bf",1)
-
-allvis.bf.bup<-VS1.bf.bup %>% rbind(VS2.bf.bup) %>% rbind(VS3.bf.bup) %>%
-  rbind(VS4.bf.bup) %>%rbind(VS5.bf.bup) 
-
-
-
-##for Papilio xuthus
-###flower vs leaf
-VS1.fl.pap<- Cpapilio580%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS1.fl.pap$vissys<-strrep("VS1.fl",1)
-VS2.fl.pap<-Cpapilio600%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS2.fl.pap$vissys<-strrep("VS2.fl",1)
-VS3.fl.pap<-Cpapilio620%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS3.fl.pap$vissys<-strrep("VS3.fl",1)
-VS4.fl.pap<-Cpapilio640%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS4.fl.pap$vissys<-strrep("VS4.fl",1)
-VS5.fl.pap<-Cpapilio660%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS5.fl.pap$vissys<-strrep("VS5.fl",1)
-
-
-allvis.fl.pap<-VS1.fl.pap %>% rbind(VS2.fl.pap) %>% rbind(VS3.fl.pap) %>%
-  rbind(VS4.fl.pap) %>% rbind(VS5.fl.pap) 
-
-###beetle vs leaf
-VS1.bl.pap<- Cpapilio580%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS1.bl.pap$vissys<-strrep("VS1.bl",1)
-VS2.bl.pap<-Cpapilio600%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS2.bl.pap$vissys<-strrep("VS2.bl",1)
-VS3.bl.pap<-Cpapilio620%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS3.bl.pap$vissys<-strrep("VS3.bl",1)
-VS4.bl.pap<-Cpapilio640%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS4.bl.pap$vissys<-strrep("VS4.bl",1)
-VS5.bl.pap<-Cpapilio660%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS5.bl.pap$vissys<-strrep("VS5.bl",1)
-
-
-allvis.bl.pap<-VS1.bl.pap %>% rbind(VS2.bl.pap) %>% rbind(VS3.bl.pap) %>%
-  rbind(VS4.bl.pap) %>% rbind(VS5.bl.pap) 
-
-###beetle vs flower
-VS1.bf.pap<- Cpapilio580%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS1.bf.pap$vissys<-strrep("VS1.bf",1)
-VS2.bf.pap<-Cpapilio600%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS2.bf.pap$vissys<-strrep("VS2.bf",1)
-VS3.bf.pap<-Cpapilio620%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS3.bf.pap$vissys<-strrep("VS3.bf",1)
-VS4.bf.pap<-Cpapilio640%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS4.bf.pap$vissys<-strrep("VS4.bf",1)
-VS5.bf.pap<-Cpapilio660%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS5.bf.pap$vissys<-strrep("VS5.bf",1)
-
-allvis.bf.pap<-VS1.bf.pap %>% rbind(VS2.bf.pap) %>% rbind(VS3.bf.pap) %>%
-  rbind(VS4.bf.pap) %>% rbind(VS5.bf.pap) 
-
-
-
-
-##for Heliconius sp
-###flower vs leaf
-VS1.fl.heli<- Cheliconius580%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS1.fl.heli$vissys<-strrep("VS1.fl",1)
-VS2.fl.heli<-Cheliconius600%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS2.fl.heli$vissys<-strrep("VS2.fl",1)
-VS3.fl.heli<-Cheliconius620%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS3.fl.heli$vissys<-strrep("VS3.fl",1)
-VS4.fl.heli<-Cheliconius640%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS4.fl.heli$vissys<-strrep("VS4.fl",1)
-VS5.fl.heli<-Cheliconius660%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"leaves"))
-VS5.fl.heli$vissys<-strrep("VS5.fl",1)
-
-
-allvis.fl.heli<-VS1.fl.heli %>% rbind(VS2.fl.heli) %>% rbind(VS3.fl.heli) %>%
-  rbind(VS4.fl.heli) %>% rbind(VS5.fl.heli) 
-
-###beetle vs leaf
-VS1.bl.heli<- Cheliconius580%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS1.bl.heli$vissys<-strrep("VS1.bl",1)
-VS2.bl.heli<-Cheliconius600%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS2.bl.heli$vissys<-strrep("VS2.bl",1)
-VS3.bl.heli<-Cheliconius620%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS3.bl.heli$vissys<-strrep("VS3.bl",1)
-VS4.bl.heli<-Cheliconius640%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS4.bl.heli$vissys<-strrep("VS4.bl",1)
-VS5.bl.heli<-Cheliconius660%>% filter(str_detect(patch2,"beetle")) %>% 
-  filter(str_detect(patch1,"leaves"))
-VS5.bl.heli$vissys<-strrep("VS5.bl",1)
-
-
-allvis.bl.heli<-VS1.bl.heli %>% rbind(VS2.bl.heli) %>% rbind(VS3.bl.heli) %>%
-  rbind(VS4.bl.heli) %>% rbind(VS5.bl.heli) 
-
-###beetle vs flower
-VS1.bf.heli<- Cheliconius580%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS1.bf.heli$vissys<-strrep("VS1.bf",1)
-VS2.bf.heli<-Cheliconius600%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS2.bf.heli$vissys<-strrep("VS2.bf",1)
-VS3.bf.heli<-Cheliconius620%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS3.bf.heli$vissys<-strrep("VS3.bf",1)
-VS4.bf.heli<-Cheliconius640%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS4.bf.heli$vissys<-strrep("VS4.bf",1)
-VS5.bf.heli<-Cheliconius660%>% filter(str_detect(patch1,"flower")) %>% 
-  filter(str_detect(patch2,"beetle"))
-VS5.bf.heli$vissys<-strrep("VS5.bf",1)
-
-allvis.bf.heli<-VS1.bf.heli %>% rbind(VS2.bf.heli) %>% rbind(VS3.bf.heli) %>%
-  rbind(VS4.bf.heli) %>% rbind(VS5.bf.heli) 
+# What should be put in the function get.plotmeans()
+# a = "aim1" or "aim2"
+# b = comparison type: "fl", "bl", "bf"
+# c = input data, e.g. allvis.fl_d65.aim1
 ```
 
-```{r}
-#import the flower color code 
-color.code<-read.csv("data/color code list.csv",header=TRUE) 
+```{r Create colour code lists for the plot}
+#create a list of species name used in the spec data in oder to merge() with mean data set later
+dataset.transpose <- gather(dataset[,2:131], 
+                            key = "species", 
+                            value = "reflectance", 
+                            na.rm = FALSE,
+                            convert = FALSE, factor_key = FALSE)
+name.list <- unique(dataset.transpose$species) %>% 
+  sort() %>% #order it alphabetically 
+  data.frame() %>% 
+  dplyr::rename(species = ".") #make it a data frame and name the column "species"
 
-#creat a list of species name used in the spec data and 
-name.list<-unique(dataset.transpose$species) %>% 
-  sort() %>% #order it alphebatically as well
-  data.frame() %>% dplyr::rename(species = ".")#make it a data frame and name the column "species"
+# create flower and beetle name list 
+colourgrouplist <- c( "flower", "beetle")
+tempcolordat <- vector("list", 4)
 
-#creat flower name list
-flower.colour <- name.list %>% filter(str_detect(species, "flower")) %>% #select flower names
-  cbind(color.code %>% filter(str_detect(type, "flower")) %>% arrange(name)) %>% #select flower color codes and order it alphebatically
-  dplyr::select(-type) %>% #remove the redundant column
-  mutate(count = 5) %>% uncount(count) #repeat each row for 5 times for 5 visual systems
+## for Aim 2
+for(i in seq_along(colourgrouplist)){
+  
+  ouput.i <- name.list %>% 
+    filter(str_detect(species, colourgrouplist[i])) %>% 
+    cbind(color.code %>% 
+            filter(str_detect(type, colourgrouplist[i])) %>% 
+            arrange(name)) %>% 
+    dplyr::select(-type) %>% 
+    mutate(count = 5) %>% 
+    uncount(count) 
+  
+  tempcolordat[[i+2]] <- ouput.i # here same in i+2 because 1-2 is for aim1
+  
+}
+flower.colour.aim2 <- tempcolordat[[3]]
+beetle.colour.aim2 <- tempcolordat[[4]]
+```
 
-#creat beetle name list
+```{r Calculate means for each visual system on the plot}
+allvis.list <- list(allvis.fl.Agrilus, allvis.bl.Agrilus, allvis.bf.Agrilus,
+                    allvis.fl.Papilio, allvis.bl.Papilio, allvis.bf.Papilio,
+                    allvis.fl.Heliconius, allvis.bl.Heliconius, allvis.bf.Heliconius)
 
-beetle.colour<- name.list %>% filter(str_detect(species, "beetle")) %>% #select flower names
-  cbind(color.code %>% filter(str_detect(type, "beetle")) %>% arrange(name)) %>% #select flower color codes and order it alphebatically
-  dplyr::select(-type) %>% #remove the redundant column
-  mutate(count = 5) %>% uncount(count) #repeat each row for 5 times for 5 visual systems
+tempcolordat <- vector("list", length(allvis.list))
+
+for(i in seq_along(allvis.list)){
+  
+  temp.meandS.i <- allvis.list[[i]] %>% 
+    group_by(vissys) %>%
+    summarize(mean.dS = mean(dS))
+  
+  tempcolordat[[i]] <- temp.meandS.i
+  
+}
+```
+
+```{r Set up list and functions for plots}
+title.list <- list("Flower vs. Leaf", "Beetle vs. Leaf", "Beetle vs. Flower")
+
+vis.comp.list <- list(fl <- c("VS580.fl", "VS600.fl", "VS620.fl", "VS640.fl", "VS660.fl"),
+                      bl <- c("VS580.bl", "VS600.bl", "VS620.bl", "VS640.bl", "VS660.bl"),
+                      bf <- c("VS580.bf", "VS600.bf", "VS620.bf", "VS640.bf", "VS660.bf"))
+stats.list <- list(fl.Agrilus <- c("a","b","c","d","d"),
+                   bl.Agrilus <- c("a","b","c","d","e"),
+                   bf.Agrilus <- c("a","b","c","d","e"),
+                   fl.Papilio <- c("a","b","c","d","d"),
+                   bl.Papilio <- c("a","b","c","d","e"),
+                   bf.Papilio <- c("a","b","c","d","e"),
+                   fl.Heliconius <- c("a","b","c","d","d"),
+                   bl.Heliconius <- c("a","b","c","d","e"),
+                   bf.Heliconius <- c("a","b","c","d","e"))
+backgorund.list <- c("grey80", NA) # choose NA for beetle.vs.leaf
+
+get.contrastplot.sens <- function(dat, title, visomplist, compgroupnstats, background){
+  ggplot(dat, aes(x = vissys, 
+                y = mean.dS.sub,
+                group = factor(dat[,1])))+
+    geom_point(col = dat$colour,
+               size = 1, alpha = 0.7) + 
+    geom_line(col = dat$colour, 
+              size = 0.5, alpha = 0.7)+
+    xlab("Visual system") +     
+    ylab("Chromatic contrast (JND)") +
+    ylim(0, 21)+
+    theme(panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = backgorund.list[background], size = NA), 
+          axis.title.x = element_text(size = 12),  
+          axis.text.x  = element_text(size = 8, colour = "black", angle = 90),
+          axis.title.y = element_text(size = 12, vjust = 1),
+          axis.text.y = element_text(size = 8, colour = "black"),
+          axis.line.x = element_line(colour = 'black', size = 0.5, linetype = 'solid'),
+          axis.line.y = element_line(colour = 'black', size = 0.5, linetype = 'solid'),
+          legend.justification = c(1,0), 
+          legend.position = c(1,0.45),
+          legend.key = element_blank(),
+          legend.title = element_text(size = 10),
+          legend.text = element_text(size = 9))+
+    scale_x_discrete(limits = vis.comp.list[[visomplist]],
+                     labels = c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
+    geom_point(data = dat, 
+               aes(x = vis.comp.list[[visomplist]][1], 
+                   y = tempcolordat[[compgroupnstats]]$mean.dS[1]),
+               col = "black", size = 3)+
+    geom_point(data = dat, 
+               aes(x = vis.comp.list[[visomplist]][2], 
+                   y = tempcolordat[[compgroupnstats]]$mean.dS[2]), 
+               col = "black", size = 3)+
+    geom_point(data = dat, 
+               aes(x = vis.comp.list[[visomplist]][3], 
+                   y = tempcolordat[[compgroupnstats]]$mean.dS[3]), 
+               col = "black", size = 3)+
+    geom_point(data = dat, 
+               aes(x = vis.comp.list[[visomplist]][4], 
+                   y = tempcolordat[[compgroupnstats]]$mean.dS[4]), 
+               col = "black", size = 3)+
+    geom_point(data = dat, 
+               aes(x = vis.comp.list[[visomplist]][5], 
+                   y = tempcolordat[[compgroupnstats]]$mean.dS[5]), 
+               col = "black", size = 3)+
+    ggtitle(title.list[[title]])+
+    annotate("text", x = vis.comp.list[[visomplist]], y = 21, 
+             label = stats.list[[compgroupnstats]])
+    
+}
 ```
 
 ## _Agrilus planipennis_
 ```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths in the jewel beetle, _Agrilus planipenni_. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 12 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
-#make flower vs leaf plot
-##add the mean
-mean.fl.bup<-allvis.fl.bup %>% mutate(patch3 = paste(allvis.fl.bup$vissys,allvis.fl.bup$patch1,sep=".")) %>% 
-  #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
-  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.fl=mean(dS)) %>% 
-  #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
-  ungroup() %>% 
-  dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
-##plot the mean
-names(mean.fl.bup)[names(mean.fl.bup) == "patch1"] <- "flowerID" 
-#rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.fl.bup<-mean.fl.bup[order(mean.fl.bup$flowerID),] 
-#make the data frame order by flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
+# create a data set for means
+mean.fl.Agrilus <- get.plotmeans("aim2", "fl", allvis.fl.Agrilus)
+mean.bl.Agrilus <- get.plotmeans("aim2", "bl", allvis.bl.Agrilus)
+mean.bf.Agrilus <- get.plotmeans("aim2", "bf", allvis.bf.Agrilus)
 
-##combine the colour code list to the mean.bf for ploting
-mean.fl.bup$match.name<-flower.colour$species # this column is just for checking if match correctly
-mean.fl.bup$colour<-flower.colour$colour
+# plot individual panel
+fl.Agrilus <- get.contrastplot.sens(mean.fl.Agrilus, 1, 1, 1, 1)
+bl.Agrilus <- get.contrastplot.sens(mean.bl.Agrilus, 2, 2, 2, 2)
+bf.Agrilus <- get.contrastplot.sens(mean.bf.Agrilus, 3, 3, 3, 1)
 
-fl.bup<-ggplot(mean.fl.bup, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
-  geom_point(col=mean.fl.bup$colour,size= 1, alpha=0.7) + 
-  geom_line(col=mean.fl.bup$colour, size = 0.5, alpha=0.7)+
-  xlab("Visual system") +     
-  ylab("Chromatic contrast (JND)") +
-  ylim(0,21)+
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
-        axis.title.x = element_text(size=12),  
-        axis.text.x  = element_text(size=8, colour="black", angle =90),
-        axis.title.y = element_text(size =12, vjust = 1),
-        axis.text.y = element_text(size=8, colour="black"),
-        axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
-        axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'),
-        legend.justification=c(1,0), legend.position=c(1,0.45),
-        legend.key = element_blank(),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_point(data = mean.fl.bup, aes(x= "VS1.fl", y= mean(VS1.fl.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.fl.bup, aes(x= "VS2.fl", y= mean(VS2.fl.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.fl.bup, aes(x= "VS3.fl", y= mean(VS3.fl.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.fl.bup, aes(x= "VS4.fl", y= mean(VS4.fl.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.fl.bup, aes(x= "VS5.fl", y= mean(VS5.fl.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  #change the x labels
-  ggtitle("Flower vs. Leaf")+
-  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 21, label =c("a","b","c","d","d")) #add statistical info
-
-
-#make beetle vs leaf plot
-##add the mean
-mean.bl.bup<-allvis.bl.bup %>% mutate(patch3 = paste(allvis.bl.bup$vissys,allvis.bl.bup$patch2,sep=".")) %>% 
-  #create a new column "patch3" which combines the category info of patch2(beetles) and vissys
-  group_by(patch3,vissys,patch2) %>% summarize(mean.dS.bl=mean(dS)) %>% 
-  #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
-  ungroup() %>% 
-  dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
-
-##plot the mean
-names(mean.bl.bup)[names(mean.bl.bup) == "patch2"] <- "beetleID"
-#rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.bl.bup<-mean.bl.bup[order(mean.bl.bup$beetleID),]
-#make the data frame order bt beetleID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
-
-##combine the colour code list to the mean.bf for ploting
-mean.bl.bup$match.name<-beetle.colour$species # this column is just for checking if match correctly
-mean.bl.bup$colour<-beetle.colour$colour
-
-
-bl.bup<-ggplot(mean.bl.bup, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
-  geom_point(col=mean.bl.bup$colour,size= 1, alpha=0.7) + 
-  geom_line(col=mean.bl.bup$colour, size = 0.5, alpha=0.7)+
-  xlab("Visual system") +     
-  ylab("Chromatic contrast (JND)") +
-  ylim(0,21)+
-  theme(panel.background = element_blank(),
-        axis.title.x = element_text(size=12),  
-        axis.text.x  = element_text(size=8, colour="black", angle =90),
-        axis.title.y = element_text(size =12, vjust = 1),
-        axis.text.y = element_text(size=8, colour="black"),
-        axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
-        axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'),
-        legend.justification=c(1,0), legend.position=c(1,0.45),
-        legend.key = element_blank(),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_point(data = mean.bl.bup, aes(x= "VS1.bl", y= mean(VS1.bl.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bl.bup, aes(x= "VS2.bl", y= mean(VS2.bl.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bl.bup, aes(x= "VS3.bl", y= mean(VS3.bl.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bl.bup, aes(x= "VS4.bl", y= mean(VS4.bl.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bl.bup, aes(x= "VS5.bl", y= mean(VS5.bl.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  #change the x labels
-  ggtitle("Beetle vs. Leaf")+
-  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 21, label =c("a","b","c","d","e")) #add statistical info
-
-
-#make beetle vs flower plot
-##add the mean
-mean.bf.bup<-allvis.bf.bup %>% mutate(patch3 = paste(allvis.bf.bup$vissys,allvis.bf.bup$patch1,sep=".")) %>% 
-  #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
-  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.bf=mean(dS)) %>% #patch1(flowers
-  #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
-  ungroup() %>% 
-  dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
-
-
-##plot the mean dS
-names(mean.bf.bup)[names(mean.bf.bup) == "patch1"] <- "flowerID"
-#rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.bf.bup<-mean.bf.bup[order(mean.bf.bup$flowerID),]
-#make the data frame order bt flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
-
-##combine the colour code list to the mean.bf for ploting
-mean.bf.bup$match.name<-flower.colour$species # this column is just for checking if match correctly
-mean.bf.bup$colour<-flower.colour$colour
-
-bf.bup<-ggplot(mean.bf.bup, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf.bup$colour, size= 1,alpha=0.7) + 
-  geom_line(col=mean.bf.bup$colour, size = 0.5, alpha=0.7)+
-  xlab("Visual system") +     
-  ylab("Chromatic contrast (JND)") +
-  ylim(0,21)+
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
-        axis.title.x = element_text(size=12),  
-        axis.text.x  = element_text(size=8, colour="black", angle =90),
-        axis.title.y = element_text(size =12, vjust = 1),
-        axis.text.y = element_text(size=8, colour="black"),
-        axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
-        axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'),
-        legend.justification=c(1,0), legend.position=c(1,0.45),
-        legend.key = element_blank(),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_point(data = mean.bf.bup, aes(x= "VS1.bf", y= mean(VS1.bf.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf.bup, aes(x= "VS2.bf", y= mean(VS2.bf.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf.bup, aes(x= "VS3.bf", y= mean(VS3.bf.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf.bup, aes(x= "VS4.bf", y= mean(VS4.bf.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf.bup, aes(x= "VS5.bf", y= mean(VS5.bf.bup$dS)), 
-             col="black", size=3)+ #add the mean point
-  #change the x labels
-  ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 21, label =c("a","b","c","d","e")) #add statistical info
-
-
-figure.bup <- ggarrange(fl.bup,bl.bup,bf.bup, ncol = 3, nrow = 1)
+# bind the 3 panels
+figure.bup <- ggarrange(fl.Agrilus,
+                             bl.Agrilus,
+                             bf.Agrilus, 
+                             ncol = 3, nrow = 1)
 figure.bup
 ```
 </br>
@@ -1273,341 +969,44 @@ figure.bup
 
 ## _Papilio xuthus_
 ```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths in the butterfly, _Papilio xuthus_. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1."}
-#make flower vs leaf plot
-##add the mean
-mean.fl.pap<-allvis.fl.pap %>% mutate(patch3 = paste(allvis.fl.pap$vissys,allvis.fl.pap$patch1,sep=".")) %>% 
-  #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
-  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.fl=mean(dS)) %>% 
-  #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
-  ungroup() %>% 
-  dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
+# create a data set for means
+mean.fl.Papilio <- get.plotmeans("aim2", "fl", allvis.fl.Papilio)
+mean.bl.Papilio <- get.plotmeans("aim2", "bl", allvis.bl.Papilio)
+mean.bf.Papilio <- get.plotmeans("aim2", "bf", allvis.bf.Papilio)
 
-##plot the mean
-names(mean.fl.pap)[names(mean.fl.pap) == "patch1"] <- "flowerID" 
-#rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.fl.pap<-mean.fl.pap[order(mean.fl.pap$flowerID),] 
-#make the data frame order by flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
+# plot individual panel
+fl.Papilio <- get.contrastplot.sens(mean.fl.Papilio, 1, 1, 4, 1)
+bl.Papilio <- get.contrastplot.sens(mean.bl.Papilio, 2, 2, 5, 2)
+bf.Papilio <- get.contrastplot.sens(mean.bf.Papilio, 3, 3, 6, 1)
 
-##combine the colour code list to the mean.bf for ploting
-mean.fl.pap$match.name<-flower.colour$species # this column is just for checking if match correctly
-mean.fl.pap$colour<-flower.colour$colour
-
-fl.pap<-ggplot(mean.fl.pap, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
-  geom_point(col=mean.fl.pap$colour,size= 1, alpha=0.7) + 
-  geom_line(col=mean.fl.pap$colour, size = 0.5, alpha=0.7)+
-  xlab("Visual system") +     
-  ylab("Chromatic contrast (JND)") +
-  ylim(0,21)+
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
-        axis.title.x = element_text(size=12),  
-        axis.text.x  = element_text(size=8, colour="black", angle =90),
-        axis.title.y = element_text(size =12, vjust = 1),
-        axis.text.y = element_text(size=8, colour="black"),
-        axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
-        axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'),
-        legend.justification=c(1,0), legend.position=c(1,0.45),
-        legend.key = element_blank(),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_point(data = mean.fl.pap, aes(x= "VS1.fl", y= mean(VS1.fl.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.fl.pap, aes(x= "VS2.fl", y= mean(VS2.fl.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.fl.pap, aes(x= "VS3.fl", y= mean(VS3.fl.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.fl.pap, aes(x= "VS4.fl", y= mean(VS4.fl.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.fl.pap, aes(x= "VS5.fl", y= mean(VS5.fl.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  #change the x labels
-  ggtitle("Flower vs. Leaf")+
-  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 21, label =c("a","b","c","d","d")) #add statistical info
-
-
-#make beetle vs leaf plot
-##add the mean
-mean.bl.pap<-allvis.bl.pap %>% mutate(patch3 = paste(allvis.bl.pap$vissys,allvis.bl.pap$patch2,sep=".")) %>% 
-  #create a new column "patch3" which combines the category info of patch2(beetles) and vissys
-  group_by(patch3,vissys,patch2) %>% summarize(mean.dS.bl=mean(dS)) %>% 
-  #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
-  ungroup() %>% 
-  dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
-
-##plot the mean
-names(mean.bl.pap)[names(mean.bl.pap) == "patch2"] <- "beetleID"
-#rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.bl.pap<-mean.bl.pap[order(mean.bl.pap$beetleID),]
-#make the data frame order bt beetleID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
-
-##combine the colour code list to the mean.bf for ploting
-mean.bl.pap$match.name<-beetle.colour$species # this column is just for checking if match correctly
-mean.bl.pap$colour<-beetle.colour$colour
-
-
-bl.pap<-ggplot(mean.bl.pap, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
-  geom_point(col=mean.bl.pap$colour,size= 1, alpha=0.7) + 
-  geom_line(col=mean.bl.pap$colour, size = 0.5, alpha=0.7)+
-  xlab("Visual system") +     
-  ylab("Chromatic contrast (JND)") +
-  ylim(0,21)+
-  theme(panel.background = element_blank(),
-        axis.title.x = element_text(size=12),  
-        axis.text.x  = element_text(size=8, colour="black", angle =90),
-        axis.title.y = element_text(size =12, vjust = 1),
-        axis.text.y = element_text(size=8, colour="black"),
-        axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
-        axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'),
-        legend.justification=c(1,0), legend.position=c(1,0.45),
-        legend.key = element_blank(),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_point(data = mean.bl.pap, aes(x= "VS1.bl", y= mean(VS1.bl.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bl.pap, aes(x= "VS2.bl", y= mean(VS2.bl.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bl.pap, aes(x= "VS3.bl", y= mean(VS3.bl.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bl.pap, aes(x= "VS4.bl", y= mean(VS4.bl.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bl.pap, aes(x= "VS5.bl", y= mean(VS5.bl.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  #change the x labels
-  ggtitle("Beetle vs. Leaf")+
-  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 21, label =c("a","b","c","d","e")) #add statistical info
-
-
-#make beetle vs flower plot
-##add the mean
-mean.bf.pap<-allvis.bf.pap %>% mutate(patch3 = paste(allvis.bf.pap$vissys,allvis.bf.pap$patch1,sep=".")) %>% 
-  #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
-  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.bf=mean(dS)) %>% #patch1(flowers
-  #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
-  ungroup() %>% 
-  dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
-
-
-##plot the mean dS
-names(mean.bf.pap)[names(mean.bf.pap) == "patch1"] <- "flowerID"
-#rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.bf.pap<-mean.bf.pap[order(mean.bf.pap$flowerID),]
-#make the data frame order bt flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
-
-##combine the colour code list to the mean.bf for ploting
-mean.bf.pap$match.name<-flower.colour$species # this column is just for checking if match correctly
-mean.bf.pap$colour<-flower.colour$colour
-
-bf.pap<-ggplot(mean.bf.pap, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf.pap$colour, size= 1,alpha=0.7) + 
-  geom_line(col=mean.bf.pap$colour, size = 0.5, alpha=0.7)+
-  xlab("Visual system") +     
-  ylab("Chromatic contrast (JND)") +
-  ylim(0,21)+
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
-        axis.title.x = element_text(size=12),  
-        axis.text.x  = element_text(size=8, colour="black", angle =90),
-        axis.title.y = element_text(size =12, vjust = 1),
-        axis.text.y = element_text(size=8, colour="black"),
-        axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
-        axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'),
-        legend.justification=c(1,0), legend.position=c(1,0.45),
-        legend.key = element_blank(),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_point(data = mean.bf.pap, aes(x= "VS1.bf", y= mean(VS1.bf.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf.pap, aes(x= "VS2.bf", y= mean(VS2.bf.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf.pap, aes(x= "VS3.bf", y= mean(VS3.bf.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf.pap, aes(x= "VS4.bf", y= mean(VS4.bf.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf.pap, aes(x= "VS5.bf", y= mean(VS5.bf.pap$dS)), 
-             col="black", size=3)+ #add the mean point
-  #change the x labels
-  ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 21, label =c("a","b","c","d","e")) #add statistical info
-
-
-figure.pap <- ggarrange(fl.pap,bl.pap,bf.pap, ncol = 3, nrow = 1)
+# bind the 3 panels
+figure.pap <- ggarrange(fl.Papilio,
+                        bl.Papilio,
+                        bf.Papilio, 
+                        ncol = 3, nrow = 1)
 figure.pap
 ```
 </br>
 </br>
 
-##  _Heliconius_ sp
+##  _Heliconius sp_
 ```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths in the butterfly, _Heliconius_ sp. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1."}
-#make flower vs leaf plot
-##add the mean
-mean.fl.heli<-allvis.fl.heli %>% mutate(patch3 = paste(allvis.fl.heli$vissys,allvis.fl.heli$patch1,sep=".")) %>% 
-  #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
-  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.fl=mean(dS)) %>% 
-  #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
-  ungroup() %>% 
-  dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
 
-##plot the mean
-names(mean.fl.heli)[names(mean.fl.heli) == "patch1"] <- "flowerID" 
-#rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.fl.heli<-mean.fl.heli[order(mean.fl.heli$flowerID),] 
-#make the data frame order by flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
+# create a data set for means
+mean.fl.Heliconius <- get.plotmeans("aim2", "fl", allvis.fl.Heliconius)
+mean.bl.Heliconius <- get.plotmeans("aim2", "bl", allvis.bl.Heliconius)
+mean.bf.Heliconius <- get.plotmeans("aim2", "bf", allvis.bf.Heliconius)
 
-##combine the colour code list to the mean.bf for ploting
-mean.fl.heli$match.name<-flower.colour$species # this column is just for checking if match correctly
-mean.fl.heli$colour<-flower.colour$colour
+# plot individual panel
+fl.Heliconius <- get.contrastplot.sens(mean.fl.Heliconius, 1, 1, 7, 1)
+bl.Heliconius <- get.contrastplot.sens(mean.bl.Heliconius, 2, 2, 8, 2)
+bf.Heliconius <- get.contrastplot.sens(mean.bf.Heliconius, 3, 3, 9, 1)
 
-fl.heli<-ggplot(mean.fl.heli, aes(x=vissys, y=mean.dS.fl,group=flowerID))+
-  geom_point(col=mean.fl.heli$colour,size= 1, alpha=0.7) + 
-  geom_line(col=mean.fl.heli$colour, size = 0.5, alpha=0.7)+
-  xlab("Visual system") +     
-  ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
-        axis.title.x = element_text(size=12),  
-        axis.text.x  = element_text(size=8, colour="black", angle =90),
-        axis.title.y = element_text(size =12, vjust = 1),
-        axis.text.y = element_text(size=8, colour="black"),
-        axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
-        axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'),
-        legend.justification=c(1,0), legend.position=c(1,0.45),
-        legend.key = element_blank(),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_point(data = mean.fl.heli, aes(x= "VS1.fl", y= mean(VS1.fl.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.fl.heli, aes(x= "VS2.fl", y= mean(VS2.fl.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.fl.heli, aes(x= "VS3.fl", y= mean(VS3.fl.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.fl.heli, aes(x= "VS4.fl", y= mean(VS4.fl.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.fl.heli, aes(x= "VS5.fl", y= mean(VS5.fl.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  #change the x labels
-  ggtitle("Flower vs. Leaf")+
-  annotate("text", x = c("VS1.fl", "VS2.fl", "VS3.fl","VS4.fl","VS5.fl"), y = 15, label =c("a","b","c","d","e")) #add statistical info
-
-
-#make beetle vs leaf plot
-##add the mean
-mean.bl.heli<-allvis.bl.heli %>% mutate(patch3 = paste(allvis.bl.heli$vissys,allvis.bl.heli$patch2,sep=".")) %>% 
-  #create a new column "patch3" which combines the category info of patch2(beetles) and vissys
-  group_by(patch3,vissys,patch2) %>% summarize(mean.dS.bl=mean(dS)) %>% 
-  #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
-  ungroup() %>% 
-  dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
-
-##plot the mean
-names(mean.bl.heli)[names(mean.bl.heli) == "patch2"] <- "beetleID"
-#rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.bl.heli<-mean.bl.heli[order(mean.bl.heli$beetleID),]
-#make the data frame order bt beetleID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
-
-##combine the colour code list to the mean.bf for ploting
-mean.bl.heli$match.name<-beetle.colour$species # this column is just for checking if match correctly
-mean.bl.heli$colour<-beetle.colour$colour
-
-
-bl.heli<-ggplot(mean.bl.heli, aes(x=vissys, y=mean.dS.bl,group=beetleID))+
-  geom_point(col=mean.bl.heli$colour,size= 1, alpha=0.7) + 
-  geom_line(col=mean.bl.heli$colour, size = 0.5, alpha=0.7)+
-  xlab("Visual system") +     
-  ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
-  theme(panel.background = element_blank(),
-        axis.title.x = element_text(size=12),  
-        axis.text.x  = element_text(size=8, colour="black", angle =90),
-        axis.title.y = element_text(size =12, vjust = 1),
-        axis.text.y = element_text(size=8, colour="black"),
-        axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
-        axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'),
-        legend.justification=c(1,0), legend.position=c(1,0.45),
-        legend.key = element_blank(),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_point(data = mean.bl.heli, aes(x= "VS1.bl", y= mean(VS1.bl.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bl.heli, aes(x= "VS2.bl", y= mean(VS2.bl.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bl.heli, aes(x= "VS3.bl", y= mean(VS3.bl.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bl.heli, aes(x= "VS4.bl", y= mean(VS4.bl.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bl.heli, aes(x= "VS5.bl", y= mean(VS5.bl.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  #change the x labels
-  ggtitle("Beetle vs. Leaf")+
-  annotate("text", x = c("VS1.bl", "VS2.bl", "VS3.bl","VS4.bl","VS5.bl"), y = 15, label =c("a","b","c","d","e")) #add statistical info
-
-
-#make beetle vs flower plot
-##add the mean
-mean.bf.heli<-allvis.bf.heli %>% mutate(patch3 = paste(allvis.bf.heli$vissys,allvis.bf.heli$patch1,sep=".")) %>% 
-  #create a new column "patch3" which combines the category info of patch1(flowers) and vissys
-  group_by(patch3,vissys,patch1) %>% summarize(mean.dS.bf=mean(dS)) %>% #patch1(flowers
-  #create a column "mean.dS" as the mean dS for one patch1 to all corresponding patch2
-  ungroup() %>% 
-  dplyr::select(-patch3) #remove the patch3 column because we don't need it anymore
-
-
-##plot the mean dS
-names(mean.bf.heli)[names(mean.bf.heli) == "patch1"] <- "flowerID"
-#rename the column "patch1" because somehow it doesn't work in the ggplot function
-mean.bf.heli<-mean.bf.heli[order(mean.bf.heli$flowerID),]
-#make the data frame order bt flowerID then when apply the colour code in the following step "viridis", the colour will be consistent in the same comparison accross different visual systems
-
-##combine the colour code list to the mean.bf for ploting
-mean.bf.heli$match.name<-flower.colour$species # this column is just for checking if match correctly
-mean.bf.heli$colour<-flower.colour$colour
-
-bf.heli<-ggplot(mean.bf.heli, aes(x=vissys, y=mean.dS.bf,group=flowerID))+
-  geom_point(col=mean.bf.heli$colour, size= 1,alpha=0.7) + 
-  geom_line(col=mean.bf.heli$colour, size = 0.5, alpha=0.7)+
-  xlab("Visual system") +     
-  ylab("Chromatic contrast (JND)") +
-  ylim(0,15)+
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-        panel.background = element_rect(fill = "grey80",size = NA), #make the backfround empty: panel.background = element_blank()
-        axis.title.x = element_text(size=12),  
-        axis.text.x  = element_text(size=8, colour="black", angle =90),
-        axis.title.y = element_text(size =12, vjust = 1),
-        axis.text.y = element_text(size=8, colour="black"),
-        axis.line.x = element_line(colour = 'black', size=0.5, linetype='solid'),
-        axis.line.y = element_line(colour = 'black', size=0.5, linetype='solid'),
-        legend.justification=c(1,0), legend.position=c(1,0.45),
-        legend.key = element_blank(),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9))+
-  scale_x_discrete(limits = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"),
-                   labels=c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
-  geom_point(data = mean.bf.heli, aes(x= "VS1.bf", y= mean(VS1.bf.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf.heli, aes(x= "VS2.bf", y= mean(VS2.bf.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf.heli, aes(x= "VS3.bf", y= mean(VS3.bf.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf.heli, aes(x= "VS4.bf", y= mean(VS4.bf.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  geom_point(data = mean.bf.heli, aes(x= "VS5.bf", y= mean(VS5.bf.heli$dS)), 
-             col="black", size=3)+ #add the mean point
-  #change the x labels
-  ggtitle("Beetle vs. Flower")+
-  annotate("text", x = c("VS1.bf", "VS2.bf", "VS3.bf","VS4.bf","VS5.bf"), y = 15, label =c("a","b","c","d","e")) #add statistical info
-
-
-figure.heli <- ggarrange(fl.heli,bl.heli,bf.heli, ncol = 3, nrow = 1)
+# bind the 3 panels
+figure.heli <- ggarrange(fl.Heliconius,
+                             bl.Heliconius,
+                             bf.Heliconius, 
+                             ncol = 3, nrow = 1)
 figure.heli
 ```
 </br>

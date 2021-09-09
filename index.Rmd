@@ -26,9 +26,9 @@ This document is divided into four parts:
 
 1. [Main models](main_models.html) : Shows the main visual models in the paper. Additionally, we combined the models using twilight illumination here for comparison.
 
-2. [Even spacing](even_spacing.html) : Test for the effect of evenly spaced photoreceptors on chromatic contrast.
+2. [Opsin-shifted visual systems](opsin_shifed_models.html) : Ran the same models as in the main models, but used opsin-shifted LWS receptors instead of filter-shifted ones.
 
-3. [Opsin-shifted visual systems](opsin_shifed_models.html) : Ran the same models as in the main models, but used opsin-shifted LWS receptors instead of filter-shifted ones.
+3. [Evenly space](evenly_space.html) : Test for the effect of evenly spaced photoreceptors on chromatic contrast.
 
 4. [Sensitivity analysis](sensitivity_analysis.html): Test if the modelling results are sensitive to photoreceptor ratio.
 

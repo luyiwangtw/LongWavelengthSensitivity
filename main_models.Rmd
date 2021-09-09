@@ -59,19 +59,19 @@ knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time wh
 
 * The wavelength range for all data used in the models was 300-800 nm.
 
-```{r import data,message=FALSE}
-#import sensitivity curves
+```{r Import data, message=FALSE}
+# import sensitivity curves
 specsensbuprest.aim1 <- read.csv("data/peak sensitivity_filter shift_aim1.csv",header=TRUE) %>%
   as.rspec()
 specsensbuprest.aim2 <- read.csv("data/peak sensitivity_filter shift_aim2.csv",header=TRUE) %>%
   as.rspec()
 
-#import irradiance
+# import irradiance
 irradiance.d65 <- read.csv("data/d65.csv",header=TRUE) %>% 
-  as.rspec(lim=c(300,800)) %>%  #set import range
+  as.rspec(lim = c(300,800)) %>%  #set import range
   procspec(opt = c("min", "max")) #standardize the illumination spectrum
 irradiance.twilight <- read.csv("data/civil twilight.csv",header=TRUE) %>% 
-  as.rspec(lim=c(300,800)) %>% 
+  as.rspec(lim = c(300,800)) %>% 
   rename( twilight = Irradiance) %>% 
   irrad2flux() #convert the irradiance (μ Watt.cm^{-2}) to photon flux (μ mol.s^{-1}.m^{-2}) to derive correct quantum catch.
 
@@ -116,10 +116,10 @@ category <- rep(category.list ,
 wavelength <- rep(dataset[,1])
 
 #transform the data for plotting purpose
-dataset.transpose<-gather(dataset[,2:131], 
-                          key = "species", 
-                          value = "reflectance", 
-                          na.rm = FALSE,
+dataset.transpose <- gather(dataset[,2:131], 
+                            key = "species", 
+                            value = "reflectance", 
+                            na.rm = FALSE,
                           convert = FALSE, 
                           factor_key = FALSE)
 dataset.plot.indivisually <- cbind(dataset.transpose, wavelength,category)
@@ -273,11 +273,11 @@ get.twilight.vismodel <- function(i){
   
   vs.i <- vismodel(dataset[1:501,], 
                    visual = i, 
-                   bkg=aveleaf$aveleaf, 
+                   bkg = aveleaf$aveleaf, 
                    illum = irradiance.twilight[1:501,2], 
                    qcatch = 'fi', 
-                   relative=FALSE, 
-                   vonkries=TRUE)
+                   relative = FALSE, 
+                   vonkries = TRUE)
   return(vs.i)
 }
 ```
@@ -298,7 +298,7 @@ sens.list <- list(USM <- specsensbuprest.aim1[, 1:4],
 ## set up list for holding output
 d65.vismodel.output <- list(USM = NA, UML = NA, USL = NA, USML = NA,
                             VS580 = NA, VS600 = NA, VS620 = NA, VS640 = NA, VS660 = NA)
-twilight.vismodel.output <- d65.vismodel.output # replicate a same list for twilight
+twilight.vismodel.output <- d65.vismodel.output # replicate a same empty list for twilight
 
 ## Run the loop
 for (i in 1:length(sens.list)){
@@ -355,7 +355,7 @@ buprest660_twilight <- twilight.vismodel.output$VS660
 aim1.recep.density.list <- list(USM <- c(1.6027, 1.4059, 1.7714),
                                 UML <- c(1.4416, 1.5933, 1.7451),
                                 USL <- c(1.5481, 1.3580, 1.8740),
-                                USML <- c(1.14,1,1.26,1.38))
+                                USML <- c(1.14, 1, 1.26, 1.38))
 
 ## Weber fraction
 aim1.web.list <- c(0.1059, 0.1067, 0.1030, 0.12)
@@ -395,9 +395,9 @@ CvsUSML <- aim1.d65.contrast.output$USML
 get.aim2.d65.coldist <- function(i){
   
   con <- coldist(modeldata = i, # put output of vismodel()
-                   noise="neural", 
-                   achro=FALSE, 
-                   n = c(1.14,1,1.26,1.38),
+                   noise = "neural", 
+                   achro = FALSE, 
+                   n = c(1.14, 1, 1.26, 1.38),
                    weber = 0.12,
                    weber.ref = 4)
   
@@ -429,7 +429,8 @@ aim1.twilight.vismodel.list <- list(vsUSM_twilight,
                                     vsUML_twilight, 
                                     vsUSL_twilight,
                                     vsUSML_twilight)
-# Here have to create one comb.list is becasue vis.model input is different from D65
+
+# Here have to create one comb.list is because vis.model input is different from D65
 aim1.twilight.comb.list <- list(vis.list = aim1.twilight.vismodel.list,
                                 recp.dens.list = aim1.recep.density.list,
                                 web.list = aim1.web.list,
@@ -490,16 +491,24 @@ Cbuprest640_twilight <- aim2.twilight.contrast.output$VS640
 Cbuprest660_twilight <- aim2.twilight.contrast.output$VS660
 ```
 
-
 ```{r Combine all contrast value in each comparison group}
 # Get a column for visual system names 
 ## Create list required in the loops
-aim2.fl.vissys <- list("VS1.fl", "VS2.fl", "VS3.fl", "VS4.fl", "VS5.fl") 
-aim2.bl.vissys <- list("VS1.bl", "VS2.bl", "VS3.bl", "VS4.bl", "VS5.bl")
-aim2.bf.vissys <- list("VS1.bf", "VS2.bf", "VS3.bf", "VS4.bf", "VS5.bf") 
-aim1.fl.vissys <- aim2.fl.vissys[1:4]
-aim1.bl.vissys <- aim2.bl.vissys[1:4]
-aim1.bf.vissys <- aim2.bf.vissys[1:4]
+aim1.fl.vissys <- list("UVSWMW...fl",
+                       "UV..MWLW.fl", 
+                       "UVSW..LW.fl",
+                       "UVSWMWLW.fl")
+aim1.bl.vissys <- list("UVSWMW...bl",
+                       "UV..MWLW.bl", 
+                       "UVSW..LW.bl",
+                       "UVSWMWLW.bl")
+aim1.bf.vissys <- list("UVSWMW...bf",
+                       "UV..MWLW.bf",
+                       "UVSW..LW.bf",
+                       "UVSWMWLW.bf")
+aim2.fl.vissys <- list("VS580.fl", "VS600.fl", "VS620.fl", "VS640.fl", "VS660.fl") 
+aim2.bl.vissys <- list("VS580.bl", "VS600.bl", "VS620.bl", "VS640.bl", "VS660.bl")
+aim2.bf.vissys <- list("VS580.bf", "VS600.bf", "VS620.bf", "VS640.bf", "VS660.bf") 
 
 ## Daylight - aim 1
 aim1.vissys_d65 <- list(CvsUSM, CvsUML, CvsUSL, CvsUSML)
@@ -511,7 +520,8 @@ for (i in 1:length(aim1.vissys_d65)) {
   
   temp.i <- aim1.vissys_d65[[i]] %>% 
     filter(str_detect(patch1,"flower")) %>% 
-    filter(str_detect(patch2,"leaves"))
+    filter(str_detect(patch2,"leaves")) %>% 
+    dplyr::select(1:3)
   
   temp.i$vissys <- strrep(aim1.fl.vissys[[i]],1)
   
@@ -525,7 +535,8 @@ for (i in 1:length(aim1.vissys_d65)) {
   temp.i <- aim1.vissys_d65[[i]] %>% 
     filter(str_detect(patch2,"beetle")) %>% 
     # Note: for beelte vs. leaf, have to filter from patch 2 then pactch 1
-    filter(str_detect(patch1,"leaves"))
+    filter(str_detect(patch1,"leaves")) %>% 
+    dplyr::select(1:3)
   
   temp.i$vissys <- strrep(aim1.bl.vissys[[i]],1)
   
@@ -538,7 +549,8 @@ for (i in 1:length(aim1.vissys_d65)) {
   
   temp.i <- aim1.vissys_d65[[i]] %>% 
     filter(str_detect(patch1,"flower")) %>% 
-    filter(str_detect(patch2,"beetle"))
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
   
   temp.i$vissys <- strrep(aim1.bf.vissys[[i]],1)
   
@@ -557,7 +569,8 @@ for (i in 1:length(aim1.vissys_twilight)) {
   
   temp.i <- aim1.vissys_twilight[[i]] %>% 
     filter(str_detect(patch1,"flower")) %>% 
-    filter(str_detect(patch2,"leaves"))
+    filter(str_detect(patch2,"leaves")) %>% 
+    dplyr::select(1:3) # ditch dL becasue we didn't calculate achromatic contrast
   
   temp.i$vissys <- strrep(aim1.fl.vissys[[i]],1)
   
@@ -570,7 +583,8 @@ for (i in 1:length(aim1.vissys_twilight)) {
   
   temp.i <- aim1.vissys_twilight[[i]] %>% 
     filter(str_detect(patch2,"beetle")) %>% 
-    filter(str_detect(patch1,"leaves"))
+    filter(str_detect(patch1,"leaves")) %>% 
+    dplyr::select(1:3)
   
   temp.i$vissys <- strrep(aim1.bl.vissys[[i]],1)
   
@@ -583,7 +597,8 @@ for (i in 1:length(aim1.vissys_twilight)) {
   
   temp.i <- aim1.vissys_twilight[[i]] %>% 
     filter(str_detect(patch1,"flower")) %>% 
-    filter(str_detect(patch2,"beetle"))
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
   
   temp.i$vissys <- strrep(aim1.bf.vissys[[i]],1)
   
@@ -600,7 +615,8 @@ for (i in 1:length(aim2.vissys_d65)) {
   
   temp.i <- aim2.vissys_d65[[i]] %>% 
     filter(str_detect(patch1,"flower")) %>% 
-    filter(str_detect(patch2,"leaves"))
+    filter(str_detect(patch2,"leaves")) %>% 
+    dplyr::select(1:3)
   
   temp.i$vissys <- strrep(aim2.fl.vissys[[i]],1)
   
@@ -613,7 +629,8 @@ for (i in 1:length(aim2.vissys_d65)) {
   
   temp.i <- aim2.vissys_d65[[i]] %>% 
     filter(str_detect(patch2,"beetle")) %>% 
-    filter(str_detect(patch1,"leaves"))
+    filter(str_detect(patch1,"leaves")) %>% 
+    dplyr::select(1:3)
   
   temp.i$vissys <- strrep(aim2.bl.vissys[[i]],1)
   
@@ -626,7 +643,8 @@ for (i in 1:length(aim2.vissys_d65)) {
   
   temp.i <- aim2.vissys_d65[[i]] %>% 
     filter(str_detect(patch1,"flower")) %>% 
-    filter(str_detect(patch2,"beetle"))
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
   
   temp.i$vissys <- strrep(aim2.bf.vissys[[i]],1)
   
@@ -643,7 +661,8 @@ for (i in 1:length(aim2.vissys_twilight)) {
   
   temp.i <- aim2.vissys_twilight[[i]] %>% 
     filter(str_detect(patch1,"flower")) %>% 
-    filter(str_detect(patch2,"leaves"))
+    filter(str_detect(patch2,"leaves")) %>% 
+    dplyr::select(1:3)
   
   temp.i$vissys <- strrep(aim2.fl.vissys[[i]],1)
   
@@ -656,7 +675,8 @@ for (i in 1:length(aim2.vissys_twilight)) {
   
   temp.i <- aim2.vissys_twilight[[i]] %>% 
     filter(str_detect(patch2,"beetle")) %>% 
-    filter(str_detect(patch1,"leaves"))
+    filter(str_detect(patch1,"leaves")) %>% 
+    dplyr::select(1:3)
   
   temp.i$vissys <- strrep(aim2.bl.vissys[[i]],1)
   
@@ -669,7 +689,8 @@ for (i in 1:length(aim2.vissys_twilight)) {
   
   temp.i <- aim2.vissys_twilight[[i]] %>% 
     filter(str_detect(patch1,"flower")) %>% 
-    filter(str_detect(patch2,"beetle"))
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
   
   temp.i$vissys <- strrep(aim2.bf.vissys[[i]],1)
   
@@ -679,6 +700,7 @@ for (i in 1:length(aim2.vissys_twilight)) {
 
 ### Aim 1 {.tabset .tabset-fade .tabset-pills}
 The table shows the mean contrast in each comparison group
+
 #### Daylight
 ```{r}
 # Combine comparison groups together in a table
@@ -786,240 +808,6 @@ contrast.list_twilight.aim2 %>% pander()
         + Fixed factor: __visual system__
         + Random factor: __sample ID__ of both targets in the comparison
 
-```{r, Create different comparison groups for furthur GLMM analysis} 
-# Organize data before GLMM
-
-## D65 - aim 1
-### flower vs leaf
-vislist.fl_d65.aim1 <- list("contrast.UVSWMW...flower.vs.leaf",
-                            "contrast.UV..MWLW.flower.vs.leaf", 
-                            "contrast.UVSW..LW.flower.vs.leaf",
-                            "contrast.UVSWMWLW.flower.vs.leaf")
-compare.flower.vs.leaf.aim1 <- data_frame()
-for (i in 1:length(aim1.vissys_d65)) {
-
-temp.i <-  aim1.vissys_d65[[i]] %>% 
-  filter(str_detect(patch1, "flower")) %>% 
-  filter(str_detect(patch2, "leaves")) %>% 
-  dplyr::select(1:3)
-
-temp.i$peak_wl.flower.vs.leaf <- strrep(vislist.fl_d65.aim1[[i]],1)
-
-compare.flower.vs.leaf.aim1 <- compare.flower.vs.leaf.aim1 %>% rbind(temp.i)
-}
-
-### beetle vs leaf
-vislist.bl_d65.aim1 <- list("contrast.UVSWMW...beetle.vs.leaf",
-                            "contrast.UV..MWLW.beetle.vs.leaf", 
-                            "contrast.UVSW..LW.beetle.vs.leaf",
-                            "contrast.UVSWMWLW.beetle.vs.leaf")
-compare.beetle.vs.leaf.aim1 <- data_frame()
-for (i in 1:length(aim1.vissys_d65)) {
-
-temp.i <-  aim1.vissys_d65[[i]] %>% 
-  filter(str_detect(patch1, "leaves")) %>% 
-  filter(str_detect(patch2, "beetle")) %>% 
-  dplyr::select(1:3)
-
-temp.i$peak_wl.beetle.vs.leaf <- strrep(vislist.bl_d65.aim1[[i]],1)
-
-compare.beetle.vs.leaf.aim1 <- compare.beetle.vs.leaf.aim1 %>% rbind(temp.i)
-}
-
-### beetle vs flower
-vislist.bf_d65.aim1 <- list("contrast.UVSWMW...beetle.vs.flower",
-                            "contrast.UV..MWLW.beetle.vs.flower", 
-                            "contrast.UVSW..LW.beetle.vs.flower",
-                            "contrast.UVSWMWLW.beetle.vs.flower")
-compare.beetle.vs.flower.aim1 <- data_frame()
-for (i in 1:length(aim1.vissys_d65)) {
-
-temp.i <-  aim1.vissys_d65[[i]] %>% 
-  filter(str_detect(patch1, "flower")) %>% 
-  filter(str_detect(patch2, "beetle")) %>% 
-  dplyr::select(1:3)
-
-temp.i$peak_wl.beetle.vs.flower <- strrep(vislist.bf_d65.aim1[[i]],1)
-
-compare.beetle.vs.flower.aim1 <- compare.beetle.vs.flower.aim1 %>% rbind(temp.i)
-}
-
-
-## D65 - Aim 2
-### flower vs leaf
-vislist.fl_d65.aim2 <- list("bup580.flower.vs.leaf",
-                            "bup600.flower.vs.leaf", 
-                            "bup620.flower.vs.leaf",
-                            "bup640.flower.vs.leaf",
-                            "bup660.flower.vs.leaf")
-compare.flower.vs.leaf.aim2 <- data_frame()
-for (i in 1:length(aim2.vissys_d65)) {
-
-temp.i <-  aim2.vissys_d65[[i]] %>% 
-  filter(str_detect(patch1, "flower")) %>% 
-  filter(str_detect(patch2, "leaves")) %>% 
-  dplyr::select(1:3)
-
-temp.i$peak_wl.flower.vs.leaf <- strrep(vislist.fl_d65.aim2[[i]],1)
-
-compare.flower.vs.leaf.aim2 <- compare.flower.vs.leaf.aim2 %>% rbind(temp.i)
-}
-
-### beetle vs leaf
-vislist.bl_d65.aim2 <- list("bup580.beetle.vs.leaf",
-                            "bup600.beetle.vs.leaf", 
-                            "bup620.beetle.vs.leaf",
-                            "bup640.beetle.vs.leaf",
-                            "bup660.beetle.vs.leaf")
-compare.beetle.vs.leaf.aim2 <- data_frame()
-for (i in 1:length(aim2.vissys_d65)) {
-
-temp.i <-  aim2.vissys_d65[[i]] %>% 
-  filter(str_detect(patch1, "leaves")) %>% 
-  filter(str_detect(patch2, "beetle")) %>% 
-  dplyr::select(1:3)
-
-temp.i$peak_wl.beetle.vs.leaf <- strrep(vislist.bl_d65.aim2[[i]],1)
-
-compare.beetle.vs.leaf.aim2 <- compare.beetle.vs.leaf.aim2 %>% rbind(temp.i)
-}
-
-
-### beetle vs flower
-vislist.bf_d65.aim2 <- list("bup580.beetle.vs.flower",
-                            "bup600.beetle.vs.flower", 
-                            "bup620.beetle.vs.flower",
-                            "bup640.beetle.vs.flower",
-                            "bup660.beetle.vs.flower")
-compare.beetle.vs.flower.aim2 <- data_frame()
-for (i in 1:length(aim2.vissys_d65)) {
-
-temp.i <-  aim2.vissys_d65[[i]] %>% 
-  filter(str_detect(patch1, "leaves")) %>% 
-  filter(str_detect(patch2, "beetle")) %>% 
-  dplyr::select(1:3)
-
-temp.i$peak_wl.beetle.vs.flower <- strrep(vislist.bf_d65.aim2[[i]],1)
-
-compare.beetle.vs.flower.aim2 <- compare.beetle.vs.flower.aim2 %>% rbind(temp.i)
-}
-
-
-## Twilight - aim 1
-### flower vs leaf
-vislist.fl_twilight.aim1 <- list("contrast.UVSWMW...flower.vs.leaf_twilight",
-                                 "contrast.UV..MWLW.flower.vs.leaf_twilight", 
-                                 "contrast.UVSW..LW.flower.vs.leaf_twilight",
-                                 "contrast.UVSWMWLW.flower.vs.leaf_twilight")
-compare.flower.vs.leaf_twilight.aim1 <- data_frame()
-for (i in 1:length(aim1.vissys_twilight)) {
-
-temp.i <-  aim1.vissys_twilight[[i]] %>% 
-  filter(str_detect(patch1, "flower")) %>% 
-  filter(str_detect(patch2, "leaves")) %>% 
-  dplyr::select(1:3)
-
-temp.i$peak_wl.flower.vs.leaf <- strrep(vislist.fl_twilight.aim1[[i]],1)
-
-compare.flower.vs.leaf_twilight.aim1 <- compare.flower.vs.leaf_twilight.aim1 %>% rbind(temp.i)
-}
-
-### beetle vs leaf
-vislist.bl_twilight.aim1 <- list("contrast.UVSWMW...beetle.vs.leaf_twilight",
-                                 "contrast.UV..MWLW.beetle.vs.leaf_twilight", 
-                                 "contrast.UVSW..LW.beetle.vs.leaf_twilight",
-                                 "contrast.UVSWMWLW.beetle.vs.leaf_twilight")
-compare.beetle.vs.leaf_twilight.aim1 <- data_frame()
-for (i in 1:length(aim1.vissys_twilight)) {
-
-temp.i <-  aim1.vissys_twilight[[i]] %>% 
-  filter(str_detect(patch1, "leaves")) %>% 
-  filter(str_detect(patch2, "beetle")) %>% 
-  dplyr::select(1:3)
-
-temp.i$peak_wl.beetle.vs.leaf <- strrep(vislist.bl_twilight.aim1[[i]],1)
-
-compare.beetle.vs.leaf_twilight.aim1 <- compare.beetle.vs.leaf_twilight.aim1 %>% rbind(temp.i)
-}
-
-### beetle vs flower
-vislist.bf_twilight.aim1 <- list("contrast.UVSWMW...beetle.vs.flower_twilight",
-                                 "contrast.UV..MWLW.beetle.vs.flower_twilight", 
-                                 "contrast.UVSW..LW.beetle.vs.flower_twilight",
-                                 "contrast.UVSWMWLW.beetle.vs.flower_twilight")
-compare.beetle.vs.flower_twilight.aim1 <- data_frame()
-for (i in 1:length(aim1.vissys_twilight)) {
-
-temp.i <-  aim1.vissys_twilight[[i]] %>% 
-  filter(str_detect(patch1, "flower")) %>% 
-  filter(str_detect(patch2, "beetle")) %>% 
-  dplyr::select(1:3)
-
-temp.i$peak_wl.beetle.vs.flower <- strrep(vislist.bf_twilight.aim1[[i]],1)
-
-compare.beetle.vs.flower_twilight.aim1 <- compare.beetle.vs.flower_twilight.aim1 %>% rbind(temp.i)
-}
-
-
-## Twilight - Aim 2
-### flower vs leaf
-vislist.fl_d65.aim2 <- list("bup580.flower.vs.leaf_twilight",
-                            "bup600.flower.vs.leaf_twilight", 
-                            "bup620.flower.vs.leaf_twilight",
-                            "bup640.flower.vs.leaf_twilight",
-                            "bup660.flower.vs.leaf_twilight")
-compare.flower.vs.leaf_twilight.aim2 <- data_frame()
-for (i in 1:length(aim2.vissys_d65)) {
-
-temp.i <-  aim2.vissys_d65[[i]] %>% 
-  filter(str_detect(patch1, "flower")) %>% 
-  filter(str_detect(patch2, "leaves")) %>% 
-  dplyr::select(1:3)
-
-temp.i$peak_wl.flower.vs.leaf <- strrep(vislist.fl_d65.aim2[[i]],1)
-
-compare.flower.vs.leaf_twilight.aim2 <- compare.flower.vs.leaf_twilight.aim2 %>% rbind(temp.i)
-}
-
-### beetle vs leaf
-vislist.bl_d65.aim2 <- list("bup580.beetle.vs.leaf_twilight",
-                            "bup600.beetle.vs.leaf_twilight", 
-                            "bup620.beetle.vs.leaf_twilight",
-                            "bup640.beetle.vs.leaf_twilight",
-                            "bup660.beetle.vs.leaf_twilight")
-compare.beetle.vs.leaf_twilight.aim2 <- data_frame()
-for (i in 1:length(aim2.vissys_d65)) {
-
-temp.i <-  aim2.vissys_d65[[i]] %>% 
-  filter(str_detect(patch1, "leaves")) %>% 
-  filter(str_detect(patch2, "beetle")) %>% 
-  dplyr::select(1:3)
-
-temp.i$peak_wl.beetle.vs.leaf <- strrep(vislist.bl_d65.aim2[[i]],1)
-
-compare.beetle.vs.leaf_twilight.aim2 <- compare.beetle.vs.leaf_twilight.aim2 %>% rbind(temp.i)
-}
-
-### beetle vs flower
-vislist.bf_d65.aim2 <- list("bup580.beetle.vs.flower_twilight",
-                            "bup600.beetle.vs.flower_twilight", 
-                            "bup620.beetle.vs.flower_twilight",
-                            "bup640.beetle.vs.flower_twilight",
-                            "bup660.beetle.vs.flower_twilight")
-compare.beetle.vs.flower_twilight.aim2 <- data_frame()
-for (i in 1:length(aim2.vissys_d65)) {
-
-temp.i <-  aim2.vissys_d65[[i]] %>% 
-  filter(str_detect(patch1, "flower")) %>% 
-  filter(str_detect(patch2, "beetle")) %>% 
-  dplyr::select(1:3)
-
-temp.i$peak_wl.beetle.vs.flower <- strrep(vislist.bf_d65.aim2[[i]],1)
-
-compare.beetle.vs.flower_twilight.aim2 <- compare.beetle.vs.flower_twilight.aim2 %>% rbind(temp.i)
-}
-```
-
 ## Check assumptions {.tabset .tabset-fade .tabset-pills}
 
 * Before running the GLMMs, we first check if the data follows the assumption of normality and homogeneity of variance
@@ -1031,18 +819,18 @@ Click the tabs to choose the assumptions ( __Normality__ / __Homogeneity__ ) of 
 </br>
 ```{r Group data for regressions}
 # list data for the following loops
-input.list.regres_d65.aim1 <- list(compare.flower.vs.leaf.aim1,
-                                compare.beetle.vs.leaf.aim1,
-                                compare.beetle.vs.flower.aim1)
-input.list.regres_twilight.aim1 <- list(compare.flower.vs.leaf_twilight.aim1,
-                                     compare.beetle.vs.leaf_twilight.aim1,
-                                     compare.beetle.vs.flower_twilight.aim1)
-input.list.regres_d65.aim2 <- list(compare.flower.vs.leaf.aim2,
-                                compare.beetle.vs.leaf.aim2,
-                                compare.beetle.vs.flower.aim2)
-input.list.regres_twilight.aim2 <- list(compare.flower.vs.leaf_twilight.aim2,
-                                     compare.beetle.vs.leaf_twilight.aim2,
-                                     compare.beetle.vs.flower_twilight.aim2)
+input.list.regres_d65.aim1 <- list(allvis.fl_d65.aim1,
+                                   allvis.bl_d65.aim1,
+                                   allvis.bf_d65.aim1)
+input.list.regres_twilight.aim1 <- list(allvis.fl_twilight.aim1,
+                                        allvis.bl_twilight.aim1,
+                                        allvis.bf_twilight.aim1)
+input.list.regres_d65.aim2 <- list(allvis.fl_d65.aim2,
+                                   allvis.bl_d65.aim2,
+                                   allvis.bf_d65.aim2)
+input.list.regres_twilight.aim2 <- list(allvis.fl_twilight.aim2,
+                                        allvis.bl_twilight.aim2,
+                                        allvis.bf_twilight.aim2)
 ```
 
 ```{r Create regressions for assumption check}
@@ -1068,18 +856,18 @@ for (i in 1:length(input.list.regres_d65.aim2)) {
 ##Twilight - aim 1
 res.list_twilight.aim1 <- list(NA)
 
-for (i in 1:length(input.list.regres_d65.aim1)) {
+for (i in 1:length(input.list.regres_twilight.aim1)) {
   res.i <- lm(
-    input.list.regres_d65.aim1[[i]]$dS ~ input.list.regres_d65.aim1[[i]][,4])
+    input.list.regres_twilight.aim1[[i]]$dS ~ input.list.regres_twilight.aim1[[i]][,4])
   res.list_twilight.aim1[[i]] <- res.i
 }
 
 ##Twilight - Aim 2
 res.list_twilight.aim2 <- list(NA)
 
-for (i in 1:length(input.list.regres_d65.aim2)) {
+for (i in 1:length(input.list.regres_twilight.aim2)) {
   res.i <- lm(
-    input.list.regres_d65.aim2[[i]]$dS ~ input.list.regres_d65.aim2[[i]][,4])
+    input.list.regres_twilight.aim2[[i]]$dS ~ input.list.regres_twilight.aim2[[i]][,4])
   res.list_twilight.aim2[[i]] <- res.i
 }
 ```
@@ -1224,119 +1012,98 @@ mtext("Contrast (JND)",side = 2, line = 0, outer = TRUE, cex = 1.3, las = 0)
 
 </br>
 
-```{r}
+```{r Set up functions for GLMM}
+get.lmer <- function(datlist, compnnumber){
+  
+  lmer(dS ~ vissys + (1|patch2) + (1|patch1), 
+       data = datlist[[compnnumber]], REML = F)
+  #REML=F, in order to fit the model using the likelihood ratio test. Otherwise, the lmer default will fit the model using the REML (REstricted Maximum Likelihood) criterion.
+}
+
+get.posthocsum <- function(modelx){
+  
+  summary(glht(modelx, 
+               linfct = mcp(vissys = "Tukey")), 
+          test = adjusted("bonferroni"))
+}
+```
+
+```{r Run GLMM models}
 #GLMM - D65 - aim 1
 ##Flower vs Leaf
-m.flower.vs.leaf_d65.aim1 <- lmer(dS ~ peak_wl.flower.vs.leaf + (1|patch2) + (1|patch1), 
-                                  data = input.list.regres_d65.aim1[[1]], REML = F)
-sum.flower.vs.leaf_d65.aim1 <- summary(glht(m.flower.vs.leaf_d65.aim1, 
-                                            linfct = mcp(peak_wl.flower.vs.leaf = "Tukey")),
-                                       test = adjusted("bonferroni"))
-#REML=F, in order to fit the model using the likelihood ratio test. Otherwise, the lmer default will fit the model using the REML (REstricted Maximum Likelihood) criterion.
+m.flower.vs.leaf_d65.aim1 <- get.lmer(input.list.regres_d65.aim1, 1)
+sum.flower.vs.leaf_d65.aim1 <- get.posthocsum(m.flower.vs.leaf_d65.aim1)
 
 ##Beetle vs Leaf
-m.beetle.vs.leaf_d65.aim1 <- lmer(dS ~ peak_wl.beetle.vs.leaf + (1|patch2) + (1|patch1), 
-                                  data = compare.beetle.vs.leaf.aim1, REML = F)
-sum.beetle.vs.leaf_d65.aim1 <- summary(glht(m.beetle.vs.leaf_d65.aim1, 
-                                            linfct = mcp(peak_wl.beetle.vs.leaf = "Tukey")), 
-                                       test = adjusted("bonferroni"))
+m.beetle.vs.leaf_d65.aim1 <- get.lmer(input.list.regres_d65.aim1, 2)
+sum.beetle.vs.leaf_d65.aim1 <- get.posthocsum(m.beetle.vs.leaf_d65.aim1)
+
 ##Beetle vs Flower
-m.beetle.vs.flower_d65.aim1 <- lmer(dS ~ peak_wl.beetle.vs.flower + (1|patch2) + (1|patch1), 
-                                    data = compare.beetle.vs.flower.aim1, REML = F)
-sum.beetle.vs.flower_d65.aim1 <-summary(glht(m.beetle.vs.flower_d65.aim1, 
-                                             linfct = mcp(peak_wl.beetle.vs.flower = "Tukey")), 
-                                        test = adjusted("bonferroni"))
+m.beetle.vs.flower_d65.aim1 <- get.lmer(input.list.regres_d65.aim1, 3)
+sum.beetle.vs.flower_d65.aim1 <- get.posthocsum(m.beetle.vs.flower_d65.aim1)
+
+#GLMM - D65 - Aim 2
+##Flower vs Leaf
+m.flower.vs.leaf_d65.aim2 <- get.lmer(input.list.regres_d65.aim2, 1)
+sum.flower.vs.leaf_d65.aim2 <- get.posthocsum(m.flower.vs.leaf_d65.aim2)
+
+##Beetle vs Leaf
+m.beetle.vs.leaf_d65.aim2 <- get.lmer(input.list.regres_d65.aim2, 2)
+sum.beetle.vs.leaf_d65.aim2 <- get.posthocsum(m.beetle.vs.leaf_d65.aim2)
+
+##Beetle vs Flower
+m.beetle.vs.flower_d65.aim2 <- get.lmer(input.list.regres_d65.aim2, 3)
+sum.beetle.vs.flower_d65.aim2 <- get.posthocsum(m.beetle.vs.flower_d65.aim2)
 
 
-###reshape data for p-value heat map
-#### Set up list and function
+#GLMM - Twilight - Aim 1
+##Flower vs Leaf
+m.flower.vs.leaf_twilight.aim1 <- get.lmer(input.list.regres_twilight.aim1, 1)
+sum.flower.vs.leaf_twilight.aim1 <- get.posthocsum(m.flower.vs.leaf_twilight.aim1)
+
+##Beetle vs Leaf
+m.beetle.vs.leaf_twilight.aim1 <- get.lmer(input.list.regres_twilight.aim1, 2)
+sum.beetle.vs.leaf_twilight.aim1 <- get.posthocsum(m.beetle.vs.leaf_twilight.aim1)
+
+##Beetle vs Flower
+m.beetle.vs.flower_twilight.aim1 <- get.lmer(input.list.regres_twilight.aim1, 3)
+sum.beetle.vs.flower_twilight.aim1 <- get.posthocsum(m.beetle.vs.flower_twilight.aim1)
+
+#GLMM - Twilight - Aim 2
+##Flower vs Leaf
+m.flower.vs.leaf_twilight.aim2 <- get.lmer(input.list.regres_twilight.aim2, 1)
+sum.flower.vs.leaf_twilight.aim2 <- get.posthocsum(m.flower.vs.leaf_twilight.aim2)
+
+##Beetle vs Leaf
+m.beetle.vs.leaf_twilight.aim2 <- get.lmer(input.list.regres_twilight.aim2, 2)
+sum.beetle.vs.leaf_twilight.aim2 <- get.posthocsum(m.beetle.vs.leaf_twilight.aim2)
+
+##Beetle vs Flower
+m.beetle.vs.flower_twilight.aim2 <- get.lmer(input.list.regres_twilight.aim2, 3)
+sum.beetle.vs.flower_twilight.aim2 <- get.posthocsum(m.beetle.vs.flower_twilight.aim2)
+```
+
+```{r Set up lists and function for heap maps}
+# Set up lists
 vislist.heatmap.aim1 <- list(c("USL", "USM","USML","USM","USML","USML"),
                              c("UML", "UML","UML","USL","USL","USM"))
 vislist.heatmap.aim2 <- list(c("VS 600", "VS 620","VS 640","VS 660","VS 620","VS 640","VS 660","VS 640","VS 660","VS 660"),
                              c("VS 580","VS 580","VS 580","VS 580","VS 600","VS 600","VS 600","VS 620","VS 620","VS 640"))
 
-
+# Set up the function
 get.heatmap.datframe <- function(i,z){
   
-  heatmapdat.i <- data.frame(names(i[[1]]),
-                            as.numeric(str_extract(i[[1]],"([0-9]+).*$"))) %>%
-  cbind(as.numeric(str_extract(i[[2]],"([0-9]+).*$"))) %>% 
-  cbind(as.numeric(str_extract(i[[3]],"([0-9]+).*$"))) %>%
-  dplyr::rename(orignial.list = 1, flower.vs.leaf = 2, beetle.vs.leaf = 3, beetle.vs.flower = 4) %>% 
-  cbind(z[[1]]) %>% 
-  cbind(z[[2]]) %>% 
-  dplyr::select(-orignial.list) 
+  heatmapdat.i <- data.frame(as.numeric(str_extract(i[[1]],"([0-9]+).*$"))) %>%
+    cbind(as.numeric(str_extract(i[[2]],"([0-9]+).*$"))) %>% 
+    cbind(as.numeric(str_extract(i[[3]],"([0-9]+).*$"))) %>%
+    dplyr::rename(flower.vs.leaf = 1, beetle.vs.leaf = 2, beetle.vs.flower = 3) %>% 
+    cbind(z[[1]]) %>% 
+    cbind(z[[2]]) 
+  
   colnames(heatmapdat.i)[4:5] <- c("VislistA", "VislistB")
   
   return(heatmapdat.i)
 }
-
-
-#GLMM - D65 - Aim 2
-##Flower vs Leaf
-m.flower.vs.leaf_d65.aim2 <- lmer(dS~peak_wl.flower.vs.leaf + (1|patch2) + (1|patch1), 
-                                  data = compare.flower.vs.leaf.aim2, REML = F)
-sum.flower.vs.leaf_d65.aim2 <- summary(glht(m.flower.vs.leaf_d65.aim2, 
-                                            linfct = mcp(peak_wl.flower.vs.leaf = "Tukey")), 
-                                       test = adjusted("bonferroni"))
-
-##Beetle vs Leaf
-m.beetle.vs.leaf_d65.aim2 <- lmer(dS ~ peak_wl.beetle.vs.leaf + (1|patch2) + (1|patch1), 
-                                  data = compare.beetle.vs.leaf.aim2, REML = F)
-sum.beetle.vs.leaf_d65.aim2 <- summary(glht(m.beetle.vs.leaf_d65.aim2, 
-                                            linfct = mcp(peak_wl.beetle.vs.leaf = "Tukey")), 
-                                       test = adjusted("bonferroni"))
-
-##Beetle vs Flower
-m.beetle.vs.flower_d65.aim2 <- lmer(dS ~ peak_wl.beetle.vs.flower + (1|patch2) + (1|patch1), 
-                                    data = compare.beetle.vs.flower.aim2, REML = F)
-sum.beetle.vs.flower_d65.aim2 <- summary(glht(m.beetle.vs.flower_d65.aim2, 
-                                              linfct = mcp(peak_wl.beetle.vs.flower = "Tukey")), 
-                                         test = adjusted("bonferroni"))
-
-
-#GLMM - Twilight - Aim 1
-##Flower vs Leaf
-m.flower.vs.leaf_twilight.aim1 <- lmer(dS ~ peak_wl.flower.vs.leaf + (1|patch2) + (1|patch1), 
-                                       data = compare.flower.vs.leaf_twilight.aim1, REML = F)
-sum.flower.vs.leaf_twilight.aim1 <- summary(glht(m.flower.vs.leaf_twilight.aim1, 
-                                                 linfct = mcp(peak_wl.flower.vs.leaf = "Tukey")), 
-                                            test = adjusted("bonferroni"))
-##Beetle vs Leaf
-m.beetle.vs.leaf_twilight.aim1 <- lmer(dS ~ peak_wl.beetle.vs.leaf + (1|patch2) + (1|patch1), 
-                                       data = compare.beetle.vs.leaf_twilight.aim1, REML = F)
-sum.beetle.vs.leaf_twilight.aim1 <- summary(glht(m.beetle.vs.leaf_twilight.aim1, 
-                                               linfct = mcp(peak_wl.beetle.vs.leaf = "Tukey")), 
-                                            test = adjusted("bonferroni"))
-
-##Beetle vs Flower
-m.beetle.vs.flower_twilight.aim1 <- lmer(dS ~ peak_wl.beetle.vs.flower + (1|patch2) + (1|patch1), 
-                                         data = compare.beetle.vs.flower_twilight.aim1, REML = F)
-sum.beetle.vs.flower_twilight.aim1<-summary(glht(m.beetle.vs.flower_twilight.aim1, 
-                                                 linfct = mcp(peak_wl.beetle.vs.flower = "Tukey")), 
-                                            test = adjusted("bonferroni"))
-
-#GLMM - Twilight - Aim 2
-##Flower vs Leaf
-m.flower.vs.leaf_twilight.aim2 <- lmer(dS ~ peak_wl.flower.vs.leaf + (1|patch2) + (1|patch1), 
-                                       data = compare.flower.vs.leaf_twilight.aim2, REML = F)
-sum.flower.vs.leaf_twilight.aim2 <- summary(glht(m.flower.vs.leaf_twilight.aim2, 
-                                                 linfct = mcp(peak_wl.flower.vs.leaf = "Tukey")), 
-                                            test = adjusted("bonferroni"))
-
-##Beetle vs Leaf
-m.beetle.vs.leaf_twilight.aim2 <- lmer(dS ~ peak_wl.beetle.vs.leaf + (1|patch2) + (1|patch1), 
-                                       data = compare.beetle.vs.leaf_twilight.aim2, REML = F)
-sum.beetle.vs.leaf_twilight.aim2 <- summary(glht(m.beetle.vs.leaf_twilight.aim2, 
-                                                 linfct = mcp(peak_wl.beetle.vs.leaf = "Tukey")), 
-                                            test = adjusted("bonferroni"))
-
-##Beetle vs Flower
-m.beetle.vs.flower_twilight.aim2 <- lmer(dS ~ peak_wl.beetle.vs.flower + (1|patch2) + (1|patch1), 
-                                         data = compare.beetle.vs.flower_twilight.aim2, REML = F)
-sum.beetle.vs.flower_twilight.aim2 <- summary(glht(m.beetle.vs.flower_twilight.aim2, 
-                                                  linfct = mcp(peak_wl.beetle.vs.flower = "Tukey")), 
-                                              test = adjusted("bonferroni"))
 ```
 
 ```{r Create p-value heat map}
@@ -1435,14 +1202,6 @@ get.pheatmap <- function(a, b){ggplot(data = a,
 
 #### __Flower v.s Leaf__ {.tabset .tabset-fade .tabset-pills}
 ##### Daylight{.tabset .tabset-fade .tabset-pills}
-```{r}
-m.flower.vs.leaf_d65.aim1 <- 
-  lmer(dS ~ peak_wl.flower.vs.leaf + (1|patch2) + (1|patch1), 
-       data = compare.flower.vs.leaf.aim1, REML=F)
-m.flower.vs.leaf_twilight.aim1 <- 
-  lmer(dS ~ peak_wl.flower.vs.leaf + (1|patch2) + (1|patch1), 
-       data = compare.flower.vs.leaf_twilight.aim1, REML=F)
-```
 
 ```{r}
 Anova(m.flower.vs.leaf_d65.aim1) %>% pander()
@@ -1836,12 +1595,12 @@ title.list <- list("Flower vs. Leaf", "Beetle vs. Leaf", "Beetle vs. Flower")
 ylim.list <- c(21, 2) # 21 for aim1, 2 for aim2
 vislable.list <- list(c("USM", "UML", "USL","USML"), # aim1
                       c("VS 580", "VS 600","VS 620","VS 640","VS 660")) # aim2
-vis.comp.list <- list(fl.aim1 <- c("VS1.fl", "VS2.fl", "VS3.fl", "VS4.fl"),
-                      bl.aim1 <- c("VS1.bl", "VS2.bl", "VS3.bl", "VS4.bl"),
-                      bf.aim1 <- c("VS1.bf", "VS2.bf", "VS3.bf", "VS4.bf"),
-                      fl.aim2 <- c("VS1.fl", "VS2.fl", "VS3.fl", "VS4.fl", "VS5.fl"),
-                      bl.aim2 <- c("VS1.bl", "VS2.bl", "VS3.bl", "VS4.bl", "VS5.bl"),
-                      bf.aim2 <- c("VS1.bf", "VS2.bf", "VS3.bf", "VS4.bf", "VS5.bf"))
+vis.comp.list <- list(fl.aim1 <- c("UVSWMW...fl", "UV..MWLW.fl", "UVSW..LW.fl", "UVSWMWLW.fl"),
+                      bl.aim1 <- c("UVSWMW...bl", "UV..MWLW.bl", "UVSW..LW.bl", "UVSWMWLW.bl"),
+                      bf.aim1 <- c("UVSWMW...bf", "UV..MWLW.bf", "UVSW..LW.bf", "UVSWMWLW.bf"),
+                      fl.aim2 <- c("VS580.fl", "VS600.fl", "VS620.fl", "VS640.fl", "VS660.fl"),
+                      bl.aim2 <- c("VS580.bl", "VS600.bl", "VS620.bl", "VS640.bl", "VS660.bl"),
+                      bf.aim2 <- c("VS580.bf", "VS600.bf", "VS620.bf", "VS640.bf", "VS660.bf"))
 
 stats.list <- list(fl_d65.aim1 <- c("a","a","b","b"),
                    bl_d65.aim1 <- c("a","b","b","b"),
@@ -1854,9 +1613,11 @@ stats.list <- list(fl_d65.aim1 <- c("a","a","b","b"),
                    bf_twilight.aim1 <- c("a","b","c","d"),
                    fl_twilight.aim2 <- c("a","b","c","d","e"),
                    bl_twilight.aim2 <- c("a","b","c","d","d"),
-                   bf_twilight.aim2 <- c("a","b","c","d","e"))
+                   bf_twilight.aim2 <- c("a","b","c","d","d"))
 
-get.contrastplot <- function(dat, title, vislable, upperylim, visomplist, compgroupnstats){
+backgorund.list <- c("grey80", NA) # choose NA for beetle.vs.leaf
+
+get.contrastplot <- function(dat, title, vislable, upperylim, visomplist, compgroupnstats, background){
   ggplot(dat, aes(x = vissys, 
                 y = mean.dS.sub,
                 group = factor(dat[,1])))+
@@ -1869,7 +1630,7 @@ get.contrastplot <- function(dat, title, vislable, upperylim, visomplist, compgr
     ylim(0, ylim.list[upperylim])+
     theme(panel.grid.major = element_blank(), 
           panel.grid.minor = element_blank(),
-          panel.background = element_rect(fill = "grey80", size = NA), 
+          panel.background = element_rect(fill = backgorund.list[background], size = NA), 
           axis.title.x = element_text(size = 12),  
           axis.text.x  = element_text(size = 8, colour = "black", angle = 90),
           axis.title.y = element_text(size = 12, vjust = 1),
@@ -1912,7 +1673,7 @@ get.contrastplot <- function(dat, title, vislable, upperylim, visomplist, compgr
 ```
 </br>
 
-## aim 1 {.tabset .tabset-fade .tabset-pills}
+## Aim 1 {.tabset .tabset-fade .tabset-pills}
 ### Daylight
 ```{r,fig.cap="Figure caption: Comparison of chromatic contrast for visual systems with different photoreceptor combinations. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts > 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
 
@@ -1922,9 +1683,9 @@ mean.bl_d65.aim1 <- get.plotmeans("aim1", "bl", allvis.bl_d65.aim1)
 mean.bf_d65.aim1 <- get.plotmeans("aim1", "bf", allvis.bf_d65.aim1)
 
 # plot individual panel
-fl_d65.aim1 <- get.contrastplot(mean.fl_d65.aim1, 1, 1, 1, 1, 1) # flower vs leaf
-bl_d65.aim1 <- get.contrastplot(mean.bl_d65.aim1, 2, 1, 1, 2, 2) # beetle vs leaf
-bf_d65.aim1 <- get.contrastplot(mean.bf_d65.aim1, 3, 1, 1, 3, 3) # beetle vs flower
+fl_d65.aim1 <- get.contrastplot(mean.fl_d65.aim1, 1, 1, 1, 1, 1, 1) # flower vs leaf
+bl_d65.aim1 <- get.contrastplot(mean.bl_d65.aim1, 2, 1, 1, 2, 2, 2) # beetle vs leaf
+bf_d65.aim1 <- get.contrastplot(mean.bf_d65.aim1, 3, 1, 1, 3, 3, 1) # beetle vs flower
 
 # bind the 3 panels
 figure_d65.aim1 <- ggarrange(fl_d65.aim1,
@@ -1942,9 +1703,9 @@ mean.bl_twilight.aim1 <- get.plotmeans("aim1", "bl", allvis.bl_twilight.aim1)
 mean.bf_twilight.aim1 <- get.plotmeans("aim1", "bf", allvis.bf_twilight.aim1)
 
 # plot individual panel
-fl_twilight.aim1 <- get.contrastplot(mean.fl_twilight.aim1, 1, 1, 2, 1, 7)
-bl_twilight.aim1 <- get.contrastplot(mean.bl_twilight.aim1, 2, 1, 2, 2, 8)
-bf_twilight.aim1 <- get.contrastplot(mean.bf_twilight.aim1, 3, 1, 2, 3, 9)
+fl_twilight.aim1 <- get.contrastplot(mean.fl_twilight.aim1, 1, 1, 2, 1, 7, 1)
+bl_twilight.aim1 <- get.contrastplot(mean.bl_twilight.aim1, 2, 1, 2, 2, 8, 2)
+bf_twilight.aim1 <- get.contrastplot(mean.bf_twilight.aim1, 3, 1, 2, 3, 9, 1)
 
 # bind the 3 panels
 figure_twilight.aim1 <- ggarrange(fl_twilight.aim1,
@@ -1965,9 +1726,9 @@ mean.bl_d65.aim2 <- get.plotmeans("aim2", "bl", allvis.bl_d65.aim2)
 mean.bf_d65.aim2 <- get.plotmeans("aim2", "bf", allvis.bf_d65.aim2)
 
 # plot individual panel
-fl_d65.aim2 <- get.contrastplot(mean.fl_d65.aim2, 1, 2, 1, 4, 4)
-bl_d65.aim2 <- get.contrastplot(mean.bl_d65.aim2, 2, 2, 1, 5, 5)
-bf_d65.aim2 <- get.contrastplot(mean.bf_d65.aim2, 3, 2, 1, 6, 6)
+fl_d65.aim2 <- get.contrastplot(mean.fl_d65.aim2, 1, 2, 1, 4, 4, 1)
+bl_d65.aim2 <- get.contrastplot(mean.bl_d65.aim2, 2, 2, 1, 5, 5, 2)
+bf_d65.aim2 <- get.contrastplot(mean.bf_d65.aim2, 3, 2, 1, 6, 6, 1)
 
 # bind the 3 panels
 figure_d65.aim2 <- ggarrange(fl_d65.aim2,
@@ -1985,9 +1746,9 @@ mean.bl_twilight.aim2 <- get.plotmeans("aim2", "bl", allvis.bl_twilight.aim2)
 mean.bf_twilight.aim2 <- get.plotmeans("aim2", "bf", allvis.bf_twilight.aim2)
 
 # plot individual panel
-fl_twilight.aim2 <- get.contrastplot(mean.fl_twilight.aim2, 1, 2, 2, 4, 10)
-bl_twilight.aim2 <- get.contrastplot(mean.bl_twilight.aim2, 2, 2, 2, 5, 11)
-bf_twilight.aim2 <- get.contrastplot(mean.bf_twilight.aim2, 3, 2, 2, 6, 12)
+fl_twilight.aim2 <- get.contrastplot(mean.fl_twilight.aim2, 1, 2, 2, 4, 10, 1)
+bl_twilight.aim2 <- get.contrastplot(mean.bl_twilight.aim2, 2, 2, 2, 5, 11, 2)
+bf_twilight.aim2 <- get.contrastplot(mean.bf_twilight.aim2, 3, 2, 2, 6, 12, 1)
 
 # bind the 3 panels
 figure_twilight.aim2 <- ggarrange(fl_twilight.aim2,
@@ -2005,4 +1766,4 @@ figure_twilight.aim2
 * The optimal peak sensitivity of the LWS photoreceptor depends on what is being viewed. When comparing beetle colours with both leaves and flowers, contrast increases with increasing LWS λmax up to 660 nm; whereas when comparing flowers against leaves, contrast stops increasing beyond 640 nm.
 </br>
 </br>
-* The contrasts of the models using civil twilight were substantially lower (often < 1 JND) than those using daylight. The contrasts in twilight showed different patterns from those using daylight in Aim 1 models, but were qualitatively similar in Aim 2 models.
+* The contrasts of the models using civil twilight were substantially lower (many < 1 JND) than those using daylight. The contrasts in twilight showed different patterns from those using daylight in Aim 1 models, but were qualitatively similar in Aim 2 models.

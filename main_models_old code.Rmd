@@ -935,14 +935,14 @@ res.beetle.vs.leaf_d65.aim2<-lm(compare.beetle.vs.leaf.aim2$dS ~ compare.beetle.
 res.beetle.vs.flower_d65.aim2<-lm(compare.beetle.vs.flower.aim2$dS ~ compare.beetle.vs.flower.aim2$peak_wl.beetle.vs.flower)
 
 ##Twilight - aim 1
-res.flower.vs.leaf_twilight.aim1<-lm(compare.flower.vs.leaf.aim1$dS ~ compare.flower.vs.leaf.aim1$peak_wl.flower.vs.leaf)
-res.beetle.vs.leaf_twilight.aim1<-lm(compare.beetle.vs.leaf.aim1$dS ~ compare.beetle.vs.leaf.aim1$peak_wl.beetle.vs.leaf)
-res.beetle.vs.flower_twilight.aim1<-lm(compare.beetle.vs.flower.aim1$dS ~ compare.beetle.vs.flower.aim1$peak_wl.beetle.vs.flower)
+res.flower.vs.leaf_twilight.aim1<-lm(compare.flower.vs.leaf_twilight.aim1$dS ~ compare.flower.vs.leaf_twilight.aim1$peak_wl.flower.vs.leaf)
+res.beetle.vs.leaf_twilight.aim1<-lm(compare.beetle.vs.leaf_twilight.aim1$dS ~ compare.beetle.vs.leaf_twilight.aim1$peak_wl.beetle.vs.leaf)
+res.beetle.vs.flower_twilight.aim1<-lm(compare.beetle.vs.flower_twilight.aim1$dS ~ compare.beetle.vs.flower_twilight.aim1$peak_wl.beetle.vs.flower)
 
 ##Twilight - Aim 2
-res.flower.vs.leaf_twilight.aim2<-lm(compare.flower.vs.leaf.aim2$dS ~ compare.flower.vs.leaf.aim2$peak_wl.flower.vs.leaf)
-res.beetle.vs.leaf_twilight.aim2<-lm(compare.beetle.vs.leaf.aim2$dS ~ compare.beetle.vs.leaf.aim2$peak_wl.beetle.vs.leaf)
-res.beetle.vs.flower_twilight.aim2<-lm(compare.beetle.vs.flower.aim2$dS ~ compare.beetle.vs.flower.aim2$peak_wl.beetle.vs.flower)
+res.flower.vs.leaf_twilight.aim2<-lm(compare.flower.vs.leaf_twilight.aim2$dS ~ compare.flower.vs.leaf_twilight.aim2$peak_wl.flower.vs.leaf)
+res.beetle.vs.leaf_twilight.aim2<-lm(compare.beetle.vs.leaf_twilight.aim2$dS ~ compare.beetle.vs.leaf_twilight.aim2$peak_wl.beetle.vs.leaf)
+res.beetle.vs.flower_twilight.aim2<-lm(compare.beetle.vs.flower_twilight.aim2$dS ~ compare.beetle.vs.flower_twilight.aim2$peak_wl.beetle.vs.flower)
 ```
 
 ### Normality {.tabset .tabset-fade .tabset-pills}
