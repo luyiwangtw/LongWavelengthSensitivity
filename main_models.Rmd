@@ -37,9 +37,10 @@ library(ggplot2)
 library(lme4)
 library(car)
 library(multcomp)
-library(boot) #for mean() function
+library(boot)
 library(pander) #for creating tidy tables
 library(ggpubr) #for ggarrange() function
+library(forcats) # for fct_relevel()
 ```
 
 ```{r setup, include=FALSE}
@@ -88,7 +89,7 @@ dataset <- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measurem
 
 </br>
 
-## Spectral reflectance of the targets
+## Spectral reflectance of the targets {.tabset .tabset-fade .tabset-pills}
 
 * Jewel beetles and their host plants (leaves and flowers)
     + Leaves: 
@@ -108,7 +109,12 @@ dataset <- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measurem
 
 * We averaged of 3 measurements to generate a representative spectrum for each colour
 * The spectral data were smoothed with the span = 0.1, and those < 0 were lifted to 0
-```{r, fig.cap="Figure caption: Reflectance spectra of the targets"}
+
+</br>
+</br>
+
+### Spectra of all targets
+```{r, fig.cap = "Figure caption: Reflectance spectra of all targets"}
 #assign categories to each spectrum
 category.list <- c("flower","leaf","beetle")
 category <- rep(category.list , 
@@ -129,32 +135,64 @@ flower.spec <- dataset.plot.indivisually[1:23547,] # 23547 = 47*501
 leaf.spec <- dataset.plot.indivisually[23548:46593,] # 46593 = 47*501 + 46*501
 beetle.spec <- dataset.plot.indivisually[46594:65130,] # 65130 = 47*501 + 46*501 + 37*501
 
-#merge the spectra before plot here
-dataset.plot.indivisually$category2 <- factor(dataset.plot.indivisually$category,
-                                              levels = c("leaf","flower","beetle"))
 
 #plot the spectra of the targets used in this model
 ggplot(dataset.plot.indivisually,
        aes(x = wavelength, 
            y = reflectance, 
-           colour = category2, 
+           colour = category, 
            group = species))+
   geom_point(size =.05)+
   geom_line(size =.05)+
   theme(legend.position = "none")+
-  scale_color_manual( values = c( "forestgreen", "palevioletred1","cornflowerblue"))+
-  facet_grid(category2 ~ .)+
+  scale_color_manual( values = c("cornflowerblue", "palevioletred1", "forestgreen"))+
+  facet_grid(fct_relevel(category,"leaf","flower","beetle") ~ .)+
   xlab("Wavelength (nm)") + 
   ylab("Reflectance (%)")+
   theme_classic()+
   guides(colour = FALSE) # remove the legend
 ```
 
+</br>
+</br>
+
+### Spectra of selected beetles
+```{r, fig.cap = "Figure caption: Reflectance spectra of selected beetles in Figure 1 in the paper"}
+## Plot beetle spectra
+beetle.spec.plot.dat <- read.csv("data/selected beetle spec for plotting.csv", header=TRUE) %>%
+  as.rspec() %>%
+  procspec(opt = "smooth") 
+
+# Set up spp category for aggregating spectra when plotting with aggplot()
+beetle.spp <- gsub("_Splice17_00\\d", "", names(beetle.spec.plot.dat))[-1]
+
+beelte.spec.plot <- aggplot(beetle.spec.plot.dat, beetle.spp,
+                            FUN.error = function(x) quantile(x, c(0.0275, 0.975)),
+                            ylim = c(0,60),
+                            alpha = 0.3, legend = TRUE)
+```
 
 </br>
 </br>
 
-## Visual sensitivities and visual systems
+### Spectra of selected plants
+```{r, fig.cap = "Figure caption: Reflectance spectra of selected plants in Figure 1 in the paper"}
+plant.spec.plot.dat <- read.csv("data/selected plant spec for plotting.csv",header=TRUE) %>%
+  as.rspec() %>% 
+  procspec(opt = "smooth") 
+
+plant.spp <- gsub("_[0-9]", "", names(plant.spec.plot.dat))[-1]
+
+plant.spec.plot <- aggplot(plant.spec.plot.dat, plant.spp,
+                           FUN.error = function(x) quantile(x, c(0.0275, 0.975)),
+                           ylim = c(0,100),
+                           alpha = 0.3, legend = TRUE)
+```
+
+</br>
+</br>
+
+## Visual sensitivities and visual systems {.tabset .tabset-fade .tabset-pills}
 
 * We created nine sensitivity curves peaking at 355, 445, 530, 580, 600, 620, 640, 660 nm and classified them into 4 photoreceptor types based on their peaks: 
     + Ultraviolet sensitive (UVS): 355 nm
@@ -185,7 +223,10 @@ ggplot(dataset.plot.indivisually,
         4. Visual system 640 (VS 640): 355 nm, 445 nm, 530 nm, 640 nm
         5. Visual system 660 (VS 660): 355 nm, 445 nm, 530 nm, 660 nm
 
+</br>
+</br>
 
+### Sensitivity curves
 ```{r, fig.cap="Figure caption: Sensitivity curves of the photoreceptors with different peak wavelengths."}
 wl <- specsensbuprest.aim2[,1]
 peaks <- gather(specsensbuprest.aim2[,2:9], peak, value) %>% 
@@ -212,13 +253,109 @@ ggplot(peaks,
 </br>
 </br>
 
-## Illuminations
+### Normalised sensitivity curves
+```{r, fig.cap="Figure caption: Normalised sensitivity curves of the photoreceptors with different peak wavelengths."}
+vis.list.norm <- list(specsensbuprest.aim2[, 1:2], specsensbuprest.aim2[, c(1, 3)], 
+                    specsensbuprest.aim2[, c(1, 4)], specsensbuprest.aim2[, c(1, 5)], 
+                    specsensbuprest.aim2[, c(1, 6)], specsensbuprest.aim2[, c(1, 7)], 
+                    specsensbuprest.aim2[, c(1, 8)], specsensbuprest.aim2[, c(1, 9)])
+
+hold.normvis <- tibble("355 nm" = NA, "445 nm" = NA, "530 nm" = NA, "580 nm" = NA, 
+                      "600 nm" = NA, "620 nm" = NA, "640 nm" = NA, "660 nm" = NA,
+                      wl = specsensbuprest.aim2[,1])
+
+for(i in 1:length(vis.list.norm)){
+  
+  temp <- vis.list.norm[[i]] %>% procspec(opt = c("min", "max"))
+  hold.normvis[[i]] <- temp[, 2]
+}
+
+plotdat.normvis <- gather(hold.normvis[,1:8], peak, value) %>% cbind(hold.normvis[,"wl"])
+
+ggplot(plotdat.normvis, aes(x = wl, y = value, color = peak))+
+  geom_line()+
+  guides(color = guide_legend(title = "peak sensitivity"))+
+  scale_color_manual(
+    values = c("darkorchid4", "dodgerblue3", "olivedrab4", "orange1", "orange3","darkorange3", "orangered1", "red2"))+
+  xlab("Wavelength (nm)")+ 
+  ylab("Relative spectral sensitivity")+
+  theme_classic()
+```
+
+</br>
+</br>
+
+
+### Sensivitiy curves with target spectra 
+```{r, fig.cap="Figure caption: Sensitivity curves with target spectra."}
+sens_for_targetplot <- peaks %>% 
+  rename("species" = "peak", 
+         "wavelength" = "wl")
+sens_for_targetplot$reflectance <- (sens_for_targetplot$value)*100
+sens_for_targetplot$category <- sens_for_targetplot$species
+
+dataset.plot.indivisually$facet_cat <- dataset.plot.indivisually$category
+
+#plot the spectra of the targets used in this model
+
+ggplot(dataset.plot.indivisually,
+       aes(x = wavelength,
+           y = reflectance,
+           colour = category,
+           group = species))+
+  geom_line(size = 0.3, alpha = 0.6)+
+  geom_line(data = sens_for_targetplot)+
+  scale_color_manual( 
+    values = c("forestgreen", "palevioletred1","cornflowerblue" ,"darkorchid4", "dodgerblue3", "olivedrab4", "orange1", "orange3","darkorange3", "orangered1", "red2"),
+    labels = c("leaf", "flower", "beetle","355 nm", "445 nm","530 nm", "580 nm", "600 nm", "620 nm", "640 nm", "660 nm"),
+     breaks = c("leaf", "flower", "beetle", peak.order))+
+  facet_grid(fct_relevel(facet_cat,"leaf","flower","beetle") ~ .)+
+  xlab("Wavelength (nm)")+
+  ylab("Reflectance/Relative spectral sensitivity (%)")+
+  scale_fill_discrete(name = "sample type")+
+  theme(legend.position = "none")+
+  theme_classic()
+```
+
+</br>
+</br>
+
+
+### Cut-off filters
+```{r, fig.cap = "Figure caption: Cut-off filters used to create filter shifted sensitivity curves."}
+raw.cutoff <- read.csv("data/cutoffs.csv",header=TRUE) %>% 
+  as.rspec(lim = c(300,800)) %>% 
+  procspec(opt = c("min", "max"))
+cutoff <- gather(raw.cutoff, peak, value, -wl)
+
+ggplot(cutoff,aes(x=wl, y=value, col=peak))+
+  geom_line()+
+  theme(legend.justification=c(0,1),
+        legend.position = c(.05, .95),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"),
+        axis.text.x = element_text(colour = "black"),
+        axis.text.y = element_text(colour = "black")
+        )+
+  scale_color_manual(
+    values = c( "orange1", "orange3","darkorange3", "orangered1", "red2"),
+    labels=c("580 nm", "600 nm", "620 nm", "640 nm", "660 nm" ))+
+  guides(color=guide_legend(override.aes=list(fill=NA)))+
+  xlab("Wavelength (nm)")+ 
+  ylab("Normalised transmittance")
+```
+
+</br>
+</br>
+
+## Illuminations {.tabset .tabset-fade .tabset-pills}
 
 * Two light environments: daylight and twilight (to represent red-shifted illumination).
   
     + Daylight: __D65__ (standard daylight) from Commission internationale de l'eclairage CIE
     + Twilight: measured at the Pinnacles Lookout in Alpine National Park, VIC, Australia at 18:15 on September 14th 2019.
 
+### D65
 ```{r, fig.cap="Figure caption: Relative irrdiance of D65 (standard daylight) used for the daylight models"}
 ggplot(irradiance.d65, 
        aes(x = wl, y = D65))+
@@ -228,6 +365,10 @@ ggplot(irradiance.d65,
   theme_classic()
 ```
 
+</br>
+</br>
+
+### Civil twilight
 ```{r, fig.cap="Figure caption: Absolute irradiance of the twilight used in the twilight models"}
 ggplot(irradiance.twilight, 
        aes(x = wl, y = twilight))+

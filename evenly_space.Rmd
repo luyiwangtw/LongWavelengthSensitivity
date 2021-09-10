@@ -9,7 +9,7 @@ output:
 subtitle: Supplementary Information
 Date: January 08 2021
 ---
-# The aim
+# The aim {.tabset .tabset-fade .tabset-pills}
 
 * Here, we tested the effect of even spacing of sensitivities on colour discrimination in a tetrachromatic visual system. Specifically, we ran visual models with __an evenly spaced visual system__ and __an unevenly spaced visual system__, then compared spectral contrast in all three comparison groups (‘leaf vs. flower’, ‘leaf vs. beetle’, ‘beetle vs. flower’). 
 
@@ -17,18 +17,22 @@ Date: January 08 2021
 
 * The model parameters and the statistical methods remain the same as described in the main text.
 
-```{r, warning=FALSE,echo=FALSE,message=FALSE, results='hide'}
+</br>
+</br>
+
+```{r, warning=FALSE, echo=FALSE, message=FALSE, results='hide'}
 library(pavo)
 library(dplyr)
 library(stringr)
-library(tidyr) #for gather() function
+library(tidyr) #for gather() 
 library(ggplot2)
 library(lme4)
 library(car)
 library(multcomp)
-library(boot) #for mean() function
+library(boot) #for mean() 
 library(pander) #for creating tidy tables
-library(ggpubr) #for ggarrange() function
+library(ggpubr) #for ggarrange() 
+library(tibble) # for add_column()
 ```
 
 ```{r setup, include=FALSE}
@@ -36,7 +40,7 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE) # Suppress warnings in the H
 knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time when re-building the html document
 ```
 
-```{r Import data, echo=FALSE,message=FALSE, warning=FALSE}
+```{r Import data, echo=FALSE, message=FALSE, warning=FALSE}
 # import sensitivity curves
 even.space <- read.csv("data/peak sensitivity_evenly space.csv", header = TRUE) %>%
   as.rspec()
@@ -64,7 +68,8 @@ dataset <- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measurem
   procspec(opt = "smooth", span = 0.1, fixneg = "zero") #smooth the spectra and lift <0 to 0
 ```
 
-```{r, fig.cap="Figure caption: ensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (VS 660; dotted lines).",echo = FALSE, message = FALSE, warning = FALSE}
+## Sensitivity curves
+```{r, fig.cap="Figure caption: Sensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (VS 660; dotted lines).",echo = FALSE, message = FALSE, warning = FALSE}
 #plot the visual systems
 system.list <- c("evenly space","unevenly space")
 system.type <- rep(system.list , c(1*501, 1*501))
@@ -92,6 +97,68 @@ ggplot(combine.curves,
   theme_classic()
 ```
 
+</br>
+</br>
+
+## Normalised sensitivity curves
+
+```{r, fig.cap="Figure caption: Normalised sensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (VS 660; dotted lines).",echo = FALSE, message = FALSE, warning = FALSE}
+# Sensitivity data for evenly space
+even.list <- list(even.space[, 1:2], even.space[, c(1, 3)], even.space[, c(1, 4)], even.space[, c(1, 5)])
+
+hold.even <- tibble("UVS" = NA, "SWS" = NA, "MWS" = NA, "LWS" = NA, wl = even.space[,1])
+
+for(i in 1:length(even.list)){
+  
+  temp <- even.list[[i]] %>% procspec(opt = c("min", "max"))
+  hold.even[[i]] <- temp[, 2]
+}
+
+# Sensitivity data for unevenly space
+unevenly.list <- list(specsensbuprest.model2[, 1:2], 
+                      specsensbuprest.model2[, c(1, 3)], specsensbuprest.model2[, c(1, 4)], 
+                      specsensbuprest.model2[, c(1, 5)], specsensbuprest.model2[, c(1, 6)], 
+                      specsensbuprest.model2[, c(1, 7)], specsensbuprest.model2[, c(1, 8)], 
+                      specsensbuprest.model2[, c(1, 9)])
+
+hold.unevenly <- tibble("355 nm" = NA, "445 nm" = NA, "530 nm" = NA, "580 nm" = NA,
+                        "600 nm" = NA, "620 nm" = NA, "640 nm" = NA, "660 nm" = NA, 
+                        wl = specsensbuprest.model2[,1])
+
+for(i in 1:length(unevenly.list)){
+  
+  temp <- unevenly.list[[i]] %>% procspec(opt = c("min", "max"))
+  hold.unevenly[[i]] <- temp[, 2]
+}
+
+plotdat.unevenly <- gather(hold.unevenly[,1:8], peak, value) %>% cbind(hold.unevenly[,"wl"])
+
+# Reshape and combine evenly and unevenly spaced data 
+
+pre.plotdat.even <- gather(hold.even[,1:4], peak, value) %>% cbind(hold.even[,"wl"]) %>% 
+  add_column(system.type = strrep("evenely space", 1)) 
+pre.plotdat.uneven <- plotdat.unevenly %>% filter(peak %in% c("355 nm", "445 nm", "530 nm", "660 nm")) %>% 
+  add_column(system.type = strrep("unevenely space", 1)) %>% 
+  mutate(peak = str_replace(peak, "355 nm", "UVS")) %>% 
+  mutate(peak = str_replace(peak, "445 nm", "SWS")) %>% 
+  mutate(peak = str_replace(peak, "530 nm", "MWS")) %>% 
+  mutate(peak = str_replace(peak, "660 nm", "LWS"))
+
+plotdat.even <- pre.plotdat.even %>% rbind(pre.plotdat.uneven)
+
+ggplot(plotdat.even,
+       aes(x = wl, y = value, 
+           linetype = system.type, color = peak))+
+  geom_line()+
+  guides(color = guide_legend(title = "peak sensitivity", reverse = TRUE),
+         linetype = guide_legend(title = "system type"))+
+  scale_color_manual(
+    values = c("red4","olivedrab4", "dodgerblue3", "darkorchid4"))+
+  xlab("Wavelength (nm)")+ 
+  ylab("Relative spectral sensitivity")+
+  theme_classic()
+
+```
 
 </br>
 </br>

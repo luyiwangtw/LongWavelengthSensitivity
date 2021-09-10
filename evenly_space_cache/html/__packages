@@ -17,3 +17,4 @@ boot
 pander
 magrittr
 ggpubr
+tibble

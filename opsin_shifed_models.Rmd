@@ -49,10 +49,13 @@ knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time wh
 
 </br>
 
-## Sensitivity curves
+## Sensitivity curves {.tabset .tabset-fade .tabset-pills}
 * ALL photoreceptor sensitivities (UVS, SWS, MWS, LWS) were generated from the Govardovskii template without apply filters.
 
 * Note: UVS, SWS, MWS photoreceptors were the same as those in the main models
+
+</br>
+</br>
 
 ```{r import data,message=FALSE}
 #import sensitivity curves
@@ -82,6 +85,7 @@ dataset <- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measurem
   procspec(opt = "smooth", span = 0.1, fixneg = "zero") #smooth the spectra and lift <0 to 0
 ```
 
+### Sensitivity curves
 ```{r, fig.cap="Figure caption: Sensitivity curves of the photoreceptors with different peak wavelengths."}
 wl <- specsensbuprest.aim2[,1]
 peaks <- gather(specsensbuprest.aim2[,2:9], peak, value) %>% 
@@ -101,6 +105,39 @@ ggplot(peaks,
     values = c("darkorchid4", "dodgerblue3", "olivedrab4", "orange1", "orange3","darkorange3", "orangered1", "red2"),
     labels = c("355 nm", "445 nm","530 nm", "580 nm", "600 nm", "620 nm", "640 nm", "660 nm"),
     breaks = peak.order)+
+  xlab("Wavelength (nm)")+ 
+  ylab("Relative spectral sensitivity")+
+  theme_classic()
+```
+
+</br>
+</br>
+
+
+### Normalised sensitivity curves
+```{r, fig.cap="Figure caption: Normalised sensitivity curves of the photoreceptors with different peak wavelengths."}
+vis.list.norm <- list(specsensbuprest.aim2[, 1:2], specsensbuprest.aim2[, c(1, 3)], 
+                    specsensbuprest.aim2[, c(1, 4)], specsensbuprest.aim2[, c(1, 5)], 
+                    specsensbuprest.aim2[, c(1, 6)], specsensbuprest.aim2[, c(1, 7)], 
+                    specsensbuprest.aim2[, c(1, 8)], specsensbuprest.aim2[, c(1, 9)])
+
+hold.normvis <- tibble("355 nm" = NA, "445 nm" = NA, "530 nm" = NA, "580 nm" = NA, 
+                      "600 nm" = NA, "620 nm" = NA, "640 nm" = NA, "660 nm" = NA,
+                      wl = specsensbuprest.aim2[,1])
+
+for(i in 1:length(vis.list.norm)){
+  
+  temp <- vis.list.norm[[i]] %>% procspec(opt = c("min", "max"))
+  hold.normvis[[i]] <- temp[, 2]
+}
+
+plotdat.normvis <- gather(hold.normvis[,1:8], peak, value) %>% cbind(hold.normvis[,"wl"])
+
+ggplot(plotdat.normvis, aes(x = wl, y = value, color = peak))+
+  geom_line()+
+  guides(color = guide_legend(title = "peak sensitivity"))+
+  scale_color_manual(
+    values = c("darkorchid4", "dodgerblue3", "olivedrab4", "orange1", "orange3","darkorange3", "orangered1", "red2"))+
   xlab("Wavelength (nm)")+ 
   ylab("Relative spectral sensitivity")+
   theme_classic()
