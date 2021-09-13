@@ -561,7 +561,7 @@ div.tocify {
 <span id="cb3-11"><a href="#cb3-11"></a>                            <span class="dt">na.rm =</span> <span class="ot">FALSE</span>,</span>
 <span id="cb3-12"><a href="#cb3-12"></a>                          <span class="dt">convert =</span> <span class="ot">FALSE</span>, </span>
 <span id="cb3-13"><a href="#cb3-13"></a>                          <span class="dt">factor_key =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb3-14"><a href="#cb3-14"></a>dataset.plot.indivisually &lt;-<span class="st"> </span><span class="kw">cbind</span>(dataset.transpose, wavelength,category)</span>
+<span id="cb3-14"><a href="#cb3-14"></a>dataset.plot.indivisually &lt;-<span class="st"> </span><span class="kw">cbind</span>(dataset.transpose, wavelength, category)</span>
 <span id="cb3-15"><a href="#cb3-15"></a></span>
 <span id="cb3-16"><a href="#cb3-16"></a><span class="co">#split data by categories for future use</span></span>
 <span id="cb3-17"><a href="#cb3-17"></a>flower.spec &lt;-<span class="st"> </span>dataset.plot.indivisually[<span class="dv">1</span><span class="op">:</span><span class="dv">23547</span>,] <span class="co"># 23547 = 47*501</span></span>
@@ -583,7 +583,7 @@ div.tocify {
 <span id="cb3-33"><a href="#cb3-33"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Wavelength (nm)&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb3-34"><a href="#cb3-34"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Reflectance (%)&quot;</span>)<span class="op">+</span></span>
 <span id="cb3-35"><a href="#cb3-35"></a><span class="st">  </span><span class="kw">theme_classic</span>()<span class="op">+</span></span>
-<span id="cb3-36"><a href="#cb3-36"></a><span class="st">  </span><span class="kw">guides</span>(<span class="dt">colour =</span> <span class="ot">FALSE</span>) <span class="co"># remove the legend</span></span></code></pre></div>
+<span id="cb3-36"><a href="#cb3-36"></a><span class="st">  </span><span class="kw">guides</span>(<span class="dt">colour =</span> <span class="st">&quot;none&quot;</span>) <span class="co"># remove the legend</span></span></code></pre></div>
 <div class="figure">
 <img src="main_models_files/figure-html/unnamed-chunk-2-1.png" alt="Figure caption: Reflectance spectra of all targets" width="672" />
 <p class="caption">
@@ -594,42 +594,68 @@ Figure caption: Reflectance spectra of all targets
 </div>
 <div id="spectra-of-selected-beetles" class="section level3">
 <h3>Spectra of selected beetles</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">## Plot beetle spectra</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>beetle.spec.plot.dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/selected beetle spec for plotting.csv&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="st">  </span><span class="kw">as.rspec</span>() <span class="op">%&gt;%</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="st">  </span><span class="kw">procspec</span>(<span class="dt">opt =</span> <span class="st">&quot;smooth&quot;</span>) </span>
-<span id="cb4-5"><a href="#cb4-5"></a></span>
-<span id="cb4-6"><a href="#cb4-6"></a><span class="co"># Set up spp category for aggregating spectra when plotting with aggplot()</span></span>
-<span id="cb4-7"><a href="#cb4-7"></a>beetle.spp &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">&quot;_Splice17_00</span><span class="ch">\\</span><span class="st">d&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="kw">names</span>(beetle.spec.plot.dat))[<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb4-8"><a href="#cb4-8"></a></span>
-<span id="cb4-9"><a href="#cb4-9"></a>beelte.spec.plot &lt;-<span class="st"> </span><span class="kw">aggplot</span>(beetle.spec.plot.dat, beetle.spp,</span>
-<span id="cb4-10"><a href="#cb4-10"></a>                            <span class="dt">FUN.error =</span> <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="kw">c</span>(<span class="fl">0.0275</span>, <span class="fl">0.975</span>)),</span>
-<span id="cb4-11"><a href="#cb4-11"></a>                            <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">60</span>),</span>
-<span id="cb4-12"><a href="#cb4-12"></a>                            <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">legend =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Select the 8 species to plot</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>selected.beetle.name &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Stigmodera_gratiosa_blue&quot;</span>, <span class="st">&quot;Cyria_imperialis_yellow&quot;</span>,</span>
+<span id="cb4-3"><a href="#cb4-3"></a>                          <span class="st">&quot;Castiarina_erythroptera_red&quot;</span>, <span class="st">&quot;Temognatha_obscuripennis_dark_purple&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4"></a>                          <span class="st">&quot;Melobasis_cuprifera_pink&quot;</span>, <span class="st">&quot;Merimna_atrata_black&quot;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5"></a>                          <span class="st">&quot;Melobasis_propinqua_green&quot;</span>, <span class="st">&quot;Pseudotaenia_gigas_green&quot;</span>)</span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a>selete.beetles.forplot &lt;-<span class="st"> </span>raw.dataset <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="st">  </span><span class="kw">as.rspec</span>() <span class="op">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="st">  </span><span class="kw">procspec</span>(<span class="dt">opt =</span> <span class="st">&quot;smooth&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">contains</span>(<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">contains</span>(selected.beetle.name))</span>
+<span id="cb4-12"><a href="#cb4-12"></a></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co"># Combine selected beetle spec with the wavelength column</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>beetle.spec.plot.dat &lt;-<span class="st"> </span><span class="kw">tibble</span>(wavelength) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="st">  </span><span class="kw">rename</span>(<span class="st">&quot;wl&quot;</span> =<span class="st"> &quot;wavelength&quot;</span> ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="st">  </span><span class="kw">cbind</span>(selete.beetles.forplot)</span>
+<span id="cb4-17"><a href="#cb4-17"></a></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="co"># for the figure legend</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a>beetle.spp &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">&quot;_Splice17_00</span><span class="ch">\\</span><span class="st">d&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="kw">names</span>(beetle.spec.plot.dat))[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb4-20"><a href="#cb4-20"></a></span>
+<span id="cb4-21"><a href="#cb4-21"></a><span class="co"># aggregate the spec for the same species and plot in 95% CI</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a>beelte.spec.plot &lt;-<span class="st"> </span><span class="kw">aggplot</span>(beetle.spec.plot.dat, beetle.spp,</span>
+<span id="cb4-23"><a href="#cb4-23"></a>                            <span class="dt">FUN.error =</span> <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="kw">c</span>(<span class="fl">0.0275</span>, <span class="fl">0.975</span>)),</span>
+<span id="cb4-24"><a href="#cb4-24"></a>                            <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">60</span>),</span>
+<span id="cb4-25"><a href="#cb4-25"></a>                            <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">legend =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <div class="figure">
-<img src="main_models_files/figure-html/unnamed-chunk-3-1.png" alt="Figure caption: Reflectance spectra of selected beetles in Figure 1 in the paper" width="672" />
+<img src="main_models_files/figure-html/unnamed-chunk-3-1.png" alt="Figure caption: Reflectance spectra of selected 8 beetles in Figure 1 in the paper" width="672" />
 <p class="caption">
-Figure caption: Reflectance spectra of selected beetles in Figure 1 in the paper
+Figure caption: Reflectance spectra of selected 8 beetles in Figure 1 in the paper
 </p>
 </div>
 <p></br> </br></p>
 </div>
 <div id="spectra-of-selected-plants" class="section level3">
 <h3>Spectra of selected plants</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>plant.spec.plot.dat &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/selected plant spec for plotting.csv&quot;</span>,<span class="dt">header=</span><span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw">as.rspec</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="st">  </span><span class="kw">procspec</span>(<span class="dt">opt =</span> <span class="st">&quot;smooth&quot;</span>) </span>
-<span id="cb5-4"><a href="#cb5-4"></a></span>
-<span id="cb5-5"><a href="#cb5-5"></a>plant.spp &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">&quot;_[0-9]&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="kw">names</span>(plant.spec.plot.dat))[<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb5-6"><a href="#cb5-6"></a></span>
-<span id="cb5-7"><a href="#cb5-7"></a>plant.spec.plot &lt;-<span class="st"> </span><span class="kw">aggplot</span>(plant.spec.plot.dat, plant.spp,</span>
-<span id="cb5-8"><a href="#cb5-8"></a>                           <span class="dt">FUN.error =</span> <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="kw">c</span>(<span class="fl">0.0275</span>, <span class="fl">0.975</span>)),</span>
-<span id="cb5-9"><a href="#cb5-9"></a>                           <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">100</span>),</span>
-<span id="cb5-10"><a href="#cb5-10"></a>                           <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">legend =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>selected.plant.name &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;flower_Chorizema_cordatum_orange&quot;</span>, <span class="st">&quot;flower_Olearia_homolepis&quot;</span>,</span>
+<span id="cb5-2"><a href="#cb5-2"></a>                     <span class="st">&quot;flower_Chamelaucium_uncinatum&quot;</span>, <span class="st">&quot;flower_Senna_artemisioides&quot;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3"></a>                     <span class="st">&quot;flower_Eremophila_maculata&quot;</span>, <span class="st">&quot;flower_Leptospermum_liversidgei&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4"></a>                     <span class="st">&quot;leaves_Gastrolobium_bilobus&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a>selete.plant.forplot &lt;-<span class="st"> </span>raw.dataset <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="st">  </span><span class="kw">as.rspec</span>() <span class="op">%&gt;%</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="st">  </span><span class="kw">procspec</span>(<span class="dt">opt =</span> <span class="st">&quot;smooth&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">contains</span>(selected.plant.name))</span>
+<span id="cb5-10"><a href="#cb5-10"></a></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co"># Combine selected beetle spec with the wavelength column</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a>plant.spec.plot.dat &lt;-<span class="st"> </span><span class="kw">tibble</span>(wavelength) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="st">  </span><span class="kw">rename</span>(<span class="st">&quot;wl&quot;</span> =<span class="st"> &quot;wavelength&quot;</span> ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="st">  </span><span class="kw">cbind</span>(selete.plant.forplot)</span>
+<span id="cb5-15"><a href="#cb5-15"></a></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="co"># for the figure legend</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a>plant.spp &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">&quot;_[0-9]&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="kw">names</span>(plant.spec.plot.dat))[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb5-18"><a href="#cb5-18"></a></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="co"># aggregate the spec for the same species and plot in 95% CI</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a>plant.spec.plot &lt;-<span class="st"> </span><span class="kw">aggplot</span>(plant.spec.plot.dat, plant.spp,</span>
+<span id="cb5-21"><a href="#cb5-21"></a>                           <span class="dt">FUN.error =</span> <span class="cf">function</span>(x) <span class="kw">quantile</span>(x, <span class="kw">c</span>(<span class="fl">0.0275</span>, <span class="fl">0.975</span>)),</span>
+<span id="cb5-22"><a href="#cb5-22"></a>                           <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">100</span>),</span>
+<span id="cb5-23"><a href="#cb5-23"></a>                           <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">legend =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <div class="figure">
-<img src="main_models_files/figure-html/unnamed-chunk-4-1.png" alt="Figure caption: Reflectance spectra of selected plants in Figure 1 in the paper" width="672" />
+<img src="main_models_files/figure-html/unnamed-chunk-4-1.png" alt="Figure caption: Reflectance spectra of selected 7 plants in Figure 1 in the paper" width="672" />
 <p class="caption">
-Figure caption: Reflectance spectra of selected plants in Figure 1 in the paper
+Figure caption: Reflectance spectra of selected 7 plants in Figure 1 in the paper
 </p>
 </div>
 <p></br> </br></p>
@@ -2741,7 +2767,7 @@ Figure caption: Absolute irradiance of the twilight used in the twilight models
 <li>Lines of the same colors connect the same sample</li>
 </ul>
 <div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1"></a><span class="co">#import the sample color code </span></span>
-<span id="cb86-2"><a href="#cb86-2"></a>color.code &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/color code list.csv&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>) </span>
+<span id="cb86-2"><a href="#cb86-2"></a>color.code &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/color code list.csv&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>)</span>
 <span id="cb86-3"><a href="#cb86-3"></a></span>
 <span id="cb86-4"><a href="#cb86-4"></a><span class="co"># Set up a function to calculate means for the plot</span></span>
 <span id="cb86-5"><a href="#cb86-5"></a>get.plotmeans &lt;-<span class="st"> </span><span class="cf">function</span>(a, b, c){</span>

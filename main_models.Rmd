@@ -60,7 +60,7 @@ knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time wh
 
 * The wavelength range for all data used in the models was 300-800 nm.
 
-```{r Import data, message=FALSE}
+```{r Import data}
 # import sensitivity curves
 specsensbuprest.aim1 <- read.csv("data/peak sensitivity_filter shift_aim1.csv",header=TRUE) %>%
   as.rspec()
@@ -128,7 +128,7 @@ dataset.transpose <- gather(dataset[,2:131],
                             na.rm = FALSE,
                           convert = FALSE, 
                           factor_key = FALSE)
-dataset.plot.indivisually <- cbind(dataset.transpose, wavelength,category)
+dataset.plot.indivisually <- cbind(dataset.transpose, wavelength, category)
 
 #split data by categories for future use
 flower.spec <- dataset.plot.indivisually[1:23547,] # 23547 = 47*501
@@ -150,39 +150,66 @@ ggplot(dataset.plot.indivisually,
   xlab("Wavelength (nm)") + 
   ylab("Reflectance (%)")+
   theme_classic()+
-  guides(colour = FALSE) # remove the legend
+  guides(colour = "none") # remove the legend
 ```
 
 </br>
 </br>
 
 ### Spectra of selected beetles
-```{r, fig.cap = "Figure caption: Reflectance spectra of selected beetles in Figure 1 in the paper"}
-## Plot beetle spectra
-beetle.spec.plot.dat <- read.csv("data/selected beetle spec for plotting.csv", header=TRUE) %>%
-  as.rspec() %>%
-  procspec(opt = "smooth") 
+```{r, fig.cap = "Figure caption: Reflectance spectra of selected 8 beetles in Figure 1 in the paper"}
+# Select the 8 species to plot
+selected.beetle.name <- c("Stigmodera_gratiosa_blue", "Cyria_imperialis_yellow",
+                          "Castiarina_erythroptera_red", "Temognatha_obscuripennis_dark_purple",
+                          "Melobasis_cuprifera_pink", "Merimna_atrata_black",
+                          "Melobasis_propinqua_green", "Pseudotaenia_gigas_green")
 
-# Set up spp category for aggregating spectra when plotting with aggplot()
+selete.beetles.forplot <- raw.dataset %>% 
+  as.rspec() %>%
+  procspec(opt = "smooth") %>% 
+  dplyr::select(contains("beetle")) %>% 
+  dplyr::select(contains(selected.beetle.name))
+
+# Combine selected beetle spec with the wavelength column
+beetle.spec.plot.dat <- tibble(wavelength) %>% 
+  rename("wl" = "wavelength" ) %>% 
+  cbind(selete.beetles.forplot)
+
+# for the figure legend
 beetle.spp <- gsub("_Splice17_00\\d", "", names(beetle.spec.plot.dat))[-1]
 
+# aggregate the spec for the same species and plot in 95% CI
 beelte.spec.plot <- aggplot(beetle.spec.plot.dat, beetle.spp,
                             FUN.error = function(x) quantile(x, c(0.0275, 0.975)),
                             ylim = c(0,60),
                             alpha = 0.3, legend = TRUE)
+
 ```
 
 </br>
 </br>
 
 ### Spectra of selected plants
-```{r, fig.cap = "Figure caption: Reflectance spectra of selected plants in Figure 1 in the paper"}
-plant.spec.plot.dat <- read.csv("data/selected plant spec for plotting.csv",header=TRUE) %>%
-  as.rspec() %>% 
-  procspec(opt = "smooth") 
+```{r, fig.cap = "Figure caption: Reflectance spectra of selected 7 plants in Figure 1 in the paper"}
+selected.plant.name <- c("flower_Chorizema_cordatum_orange", "flower_Olearia_homolepis",
+                     "flower_Chamelaucium_uncinatum", "flower_Senna_artemisioides",
+                     "flower_Eremophila_maculata", "flower_Leptospermum_liversidgei",
+                     "leaves_Gastrolobium_bilobus")
 
+selete.plant.forplot <- raw.dataset %>% 
+  as.rspec() %>%
+  procspec(opt = "smooth") %>%
+  dplyr::select(contains(selected.plant.name))
+
+# Combine selected beetle spec with the wavelength column
+plant.spec.plot.dat <- tibble(wavelength) %>% 
+  rename("wl" = "wavelength" ) %>% 
+  cbind(selete.plant.forplot)
+
+# for the figure legend
 plant.spp <- gsub("_[0-9]", "", names(plant.spec.plot.dat))[-1]
 
+# aggregate the spec for the same species and plot in 95% CI
 plant.spec.plot <- aggplot(plant.spec.plot.dat, plant.spp,
                            FUN.error = function(x) quantile(x, c(0.0275, 0.975)),
                            ylim = c(0,100),
@@ -393,7 +420,7 @@ ggplot(irradiance.twilight,
 * The average of all leaf spectra was used as the background adapting light.
 * The von Kries chromatic adaptation was applied.
 
-```{r Set up functions for quantum catch calculation, message=FALSE}
+```{r Set up functions for quantum catch calculation}
 ## D65
 get.d65.vismodel <- function(i){
   
@@ -423,7 +450,7 @@ get.twilight.vismodel <- function(i){
 }
 ```
 
-```{r Quantum catch calculation, message=FALSE}
+```{r Quantum catch calculation}
 # set up sensitivity list for Aim 1 and Aim 2
 sens.list <- list(USM <- specsensbuprest.aim1[, 1:4],
                   UML <- specsensbuprest.aim1[, c(1,2,4,5)],
@@ -490,7 +517,7 @@ buprest660_twilight <- twilight.vismodel.output$VS660
 
 * In the models using twilight illuminance, we took the photo shot noise into account.
 
-```{r Contrast calculation, message=FALSE}
+```{r Contrast calculation}
 # set up common list before running loop for calculating contrast
 ## receptor density
 aim1.recep.density.list <- list(USM <- c(1.6027, 1.4059, 1.7714),
@@ -1611,7 +1638,7 @@ sum.beetle.vs.flower_twilight.aim2
 * Lines of the same colors connect the same sample
 ```{r Import color code and setup functions}
 #import the sample color code 
-color.code <- read.csv("data/color code list.csv", header=TRUE) 
+color.code <- read.csv("data/color code list.csv", header=TRUE)
 
 # Set up a function to calculate means for the plot
 get.plotmeans <- function(a, b, c){
