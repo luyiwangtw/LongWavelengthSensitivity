@@ -1,2 +1,2 @@
 # LongWavelengthSensitivity
- Supplementary materials of the visual modeling on long wavelength sensitivity
+ Vision models and behavioural assays in the paper "Insect visual sensitivity to long wavelengths enhances colour contrast of insects against vegetation"
