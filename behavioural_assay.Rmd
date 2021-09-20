@@ -7,7 +7,7 @@ output:
     toc: true
     toc_depth: 2
 subtitle: Supplementary Information
-Date: September 10 2021
+Date: September 20 2021
 ---
 # The aim
 
@@ -56,51 +56,44 @@ knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time wh
 ymaze <- read.csv("data/behavioura result.csv")
 ```
 
+
+
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 # Castiarina dimidiata (n=16)
 # filter the data for this species
-ymaze.Cdimidiata<-subset(filter(ymaze, species == "Castiarina_dimidiata" ))
-# creat the logistic model
-ymodel.Cdimidiata<-glmer(attracted ~ wavelength + (1|individual), 
-                             family=binomial(link="logit"), data= ymaze.Cdimidiata)
+ymaze.Cdimidiata <- subset(filter(ymaze, species == "Castiarina_dimidiata" ))
+ymaze.Cflavopicta <- subset(filter(ymaze, species == "Castiarina_flavopicta"))
+
+# create the logistic model
+ymodel.Cdimidiata <- glmer(attracted ~ wavelength + (1|individual), 
+                             family = binomial(link = "logit"), data = ymaze.Cdimidiata)
+ymodel.Cflavopicta <- glmer(attracted ~ wavelength + (1|individual), 
+                          family = binomial(link="logit"), data = ymaze.Cflavopicta)
 
 #predict the 95 CI
-idlist.Cdimidiata<-unique(ymaze.Cdimidiata$individual)
-newdat.Cd  <- expand.grid(wavelength=590:735,individual=idlist.Cdimidiata) 
-newdat.Cd $attracted <- predict(ymodel.Cdimidiata,newdat.Cd ,re.form=NA)
-mm.Cd <- model.matrix(terms(ymodel.Cdimidiata),newdat.Cd )
-pvar.Cd <- diag(mm.Cd %*% tcrossprod(vcov(ymodel.Cdimidiata),mm.Cd))
-tvar.Cd  <- pvar.Cd +VarCorr(ymodel.Cdimidiata)$individual[1]
-cmult <-1.96
-newdat1.Cd  <- data.frame( newdat.Cd 
-                       , plo.Cd  = plogis(newdat.Cd$attracted-cmult*sqrt(pvar.Cd ))
-                       , phi.Cd  = plogis(newdat.Cd$attracted+cmult*sqrt(pvar.Cd ))
-                      ) 
-newdat1.Cd $attracted<-plogis(newdat1.Cd $attracted)
+inputdat <- list(ymaze.Cdimidiata, ymaze.Cflavopicta)
+predictmodel <- list(ymodel.Cdimidiata, ymodel.Cflavopicta)
+newdat_output <- list(Cdimidiata = NA, Cflavopicta = NA)
 
+for (i in 1:length(inputdat)){
+  
+  idlist <- unique(inputdat[[i]]$individual)
+  newdat <- expand.grid(wavelength = 590:735, individual = idlist)
+  newdat$attracted <- predict(predictmodel[[i]], newdat ,re.form = NA)
+  
+  mm <- model.matrix(terms(predictmodel[[i]]), newdat)
+  pvar <- diag(mm %*% tcrossprod(vcov(predictmodel[[i]]), mm))
+  tvar  <- pvar + VarCorr(predictmodel[[i]])$individual[1]
+  cmult <- 1.96
+  
+  newdat1 <- data.frame(newdat, 
+                      plo = plogis(newdat$attracted - cmult*sqrt(pvar)), 
+                      phi = plogis(newdat$attracted + cmult*sqrt(pvar))) 
+  newdat1$attracted <- plogis(newdat1$attracted)
+  
+  newdat_output[[i]] <- newdat1
 
-#Castiarina flavopicta (n=12)
-#filter the data for this species
-ymaze.Cflavopicta<-subset(filter(ymaze, species == "Castiarina_flavopicta" ))
-
-#creat the logistic model
-ymodel.Cflavopicta<-glmer(attracted ~ wavelength + (1|individual), 
-                          family=binomial(link="logit"), data= ymaze.Cflavopicta)
-
-#predict the 95 CI
-idlist.Cflavopicta<-unique(ymaze.Cflavopicta$individual)
-newdat.Cf <- expand.grid(wavelength=590:735,individual=idlist.Cflavopicta) 
-newdat.Cf$attracted <- predict(ymodel.Cflavopicta,newdat.Cf,re.form=NA)
-mm.Cf <- model.matrix(terms(ymodel.Cflavopicta),newdat.Cf)
-pvar.Cf <- diag(mm.Cf %*% tcrossprod(vcov(ymodel.Cflavopicta),mm.Cf))
-tvar.Cf <- pvar.Cf+VarCorr(ymodel.Cflavopicta)$individual[1]
-cmult <-1.96
-newdat1.Cf <- data.frame( newdat.Cf
-                       , plo.Cf = plogis(newdat.Cf$attracted-cmult*sqrt(pvar.Cf))
-                       , phi.Cf = plogis(newdat.Cf$attracted+cmult*sqrt(pvar.Cf))
-) 
-newdat1.Cf$attracted<-plogis(newdat1.Cf$attracted) ##can track the corresponding wavelength of 50% response
-
+}
 ```
 
 </br>
@@ -112,20 +105,20 @@ Behavioural experiments confirmed far-red sensitivity in both species of jewel b
 </br>
 </br>
 
-```{r, fig.cap="Figure caption: Results of the behavioural experiments on two jewel beetles. Blue represents *Castiarina dimidiata* and yellow represent *C. flavopicta*. Logistic regression lines show beetles’ high response rate at 700 nm. 95 % confidence intervals in shaded regions. The green dashed line shows the mean leaf reflectance spectrum from our dataset.", echo=FALSE}
-
-datacombined<- ymaze.Cdimidiata %>% rbind(ymaze.Cflavopicta)
-ggplot(datacombined, aes(x=wavelength, y=attracted))+
-  geom_jitter(data=ymaze.Cflavopicta,height=0.01, width=5, alpha=0.5, size= 3, color="#ffb700ff")+
-  geom_jitter(data=ymaze.Cdimidiata,height=0.01, width=5, alpha=0.5, size= 3, color="#1c5ab7ff")+
-  geom_ribbon(data=newdat1.Cf, fill="#FDF0AD", aes(ymax=phi.Cf, ymin=plo.Cf))+
-  geom_ribbon(data=newdat1.Cd, fill="#b6d1ff", aes(ymax=phi.Cd, ymin=plo.Cd))+ 
-  geom_line(data=newdat1.Cf, aes(x=wavelength, y=attracted), color="#ffb700ff")+
-  geom_line(data=newdat1.Cd, aes(x=wavelength, y=attracted), color="#1c5ab7ff")+ 
-  geom_hline(yintercept=0.50, linetype = "dotted")+
+```{r, fig.cap="Figure caption: Results of the behavioural experiments on two jewel beetles. Blue represents *Castiarina dimidiata* and yellow represent *C. flavopicta*. Logistic regression lines show beetles’ high response rate at 700 nm. 95 % confidence intervals in shaded regions. The green dashed line shows the mean leaf reflectance spectrum from our dataset."}
+ggplot(ymaze, 
+       aes(x = wavelength, y = attracted))+
+  geom_jitter(data = ymaze.Cflavopicta, 
+              height = 0.01, width = 5, alpha = 0.5, size = 3, color = "#ffb700ff")+
+  geom_jitter(data = ymaze.Cdimidiata, 
+              height = 0.01, width = 5, alpha = 0.5, size = 3, color = "#1c5ab7ff")+
+  geom_ribbon(data = newdat_output[[2]], fill = "#FDF0AD", aes(ymax = phi, ymin = plo))+
+  geom_ribbon(data = newdat_output[[1]], fill = "#b6d1ff", aes(ymax = phi, ymin = plo))+ 
+  geom_line(data = newdat_output[[2]], aes(x = wavelength, y = attracted), color = "#ffb700ff")+
+   geom_line(data = newdat_output[[1]], aes(x = wavelength, y = attracted), color = "#1c5ab7ff")+ 
+  geom_hline(yintercept = 0.50, linetype = "dotted")+
   scale_x_continuous(breaks = seq(580, 780, by = 20))+
-  scale_y_continuous(name = "Attracted rate (%)",
-                     sec.axis = sec_axis(~.*(6/10), name = "Reflectance"))+
+  scale_y_continuous(name = "Attracted rate")+
   xlab("Wavelength (nm)")+
   theme_classic()
 ```
@@ -147,21 +140,19 @@ The behavioural experiment suggests that jewel beetles have long wavelength sens
 </br>
 </br>
 
-```{r, echo=FALSE, fig.cap="Figure caption: Relative irradiance of the LED lights used in behavioural trials.", out.width = '70%'}
-
+```{r, echo=FALSE, fig.cap="Figure caption: Absolute irradiance of the LED lights used in behavioural trials.", out.width = '70%'}
 led.spec <- read.csv("data/LED irradiation.csv",header=TRUE) %>%
   as.rspec(lim = c(300, 800)) %>% 
   procspec(opt = "smooth", # smooth the spec
            span = 0.05) %>% 
-  procspec(opt = "max") %>%  # normalized the spec
   gather(peak,irradiance, -wl)
 
-ggplot(led.spec, aes(x=wl, y=irradiance))+
+library(ggsci)
+ggplot(led.spec, aes(x = wl, y = irradiance, color = peak))+
   geom_line()+
-  facet_wrap(.~peak, ncol=3)+
-  scale_colour_discrete(labels = c("590 nm", "645 nm", "680 nm", "700 nm", "720 nm", "735 nm", "755 nm"))+ 
+  scale_color_jco(labels = c("590 nm", "645 nm", "680 nm", "700 nm", "720 nm", "735 nm", "755 nm"))+
   xlab("Wavelength (nm)")+
-  ylab( "Relative irradiance")+
+  ylab("Photon flux (umol.s-1.m-2.nm-1)")+
   theme_classic()
 ```
 ## Ambient dim light
@@ -172,7 +163,7 @@ dim.spec <- read.csv("data/dim spec.csv",header=TRUE) %>%
            fixneg = "zero")# lift the negative values to zero. Likely just noise.
 
 ggplot(dim.spec, aes(x = wl, y = Irradiance)) + 
-  ylab( "Absolute irradiance (uW.cm-2.nm-1)")+ 
+  ylab("Absolute irradiance (uW.cm-2.nm-1)")+ 
   xlab("Wavelength (nm)")+
   geom_line() + 
   ylim(NA, 0.01)+
