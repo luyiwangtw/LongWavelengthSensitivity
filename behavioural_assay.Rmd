@@ -11,7 +11,7 @@ Date: September 20 2021
 ---
 # The aim
 
-Intracellular recordings, opsin expression and electroretinogram data indicate that jewel beetles have a LWS photoreceptor with sensitivity potentially extending into the far red. However, their visual sensitivities have not been confirmed with behavioural data. Here, we conducted a behavioral assay to confirm their long wavelength sensitivity in living jewel beetles.
+Intracellular recordings, opsin expression and electroretinogram data indicate that jewel beetles have a LWS photoreceptor with sensitivity potentially extending into the far red. However, their visual sensitivities have not been confirmed with behavioural data. Here, we conducted a behavioural assay to confirm their long wavelength sensitivity in living jewel beetles.
 
 </br>
 </br>
