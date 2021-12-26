@@ -12,22 +12,29 @@ output:
   pdf_document: default
 subtitle: Supplementary Information
 Date: September 13 2021
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 # The aims
-  
-* We used visual modelling to investigate the potential benefit of long wavelength sensitivity for insects.
 
-* Specifically, we varied the presence of a long wavelength sensitive photoreceptor and its peak sensitivity.
+-   We used visual modelling to investigate the potential benefit of
+    long wavelength sensitivity for insects.
 
-* Our study focused on jewel beetles and their host plants because jewel beetles have sensitivity in the far red. 
+-   Specifically, we varied the presence of a long wavelength sensitive
+    photoreceptor and its peak sensitivity.
 
-* Additionally, we tested the effect of red-shifted light environment on contrast by running the same models under twilight illumination.
+-   Our study focused on jewel beetles and their host plants because
+    jewel beetles have sensitivity in the far red.
 
-</br>
-</br>
+-   Additionally, we tested the effect of red-shifted light environment
+    on contrast by running the same models under twilight illumination.
 
-# Load R libraries 
+</br> </br>
+
+# Load R libraries
+
 ```{r, warning=FALSE, message=FALSE, results='hide'}
 library(pavo)
 library(dplyr)
@@ -48,9 +55,7 @@ knitr::opts_chunk$set(warning=FALSE, message=FALSE) # Suppress warnings in the H
 knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time when re-building the html document
 ```
 
-
-</br>
-</br>
+</br> </br>
 
 # Data description
 
@@ -58,7 +63,7 @@ knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time wh
 
 ## Import and process the data
 
-* The wavelength range for all data used in the models was 300-800 nm.
+-   The wavelength range for all data used in the models was 300-800 nm.
 
 ```{r Import data}
 # import sensitivity curves
@@ -91,29 +96,43 @@ dataset <- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measurem
 
 ## Spectral reflectance of the targets {.tabset .tabset-fade .tabset-pills}
 
-* Jewel beetles and their host plants (leaves and flowers)
-    + Leaves: 
-        + sample source: mainly from Melton Gardens and Maranoa Gardens (4 from Meblourne roadsides).
-        + colour (to human vision): green
-        + total number: 46 (all are from the host plant genus of Australian jewel beetles)
+-   Jewel beetles and their host plants (leaves and flowers)
 
-    + Flowers: 
-        + sample source: mainly from Melton Gardens and Maranoa Gardens (4 from Meblourne roadsides).
-        + colour (to human vision): white (10), pink (11), red (10), yellow (9), orange (3), and purple (4)
-        + total number: 47 (from 46 species, the same species for leaf reflectance)
+    -   Leaves:
 
-    + Beetles:
-        + sample source: Australian jewel beetles from, ANIC (29) and our own collection
-        + colour (to human vision): red, pink, yellow/orange, green, blue, velvet, black
-        + total number: 37
+        -   sample source: mainly from Melton Gardens and Maranoa
+            Gardens (4 from Meblourne roadsides).
+        -   colour (to human vision): green
+        -   total number: 46 (all are from the host plant genus of
+            Australian jewel beetles)
 
-* We averaged of 3 measurements to generate a representative spectrum for each colour
-* The spectral data were smoothed with the span = 0.1, and those < 0 were lifted to 0
+    -   Flowers:
 
-</br>
-</br>
+        -   sample source: mainly from Melton Gardens and Maranoa
+            Gardens (4 from Meblourne roadsides).
+        -   colour (to human vision): white (10), pink (11), red (10),
+            yellow (9), orange (3), and purple (4)
+        -   total number: 47 (from 46 species, the same species for leaf
+            reflectance)
+
+    -   Beetles:
+
+        -   sample source: Australian jewel beetles from, ANIC (29) and
+            our own collection
+        -   colour (to human vision): red, pink, yellow/orange, green,
+            blue, velvet, black
+        -   total number: 37
+
+-   We averaged of 3 measurements to generate a representative spectrum
+    for each colour
+
+-   The spectral data were smoothed with the span = 0.1, and those \< 0
+    were lifted to 0
+
+</br> </br>
 
 ### Spectra of all targets
+
 ```{r, fig.cap = "Figure caption: Reflectance spectra of all targets"}
 #assign categories to each spectrum
 category.list <- c("flower","leaf","beetle")
@@ -153,10 +172,10 @@ ggplot(dataset.plot.indivisually,
   guides(colour = "none") # remove the legend
 ```
 
-</br>
-</br>
+</br> </br>
 
 ### Spectra of selected beetles
+
 ```{r, fig.cap = "Figure caption: Reflectance spectra of selected 8 beetles in Figure 1 in the paper"}
 # Select the 8 species to plot
 selected.beetle.name <- c("Stigmodera_gratiosa_blue", "Cyria_imperialis_yellow",
@@ -186,10 +205,10 @@ beelte.spec.plot <- aggplot(beetle.spec.plot.dat, beetle.spp,
 
 ```
 
-</br>
-</br>
+</br> </br>
 
 ### Spectra of selected plants
+
 ```{r, fig.cap = "Figure caption: Reflectance spectra of selected 7 plants in Figure 1 in the paper"}
 selected.plant.name <- c("flower_Chorizema_cordatum_orange", "flower_Olearia_homolepis",
                      "flower_Chamelaucium_uncinatum", "flower_Senna_artemisioides",
@@ -216,44 +235,68 @@ plant.spec.plot <- aggplot(plant.spec.plot.dat, plant.spp,
                            alpha = 0.3, legend = TRUE)
 ```
 
-</br>
-</br>
+</br> </br>
 
 ## Visual sensitivities and visual systems {.tabset .tabset-fade .tabset-pills}
 
-* We created nine sensitivity curves peaking at 355, 445, 530, 580, 600, 620, 640, 660 nm and classified them into 4 photoreceptor types based on their peaks: 
-    + Ultraviolet sensitive (UVS): 355 nm
-    + Short-wavelength sensitive (SWS): 445 nm
-    + Medium-wavelength sensitive (MWS): 530 nm
-    + Long-wavelength sensitive (LWS): 580, 600, 620, 640, 660 nm
+-   We created nine sensitivity curves peaking at 355, 445, 530, 580,
+    600, 620, 640, 660 nm and classified them into 4 photoreceptor types
+    based on their peaks:
 
-* For the LWS, we applied a cut-off filter on the A1opsin sensitivity template peaking at 570 nm to shift the peak sensitivty to longer wavelengths.
+    -   Ultraviolet sensitive (UVS): 355 nm
+    -   Short-wavelength sensitive (SWS): 445 nm
+    -   Medium-wavelength sensitive (MWS): 530 nm
+    -   Long-wavelength sensitive (LWS): 580, 600, 620, 640, 660 nm
 
-* Based on these sensitivities, we created several different visual systems to test two different questions: 
-    + What is the benefit of possessing a long wavelength photoreceptor?
-    + Is there an benefit to shifting the peak sensitivity of the long wavelength photoreceptor?
-  
-***
-* For the first question we compared the contrast between 3 trichromatic visual system with varied photoreceptor combination. We also tested whether an extra receptor enhanced chromatic contrast by comparing the trichromatic visual systems with a tetrachromatic visual system.
-    + Visual systems used: 
-        1. Visual system USM (USM): 355 nm, 445 nm, 530 nm (UVS,SWS,MWS)
-        2. Visual system UML (UML): 355 nm, 530 nm, 600 nm (UVS,MWS,LWS)
-        3. Visual system USL (USL): 355 nm, 445 nm, 600 nm (UVS,SWS,LWS)
-        4. Visual system USML (USML): 355 nm, 445 nm, 530 nm, 600 nm (UVS,SWS,MWS,LWS)
+-   For the LWS, we applied a cut-off filter on the A1opsin sensitivity
+    template peaking at 570 nm to shift the peak sensitivty to longer
+    wavelengths.
 
-***
-* For the second question, we tested how the contrast changed as peak sensitivity increased by systematically increasing the peak sensitivity of the LWS photoreceptor from 580-660 nm.
-    + Visual systems used:
-        1. Visual system 580 (VS 580): 355 nm, 445 nm, 530 nm, 580 nm
-        2. Visual system 600 (VS 600): 355 nm, 445 nm, 530 nm, 600 nm
-        3. Visual system 620 (VS 620): 355 nm, 445 nm, 530 nm, 620 nm
-        4. Visual system 640 (VS 640): 355 nm, 445 nm, 530 nm, 640 nm
-        5. Visual system 660 (VS 660): 355 nm, 445 nm, 530 nm, 660 nm
+-   Based on these sensitivities, we created several different visual
+    systems to test two different questions:
 
-</br>
-</br>
+    -   What is the benefit of possessing a long wavelength
+        photoreceptor?
+    -   Is there an benefit to shifting the peak sensitivity of the long
+        wavelength photoreceptor?
+
+------------------------------------------------------------------------
+
+-   For the first question we compared the contrast between 3
+    trichromatic visual system with varied photoreceptor combination. We
+    also tested whether an extra receptor enhanced chromatic contrast by
+    comparing the trichromatic visual systems with a tetrachromatic
+    visual system.
+
+    -   Visual systems used:
+
+        1.  Visual system USM (USM): 355 nm, 445 nm, 530 nm
+            (UVS,SWS,MWS)
+        2.  Visual system UML (UML): 355 nm, 530 nm, 600 nm
+            (UVS,MWS,LWS)
+        3.  Visual system USL (USL): 355 nm, 445 nm, 600 nm
+            (UVS,SWS,LWS)
+        4.  Visual system USML (USML): 355 nm, 445 nm, 530 nm, 600 nm
+            (UVS,SWS,MWS,LWS)
+
+------------------------------------------------------------------------
+
+-   For the second question, we tested how the contrast changed as peak
+    sensitivity increased by systematically increasing the peak
+    sensitivity of the LWS photoreceptor from 580-660 nm.
+
+    -   Visual systems used:
+
+        1.  Visual system 580 (VS 580): 355 nm, 445 nm, 530 nm, 580 nm
+        2.  Visual system 600 (VS 600): 355 nm, 445 nm, 530 nm, 600 nm
+        3.  Visual system 620 (VS 620): 355 nm, 445 nm, 530 nm, 620 nm
+        4.  Visual system 640 (VS 640): 355 nm, 445 nm, 530 nm, 640 nm
+        5.  Visual system 660 (VS 660): 355 nm, 445 nm, 530 nm, 660 nm
+
+</br> </br>
 
 ### Sensitivity curves
+
 ```{r, fig.cap="Figure caption: Sensitivity curves of the photoreceptors with different peak wavelengths."}
 wl <- specsensbuprest.aim2[,1]
 peaks <- gather(specsensbuprest.aim2[,2:9], peak, value) %>% 
@@ -277,10 +320,10 @@ ggplot(peaks,
   theme_classic()
 ```
 
-</br>
-</br>
+</br> </br>
 
 ### Normalised sensitivity curves
+
 ```{r, fig.cap="Figure caption: Normalised sensitivity curves of the photoreceptors with different peak wavelengths."}
 vis.list.norm <- list(specsensbuprest.aim2[, 1:2], specsensbuprest.aim2[, c(1, 3)], 
                     specsensbuprest.aim2[, c(1, 4)], specsensbuprest.aim2[, c(1, 5)], 
@@ -309,11 +352,10 @@ ggplot(plotdat.normvis, aes(x = wl, y = value, color = peak))+
   theme_classic()
 ```
 
-</br>
-</br>
+</br> </br>
 
+### Sensivitiy curves with target spectra
 
-### Sensivitiy curves with target spectra 
 ```{r, fig.cap="Figure caption: Sensitivity curves with target spectra."}
 sens_for_targetplot <- peaks %>% 
   rename("species" = "peak", 
@@ -344,11 +386,10 @@ ggplot(dataset.plot.indivisually,
   theme_classic()
 ```
 
-</br>
-</br>
-
+</br> </br>
 
 ### Cut-off filters
+
 ```{r, fig.cap = "Figure caption: Cut-off filters used to create filter shifted sensitivity curves."}
 raw.cutoff <- read.csv("data/cutoffs.csv",header=TRUE) %>% 
   as.rspec(lim = c(300,800)) %>% 
@@ -372,17 +413,20 @@ ggplot(cutoff,aes(x=wl, y=value, col=peak))+
   ylab("Normalised transmittance")
 ```
 
-</br>
-</br>
+</br> </br>
 
 ## Illuminations {.tabset .tabset-fade .tabset-pills}
 
-* Two light environments: daylight and twilight (to represent red-shifted illumination).
-  
-    + Daylight: __D65__ (standard daylight) from Commission internationale de l'eclairage CIE
-    + Twilight: measured at the Pinnacles Lookout in Alpine National Park, VIC, Australia at 18:15 on September 14th 2019.
+-   Two light environments: daylight and twilight (to represent
+    red-shifted illumination).
+
+    -   Daylight: **D65** (standard daylight) from Commission
+        internationale de l'eclairage CIE
+    -   Twilight: measured at the Pinnacles Lookout in Alpine National
+        Park, VIC, Australia at 18:15 on September 14th 2019.
 
 ### D65
+
 ```{r, fig.cap="Figure caption: Relative irrdiance of D65 (standard daylight) used for the daylight models"}
 ggplot(irradiance.d65, 
        aes(x = wl, y = D65))+
@@ -392,10 +436,10 @@ ggplot(irradiance.d65,
   theme_classic()
 ```
 
-</br>
-</br>
+</br> </br>
 
 ### Civil twilight
+
 ```{r, fig.cap="Figure caption: Absolute irradiance of the twilight used in the twilight models"}
 ggplot(irradiance.twilight, 
        aes(x = wl, y = twilight))+
@@ -405,20 +449,22 @@ ggplot(irradiance.twilight,
   theme_classic()
 ```
 
-</br>
-</br>
+</br> </br>
 
 # Run the visual models
 
-</br>
-</br>
+</br> </br>
 
 ## First: Quantum catch calculation
 
-* We used the `vismodel` function in the package pavo to calculate quantum catch.
-* For each visual system, quantum catch was calculated based on Fechner's law (the signal of the receptor channel is proportional to the logarithm of the quantum catch).
-* The average of all leaf spectra was used as the background adapting light.
-* The von Kries chromatic adaptation was applied.
+-   We used the `vismodel` function in the package pavo to calculate
+    quantum catch.
+-   For each visual system, quantum catch was calculated based on
+    Fechner's law (the signal of the receptor channel is proportional to
+    the logarithm of the quantum catch).
+-   The average of all leaf spectra was used as the background adapting
+    light.
+-   The von Kries chromatic adaptation was applied.
 
 ```{r Set up functions for quantum catch calculation}
 ## D65
@@ -502,20 +548,32 @@ buprest640_twilight <- twilight.vismodel.output$VS640
 buprest660_twilight <- twilight.vismodel.output$VS660
 ```
 
-
-</br>
-</br>
+</br> </br>
 
 ## Second: Contrast calculation {.tabset .tabset-fade .tabset-pills}
 
-* To calculate chromatic contrast we used the `coldist` function in pavo.
-* We used a neural noise-limited model where the noise is proportional to the Weber fraction and is independent of the intensity of the signal received.
-* Photoreceptor density of the tetrachromat was based on the opsin gene expression of Emerald ash borer, _Agrilus planipennis_: 1.14, 1, 1.26, 1.38. For the trichromates, we redistributed the lost cone number proportionally to the remaining three cones. (USM: 1.6027, 1.4059, 1.771; UML: 1.4416, 1.5933, 1.7451; USL:1.5481, 1.3580, 1.8740)
+-   To calculate chromatic contrast we used the `coldist` function in
+    pavo.
 
+-   We used a neural noise-limited model where the noise is proportional
+    to the Weber fraction and is independent of the intensity of the
+    signal received.
 
-* The Weber fraction for the longest cone in the tetrachromat was 0.1, which was used to calculated the unknown signa;-to-noise ratio. To keep the signa;-to-noise ratio the same bwtween the tetrachromat and the trichromates, we adjusted the weber fractions for the longest cone in trichromats to be 0.0883, 0.0889, 0.0858 for USM, UML, USL. 
+-   Photoreceptor density of the tetrachromat was based on the opsin
+    gene expression of Emerald ash borer, *Agrilus planipennis*: 1.14,
+    1, 1.26, 1.38. For the trichromates, we redistributed the lost cone
+    number proportionally to the remaining three cones. (USM: 1.6027,
+    1.4059, 1.771; UML: 1.4416, 1.5933, 1.7451; USL:1.5481, 1.3580,
+    1.8740)
 
-* In the models using twilight illuminance, we took the photo shot noise into account.
+-   The Weber fraction for the longest cone in the tetrachromat was 0.1,
+    which was used to calculated the unknown signa;-to-noise ratio. To
+    keep the signa;-to-noise ratio the same bwtween the tetrachromat and
+    the trichromates, we adjusted the weber fractions for the longest
+    cone in trichromats to be 0.0883, 0.0889, 0.0858 for USM, UML, USL.
+
+-   In the models using twilight illuminance, we took the photo shot
+    noise into account.
 
 ```{r Contrast calculation}
 # set up common list before running loop for calculating contrast
@@ -867,9 +925,11 @@ for (i in 1:length(aim2.vissys_twilight)) {
 ```
 
 ### Aim 1 {.tabset .tabset-fade .tabset-pills}
+
 The table shows the mean contrast in each comparison group
 
 #### Daylight
+
 ```{r}
 # Combine comparison groups together in a table
 ## create a input list for the loop
@@ -893,7 +953,9 @@ for (i in 1:length(allvis.aim1_d65.list)) {
 ## print out the table 
 contrast.list_d65.aim1 %>% pander() 
 ```
+
 #### Twilight
+
 ```{r}
 allvis.aim1_twilight.list <- list(allvis.fl_twilight.aim1, allvis.bl_twilight.aim1, allvis.bf_twilight.aim1)
 
@@ -915,10 +977,13 @@ for (i in 1:length(allvis.aim1_twilight.list)) {
 ## print out the table 
 contrast.list_twilight.aim1 %>% pander() 
 ```
+
 ### Aim 2 {.tabset .tabset-fade .tabset-pills}
+
 The table shows the mean contrast in each comparison group
 
 #### Daylight
+
 ```{r}
 allvis.aim2_d65.list <- list(allvis.fl_d65.aim2, allvis.bl_d65.aim2, allvis.bf_d65.aim2)
 
@@ -940,7 +1005,9 @@ for (i in 1:length(allvis.aim2_d65.list)) {
 ## print out the table 
 contrast.list_d65.aim2 %>% pander() 
 ```
+
 #### Twilight
+
 ```{r}
 allvis.aim2_twilight.list <- list(allvis.fl_twilight.aim2, allvis.bl_twilight.aim2, allvis.bf_twilight.aim2)
 
@@ -963,28 +1030,37 @@ for (i in 1:length(allvis.aim2_twilight.list)) {
 contrast.list_twilight.aim2 %>% pander() 
 ```
 
-</br>
-</br>
+</br> </br>
 
 # Compare contrasts
 
-* To compare contrasts between visual systems, We conducted Wald chi-square tests on generalised linear mixed models (GLMM) followed by posthoc tests.
+-   To compare contrasts between visual systems, We conducted Wald
+    chi-square tests on generalised linear mixed models (GLMM) followed
+    by posthoc tests.
 
-* In the models, we assigned
-    + Independent variable: __contrast__
-    + Dependent variable: 
-        + Fixed factor: __visual system__
-        + Random factor: __sample ID__ of both targets in the comparison
+-   In the models, we assigned
+
+    -   Independent variable: **contrast**
+
+    -   Dependent variable:
+
+        -   Fixed factor: **visual system**
+        -   Random factor: **sample ID** of both targets in the
+            comparison
 
 ## Check assumptions {.tabset .tabset-fade .tabset-pills}
 
-* Before running the GLMMs, we first check if the data follows the assumption of normality and homogeneity of variance
+-   Before running the GLMMs, we first check if the data follows the
+    assumption of normality and homogeneity of variance
 
 </br>
 
-Click the tabs to choose the assumptions ( __Normality__ / __Homogeneity__ ) of the visual models ( __Aim 1__ / __Aim 2__ ) under different light conditions ( __Daylight__ / __Twilight__)
+Click the tabs to choose the assumptions ( **Normality** /
+**Homogeneity** ) of the visual models ( **Aim 1** / **Aim 2** ) under
+different light conditions ( **Daylight** / **Twilight**)
 
 </br>
+
 ```{r Group data for regressions}
 # list data for the following loops
 input.list.regres_d65.aim1 <- list(allvis.fl_d65.aim1,
@@ -1057,9 +1133,11 @@ input.list.norm_twilight.aim2 <- list(res.list_twilight.aim2[[1]],
                                       res.list_twilight.aim2[[2]],
                                       res.list_twilight.aim2[[3]])
 ```
+
 #### Aim 1 {.tabset .tabset-fade .tabset-pills}
 
-##### D65 
+##### D65
+
 ```{r}
 par(mfrow = c(1,3), pin = c(1.5, 1.5))
 for (i in 1:length(input.list.norm_d65.aim1)) {
@@ -1070,6 +1148,7 @@ for (i in 1:length(input.list.norm_d65.aim1)) {
 ```
 
 ##### Twilight
+
 ```{r}
 par(mfrow=c(1,3), pin = c(1.5, 1.5))
 for (i in 1:length(input.list.norm_twilight.aim1)) {
@@ -1080,7 +1159,9 @@ for (i in 1:length(input.list.norm_twilight.aim1)) {
 ```
 
 #### Aim 2 {.tabset .tabset-fade .tabset-pills}
-##### D65 
+
+##### D65
+
 ```{r}
 par(mfrow=c(1,3), pin = c(1.5, 1.5))
 for (i in 1:length(input.list.norm_d65.aim2)) {
@@ -1091,6 +1172,7 @@ for (i in 1:length(input.list.norm_d65.aim2)) {
 ```
 
 ##### Twilight
+
 ```{r}
 par(mfrow=c(1,3), pin = c(1.5, 1.5))
 for (i in 1:length(input.list.norm_twilight.aim2)) {
@@ -1101,6 +1183,7 @@ for (i in 1:length(input.list.norm_twilight.aim2)) {
 ```
 
 ### Homoscedasticity {.tabset .tabset-fade .tabset-pills}
+
 ```{r}
 vislist.aim1 <- c("UML", "USL", "USM", "USML")
 vislist.aim2 <- c("VS 580", "VS 600", "VS 620", "VS 640", "VS 660")
@@ -1109,6 +1192,7 @@ vislist.aim2 <- c("VS 580", "VS 600", "VS 620", "VS 640", "VS 660")
 #### Aim 1 {.tabset .tabset-fade .tabset-pills}
 
 ##### D65
+
 ```{r}
 par (mfrow = c(1,3), oma = c(2,2,0,0)) #oma=c() to create space for common labels
 
@@ -1127,6 +1211,7 @@ mtext("Contrast (JND)",side = 2, line = 0, outer = TRUE, cex = 1.3, las = 0)
 ```
 
 ##### Twilight
+
 ```{r}
 par (mfrow = c(1,3), oma = c(2,2,0,0))
 
@@ -1142,7 +1227,9 @@ mtext("Contrast (JND)",side = 2, line = 0, outer = TRUE, cex = 1.3, las = 0)
 ```
 
 #### Aim 2 {.tabset .tabset-fade .tabset-pills}
+
 ##### D65
+
 ```{r}
 par (mfrow = c(1,3), oma = c(2,2,0,0))
 
@@ -1157,7 +1244,8 @@ mtext("Visual system",side = 1, line = 0, outer = TRUE, cex = 1.3)
 mtext("Contrast (JND)",side = 2, line = 0, outer = TRUE, cex = 1.3, las = 0) 
 ```
 
-##### Twilight 
+##### Twilight
+
 ```{r}
 par (mfrow = c(1,3), oma = c(2,2,0,0))
 
@@ -1172,9 +1260,7 @@ mtext("Visual system",side = 1, line = 0, outer = TRUE, cex = 1.3)
 mtext("Contrast (JND)",side = 2, line = 0, outer = TRUE, cex = 1.3, las = 0) 
 ```
 
-
-</br>
-</br>
+</br> </br>
 
 ## GLMM results
 
@@ -1341,7 +1427,10 @@ heat_twilight.aim2 <- pdatalist[[4]]
 
 </br>
 
-Click the tabs to see the results for each comparison group ( __Flower vs. Leaf__ / __Beetle vs. Leaf__ / __Beetle vs. Flower__) and under different light conditions ( __Daylight__ / __Twilight__)
+Click the tabs to see the results for each comparison group ( **Flower
+vs. Leaf** / **Beetle vs. Leaf** / **Beetle vs. Flower**) and under
+different light conditions ( **Daylight** / **Twilight**)
+
 ```{r Function for p-value heat maps}
 # a = data
 # b = 1/2/3; 1 for flower.vs.leaf, 2 for beetle.vs.leaf, 3 for beetle.vs.flower
@@ -1368,274 +1457,314 @@ get.pheatmap <- function(a, b){ggplot(data = a,
 
 </br>
 
-#### __Flower v.s Leaf__ {.tabset .tabset-fade .tabset-pills}
-##### Daylight{.tabset .tabset-fade .tabset-pills}
+#### **Flower v.s Leaf** {.tabset .tabset-fade .tabset-pills}
+
+##### Daylight {.tabset .tabset-fade .tabset-pills}
 
 ```{r}
 Anova(m.flower.vs.leaf_d65.aim1) %>% pander()
 ```
 
-</br>
-</br>
+</br> </br>
 
-Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
+Click the tabs to see posthoc results ( **p-value summary plot** /
+**original model output** )
 
-###### Pair-wise p-values 
+###### Pair-wise p-values
+
 ```{r}
 get.pheatmap(heat_d65.aim1, 1)
 ```
 
 ###### Original model output
+
 ```{r}
 sum.flower.vs.leaf_d65.aim1
 ```
 
-##### Twilight{.tabset .tabset-fade .tabset-pills}
+##### Twilight {.tabset .tabset-fade .tabset-pills}
+
 ```{r}
 Anova(m.flower.vs.leaf_twilight.aim1) %>% pander()
 ```
 
-</br>
-</br>
+</br> </br>
 
-Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
+Click the tabs to see posthoc results ( **p-value summary plot** /
+**original model output** )
 
 ###### Pair-wise p-values
+
 ```{r}
 get.pheatmap(heat_twilight.aim1, 1)
 ```
 
 ###### Original model output
+
 ```{r}
 sum.flower.vs.leaf_twilight.aim1
 ```
 
-#### __Beetle vs. Leaf__ {.tabset .tabset-fade .tabset-pills}
-##### Daylight{.tabset .tabset-fade .tabset-pills}
+#### **Beetle vs. Leaf** {.tabset .tabset-fade .tabset-pills}
+
+##### Daylight {.tabset .tabset-fade .tabset-pills}
+
 ```{r}
 Anova(m.beetle.vs.leaf_d65.aim1) %>% pander()
 ```
 
-</br>
-</br>
+</br> </br>
 
-Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
+Click the tabs to see posthoc results ( **p-value summary plot** /
+**original model output** )
 
-###### Pair-wise p-values 
+###### Pair-wise p-values
+
 ```{r}
 get.pheatmap(heat_d65.aim1, 2)
 ```
 
 ###### Original model output
+
 ```{r}
 sum.beetle.vs.leaf_d65.aim1
 ```
 
-##### Twilight{.tabset .tabset-fade .tabset-pills}
+##### Twilight {.tabset .tabset-fade .tabset-pills}
+
 ```{r}
 Anova(m.beetle.vs.leaf_twilight.aim1) %>% pander()
 ```
 
-</br>
-</br>
+</br> </br>
 
-Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
+Click the tabs to see posthoc results ( **p-value summary plot** /
+**original model output** )
 
 ###### Pair-wise p-values
+
 ```{r}
 get.pheatmap(heat_twilight.aim1, 2)
 ```
 
 ###### Original model output
+
 ```{r}
 sum.beetle.vs.leaf_twilight.aim1
 ```
 
-#### __Beetle vs. Flower__ {.tabset .tabset-fade .tabset-pills}
-##### Daylight{.tabset .tabset-fade .tabset-pills}
+#### **Beetle vs. Flower** {.tabset .tabset-fade .tabset-pills}
+
+##### Daylight {.tabset .tabset-fade .tabset-pills}
+
 ```{r}
 Anova(m.beetle.vs.flower_d65.aim1) %>% pander()
 ```
 
-</br>
-</br>
+</br> </br>
 
-Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
+Click the tabs to see posthoc results ( **p-value summary plot** /
+**original model output** )
 
-###### Pair-wise p-values 
+###### Pair-wise p-values
+
 ```{r}
 get.pheatmap(heat_d65.aim1, 3)
 ```
 
 ###### Original model output
+
 ```{r}
 sum.beetle.vs.flower_d65.aim1
 ```
 
-##### Twilight{.tabset .tabset-fade .tabset-pills}
+##### Twilight {.tabset .tabset-fade .tabset-pills}
+
 ```{r}
 Anova(m.beetle.vs.flower_twilight.aim1) %>% pander()
 ```
 
-</br>
-</br>
+</br> </br>
 
-Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
+Click the tabs to see posthoc results ( **p-value summary plot** /
+**original model output** )
 
 ###### Pair-wise p-values
+
 ```{r}
 get.pheatmap(heat_twilight.aim1, 3)
 ```
 
 ###### Original model output
+
 ```{r}
 sum.beetle.vs.flower_twilight.aim1
 ```
 
-
-</br>
-</br>
-
+</br> </br>
 
 ### Results of Aim 2: comparing visual systems with different LWS peak sensitivities {.tabset .tabset-fade .tabset-pills}
 
 </br>
 
-Click the tabs to see the results for each comparison group ( __Flower vs. Leaf__ / __Beetle vs. Leaf__ / __Beetle vs. Flower__) and under different light conditions ( __Daylight__ / __Twilight__)
+Click the tabs to see the results for each comparison group ( **Flower
+vs. Leaf** / **Beetle vs. Leaf** / **Beetle vs. Flower**) and under
+different light conditions ( **Daylight** / **Twilight**)
 
 </br>
 
-#### __Flower v.s Leaf__ {.tabset .tabset-fade .tabset-pills}
+#### **Flower v.s Leaf** {.tabset .tabset-fade .tabset-pills}
+
 ##### Daylight {.tabset .tabset-fade .tabset-pills}
 
 ```{r}
 Anova(m.flower.vs.leaf_d65.aim2) %>% pander()
 ```
 
-</br>
-</br>
+</br> </br>
 
-Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
+Click the tabs to see posthoc results ( **p-value summary plot** /
+**original model output** )
 
-###### Pair-wise p-values 
+###### Pair-wise p-values
+
 ```{r}
 get.pheatmap(heat_d65.aim2, 1)
 ```
 
 ###### Original model output
+
 ```{r}
 sum.flower.vs.leaf_d65.aim2
 ```
 
 ##### Twilight {.tabset .tabset-fade .tabset-pills}
+
 ```{r}
 Anova(m.flower.vs.leaf_twilight.aim2) %>% pander()
 ```
 
-</br>
-</br>
+</br> </br>
 
-Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
+Click the tabs to see posthoc results ( **p-value summary plot** /
+**original model output** )
 
 ###### Pair-wise p-values
+
 ```{r}
 get.pheatmap(heat_twilight.aim2, 1)
 ```
 
 ###### Original model output
+
 ```{r}
 sum.flower.vs.leaf_twilight.aim2
 ```
 
-#### __Beetle vs. Leaf__ {.tabset .tabset-fade .tabset-pills}
-##### Daylight{.tabset .tabset-fade .tabset-pills}
+#### **Beetle vs. Leaf** {.tabset .tabset-fade .tabset-pills}
+
+##### Daylight {.tabset .tabset-fade .tabset-pills}
+
 ```{r}
 Anova(m.beetle.vs.leaf_d65.aim2) %>% pander()
 ```
 
-</br>
-</br>
+</br> </br>
 
-Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
+Click the tabs to see posthoc results ( **p-value summary plot** /
+**original model output** )
 
-###### Pair-wise p-values 
+###### Pair-wise p-values
+
 ```{r}
 get.pheatmap(heat_d65.aim2, 2)
 ```
 
 ###### Original model output
+
 ```{r}
 sum.beetle.vs.leaf_d65.aim2
 ```
 
-##### Twilight{.tabset .tabset-fade .tabset-pills}
+##### Twilight {.tabset .tabset-fade .tabset-pills}
+
 ```{r}
 Anova(m.beetle.vs.leaf_twilight.aim2) %>% pander()
 ```
 
-</br>
-</br>
+</br> </br>
 
-Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
+Click the tabs to see posthoc results ( **p-value summary plot** /
+**original model output** )
 
 ###### Pair-wise p-values
+
 ```{r}
 get.pheatmap(heat_twilight.aim2, 2)
 ```
 
 ###### Original model output
+
 ```{r}
 sum.beetle.vs.leaf_twilight.aim2
 ```
 
-#### __Beetle vs. Flower__ {.tabset .tabset-fade .tabset-pills}
-##### Daylight{.tabset .tabset-fade .tabset-pills}
+#### **Beetle vs. Flower** {.tabset .tabset-fade .tabset-pills}
+
+##### Daylight {.tabset .tabset-fade .tabset-pills}
+
 ```{r}
 Anova(m.beetle.vs.flower_d65.aim2) %>% pander()
 ```
 
-</br>
-</br>
+</br> </br>
 
-Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
+Click the tabs to see posthoc results ( **p-value summary plot** /
+**original model output** )
 
-###### Pair-wise p-values 
+###### Pair-wise p-values
+
 ```{r}
 get.pheatmap(heat_d65.aim2, 3)
 ```
 
 ###### Original model output
+
 ```{r}
 sum.beetle.vs.flower_d65.aim2
 ```
 
-##### Twilight{.tabset .tabset-fade .tabset-pills}
+##### Twilight {.tabset .tabset-fade .tabset-pills}
+
 ```{r}
 Anova(m.beetle.vs.flower_twilight.aim2) %>% pander()
 ```
 
-</br>
-</br>
+</br> </br>
 
-Click the tabs to see posthoc results ( __p-value summary plot__ / __original model output__ )
+Click the tabs to see posthoc results ( **p-value summary plot** /
+**original model output** )
 
 ###### Pair-wise p-values
+
 ```{r}
 get.pheatmap(heat_twilight.aim2, 3)
 ```
 
 ###### Original model output
+
 ```{r}
 sum.beetle.vs.flower_twilight.aim2
 ```
 
-
-</br>
-</br>
+</br> </br>
 
 # Plot the contrasts {.tabset .tabset-fade .tabset-pills}
-* Colours approximate human perception of either flower (left and right) or beetle (centre) colouration.
-* Lines of the same colors connect the same sample
+
+-   Colours approximate human perception of either flower (left and
+    right) or beetle (centre) colouration.
+-   Lines of the same colors connect the same sample
+
 ```{r Import color code and setup functions}
 #import the sample color code 
 color.code <- read.csv("data/color code list.csv", header=TRUE)
@@ -1839,10 +1968,13 @@ get.contrastplot <- function(dat, title, vislable, upperylim, visomplist, compgr
 }
 
 ```
+
 </br>
 
 ## Aim 1 {.tabset .tabset-fade .tabset-pills}
+
 ### Daylight
+
 ```{r,fig.cap="Figure caption: Comparison of chromatic contrast for visual systems with different photoreceptor combinations. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts > 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
 
 # create a data set for means
@@ -1864,6 +1996,7 @@ figure_d65.aim1
 ```
 
 ### Twilight
+
 ```{r,fig.cap="Figure caption: Comparison of chromatic contrast for visual systems with different photoreceptor combinations under civil twilight illumination. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1."}
 # create a data set for means
 mean.fl_twilight.aim1 <- get.plotmeans("aim1", "fl", allvis.fl_twilight.aim1)
@@ -1883,9 +2016,10 @@ figure_twilight.aim1 <- ggarrange(fl_twilight.aim1,
 figure_twilight.aim1
 ```
 
-
 ## Aim 2 {.tabset .tabset-fade .tabset-pills}
+
 ### Daylight
+
 ```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Three contrasts > 13 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
 
 # create a data set for means
@@ -1907,6 +2041,7 @@ figure_d65.aim2
 ```
 
 ### Twilight
+
 ```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths under civil twilight illumination. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1."}
 # create a data set for means
 mean.fl_twilight.aim2 <- get.plotmeans("aim2", "fl", allvis.fl_twilight.aim2)
@@ -1928,10 +2063,20 @@ figure_twilight.aim2
 
 # Summary
 
-* Visual models using hypothetical insect visual systems indicate that having both SWS and LWS receptors enhances the contrast of beetles with flowers and flowers with leaves, and a LWS receptor enhances the contrast of beetles against leaves.
-</br>
-</br>
-* The optimal peak sensitivity of the LWS photoreceptor depends on what is being viewed. When comparing beetle colours with both leaves and flowers, contrast increases with increasing LWS λmax up to 660 nm; whereas when comparing flowers against leaves, contrast stops increasing beyond 640 nm.
-</br>
-</br>
-* The contrasts of the models using civil twilight were substantially lower (many < 1 JND) than those using daylight. The contrasts in twilight showed different patterns from those using daylight in Aim 1 models, but were qualitatively similar in Aim 2 models.
+-   Visual models using hypothetical insect visual systems indicate that
+    having both SWS and LWS receptors enhances the contrast of beetles
+    with flowers and flowers with leaves, and a LWS receptor enhances
+    the contrast of beetles against leaves.
+
+    </br> </br>
+
+-   The optimal peak sensitivity of the LWS photoreceptor depends on
+    what is being viewed. When comparing beetle colours with both leaves
+    and flowers, contrast increases with increasing LWS λmax up to 660
+    nm; whereas when comparing flowers against leaves, contrast stops
+    increasing beyond 640 nm. </br> </br>
+
+-   The contrasts of the models using civil twilight were substantially
+    lower (many \< 1 JND) than those using daylight. The contrasts in
+    twilight showed different patterns from those using daylight in Aim
+    1 models, but were qualitatively similar in Aim 2 models.

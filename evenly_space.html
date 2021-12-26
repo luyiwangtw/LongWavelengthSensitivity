@@ -13,7 +13,8 @@
 
 <title>The effect of evenly spaced photoreceptors on chromatic contrast</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -33,7 +34,6 @@
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
-<script src="site_libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -54,19 +54,19 @@
   }
 </style>
 <style type="text/css" data-origin="pandoc">
-code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -86,7 +86,7 @@ pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-le
 div.sourceCode
   {  background-color: #f8f8f8; }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ef2929; } /* Alert */
 code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
@@ -457,7 +457,7 @@ div.tocify {
 
 
 <div id="the-aim" class="section level1 tabset tabset-fade tabset-pills">
-<h1>The aim</h1>
+<h1 class="tabset tabset-fade tabset-pills">The aim</h1>
 <ul>
 <li><p>Here, we tested the effect of even spacing of sensitivities on colour discrimination in a tetrachromatic visual system. Specifically, we ran visual models with <strong>an evenly spaced visual system</strong> and <strong>an unevenly spaced visual system</strong>, then compared spectral contrast in all three comparison groups (‘leaf vs. flower’, ‘leaf vs. beetle’, ‘beetle vs. flower’).</p></li>
 <li><p>These two visual systems have the same upper and lower sensitivities with varying distribution of the two middle sensitivities. The evenly spaced visual system has peak sensitivities at 355 nm, 455 nm, 560 nm, and 660 nm, while VS 660 from the <a href="main_models.html">Main models</a> section is used to represent the unevenly spaced visual system, with peak sensitivities at 355 nm, 445 nm, 530 nm, and 660 nm.</p></li>
@@ -497,81 +497,81 @@ Figure caption: Normalised sensitivity curves of the evenly spaced visual system
 <ul>
 <li>We ran the visual models with the same parameter settings and steps as in the main models.</li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co">## D65</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>get.d65.vismodel &lt;-<span class="st"> </span><span class="cf">function</span>(i){</span>
-<span id="cb1-3"><a href="#cb1-3"></a>  </span>
-<span id="cb1-4"><a href="#cb1-4"></a>  vs.i &lt;-<span class="st"> </span><span class="kw">vismodel</span>(dataset[<span class="dv">1</span><span class="op">:</span><span class="dv">501</span>,], </span>
-<span id="cb1-5"><a href="#cb1-5"></a>                   <span class="dt">visual =</span> i, <span class="co">#this need to change according to the visual system</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>                   <span class="dt">bkg =</span> aveleaf<span class="op">$</span>aveleaf, </span>
-<span id="cb1-7"><a href="#cb1-7"></a>                   <span class="dt">illum =</span> irradiance.d65[<span class="dv">1</span><span class="op">:</span><span class="dv">501</span>,<span class="dv">2</span>], </span>
-<span id="cb1-8"><a href="#cb1-8"></a>                   <span class="dt">qcatch =</span> <span class="st">&#39;fi&#39;</span>, </span>
-<span id="cb1-9"><a href="#cb1-9"></a>                   <span class="dt">relative =</span> <span class="ot">FALSE</span>,</span>
-<span id="cb1-10"><a href="#cb1-10"></a>                   <span class="dt">vonkries =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb1-11"><a href="#cb1-11"></a>  <span class="kw">return</span>(vs.i)</span>
-<span id="cb1-12"><a href="#cb1-12"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>get.evenspace.coldist &lt;-<span class="st"> </span><span class="cf">function</span>(i){</span>
-<span id="cb2-2"><a href="#cb2-2"></a>  </span>
-<span id="cb2-3"><a href="#cb2-3"></a>  con &lt;-<span class="st"> </span><span class="kw">coldist</span>(<span class="dt">modeldata =</span> i, <span class="co"># put output of vismodel()</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a>                   <span class="dt">noise=</span><span class="st">&quot;neural&quot;</span>, </span>
-<span id="cb2-5"><a href="#cb2-5"></a>                   <span class="dt">achro=</span><span class="ot">FALSE</span>, </span>
-<span id="cb2-6"><a href="#cb2-6"></a>                   <span class="dt">n =</span> <span class="kw">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>),</span>
-<span id="cb2-7"><a href="#cb2-7"></a>                   <span class="dt">weber =</span> <span class="fl">0.12</span>,</span>
-<span id="cb2-8"><a href="#cb2-8"></a>                   <span class="dt">weber.ref =</span> <span class="dv">4</span>)</span>
-<span id="cb2-9"><a href="#cb2-9"></a>  </span>
-<span id="cb2-10"><a href="#cb2-10"></a>  <span class="kw">return</span>(con)</span>
-<span id="cb2-11"><a href="#cb2-11"></a>}</span>
-<span id="cb2-12"><a href="#cb2-12"></a></span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="co">#Contrast calculation</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a>Cbuprest.even.space.d65  &lt;-<span class="st">  </span><span class="kw">get.evenspace.coldist</span>(buprest.even.space.d65)</span>
-<span id="cb2-15"><a href="#cb2-15"></a></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#VS660</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a>Cbuprest660 &lt;-<span class="st"> </span><span class="kw">get.evenspace.coldist</span>(buprest660)</span>
-<span id="cb2-18"><a href="#cb2-18"></a></span>
-<span id="cb2-19"><a href="#cb2-19"></a><span class="co">#combine all contrast value in each comparison group</span></span>
-<span id="cb2-20"><a href="#cb2-20"></a></span>
-<span id="cb2-21"><a href="#cb2-21"></a>even.vissys_d65 &lt;-<span class="st"> </span><span class="kw">list</span>(Cbuprest.even.space.d65, Cbuprest660)</span>
-<span id="cb2-22"><a href="#cb2-22"></a>even.fl.vissys &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;even.fl&quot;</span>, <span class="st">&quot;Vis5.fl&quot;</span>) </span>
-<span id="cb2-23"><a href="#cb2-23"></a>even.bl.vissys &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;even.bl&quot;</span>, <span class="st">&quot;Vis5.bl&quot;</span>)</span>
-<span id="cb2-24"><a href="#cb2-24"></a>even.bf.vissys &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;even.bf&quot;</span>, <span class="st">&quot;Vis5.bf&quot;</span>) </span>
-<span id="cb2-25"><a href="#cb2-25"></a></span>
-<span id="cb2-26"><a href="#cb2-26"></a><span class="co">### flower vs leaf</span></span>
-<span id="cb2-27"><a href="#cb2-27"></a>allvis.fl_d65.even &lt;-<span class="st"> </span><span class="kw">data_frame</span>()</span>
-<span id="cb2-28"><a href="#cb2-28"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(even.vissys_d65)) {</span>
-<span id="cb2-29"><a href="#cb2-29"></a>  </span>
-<span id="cb2-30"><a href="#cb2-30"></a>  temp.i &lt;-<span class="st"> </span>even.vissys_d65[[i]] <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-31"><a href="#cb2-31"></a><span class="st">    </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-32"><a href="#cb2-32"></a><span class="st">    </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))</span>
-<span id="cb2-33"><a href="#cb2-33"></a>  </span>
-<span id="cb2-34"><a href="#cb2-34"></a>  temp.i<span class="op">$</span>vissys &lt;-<span class="st"> </span><span class="kw">strrep</span>(even.fl.vissys[[i]],<span class="dv">1</span>)</span>
-<span id="cb2-35"><a href="#cb2-35"></a>  </span>
-<span id="cb2-36"><a href="#cb2-36"></a>  allvis.fl_d65.even &lt;-<span class="st"> </span>temp.i <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(allvis.fl_d65.even)  </span>
-<span id="cb2-37"><a href="#cb2-37"></a>}</span>
-<span id="cb2-38"><a href="#cb2-38"></a></span>
-<span id="cb2-39"><a href="#cb2-39"></a><span class="co">### beetle vs leaf</span></span>
-<span id="cb2-40"><a href="#cb2-40"></a>allvis.bl_d65.even &lt;-<span class="st"> </span><span class="kw">data_frame</span>()</span>
-<span id="cb2-41"><a href="#cb2-41"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(even.vissys_d65)) {</span>
-<span id="cb2-42"><a href="#cb2-42"></a>  </span>
-<span id="cb2-43"><a href="#cb2-43"></a>  temp.i &lt;-<span class="st"> </span>even.vissys_d65[[i]] <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-44"><a href="#cb2-44"></a><span class="st">    </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-45"><a href="#cb2-45"></a><span class="st">    </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))</span>
-<span id="cb2-46"><a href="#cb2-46"></a>  </span>
-<span id="cb2-47"><a href="#cb2-47"></a>  temp.i<span class="op">$</span>vissys &lt;-<span class="st"> </span><span class="kw">strrep</span>(even.bl.vissys[[i]],<span class="dv">1</span>)</span>
-<span id="cb2-48"><a href="#cb2-48"></a>  </span>
-<span id="cb2-49"><a href="#cb2-49"></a>  allvis.bl_d65.even &lt;-<span class="st"> </span>temp.i <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(allvis.bl_d65.even)  </span>
-<span id="cb2-50"><a href="#cb2-50"></a>}</span>
-<span id="cb2-51"><a href="#cb2-51"></a></span>
-<span id="cb2-52"><a href="#cb2-52"></a><span class="co">### beetle vs flower</span></span>
-<span id="cb2-53"><a href="#cb2-53"></a>allvis.bf_d65.even &lt;-<span class="st"> </span><span class="kw">data_frame</span>()</span>
-<span id="cb2-54"><a href="#cb2-54"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(even.vissys_d65)) {</span>
-<span id="cb2-55"><a href="#cb2-55"></a>  </span>
-<span id="cb2-56"><a href="#cb2-56"></a>  temp.i &lt;-<span class="st"> </span>even.vissys_d65[[i]] <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-57"><a href="#cb2-57"></a><span class="st">    </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-58"><a href="#cb2-58"></a><span class="st">    </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))</span>
-<span id="cb2-59"><a href="#cb2-59"></a>  </span>
-<span id="cb2-60"><a href="#cb2-60"></a>  temp.i<span class="op">$</span>vissys &lt;-<span class="st"> </span><span class="kw">strrep</span>(even.bf.vissys[[i]],<span class="dv">1</span>)</span>
-<span id="cb2-61"><a href="#cb2-61"></a>  </span>
-<span id="cb2-62"><a href="#cb2-62"></a>  allvis.bf_d65.even &lt;-<span class="st"> </span>temp.i <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rbind</span>(allvis.bf_d65.even)  </span>
-<span id="cb2-63"><a href="#cb2-63"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## D65</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>get.d65.vismodel <span class="ot">&lt;-</span> <span class="cf">function</span>(i){</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  vs.i <span class="ot">&lt;-</span> <span class="fu">vismodel</span>(dataset[<span class="dv">1</span><span class="sc">:</span><span class="dv">501</span>,], </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">visual =</span> i, <span class="co">#this need to change according to the visual system</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">bkg =</span> aveleaf<span class="sc">$</span>aveleaf, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">illum =</span> irradiance.d65[<span class="dv">1</span><span class="sc">:</span><span class="dv">501</span>,<span class="dv">2</span>], </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">qcatch =</span> <span class="st">&#39;fi&#39;</span>, </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">relative =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">vonkries =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(vs.i)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>get.evenspace.coldist <span class="ot">&lt;-</span> <span class="cf">function</span>(i){</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  con <span class="ot">&lt;-</span> <span class="fu">coldist</span>(<span class="at">modeldata =</span> i, <span class="co"># put output of vismodel()</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">noise=</span><span class="st">&quot;neural&quot;</span>, </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">achro=</span><span class="cn">FALSE</span>, </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">n =</span> <span class="fu">c</span>(<span class="fl">1.14</span>,<span class="dv">1</span>,<span class="fl">1.26</span>,<span class="fl">1.38</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">weber =</span> <span class="fl">0.12</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">weber.ref =</span> <span class="dv">4</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(con)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Contrast calculation</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>Cbuprest.even.space.d65  <span class="ot">&lt;-</span>  <span class="fu">get.evenspace.coldist</span>(buprest.even.space.d65)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co">#VS660</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>Cbuprest660 <span class="ot">&lt;-</span> <span class="fu">get.evenspace.coldist</span>(buprest660)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co">#combine all contrast value in each comparison group</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>even.vissys_d65 <span class="ot">&lt;-</span> <span class="fu">list</span>(Cbuprest.even.space.d65, Cbuprest660)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>even.fl.vissys <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;even.fl&quot;</span>, <span class="st">&quot;Vis5.fl&quot;</span>) </span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>even.bl.vissys <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;even.bl&quot;</span>, <span class="st">&quot;Vis5.bl&quot;</span>)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>even.bf.vissys <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">&quot;even.bf&quot;</span>, <span class="st">&quot;Vis5.bf&quot;</span>) </span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="do">### flower vs leaf</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>allvis.fl_d65.even <span class="ot">&lt;-</span> <span class="fu">data_frame</span>()</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(even.vissys_d65)) {</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  temp.i <span class="ot">&lt;-</span> even.vissys_d65[[i]] <span class="sc">%&gt;%</span> </span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(patch2,<span class="st">&quot;leaves&quot;</span>))</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  temp.i<span class="sc">$</span>vissys <span class="ot">&lt;-</span> <span class="fu">strrep</span>(even.fl.vissys[[i]],<span class="dv">1</span>)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  allvis.fl_d65.even <span class="ot">&lt;-</span> temp.i <span class="sc">%&gt;%</span> <span class="fu">rbind</span>(allvis.fl_d65.even)  </span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="do">### beetle vs leaf</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>allvis.bl_d65.even <span class="ot">&lt;-</span> <span class="fu">data_frame</span>()</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(even.vissys_d65)) {</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  temp.i <span class="ot">&lt;-</span> even.vissys_d65[[i]] <span class="sc">%&gt;%</span> </span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(patch1,<span class="st">&quot;leaves&quot;</span>))</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  temp.i<span class="sc">$</span>vissys <span class="ot">&lt;-</span> <span class="fu">strrep</span>(even.bl.vissys[[i]],<span class="dv">1</span>)</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  allvis.bl_d65.even <span class="ot">&lt;-</span> temp.i <span class="sc">%&gt;%</span> <span class="fu">rbind</span>(allvis.bl_d65.even)  </span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="do">### beetle vs flower</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>allvis.bf_d65.even <span class="ot">&lt;-</span> <span class="fu">data_frame</span>()</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(even.vissys_d65)) {</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>  temp.i <span class="ot">&lt;-</span> even.vissys_d65[[i]] <span class="sc">%&gt;%</span> </span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(patch1,<span class="st">&quot;flower&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(patch2,<span class="st">&quot;beetle&quot;</span>))</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>  temp.i<span class="sc">$</span>vissys <span class="ot">&lt;-</span> <span class="fu">strrep</span>(even.bf.vissys[[i]],<span class="dv">1</span>)</span>
+<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>  allvis.bf_d65.even <span class="ot">&lt;-</span> temp.i <span class="sc">%&gt;%</span> <span class="fu">rbind</span>(allvis.bf_d65.even)  </span>
+<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p></br> </br></p>
 <div id="contrast-tables" class="section level2">
 <h2>Contrast tables</h2>
@@ -609,7 +609,7 @@ Figure caption: Normalised sensitivity curves of the evenly spaced visual system
 </div>
 </div>
 <div id="compare-contrasts" class="section level1 tabset tabset-fade tabset-pills">
-<h1>Compare contrasts</h1>
+<h1 class="tabset tabset-fade tabset-pills">Compare contrasts</h1>
 <ul>
 <li><p>To compare contrasts between visual systems, We conducted Wald chi-square tests on generalised linear mixed models (GLMM) followed by posthoc tests.</p></li>
 <li><p>In the models, we assigned</p>
@@ -623,19 +623,19 @@ Figure caption: Normalised sensitivity curves of the evenly spaced visual system
 </ul></li>
 </ul>
 <p></br></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>get.lmer &lt;-<span class="st"> </span><span class="cf">function</span>(datlist, compnnumber){</span>
-<span id="cb3-2"><a href="#cb3-2"></a>  </span>
-<span id="cb3-3"><a href="#cb3-3"></a>  <span class="kw">lmer</span>(dS <span class="op">~</span><span class="st"> </span>vissys <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>patch2) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>patch1), </span>
-<span id="cb3-4"><a href="#cb3-4"></a>       <span class="dt">data =</span> datlist[[compnnumber]], <span class="dt">REML =</span> F)</span>
-<span id="cb3-5"><a href="#cb3-5"></a>  <span class="co">#REML=F, in order to fit the model using the likelihood ratio test. Otherwise, the lmer default will fit the model using the REML (REstricted Maximum Likelihood) criterion.</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a>}</span>
-<span id="cb3-7"><a href="#cb3-7"></a></span>
-<span id="cb3-8"><a href="#cb3-8"></a>get.posthocsum &lt;-<span class="st"> </span><span class="cf">function</span>(modelx){</span>
-<span id="cb3-9"><a href="#cb3-9"></a>  </span>
-<span id="cb3-10"><a href="#cb3-10"></a>  <span class="kw">summary</span>(<span class="kw">glht</span>(modelx, </span>
-<span id="cb3-11"><a href="#cb3-11"></a>               <span class="dt">linfct =</span> <span class="kw">mcp</span>(<span class="dt">vissys =</span> <span class="st">&quot;Tukey&quot;</span>)), </span>
-<span id="cb3-12"><a href="#cb3-12"></a>          <span class="dt">test =</span> <span class="kw">adjusted</span>(<span class="st">&quot;bonferroni&quot;</span>))</span>
-<span id="cb3-13"><a href="#cb3-13"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>get.lmer <span class="ot">&lt;-</span> <span class="cf">function</span>(datlist, compnnumber){</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lmer</span>(dS <span class="sc">~</span> vissys <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>patch2) <span class="sc">+</span> (<span class="dv">1</span><span class="sc">|</span>patch1), </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">data =</span> datlist[[compnnumber]], <span class="at">REML =</span> F)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">#REML=F, in order to fit the model using the likelihood ratio test. Otherwise, the lmer default will fit the model using the REML (REstricted Maximum Likelihood) criterion.</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>get.posthocsum <span class="ot">&lt;-</span> <span class="cf">function</span>(modelx){</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(<span class="fu">glht</span>(modelx, </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">linfct =</span> <span class="fu">mcp</span>(<span class="at">vissys =</span> <span class="st">&quot;Tukey&quot;</span>)), </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>          <span class="at">test =</span> <span class="fu">adjusted</span>(<span class="st">&quot;bonferroni&quot;</span>))</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <div id="flower-vs.-leaf" class="section level2">
 <h2><strong>Flower vs. Leaf</strong></h2>
 <table style="width:54%;">

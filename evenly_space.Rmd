@@ -71,7 +71,7 @@ dataset <- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measurem
 ## Sensitivity curves
 ```{r, fig.cap="Figure caption: Sensitivity curves of the evenly spaced visual system (solid lines) and the unevenly spaced visual system (VS 660; dotted lines).",echo = FALSE, message = FALSE, warning = FALSE}
 #plot the visual systems
-system.list <- c("evenly space","unevenly space")
+system.list <- c("evenly spaced","unevenly spaced")
 system.type <- rep(system.list , c(1*501, 1*501))
 
 visevencurve <- even.space %>%
@@ -136,9 +136,9 @@ plotdat.unevenly <- gather(hold.unevenly[,1:8], peak, value) %>% cbind(hold.unev
 # Reshape and combine evenly and unevenly spaced data 
 
 pre.plotdat.even <- gather(hold.even[,1:4], peak, value) %>% cbind(hold.even[,"wl"]) %>% 
-  add_column(system.type = strrep("evenely space", 1)) 
+  add_column(system.type = strrep("evenly spaced", 1)) 
 pre.plotdat.uneven <- plotdat.unevenly %>% filter(peak %in% c("355 nm", "445 nm", "530 nm", "660 nm")) %>% 
-  add_column(system.type = strrep("unevenely space", 1)) %>% 
+  add_column(system.type = strrep("unevenly spaced", 1)) %>% 
   mutate(peak = str_replace(peak, "355 nm", "UVS")) %>% 
   mutate(peak = str_replace(peak, "445 nm", "SWS")) %>% 
   mutate(peak = str_replace(peak, "530 nm", "MWS")) %>% 
