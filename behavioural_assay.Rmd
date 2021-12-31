@@ -152,7 +152,7 @@ ggplot(led.spec, aes(x = wl, y = irradiance, color = peak))+
   geom_line()+
   scale_color_jco(labels = c("590 nm", "645 nm", "680 nm", "700 nm", "720 nm", "735 nm", "755 nm"))+
   xlab("Wavelength (nm)")+
-  ylab("Photon flux (umol.s-1.m-2.nm-1)")+
+  ylab("Absolute irradiance (uW.cm-2.nm-1)")+
   theme_classic()
 ```
 ## Ambient dim light
