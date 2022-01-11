@@ -32,6 +32,6 @@ This document is divided into four parts:
 
 4. [Sensitivity analysis](sensitivity_analysis.html): Test if the modelling results are sensitive to photoreceptor ratio.
 
-5. [Behavioural assay](behairoual_assay.html): Details about the behavioural assay which we tested if the living jewel beetles could respond to long wavelength light.
+5. [Behavioural assay](behavioural_assay.html): Details about the behavioural assay which we tested if the living jewel beetles could respond to long wavelength light.
 
 
