@@ -45,6 +45,7 @@ library(dplyr)
 library(pavo)
 library(ggpubr)
 library(tidyr)
+library(stringr)
 ```
 
 ```{r setup, include=FALSE}
@@ -145,12 +146,13 @@ led.spec <- read.csv("data/LED irradiation.csv",header=TRUE) %>%
   as.rspec(lim = c(300, 800)) %>% 
   procspec(opt = "smooth", # smooth the spec
            span = 0.05) %>% 
-  gather(peak,irradiance, -wl)
+  gather(peak,irradiance, -wl) %>% 
+  filter(!str_detect(peak, 'LED755nm'))
 
 library(ggsci)
 ggplot(led.spec, aes(x = wl, y = irradiance, color = peak))+
   geom_line()+
-  scale_color_jco(labels = c("590 nm", "645 nm", "680 nm", "700 nm", "720 nm", "735 nm", "755 nm"))+
+  scale_color_jco(labels = c("590 nm", "645 nm", "680 nm", "700 nm", "720 nm", "735 nm"))+
   xlab("Wavelength (nm)")+
   ylab("Absolute irradiance (uW.cm-2.nm-1)")+
   theme_classic()
