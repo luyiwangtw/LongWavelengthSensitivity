@@ -741,7 +741,7 @@ aim1.vissys_d65 <- list(CvsUSM, CvsUML, CvsUSL, CvsUSML)
 
 ### flower vs leaf
 
-allvis.fl_d65.aim1 <- data_frame()
+allvis.fl_d65.aim1 <- tibble()
 for (i in 1:length(aim1.vissys_d65)) {
   
   temp.i <- aim1.vissys_d65[[i]] %>% 
@@ -755,7 +755,7 @@ for (i in 1:length(aim1.vissys_d65)) {
 }
 
 ### beetle vs leaf
-allvis.bl_d65.aim1 <- data_frame()
+allvis.bl_d65.aim1 <- tibble()
 for (i in 1:length(aim1.vissys_d65)) {
   
   temp.i <- aim1.vissys_d65[[i]] %>% 
@@ -770,7 +770,7 @@ for (i in 1:length(aim1.vissys_d65)) {
 }
 
 ### beetle vs flower
-allvis.bf_d65.aim1 <- data_frame()
+allvis.bf_d65.aim1 <- tibble()
 for (i in 1:length(aim1.vissys_d65)) {
   
   temp.i <- aim1.vissys_d65[[i]] %>% 
@@ -790,7 +790,7 @@ for (i in 1:length(aim1.vissys_d65)) {
 aim1.vissys_twilight <- list(CvsUSM_twilight, CvsUML_twilight, CvsUSL_twilight, CvsUSML_twilight)
 
 ### flower vs leaf
-allvis.fl_twilight.aim1 <- data_frame()
+allvis.fl_twilight.aim1 <- tibble()
 for (i in 1:length(aim1.vissys_twilight)) {
   
   temp.i <- aim1.vissys_twilight[[i]] %>% 
@@ -804,7 +804,7 @@ for (i in 1:length(aim1.vissys_twilight)) {
 }
 
 ### beetle vs leaf
-allvis.bl_twilight.aim1 <- data_frame()
+allvis.bl_twilight.aim1 <- tibble()
 for (i in 1:length(aim1.vissys_twilight)) {
   
   temp.i <- aim1.vissys_twilight[[i]] %>% 
@@ -818,7 +818,7 @@ for (i in 1:length(aim1.vissys_twilight)) {
 }
 
 ### beetle vs flower
-allvis.bf_twilight.aim1 <- data_frame()
+allvis.bf_twilight.aim1 <- tibble()
 for (i in 1:length(aim1.vissys_twilight)) {
   
   temp.i <- aim1.vissys_twilight[[i]] %>% 
@@ -836,7 +836,7 @@ for (i in 1:length(aim1.vissys_twilight)) {
 aim2.vissys_d65 <- list(Cbuprest580, Cbuprest600, Cbuprest620, Cbuprest640, Cbuprest660)
 
 ### flower vs leaf
-allvis.fl_d65.aim2 <- data_frame()
+allvis.fl_d65.aim2 <- tibble()
 for (i in 1:length(aim2.vissys_d65)) {
   
   temp.i <- aim2.vissys_d65[[i]] %>% 
@@ -850,7 +850,7 @@ for (i in 1:length(aim2.vissys_d65)) {
 }
 
 ### beetle vs leaf
-allvis.bl_d65.aim2 <- data_frame()
+allvis.bl_d65.aim2 <- tibble()
 for (i in 1:length(aim2.vissys_d65)) {
   
   temp.i <- aim2.vissys_d65[[i]] %>% 
@@ -864,7 +864,7 @@ for (i in 1:length(aim2.vissys_d65)) {
 }
 
 ### beetle vs flower
-allvis.bf_d65.aim2 <- data_frame()
+allvis.bf_d65.aim2 <- tibble()
 for (i in 1:length(aim2.vissys_d65)) {
   
   temp.i <- aim2.vissys_d65[[i]] %>% 
@@ -882,7 +882,7 @@ for (i in 1:length(aim2.vissys_d65)) {
 aim2.vissys_twilight <- list(Cbuprest580_twilight, Cbuprest600_twilight, Cbuprest620_twilight, Cbuprest640_twilight, Cbuprest660_twilight)
 
 ### flower vs leaf
-allvis.fl_twilight.aim2 <- data_frame()
+allvis.fl_twilight.aim2 <- tibble()
 for (i in 1:length(aim2.vissys_twilight)) {
   
   temp.i <- aim2.vissys_twilight[[i]] %>% 
@@ -896,7 +896,7 @@ for (i in 1:length(aim2.vissys_twilight)) {
 }
 
 ### beetle vs leaf
-allvis.bl_twilight.aim2 <- data_frame()
+allvis.bl_twilight.aim2 <- tibble()
 for (i in 1:length(aim2.vissys_twilight)) {
   
   temp.i <- aim2.vissys_twilight[[i]] %>% 
@@ -910,7 +910,7 @@ for (i in 1:length(aim2.vissys_twilight)) {
 }
 
 ### beetle vs flower
-allvis.bf_twilight.aim2 <- data_frame()
+allvis.bf_twilight.aim2 <- tibble()
 for (i in 1:length(aim2.vissys_twilight)) {
   
   temp.i <- aim2.vissys_twilight[[i]] %>% 
@@ -936,10 +936,16 @@ The table shows the mean contrast in each comparison group
 allvis.aim1_d65.list <- list(allvis.fl_d65.aim1, allvis.bl_d65.aim1, allvis.bf_d65.aim1)
 
 ## create a data frame to hold the loop output
-contrast.list_d65.aim1 <- data_frame(system = c("USM", "UML", "USL", "USML"),
-                                     flower.vs.leaf = NA, 
-                                     beetle.vs.leaf = NA, 
-                                     beetle.vs.flower = NA)
+contrast.list_d65.aim1 <- tibble(ori.vis = NA,
+                            flower.vs.leaf = NA, 
+                            beetle.vs.leaf = NA, 
+                            beetle.vs.flower = NA,
+                            num = c("1", "2", "3", "4"))
+vis.order <- c("USM", "UML", "USL", "USML")
+vis.name.list <- tibble(system = vis.order,
+                        ori.vis = c("UVSWMW...bf", "UV..MWLW.bf", "UVSW..LW.bf", "UVSWMWLW.bf"))
+# The above two lines are to match the system names correctly
+
 ## loop
 for (i in 1:length(allvis.aim1_d65.list)) {
   
@@ -947,11 +953,19 @@ for (i in 1:length(allvis.aim1_d65.list)) {
                             by = list(allvis.aim1_d65.list[[i]]$vissys), 
                             mean) 
    mean.i <- meantable.i[, 2] 
+   ori.vis.i <- meantable.i[, 1]
    contrast.list_d65.aim1[,i+1] <- mean.i # here same at column i+1 because the 1st column is the visual system names
+   contrast.list_d65.aim1[,1] <- ori.vis.i
 }
 
+contrast.list_d65.aim1 <- vis.name.list %>% 
+  merge(contrast.list_d65.aim1) %>% 
+  dplyr::select(-ori.vis, -num) %>% 
+  slice(match(vis.order, system)) # set the order to this c("USM", "UML", "USL", "USML")
+
 ## print out the table 
-contrast.list_d65.aim1 %>% pander() 
+contrast.list_d65.aim1 %>% 
+  pander() 
 ```
 
 #### Twilight
@@ -960,10 +974,11 @@ contrast.list_d65.aim1 %>% pander()
 allvis.aim1_twilight.list <- list(allvis.fl_twilight.aim1, allvis.bl_twilight.aim1, allvis.bf_twilight.aim1)
 
 ## create a data frame to hold the loop output
-contrast.list_twilight.aim1 <- data_frame(system = c("USM", "UML", "USL", "USML"),
-                                          flower.vs.leaf = NA, 
-                                          beetle.vs.leaf = NA, 
-                                          beetle.vs.flower = NA)
+contrast.list_twilight.aim1 <- tibble(ori.vis = NA,
+                            flower.vs.leaf = NA, 
+                            beetle.vs.leaf = NA, 
+                            beetle.vs.flower = NA,
+                            num = c("1", "2", "3", "4"))
 ## loop
 for (i in 1:length(allvis.aim1_twilight.list)) {
   
@@ -971,8 +986,16 @@ for (i in 1:length(allvis.aim1_twilight.list)) {
                             by = list(allvis.aim1_twilight.list[[i]]$vissys), 
                             mean) 
    mean.i <- meantable.i[, 2] 
+   ori.vis.i <- meantable.i[, 1]
    contrast.list_twilight.aim1[,i+1] <- mean.i # here same at column i+1 because the 1st column is the visual system names
+   contrast.list_twilight.aim1[,1] <- ori.vis.i
 }
+
+
+contrast.list_twilight.aim1 <- vis.name.list %>% 
+  merge(contrast.list_twilight.aim1) %>% 
+  dplyr::select(-ori.vis, -num) %>% 
+  slice(match(vis.order, system)) # set the order to this c("USM", "UML", "USL", "USML")
 
 ## print out the table 
 contrast.list_twilight.aim1 %>% pander() 
@@ -988,7 +1011,7 @@ The table shows the mean contrast in each comparison group
 allvis.aim2_d65.list <- list(allvis.fl_d65.aim2, allvis.bl_d65.aim2, allvis.bf_d65.aim2)
 
 ## create a data frame to hold the loop output
-contrast.list_d65.aim2 <- data_frame(system = c("VS 580", "VS 600", "VS 620", "VS 640", "VS 660"),
+contrast.list_d65.aim2 <- tibble(system = c("VS 580", "VS 600", "VS 620", "VS 640", "VS 660"),
                                      flower.vs.leaf = NA, 
                                      beetle.vs.leaf = NA, 
                                      beetle.vs.flower = NA)
@@ -1012,7 +1035,7 @@ contrast.list_d65.aim2 %>% pander()
 allvis.aim2_twilight.list <- list(allvis.fl_twilight.aim2, allvis.bl_twilight.aim2, allvis.bf_twilight.aim2)
 
 ## create a data frame to hold the loop output
-contrast.list_twilight.aim2 <- data_frame(system = c("VS 580", "VS 600", "VS 620", "VS 640", "VS 660"),
+contrast.list_twilight.aim2 <- tibble(system = c("VS 580", "VS 600", "VS 620", "VS 640", "VS 660"),
                                           flower.vs.leaf = NA,
                                           beetle.vs.leaf = NA, 
                                           beetle.vs.flower = NA)
@@ -1884,6 +1907,12 @@ for(i in seq_along(allvis.list)){
   
   tempcolordat[[i]] <- temp.meandS.i
   
+}
+
+reorder.aim1.list <- c(1, 2, 3, 7, 8, 9)
+
+for (i in reorder.aim1.list) {
+  tempcolordat[[i]] <- tempcolordat[[i]][c(3, 1, 2, 4),] 
 }
 ```
 
