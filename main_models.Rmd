@@ -1450,7 +1450,7 @@ get.pheatmap <- function(a, b){ggplot(data = a,
           panel.grid = element_blank(), 
           panel.border = element_blank(), 
           axis.ticks = element_blank() )+
-    labs(fill = "p vaalue")
+    labs(fill = "p value")
   
 }
 ```
