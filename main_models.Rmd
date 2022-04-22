@@ -2097,13 +2097,11 @@ figure_twilight.aim2
     with flowers and flowers with leaves, and a LWS receptor enhances
     the contrast of beetles against leaves.
 
-    </br> </br>
-
 -   The optimal peak sensitivity of the LWS photoreceptor depends on
     what is being viewed. When comparing beetle colours with both leaves
     and flowers, contrast increases with increasing LWS λmax up to 660
     nm; whereas when comparing flowers against leaves, contrast stops
-    increasing beyond 640 nm. </br> </br>
+    increasing beyond 640 nm.
 
 -   The contrasts of the models using civil twilight were substantially
     lower (many \< 1 JND) than those using daylight. The contrasts in
