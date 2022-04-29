@@ -8,6 +8,8 @@ output:
     toc_depth: 2
 subtitle: Supplementary Information
 Date: September 10 2021
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "./docs") })
 ---
 # The aim
 

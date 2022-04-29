@@ -12,6 +12,8 @@ output:
     toc_depth: 2
 subtitle: Supplementary Information
 Date: May 27 2020
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "./docs") })
 ---
 
 ```{r, echo=FALSE, fig.cap="Figure caption: A jewel beetle feeding on _Eucalyptus_ flowers. Credit: Amanda Franklin.", out.width = '100%'}
