@@ -5,7 +5,6 @@ author: <br>Lu-Yi Wang^1^, Devi Stuart-Fox^1^, Geoff Walker^1^, Nicholas W. Robe
   Australia <br></br> ^2^School of Biological Sciences, University of Bristol, UK
   <br></br>
 output:
-  pdf_document: default
   html_document:
     theme: flatly
     toc: true
@@ -16,7 +15,7 @@ knit: (function(inputFile, encoding) {
   rmarkdown::render(inputFile, encoding = encoding, output_dir = "./docs") })
 ---
 
-```{r, echo=FALSE, fig.cap="Figure caption: A jewel beetle feeding on _Eucalyptus_ flowers. Credit: Amanda Franklin.", out.width = '100%'}
+```{r, echo=FALSE, fig.cap = "Figure caption: A jewel beetle feeding on _Eucalyptus_ flowers. Credit: Amanda Franklin.", out.width = '100%'}
 knitr::include_graphics("image/jewel_beetle.png")
 ```
 </br>

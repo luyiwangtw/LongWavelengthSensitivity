@@ -1,7 +1,6 @@
 ---
 title: "Behavioural assay"
 output:
-  pdf_document: default
   html_document:
     theme: flatly
     toc: true
@@ -28,6 +27,11 @@ To test the behavioural response of jewel beetles to long wavelengths, we conduc
 ```{r pressure, echo=FALSE, fig.cap="Figure caption: Y-maze setup.", out.width = '70%'}
 knitr::include_graphics("image/ymaze.png")
 ```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE) # Suppress warnings in the HTML output
+```
+
 </br>
 </br>
 
@@ -48,11 +52,6 @@ library(pavo)
 library(ggpubr)
 library(tidyr)
 library(stringr)
-```
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(warning=FALSE, message=FALSE) # Suppress warnings in the HTML output
-knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time when re-building the html document
 ```
 
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}

@@ -1,7 +1,6 @@
 ---
 title: "The effect of evenly spaced photoreceptors on chromatic contrast"
 output:
-  pdf_document: default
   html_document:
     theme: flatly
     toc: true
@@ -39,7 +38,6 @@ library(tibble) # for add_column()
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE) # Suppress warnings in the HTML output
-knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time when re-building the html document
 ```
 
 ```{r Import data, echo=FALSE, message=FALSE, warning=FALSE}

@@ -9,7 +9,6 @@ output:
     theme: flatly
     toc: true
     toc_depth: 2
-  pdf_document: default
 subtitle: Supplementary Information
 Date: September 13 2021
 editor_options: 
@@ -54,7 +53,6 @@ library(forcats) # for fct_relevel()
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE) # Suppress warnings in the HTML output
-knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time when re-building the html document
 ```
 
 </br> </br>

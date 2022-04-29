@@ -1,7 +1,6 @@
 ---
 title: "Opsin-shifted LWS photoreceptors: Visual models using opsin-shifted LWS receptors instead of filter-shifted LWS receptors in Main models"
 output:
-  pdf_document: default
   html_document:
     theme: flatly
     toc: true
@@ -39,9 +38,7 @@ library(ggpubr) #for ggarrange() function
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE) # Suppress warnings in the HTML output
-knitr::opts_chunk$set(cache=TRUE, warning = F) # set up cacheing to save time when re-building the html document
 ```
-
 
 </br>
 </br>
