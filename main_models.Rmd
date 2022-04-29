@@ -14,8 +14,6 @@ Date: September 13 2021
 editor_options: 
   markdown: 
     wrap: 72
-knit: (function(inputFile, encoding) {
-  rmarkdown::render(inputFile, encoding = encoding, output_dir = "./docs") })
 ---
 
 # The aims
