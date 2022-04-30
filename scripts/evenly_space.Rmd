@@ -10,7 +10,7 @@ Date: September 10 2021
 knit: (function(inputFile, encoding) {
   rmarkdown::render(inputFile, encoding = encoding, output_dir = "../docs") })
 ---
-# The aim {.tabset .tabset-fade .tabset-pills}
+# The aim
 
 * Here, we tested the effect of even spacing of sensitivities on colour discrimination in a tetrachromatic visual system. Specifically, we ran visual models with __an evenly spaced visual system__ and __an unevenly spaced visual system__, then compared spectral contrast in all three comparison groups (‘leaf vs. flower’, ‘leaf vs. beetle’, ‘beetle vs. flower’). 
 

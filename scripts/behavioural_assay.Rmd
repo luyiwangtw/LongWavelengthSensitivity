@@ -58,8 +58,6 @@ library(stringr)
 ymaze <- read.csv("../data/behavioura result.csv")
 ```
 
-
-
 ```{r,echo=FALSE,message=FALSE, warning=FALSE}
 # Castiarina dimidiata (n=16)
 # filter the data for this species
