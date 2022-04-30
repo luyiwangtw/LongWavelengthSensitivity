@@ -17,6 +17,10 @@ navbar:
       href: sensitivity_analysis.html
     - text: "Behavioural assay"
       href: behavioural_assay.html
+  right: 
+    - icon: fa-github 
+      text: Source code
+      href: https://github.com/luyiwangtw/LongWavelengthSensitivity
       
 output:
   html_document:
