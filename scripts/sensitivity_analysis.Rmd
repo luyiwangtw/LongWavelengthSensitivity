@@ -1,0 +1,1017 @@
+---
+title: "Sensitivity analysis"
+output:
+  html_document:
+    theme: flatly
+    toc: true
+    toc_depth: 2
+subtitle: Supplementary Information
+Date: September 10 2021
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "../docs") })
+---
+# The aim
+
+* To test whether the modelling results were sensitive to the photoreceptor ratios used, we repeated these analyses using published ratios that represent the known variation in insects. Specifically, we compared the changes in contrast when shifting the LWS peak from 580 nm to 660 nm between tetrachomat visual systems with different photoreceptor ratios.
+
+* We applied the same modelling method described in the [Main models](main_models.html) but using ratios of different insects, including the jewel beetle, *Agrilus planipennis* (same as the ratio used in the main text; 1.14: 1: 1.26: 1.38; UVS: SWS: MWS: LWS), and two butterflies, *Papilio Xuthus* (1: 1: 4.08: 2.92) and *Heliconius sp.* type III (1.00: 1.44: 2.22: 11.11).
+
+* The model parameters and the statistical methods remain the same as described in main text of the paper.
+
+```{r, warning=FALSE, message=FALSE, results='hide'}
+library(pavo)
+library(dplyr)
+library(stringr)
+library(tidyr) #for gather() function
+library(ggplot2)
+library(lme4)
+library(car)
+library(multcomp)
+library(boot) #for mean() function
+library(pander) #for creating tidy tables
+library(ggpubr) #for ggarrange() function
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE, message=FALSE) # Suppress warnings in the HTML output
+```
+
+```{r Import data, echo=FALSE,message=FALSE, warning=FALSE}
+#import sensitivity curves
+specsensbuprest.model2 <- read.csv("../data/peak sensitivity_filter shift_aim2.csv",header = TRUE) %>% 
+  as.rspec()
+
+# import irradiance
+irradiance.d65 <- read.csv("../data/d65.csv",header=TRUE) %>% 
+  as.rspec(lim = c(300,800)) %>%  #set import range
+  procspec(opt = c("min", "max")) #standardize the illumination spectrum
+irradiance.twilight <- read.csv("../data/civil twilight.csv",header=TRUE) %>% 
+  as.rspec(lim = c(300,800)) %>% 
+  rename( twilight = Irradiance) %>% 
+  irrad2flux() #convert the irradiance (μ Watt.cm^{-2}) to photon flux (μ mol.s^{-1}.m^{-2}) to derive correct quantum catch.
+
+#import background - average leaf
+aveleaf <- read.csv("../data/aveleaf.csv",header=TRUE) %>% 
+  as.rspec()
+
+#import and combine beetle, flower, leaf together
+raw.dataset <- read.csv("../data/refelectance spectra.csv",header=TRUE) %>% 
+  as.rspec()
+dataset <- aggspec(raw.dataset, by = 3, FUN = mean) %>%  #average three measurements to a representative one
+  procspec(opt = "smooth", span = 0.1, fixneg = "zero") #smooth the spectra and lift <0 to 0
+```
+
+```{r, fig.cap="Figure caption: Sensitivity curves of the photoreceptors with different peak wavelengths."}
+wl <- specsensbuprest.model2[,1]
+peaks <- gather(specsensbuprest.model2[,2:9], peak, value) %>% 
+  cbind(wl)
+
+#order the peaks in the legend
+peak.order <- c("UVS.355.A1.", "SWS.445.A1.", "MWS.530.A1.", "LWS.570.A1..filter580.", "LWS.570.A1..filter600.", "LWS.570.A1..filter620.", "LWS.570.A1..filter640.", "LWS.570.A1..filter660.") 
+
+ggplot(peaks,
+       aes(x = wl, 
+                 y = value, 
+                 col = peak))+
+  geom_line()+
+  guides(color = guide_legend(title = "peak sensitivity"))+
+  scale_color_manual(
+    values = c("darkorchid4", "dodgerblue3", "olivedrab4", "orange1", "orange3","darkorange3", "orangered1", "red2"),
+    labels = c("355 nm", "445 nm","530 nm", "580 nm", "600 nm", "620 nm", "640 nm", "660 nm" ),
+    breaks = peak.order)+
+  xlab("Wavelength (nm)")+ 
+  ylab("Relative spectral sensitivity")+
+  theme_classic()
+```
+</br>
+</br>
+
+# Data description
+
+We used the same spectral data and daylight illumination described in the [Main models](main_models.html) section.
+
+</br>
+</br>
+
+# Run the visual models
+* We created 3 different visual systems using different receptor ratios from 3 insect species (UVS, SWS, MWS, LWS):
+
++ _Agrilus planipennis_: 1.14, 1, 1.26, 1.38
++ _Papilio xuthus_: 1, 1, 4.08, 2.92
++ _Heliconius_ sp. type III : 1, 1.44, 2.22, 11.11 
+    
+</br>
+
+* We ran the visual models with the same parameter settings and steps as in the [Main models](main_models.html).
+
+* We first calculated the quantum catches, then calculated the contrasts.
+```{r Set up functions for quantum catch calculation, message=FALSE}
+get.d65.vismodel <- function(i){
+  
+  vs.i <- vismodel(dataset[1:501,], 
+                   visual = i, #this need to change according to the visual system
+                   bkg = aveleaf$aveleaf, 
+                   illum = irradiance.d65[1:501,2], 
+                   qcatch = 'fi', 
+                   relative = FALSE,
+                   vonkries = TRUE)
+  return(vs.i)
+}
+```
+
+```{r Quantum catch calculation, message=FALSE}
+#shared between 3 species
+sens.list <- list(VS580 <- specsensbuprest.model2[, 1:5],
+                  VS600 <- specsensbuprest.model2[, c(1,2,3,4,6)],
+                  VS620 <- specsensbuprest.model2[, c(1,2,3,4,7)],
+                  VS640 <- specsensbuprest.model2[, c(1,2,3,4,8)],
+                  VS660 <- specsensbuprest.model2[, c(1,2,3,4,9)])
+d65.vismodel.output <- list(VS580 = NA, VS600 = NA, VS620 = NA, VS640 = NA, VS660 = NA)
+
+# Set a loop for calculating quantum catch for each visual system
+for (i in 1:length(sens.list)){
+  
+  vs.result.d65 <- get.d65.vismodel(sens.list[[i]]) # for D65
+  d65.vismodel.output[[i]] <- vs.result.d65
+}
+
+buprest580 <- d65.vismodel.output$VS580
+buprest600 <- d65.vismodel.output$VS600
+buprest620 <- d65.vismodel.output$VS620
+buprest640 <- d65.vismodel.output$VS640
+buprest660 <- d65.vismodel.output$VS660
+```
+
+```{r Contrast calculation, message=FALSE}
+recep.density.list <- list(Agrilus <- c(1.14, 1, 1.26, 1.38),
+                                Papilio <- c(1, 1, 4.08, 2.92),
+                                Heliconius <- c(1, 1.44, 2.22, 11.11))
+
+get.sens.coldist <- function(i, sp){
+  
+  con <- coldist(modeldata = i, # put output of vismodel()
+                   noise = "neural", 
+                   achro = FALSE, 
+                   n = recep.density.list[[sp]],
+                   weber = 0.12,
+                   weber.ref = 4)
+  
+  return(con)
+}
+
+vismodel.list <- list(buprest580, 
+                      buprest600, 
+                      buprest620, 
+                      buprest640, 
+                      buprest660)
+#for Agrilus planipennis
+Agrilus.contrast.output <- list(VS580 = NA, VS600 = NA, VS620 = NA, VS640 = NA, VS660 = NA)
+
+for (i in 1:length(vismodel.list)) {
+  
+  contrast.result.i <- get.sens.coldist(vismodel.list[[i]], 1)
+  Agrilus.contrast.output[[i]] <- contrast.result.i
+}
+
+Cbuprest580 <- Agrilus.contrast.output$VS580
+Cbuprest600 <- Agrilus.contrast.output$VS600
+Cbuprest620 <- Agrilus.contrast.output$VS620
+Cbuprest640 <- Agrilus.contrast.output$VS640
+Cbuprest660 <- Agrilus.contrast.output$VS660
+
+
+#for Papilio xuthus
+Papilio.contrast.output <- list(VS580 = NA, VS600 = NA, VS620 = NA, VS640 = NA, VS660 = NA)
+
+for (i in 1:length(vismodel.list)) {
+  
+  contrast.result.i <- get.sens.coldist(vismodel.list[[i]], 2)
+  Papilio.contrast.output[[i]] <- contrast.result.i
+}
+
+Cpapilio580 <- Papilio.contrast.output$VS580
+Cpapilio600 <- Papilio.contrast.output$VS600
+Cpapilio620 <- Papilio.contrast.output$VS620
+Cpapilio640 <- Papilio.contrast.output$VS640
+Cpapilio660 <- Papilio.contrast.output$VS660
+
+#for Heliconius sp
+Heliconius.contrast.output <- list(VS580 = NA, VS600 = NA, VS620 = NA, VS640 = NA, VS660 = NA)
+
+for (i in 1:length(vismodel.list)) {
+  
+  contrast.result.i <- get.sens.coldist(vismodel.list[[i]], 3)
+  Heliconius.contrast.output[[i]] <- contrast.result.i
+}
+
+Cheliconius580 <- Heliconius.contrast.output$VS580
+Cheliconius600 <- Heliconius.contrast.output$VS600
+Cheliconius620 <- Heliconius.contrast.output$VS620
+Cheliconius640 <- Heliconius.contrast.output$VS640
+Cheliconius660 <- Heliconius.contrast.output$VS660
+```
+
+```{r Combine all contrast value in each comparison group} 
+#Organize data before GLMM
+fl.vissys <- list("VS580.fl", "VS600.fl", "VS620.fl", "VS640.fl", "VS660.fl") 
+bl.vissys <- list("VS580.bl", "VS600.bl", "VS620.bl", "VS640.bl", "VS660.bl")
+bf.vissys <- list("VS580.bf", "VS600.bf", "VS620.bf", "VS640.bf", "VS660.bf") 
+
+
+# for Agrilus planipennis
+Agrilus.vissys <- list(Cbuprest580,
+                       Cbuprest600, 
+                       Cbuprest620, 
+                       Cbuprest640, 
+                       Cbuprest660)
+##flower vs leaf
+allvis.fl.Agrilus <- data_frame()
+for (i in 1:length(Agrilus.vissys)) {
+  
+  temp.i <- Agrilus.vissys[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"leaves")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(fl.vissys[[i]],1)
+  
+  allvis.fl.Agrilus <- temp.i %>% rbind(allvis.fl.Agrilus)  
+}
+
+### beetle vs leaf
+allvis.bl.Agrilus <- data_frame()
+for (i in 1:length(Agrilus.vissys)) {
+  
+  temp.i <- Agrilus.vissys[[i]] %>% 
+    filter(str_detect(patch1,"leaves")) %>% 
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(bl.vissys[[i]],1)
+  
+  allvis.bl.Agrilus <- temp.i %>% rbind(allvis.bl.Agrilus)  
+}
+
+##beetle vs flower
+allvis.bf.Agrilus <- data_frame()
+for (i in 1:length(Agrilus.vissys)) {
+  
+  temp.i <- Agrilus.vissys[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(bf.vissys[[i]],1)
+  
+  allvis.bf.Agrilus <- temp.i %>% rbind(allvis.bf.Agrilus)  
+}
+
+#for Papilio xuthus
+Papilio.vissys <- list(Cpapilio580,
+                       Cpapilio600, 
+                       Cpapilio620, 
+                       Cpapilio640, 
+                       Cpapilio660)
+##flower vs leaf
+allvis.fl.Papilio <- data_frame()
+for (i in 1:length(Papilio.vissys)) {
+  
+  temp.i <- Papilio.vissys[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"leaves")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(fl.vissys[[i]],1)
+  
+  allvis.fl.Papilio <- temp.i %>% rbind(allvis.fl.Papilio)  
+}
+
+##beetle vs leaf
+allvis.bl.Papilio <- data_frame()
+for (i in 1:length(Papilio.vissys)) {
+  
+  temp.i <- Papilio.vissys[[i]] %>% 
+    filter(str_detect(patch1,"leaves")) %>% 
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(bl.vissys[[i]],1)
+  
+  allvis.bl.Papilio <- temp.i %>% rbind(allvis.bl.Papilio)  
+}
+
+##beetle vs flower
+allvis.bf.Papilio <- data_frame()
+for (i in 1:length(Papilio.vissys)) {
+  
+  temp.i <- Papilio.vissys[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(bf.vissys[[i]],1)
+  
+  allvis.bf.Papilio <- temp.i %>% rbind(allvis.bf.Papilio)  
+}
+
+#for Heliconius sp
+Heliconius.vissys <- list(Cheliconius580,
+                       Cheliconius600, 
+                       Cheliconius620, 
+                       Cheliconius640, 
+                       Cheliconius660)
+##flower vs leaf
+allvis.fl.Heliconius <- data_frame()
+for (i in 1:length(Heliconius.vissys)) {
+  
+  temp.i <- Heliconius.vissys[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"leaves")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(fl.vissys[[i]],1)
+  
+  allvis.fl.Heliconius <- temp.i %>% rbind(allvis.fl.Heliconius)  
+}
+
+##beetle vs leaf
+allvis.bl.Heliconius <- data_frame()
+for (i in 1:length(Heliconius.vissys)) {
+  
+  temp.i <- Heliconius.vissys[[i]] %>% 
+    filter(str_detect(patch1,"leaves")) %>% 
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(bl.vissys[[i]],1)
+  
+  allvis.bl.Heliconius <- temp.i %>% rbind(allvis.bl.Heliconius)  
+}
+
+##beetle vs flower
+allvis.bf.Heliconius <- data_frame()
+for (i in 1:length(Heliconius.vissys)) {
+  
+  temp.i <- Heliconius.vissys[[i]] %>% 
+    filter(str_detect(patch1,"flower")) %>% 
+    filter(str_detect(patch2,"beetle")) %>% 
+    dplyr::select(1:3)
+  
+  temp.i$vissys <- strrep(bf.vissys[[i]],1)
+  
+  allvis.bf.Heliconius <- temp.i %>% rbind(allvis.bf.Heliconius)  
+}
+```
+</br>
+
+# Compare contrast {.tabset .tabset-fade .tabset-pills}
+
+</br>
+</br>
+
+Click the tabs to see the results for each comparison group ( __Flower vs. Leaf__ / __Beetle vs. Leaf__ / __Beetle vs. Flower__) in 3 different speceis (_Agrilus planipennis_ / _Papilio xuthus_ / _Heliconius_ sp).
+
+```{r Set up functions for GLMM}
+get.lmer.sens <- function(inputdat){
+  
+  lmer(dS ~ vissys + (1|patch2) + (1|patch1), 
+       data = inputdat, REML = F)
+  #REML=F, in order to fit the model using the likelihood ratio test. Otherwise, the lmer default will fit the model using the REML (REstricted Maximum Likelihood) criterion.
+}
+
+get.posthocsum <- function(modelx){
+  
+  summary(glht(modelx, 
+               linfct = mcp(vissys = "Tukey")), 
+          test = adjusted("bonferroni"))
+}
+```
+
+```{r Run GLMM models}
+# for Agrilus planipennis
+## Flower vs Leaf
+m.flower.vs.leaf.bup <- get.lmer.sens(allvis.fl.Agrilus)
+sum.flower.vs.leaf.bup <- get.posthocsum(m.flower.vs.leaf.bup)
+
+##Beetle vs Leaf
+m.beetle.vs.leaf.bup <- get.lmer.sens(allvis.bl.Agrilus)
+sum.beetle.vs.leaf.bup <- get.posthocsum(m.beetle.vs.leaf.bup)
+
+##Beetle vs Flower
+m.beetle.vs.flower.bup <- get.lmer.sens(allvis.bf.Agrilus)
+sum.beetle.vs.flower.bup <- get.posthocsum(m.beetle.vs.flower.bup)
+
+#for Papilio xuthus
+##Flower vs Leaf
+m.flower.vs.leaf.pap <- get.lmer.sens(allvis.fl.Papilio)
+sum.flower.vs.leaf.pap <- get.posthocsum(m.flower.vs.leaf.pap)
+
+##Beetle vs Leaf
+m.beetle.vs.leaf.pap <- get.lmer.sens(allvis.bl.Papilio)
+sum.beetle.vs.leaf.pap <- get.posthocsum(m.beetle.vs.leaf.pap)
+
+##Beetle vs Flower
+m.beetle.vs.flower.pap <- get.lmer.sens(allvis.bf.Papilio)
+sum.beetle.vs.flower.pap <- get.posthocsum(m.beetle.vs.flower.pap)
+
+#for Heliconius sp
+##Flower vs Leaf
+m.flower.vs.leaf.heli <- get.lmer.sens(allvis.fl.Heliconius)
+sum.flower.vs.leaf.heli <- get.posthocsum(m.flower.vs.leaf.heli)
+
+##Beetle vs Leaf
+m.beetle.vs.leaf.heli <- get.lmer.sens(allvis.bl.Heliconius)
+sum.beetle.vs.leaf.heli <- get.posthocsum(m.beetle.vs.leaf.heli)
+
+##Beetle vs Flower
+m.beetle.vs.flower.heli <- get.lmer.sens(allvis.bf.Heliconius)
+sum.beetle.vs.flower.heli <- get.posthocsum(m.beetle.vs.flower.heli)
+```
+
+```{r Set up lists and function for heap maps}
+vislist.heatmap <- list(
+  c("VS 600", "VS 620","VS 640","VS 660","VS 620","VS 640","VS 660","VS 640","VS 660","VS 660"),
+  c("VS 580","VS 580","VS 580","VS 580","VS 600","VS 600","VS 600","VS 620","VS 620","VS 640"))
+
+# Set up the function
+get.heatmap.datframe <- function(i,z){
+  
+  heatmapdat.i <- data.frame(as.numeric(str_extract(i[[1]],"([0-9]+).*$"))) %>%
+    cbind(as.numeric(str_extract(i[[2]],"([0-9]+).*$"))) %>% 
+    cbind(as.numeric(str_extract(i[[3]],"([0-9]+).*$"))) %>%
+    dplyr::rename(flower.vs.leaf = 1, beetle.vs.leaf = 2, beetle.vs.flower = 3) %>% 
+    cbind(z[[1]]) %>% 
+    cbind(z[[2]]) 
+  
+  colnames(heatmapdat.i)[4:5] <- c("VislistA", "VislistB")
+  
+  return(heatmapdat.i)
+}
+```
+
+```{r Create p-value heat map}
+# Create pvalue dataset
+## for Agrilus planipennis
+pdata.Agrilus <- list(sum.flower.vs.leaf.bup[["test"]][["pvalues"]],
+                      sum.beetle.vs.leaf.bup[["test"]][["pvalues"]],
+                      sum.beetle.vs.flower.bup[["test"]][["pvalues"]])
+
+heat.Agrilus <- get.heatmap.datframe(pdata.Agrilus, vislist.heatmap)
+
+## for Papilio xuthus
+pdata.Papilio <- list(sum.flower.vs.leaf.pap[["test"]][["pvalues"]],
+                      sum.beetle.vs.leaf.pap[["test"]][["pvalues"]],
+                      sum.beetle.vs.flower.pap[["test"]][["pvalues"]])
+
+heat.Papilio <- get.heatmap.datframe(pdata.Papilio, vislist.heatmap)
+
+## for Heliconius sp
+pdata.Heliconius <- list(sum.flower.vs.leaf.heli[["test"]][["pvalues"]],
+                      sum.beetle.vs.leaf.heli[["test"]][["pvalues"]],
+                      sum.beetle.vs.flower.heli[["test"]][["pvalues"]])
+
+heat.Heliconius <- get.heatmap.datframe(pdata.Heliconius, vislist.heatmap)
+
+
+# Assign asterisk signs
+pdatalist <- list(heat.Agrilus, heat.Papilio, heat.Heliconius)
+
+for (i in 1:length(pdatalist)) {
+  
+  pdatalist[[i]]$sig.flower.vs.leaf[pdatalist[[i]]$flower.vs.leaf > 0.05] <- ""
+  pdatalist[[i]]$sig.flower.vs.leaf[pdatalist[[i]]$flower.vs.leaf < 0.05] <- "*"
+  pdatalist[[i]]$sig.flower.vs.leaf[pdatalist[[i]]$flower.vs.leaf < 0.01] <- "**"
+  pdatalist[[i]]$sig.flower.vs.leaf[pdatalist[[i]]$flower.vs.leaf < 0.0001] <- "***"
+  pdatalist[[i]]$sig.beetle.vs.leaf[pdatalist[[i]]$beetle.vs.leaf > 0.05] <- ""
+  pdatalist[[i]]$sig.beetle.vs.leaf[pdatalist[[i]]$beetle.vs.leaf < 0.05] <- "*"
+  pdatalist[[i]]$sig.beetle.vs.leaf[pdatalist[[i]]$beetle.vs.leaf < 0.01] <- "**"
+  pdatalist[[i]]$sig.beetle.vs.leaf[pdatalist[[i]]$beetle.vs.leaf < 0.0001] <- "***"
+  pdatalist[[i]]$sig.beetle.vs.flower[pdatalist[[i]]$beetle.vs.flower > 0.05] <- ""
+  pdatalist[[i]]$sig.beetle.vs.flower[pdatalist[[i]]$beetle.vs.flower < 0.05] <- "*"
+  pdatalist[[i]]$sig.beetle.vs.flower[pdatalist[[i]]$beetle.vs.flower < 0.01] <- "**"
+  pdatalist[[i]]$sig.beetle.vs.flower[pdatalist[[i]]$beetle.vs.flower < 0.0001] <- "***"
+  
+}
+
+# Because we did the assignment on a data list, now we need to link the loop output back to the data respectively
+heat.Agrilus <- pdatalist[[1]] 
+heat.Papilio <- pdatalist[[2]]
+heat.Heliconius <- pdatalist[[3]]
+```
+
+```{r Function for p-value heat maps}
+# a = data
+# b = 1/2/3; 1 for flower.vs.leaf, 2 for beetle.vs.leaf, 3 for beetle.vs.flower
+get.pheatmap <- function(a, b){ggplot(data = a, 
+                                        aes(x = VislistA, 
+                                            y = VislistB, 
+                                            fill = a[,b])) + 
+    geom_tile(colour = "white", size = 4)+
+    geom_text(aes(VislistA, 
+                  VislistB, 
+                  label = paste(format(round(a[,b], 2), nsmall = 2), 
+                                a[, b+5])))+
+    scale_fill_continuous(high = "#132B43", low = "#56B1F7", limit = c(0,1))+ #delete if want to reverse the colour
+    theme_bw()+
+    theme(axis.title.x = element_blank(),
+          axis.title.y = element_blank(),
+          panel.grid = element_blank(), 
+          panel.border = element_blank(), 
+          axis.ticks = element_blank() )+
+    labs(fill = "p vaalue")
+  
+}
+```
+
+## __Flower vs Leaf__ {.tabset .tabset-fade .tabset-pills}
+
+### _Agrilus planipennis_ {.tabset .tabset-fade .tabset-pills}
+```{r}
+Anova(m.flower.vs.leaf.bup) %>% pander()
+```
+
+</br>
+</br>
+
+Click the tabs to see the __p-value summary plot__ or the __original model output__
+
+#### Pair-wise p-values 
+```{r}
+get.pheatmap(heat.Agrilus, 1)
+```
+
+</br>
+</br>
+
+#### Original model output
+```{r}
+sum.flower.vs.leaf.bup
+```
+
+</br>
+</br>
+
+### _Papilio xuthus_ {.tabset .tabset-fade .tabset-pills}
+```{r}
+Anova(m.flower.vs.leaf.pap) %>% pander()
+```
+
+</br>
+</br>
+
+Click the tabs to see the __p-value summary plot__ or the __original model output__
+
+#### Pair-wise p-values 
+```{r}
+get.pheatmap(heat.Papilio, 1)
+```
+
+</br>
+</br>
+
+#### Original model output
+```{r}
+sum.flower.vs.leaf.pap
+```
+
+</br>
+</br>
+
+### _Heliconius_ sp {.tabset .tabset-fade .tabset-pills}
+```{r}
+Anova(m.flower.vs.leaf.heli) %>% pander()
+```
+
+</br>
+</br>
+
+Click the tabs to see the __p-value summary plot__ or the __original model output__
+
+#### Pair-wise p-values 
+```{r}
+get.pheatmap(heat.Heliconius, 1)
+```
+
+</br>
+</br>
+
+#### Original model output
+```{r}
+sum.flower.vs.leaf.heli
+```
+
+</br>
+</br>
+
+## __Beetle vs Leaf__ {.tabset .tabset-fade .tabset-pills}
+### _Agrilus planipennis_ {.tabset .tabset-fade .tabset-pills}
+```{r}
+Anova(m.beetle.vs.leaf.bup) %>% pander()
+```
+
+</br>
+</br>
+
+Click the tabs to see the __p-value summary plot__ or the __original model output__
+
+#### Pair-wise p-values 
+```{r}
+get.pheatmap(heat.Agrilus, 2)
+```
+
+</br>
+</br>
+
+#### Original model output
+```{r}
+sum.beetle.vs.leaf.bup
+```
+
+</br>
+</br>
+
+### _Papilio xuthus_ {.tabset .tabset-fade .tabset-pills}
+```{r}
+Anova(m.beetle.vs.leaf.pap) %>% pander()
+```
+
+</br>
+</br>
+
+Click the tabs to see the __p-value summary plot__ or the __original model output__
+
+#### Pair-wise p-values 
+```{r}
+get.pheatmap(heat.Papilio, 2)
+```
+
+</br>
+</br>
+
+#### Original model output
+```{r}
+sum.beetle.vs.leaf.pap
+```
+
+</br>
+</br>
+
+### _Heliconius_ sp {.tabset .tabset-fade .tabset-pills}
+
+```{r}
+Anova(m.beetle.vs.leaf.heli) %>% pander()
+```
+
+</br>
+</br>
+
+Click the tabs to see the __p-value summary plot__ or the __original model output__
+
+#### Pair-wise p-values 
+```{r}
+get.pheatmap(heat.Heliconius, 2)
+```
+
+</br>
+</br>
+
+#### Original model output
+```{r}
+sum.beetle.vs.leaf.heli
+```
+
+</br>
+</br>
+
+## __Beetle vs Flower__ {.tabset .tabset-fade .tabset-pills}
+### _Agrilus planipennis_ {.tabset .tabset-fade .tabset-pills}
+```{r}
+Anova(m.beetle.vs.flower.bup) %>% pander()
+```
+
+</br>
+</br>
+
+Click the tabs to see the __p-value summary plot__ or the __original model output__
+
+#### Pair-wise p-values 
+```{r}
+get.pheatmap(heat.Agrilus, 3)
+```
+</br>
+</br>
+
+#### Original model output
+```{r}
+sum.beetle.vs.flower.bup
+```
+</br>
+</br>
+
+### _Papilio xuthus_ {.tabset .tabset-fade .tabset-pills}
+```{r}
+Anova(m.beetle.vs.flower.pap) %>% pander()
+```
+
+</br>
+</br>
+
+Click the tabs to see the __p-value summary plot__ or the __original model output__
+
+#### Pair-wise p-values 
+```{r}
+get.pheatmap(heat.Papilio, 3)
+```
+
+</br>
+</br>
+
+#### Original model output
+```{r}
+sum.beetle.vs.flower.pap
+```
+
+</br>
+</br>
+
+### _Heliconius_ sp {.tabset .tabset-fade .tabset-pills}
+```{r}
+Anova(m.beetle.vs.flower.heli) %>% pander()
+```
+
+</br>
+</br>
+
+Click the tabs to see the __p-value summary plot__ or the __original model output__
+
+#### Pair-wise p-values 
+```{r}
+get.pheatmap(heat.Heliconius, 3)
+```
+
+</br>
+</br>
+
+#### Original model output
+```{r}
+sum.beetle.vs.flower.heli
+```
+
+</br>
+</br>
+
+
+# Plot the contrasts {.tabset .tabset-fade .tabset-pills}
+* Colours approximate human perception of either flower (left and right) or beetle (centre) colouration.
+* Lines of the same colors connect the same sample
+
+```{r Import color code and setup functions}
+#import the sample color code 
+color.code <- read.csv("../data/color code list.csv", header=TRUE) 
+
+# Set up a function to calculate means for the plot
+get.plotmeans <- function(a, b, c){
+  if (a == "aim1"){
+    if(b == "bl"){
+      plotmean.i <- c %>% 
+        group_by(patch2, vissys) %>%
+        summarize(mean.dS.sub = mean(dS)) %>% 
+        ungroup() %>% 
+        rename(beetleID = patch2) %>% 
+        merge(beetle.colour.aim1[,c("species", "colour")], by.x = c("beetleID"), by.y = c("species")) %>% 
+        distinct()
+      return(plotmean.i)
+    } else {
+      plotmean.i <- c %>% 
+        group_by(patch1, vissys) %>%
+        summarize(mean.dS.sub = mean(dS)) %>% 
+        ungroup() %>% 
+        rename(flowerID = patch1) %>% 
+        merge(flower.colour.aim1[,c("species", "colour")], by.x = c("flowerID"), by.y = c("species")) %>% 
+        distinct()
+      return(plotmean.i)
+    }
+  } else if (a == "aim2"){
+    if (b == "bl"){
+      plotmean.i <- c %>% 
+        group_by(patch2, vissys) %>%
+        summarize(mean.dS.sub = mean(dS)) %>% 
+        ungroup() %>% 
+        rename(beetleID = patch2) %>% 
+        merge(beetle.colour.aim2[,c("species", "colour")], by.x = c("beetleID"), by.y = c("species")) %>% 
+        distinct()
+      return(plotmean.i)
+    } else {
+      plotmean.i <- c %>% 
+        group_by(patch1, vissys) %>%
+        summarize(mean.dS.sub = mean(dS)) %>% 
+        ungroup() %>% 
+        rename(flowerID = patch1) %>% 
+        merge(flower.colour.aim2[,c("species", "colour")], by.x = c("flowerID"), by.y = c("species")) %>% 
+        distinct()
+      return(plotmean.i)
+    }
+  }
+}
+
+# What should be put in the function get.plotmeans()
+# a = "aim1" or "aim2"
+# b = comparison type: "fl", "bl", "bf"
+# c = input data, e.g. allvis.fl_d65.aim1
+```
+
+```{r Create colour code lists for the plot}
+#create a list of species name used in the spec data in oder to merge() with mean data set later
+dataset.transpose <- gather(dataset[,2:131], 
+                            key = "species", 
+                            value = "reflectance", 
+                            na.rm = FALSE,
+                            convert = FALSE, factor_key = FALSE)
+name.list <- unique(dataset.transpose$species) %>% 
+  sort() %>% #order it alphabetically 
+  data.frame() %>% 
+  dplyr::rename(species = ".") #make it a data frame and name the column "species"
+
+# create flower and beetle name list 
+colourgrouplist <- c( "flower", "beetle")
+tempcolordat <- vector("list", 4)
+
+## for Aim 2
+for(i in seq_along(colourgrouplist)){
+  
+  ouput.i <- name.list %>% 
+    filter(str_detect(species, colourgrouplist[i])) %>% 
+    cbind(color.code %>% 
+            filter(str_detect(type, colourgrouplist[i])) %>% 
+            arrange(name)) %>% 
+    dplyr::select(-type) %>% 
+    mutate(count = 5) %>% 
+    uncount(count) 
+  
+  tempcolordat[[i+2]] <- ouput.i # here same in i+2 because 1-2 is for aim1
+  
+}
+flower.colour.aim2 <- tempcolordat[[3]]
+beetle.colour.aim2 <- tempcolordat[[4]]
+```
+
+```{r Calculate means for each visual system on the plot}
+allvis.list <- list(allvis.fl.Agrilus, allvis.bl.Agrilus, allvis.bf.Agrilus,
+                    allvis.fl.Papilio, allvis.bl.Papilio, allvis.bf.Papilio,
+                    allvis.fl.Heliconius, allvis.bl.Heliconius, allvis.bf.Heliconius)
+
+tempcolordat <- vector("list", length(allvis.list))
+
+for(i in seq_along(allvis.list)){
+  
+  temp.meandS.i <- allvis.list[[i]] %>% 
+    group_by(vissys) %>%
+    summarize(mean.dS = mean(dS))
+  
+  tempcolordat[[i]] <- temp.meandS.i
+  
+}
+```
+
+```{r Set up list and functions for plots}
+title.list <- list("Flower vs. Leaf", "Beetle vs. Leaf", "Beetle vs. Flower")
+
+vis.comp.list <- list(fl <- c("VS580.fl", "VS600.fl", "VS620.fl", "VS640.fl", "VS660.fl"),
+                      bl <- c("VS580.bl", "VS600.bl", "VS620.bl", "VS640.bl", "VS660.bl"),
+                      bf <- c("VS580.bf", "VS600.bf", "VS620.bf", "VS640.bf", "VS660.bf"))
+stats.list <- list(fl.Agrilus <- c("a","b","c","d","d"),
+                   bl.Agrilus <- c("a","b","c","d","e"),
+                   bf.Agrilus <- c("a","b","c","d","e"),
+                   fl.Papilio <- c("a","b","c","d","d"),
+                   bl.Papilio <- c("a","b","c","d","e"),
+                   bf.Papilio <- c("a","b","c","d","e"),
+                   fl.Heliconius <- c("a","b","c","d","d"),
+                   bl.Heliconius <- c("a","b","c","d","e"),
+                   bf.Heliconius <- c("a","b","c","d","e"))
+backgorund.list <- c("grey80", NA) # choose NA for beetle.vs.leaf
+
+get.contrastplot.sens <- function(dat, title, visomplist, compgroupnstats, background){
+  ggplot(dat, aes(x = vissys, 
+                y = mean.dS.sub,
+                group = factor(dat[,1])))+
+    geom_point(col = dat$colour,
+               size = 1, alpha = 0.7) + 
+    geom_line(col = dat$colour, 
+              size = 0.5, alpha = 0.7)+
+    xlab("Visual system") +     
+    ylab("Chromatic contrast (JND)") +
+    ylim(0, 21)+
+    theme(panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank(),
+          panel.background = element_rect(fill = backgorund.list[background], size = NA), 
+          axis.title.x = element_text(size = 12),  
+          axis.text.x  = element_text(size = 8, colour = "black", angle = 90),
+          axis.title.y = element_text(size = 12, vjust = 1),
+          axis.text.y = element_text(size = 8, colour = "black"),
+          axis.line.x = element_line(colour = 'black', size = 0.5, linetype = 'solid'),
+          axis.line.y = element_line(colour = 'black', size = 0.5, linetype = 'solid'),
+          legend.justification = c(1,0), 
+          legend.position = c(1,0.45),
+          legend.key = element_blank(),
+          legend.title = element_text(size = 10),
+          legend.text = element_text(size = 9))+
+    scale_x_discrete(limits = vis.comp.list[[visomplist]],
+                     labels = c("VS 580", "VS 600","VS 620","VS 640","VS 660"))+
+    geom_point(data = dat, 
+               aes(x = vis.comp.list[[visomplist]][1], 
+                   y = tempcolordat[[compgroupnstats]]$mean.dS[1]),
+               col = "black", size = 3)+
+    geom_point(data = dat, 
+               aes(x = vis.comp.list[[visomplist]][2], 
+                   y = tempcolordat[[compgroupnstats]]$mean.dS[2]), 
+               col = "black", size = 3)+
+    geom_point(data = dat, 
+               aes(x = vis.comp.list[[visomplist]][3], 
+                   y = tempcolordat[[compgroupnstats]]$mean.dS[3]), 
+               col = "black", size = 3)+
+    geom_point(data = dat, 
+               aes(x = vis.comp.list[[visomplist]][4], 
+                   y = tempcolordat[[compgroupnstats]]$mean.dS[4]), 
+               col = "black", size = 3)+
+    geom_point(data = dat, 
+               aes(x = vis.comp.list[[visomplist]][5], 
+                   y = tempcolordat[[compgroupnstats]]$mean.dS[5]), 
+               col = "black", size = 3)+
+    ggtitle(title.list[[title]])+
+    annotate("text", x = vis.comp.list[[visomplist]], y = 21, 
+             label = stats.list[[compgroupnstats]])
+    
+}
+```
+
+## _Agrilus planipennis_
+```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths in the jewel beetle, _Agrilus planipenni_. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1. Two contrasts > 12 JND are from flowers that have high UV - blue chroma compared to beetles and leaves."}
+
+# create a data set for means
+mean.fl.Agrilus <- get.plotmeans("aim2", "fl", allvis.fl.Agrilus)
+mean.bl.Agrilus <- get.plotmeans("aim2", "bl", allvis.bl.Agrilus)
+mean.bf.Agrilus <- get.plotmeans("aim2", "bf", allvis.bf.Agrilus)
+
+# plot individual panel
+fl.Agrilus <- get.contrastplot.sens(mean.fl.Agrilus, 1, 1, 1, 1)
+bl.Agrilus <- get.contrastplot.sens(mean.bl.Agrilus, 2, 2, 2, 2)
+bf.Agrilus <- get.contrastplot.sens(mean.bf.Agrilus, 3, 3, 3, 1)
+
+# bind the 3 panels
+figure.bup <- ggarrange(fl.Agrilus,
+                             bl.Agrilus,
+                             bf.Agrilus, 
+                             ncol = 3, nrow = 1)
+figure.bup
+```
+</br>
+</br>
+
+## _Papilio xuthus_
+```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths in the butterfly, _Papilio xuthus_. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1."}
+# create a data set for means
+mean.fl.Papilio <- get.plotmeans("aim2", "fl", allvis.fl.Papilio)
+mean.bl.Papilio <- get.plotmeans("aim2", "bl", allvis.bl.Papilio)
+mean.bf.Papilio <- get.plotmeans("aim2", "bf", allvis.bf.Papilio)
+
+# plot individual panel
+fl.Papilio <- get.contrastplot.sens(mean.fl.Papilio, 1, 1, 4, 1)
+bl.Papilio <- get.contrastplot.sens(mean.bl.Papilio, 2, 2, 5, 2)
+bf.Papilio <- get.contrastplot.sens(mean.bf.Papilio, 3, 3, 6, 1)
+
+# bind the 3 panels
+figure.pap <- ggarrange(fl.Papilio,
+                        bl.Papilio,
+                        bf.Papilio, 
+                        ncol = 3, nrow = 1)
+figure.pap
+```
+</br>
+</br>
+
+##  _Heliconius sp_
+```{r,fig.cap="Figure caption: Comparison of chromatic contrast between visual systems with the LWS photoreceptor peaking at different wavelengths in the butterfly, _Heliconius_ sp. Black dots show the means of the representative contrasts in visual systems. Each coloured dot represents the average contrast of each flower pattern to all leaves (left panel), each beetle colour to all leaves (middle panel) or each flower colour to all beetle colours (right panel). Colours of the dots correspond to the human-visible colour of the flower (left and right panels) or beetle (middle panel) with the lines of the same colour connecting the results between different visual systems. This is for graphical representation only; statistical tests are based on all pairwise combinations of spectra and not averages. Letters on the top of each panel show the significant difference in contrast between visual systems. Dotted horizontal line indicates JND=1."}
+
+# create a data set for means
+mean.fl.Heliconius <- get.plotmeans("aim2", "fl", allvis.fl.Heliconius)
+mean.bl.Heliconius <- get.plotmeans("aim2", "bl", allvis.bl.Heliconius)
+mean.bf.Heliconius <- get.plotmeans("aim2", "bf", allvis.bf.Heliconius)
+
+# plot individual panel
+fl.Heliconius <- get.contrastplot.sens(mean.fl.Heliconius, 1, 1, 7, 1)
+bl.Heliconius <- get.contrastplot.sens(mean.bl.Heliconius, 2, 2, 8, 2)
+bf.Heliconius <- get.contrastplot.sens(mean.bf.Heliconius, 3, 3, 9, 1)
+
+# bind the 3 panels
+figure.heli <- ggarrange(fl.Heliconius,
+                             bl.Heliconius,
+                             bf.Heliconius, 
+                             ncol = 3, nrow = 1)
+figure.heli
+```
+</br>
+</br>
+
+
+# Summary
+The results were qualitatively the same for different photoreceptor ratios among three comparison groups – contrast increased for LWS photoreceptors with peak sensitivity from 580 to at least 640 nm. This indicates that our results were not biased by photoreceptor ratios in our hypothetical visual systems.
