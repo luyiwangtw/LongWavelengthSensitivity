@@ -21,7 +21,7 @@ knitr::include_graphics("../image/jewel_beetle.png")
 </br>
 </br>
 
-In this online document, we describe the analyses and results of visual models and behavioural assays in the paper "Insect visual sensitivity in the far-red enhances contrast against vegetation". We provide the code for users to run the analyses step-by-step, and produce the figures from the manuscript.
+In this online document, we describe the analyses and results of visual models and behavioural assays in the paper [Insect visual sensitivity to long wavelengths enhances colour contrast of insects against vegetation (Wang et al. 2022, Scientific Reports)](https://www.nature.com/articles/s41598-021-04702-w). We provide the code for users to run the analyses step-by-step, and produce the figures from the manuscript.
 
 This document is divided into four parts:
 
