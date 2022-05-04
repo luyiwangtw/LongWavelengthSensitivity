@@ -12,7 +12,7 @@ navbar:
     - text: "Opsin-shifted visual systems"
       href: opsin_shifed_models.html
     - text: "Evenly spaced"
-      href: evenly_space.html
+      href: evenly_spaced.html
     - text: "Sensitivity analysis"
       href: sensitivity_analysis.html
     - text: "Behavioural assay"
